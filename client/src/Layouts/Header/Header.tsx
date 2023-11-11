@@ -37,7 +37,7 @@ export default function Header() {
   };
 
   return (
-    <AppBar position="static" sx={{background:"white",height:"80px",zIndex:"200000000000",position:"fixed",top:"0"}}>
+    <AppBar position="static" sx={{background:"white",height:"80px",zIndex:"1000",position:"fixed",top:"0"}}>
       <Container maxWidth="xl">
         <Box display="flex"  sx={{gap:"40px",justifyContent:"center",alignItems:"center"}}>
           <Typography

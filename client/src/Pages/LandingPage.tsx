@@ -29,8 +29,6 @@ import FmdGoodIcon from '@mui/icons-material/FmdGood';
 
 import logoDrop from '../Images/LogoDrop.png'
 // lAYOUTS
-import Footer from '../Layouts/Footer/Footer'
-
 
 
 
@@ -111,7 +109,7 @@ function LandingPage() {
     ];
     return (
         <div>
-            <Box position="relative" height="400px" sx={{ backgroundImage: "url('../Images/Resources/Section1BG.jpg')", backgroundSize: "cover",overflow:"hidden",marginTop:"80px"}}>
+            <Box position="relative" height="400px" sx={{ backgroundImage: "url('../Images/Resources/Section1BG.jpg')", backgroundSize: "cover",overflow:"hidden"}}>
                 <img src={Section1Img} alt="" width={"100%"}  style={{position:"absolute",top:"50%",transform:"translateY(-50%)",minHeight:"1000px"}}/>
                 <Box position={"absolute"} height={"100%"} width={"100%"}  top="50%" sx={{transform:("translateY(-50%)"), background:"black",opacity:".56"}}>
                     
@@ -165,7 +163,7 @@ function LandingPage() {
                                     <TextField id="shift" label="Shift" fullWidth/>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Button variant="contained" color="primary" fullWidth>
+                                    <Button variant="contained" color="primary" href='booking' fullWidth>
                                         Book Now
                                     </Button>
                                 </Grid>
@@ -283,11 +281,11 @@ function LandingPage() {
                     <img src={logoDrop} alt="" />
                     <Typography variant="h5" color="primary" fontWeight={600}>View Leaf Resort </Typography>
                     <div style={{display:"flex",gap:"25px"}}>
-                        <a href="#"> <Typography variant="body1" color="white">About Us</Typography></a>
-                        <a href="#"> <Typography variant="body1" color="white">Contact Us</Typography></a>
-                        <a href="#"> <Typography variant="body1" color="white">Accommodation</Typography></a>
-                        <a href="#"> <Typography variant="body1" color="white">Policy</Typography></a>
-                        <a href="#"> <Typography variant="body1" color="primary">Book</Typography></a>
+                        <a href="/#aboutUs"> <Typography variant="body1" color="white">About Us</Typography></a>
+                        <a href="/#contactUs"> <Typography variant="body1" color="white">Contact Us</Typography></a>
+                        <a href="/#accommodation"> <Typography variant="body1" color="white">Accommodation</Typography></a>
+                        <a href="/policy"> <Typography variant="body1" color="white">Policy</Typography></a>
+                        <a href="/#book"> <Typography variant="body1" color="primary">Book</Typography></a>
                     </div>
                     <Typography variant="subtitle1" color="white" style={{opacity:".6"}}>©2023 View Leaf Resort</Typography>
                 </Container>

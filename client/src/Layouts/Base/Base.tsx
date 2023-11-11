@@ -7,7 +7,10 @@ export default function Base() {
   return (
     <>
       <Header />
-      <Outlet />
+      <div style={{marginTop:"80px"}}>
+        <Outlet />
+
+      </div>
     </>
   )
 }
