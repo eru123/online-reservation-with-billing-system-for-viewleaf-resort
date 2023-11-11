@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Paper, Typography, TextField, Button, Box } from '@mui/material';
 import { AccountCircle, Lock } from '@mui/icons-material';
-
+import LogoImage from '../../Images/ViewLeafLogo.jpg'
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,14 +11,16 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{height:"100vh", minHeight:"100vh", maxHeight:"600px", display:"flex",justifyContent:"center",alignItems:"center"}}>
       <Paper elevation={3} style={{ padding: '2rem' }}>
-        <Box display="flex" justifyContent="center">
-          <AccountCircle style={{ fontSize: 64, color: 'gray' }} />
+        <Box display={"flex"} alignItems={"center"} gap={"20px"} mb={"40px"}>
+          <img src={LogoImage} height={"100px"} alt="" />
+          <Box >
+            <Typography variant="h4" fontWeight={700} color="primary">Login</Typography>
+            <Typography variant="body1" color="initial">Manage the website</Typography>
+          </Box>
         </Box>
-        <Typography variant="h5" align="center" gutterBottom>
-          Log In
-        </Typography>
+        
         <form>
           <TextField
             label="Email"
@@ -42,6 +44,7 @@ const Login: React.FC = () => {
             color="primary"
             fullWidth
             onClick={handleLogin}
+            sx={{marginTop:"25px"}}
           >
             Log In
           </Button>
