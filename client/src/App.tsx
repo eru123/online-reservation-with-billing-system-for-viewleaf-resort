@@ -9,7 +9,8 @@ import Default from './Pages/Default/Default';
 import Login from './Pages/Login/Login';
 import Register from './Pages/Register/Register';
 import LandingPage from './Pages/LandingPage';
-import Booking from './Pages/Login/Booking/Booking';
+import Booking from './Pages/Guests/Booking/Booking';
+import Invoice from './Pages/Guests/Invoice'
 function App() {
   return (
     <Routes>
@@ -19,7 +20,8 @@ function App() {
 
         <Route element={<Base />} >
           <Route path="/" element={<LandingPage/>} />
-          <Route path="/Booking" element={<Booking/>} />
+          <Route path="/booking" element={<Booking/>} />
+          <Route path="/invoice" element={<Invoice variant={"view"}/>} />
         </Route>
     </Routes>
   );
