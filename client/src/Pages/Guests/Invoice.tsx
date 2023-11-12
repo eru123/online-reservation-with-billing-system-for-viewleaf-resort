@@ -63,7 +63,7 @@ function Invoice({variant}:Props) {
                     <Chip icon={<StarIcon />} label="Rate our Service" variant="filled" onClick={()=>{setOpen("rate")}} color="primary" />:""    
                 }
                 {variant ==="manage"?
-                    <Chip icon={<AddIcon />} label="Add Inclussions" variant="filled" onClick={()=>{}} color="primary" />:""    
+                    <Chip icon={<AddIcon />} label="Add" variant="filled" onClick={()=>{}} color="primary" />:""    
                 }
             </Box>
             <Alert severity="info" sx={{margin:"2em 0"}}>Your requests is pending for verification</Alert>
@@ -97,7 +97,6 @@ function Invoice({variant}:Props) {
             <Box sx={{padding:"0 32px"}}>
                 <Typography variant="subtitle1" textAlign="end" color="initial" fontWeight={600} sx={{opacity:".6"}}>TOTAL</Typography>
                 <Typography variant="h5" textAlign="end" color="initial" fontWeight={600}>₱300</Typography>
-                
             </Box>
             <hr style={{margin:"2em 0"}}/>
             <Typography variant="h6" color="initial">Billing Statement #2</Typography>

@@ -5,7 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
-import ReportCard from '../../Components/ReportCard';
+import ReportCard from '../../../Components/ReportCard';
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
 import TableHead from '@mui/material/TableHead'
@@ -15,15 +15,16 @@ import TableCell from '@mui/material/TableCell'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-function Dashboard() {
+import Chip from '@mui/material/Chip';
+import Paper from '@mui/material/Paper';
+import TESTCalendar from '../../../Components/TESTCalendar';
+function ListReservation() {
     const [anchorElMoreMenu, setAnchorElMoreMenu] = React.useState<null | HTMLElement>(null);
     const openMenu = Boolean(anchorElMoreMenu);
- 
-    
-    return (
+    return <>
         <div>
-            <Typography variant="h4" fontWeight={600} color="primary">Dashboard</Typography>
-            <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>Here are the list of reservation for today</Typography>
+            <Typography variant="h4" fontWeight={600} color="primary">Reservation Lists</Typography>
+            <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>Here are all the list of reservation</Typography>
             <Grid container spacing={2}>
                 <Grid item  md={9}>
                     <Box display="flex"  gap={"15px"}>
@@ -33,7 +34,7 @@ function Dashboard() {
                                 <input placeholder='Search...' type="text" style={{border:"none",outline:"none", height:"38px",width:"100%",marginRight:"5px"}}/>
                             </Box>
                         </Box>
-                        <Button variant="contained" color="primary"  href='/admin/reservation/create'>
+                        <Button variant="contained" color="primary" href='/admin/reservation/create'>
                             Add Reservation
                         </Button>
                     </Box>
@@ -44,6 +45,7 @@ function Dashboard() {
                                 <TableRow>
                                     <TableCell>Reference No.</TableCell>
                                     <TableCell >Name</TableCell>
+                                    <TableCell >Date</TableCell>
                                     <TableCell >Check In </TableCell>
                                     <TableCell >Check Out </TableCell>
                                     <TableCell >Status </TableCell>
@@ -54,9 +56,10 @@ function Dashboard() {
                                 <TableRow sx={{background:"#D7D7D7"}}>
                                     <TableCell >#2W23e23</TableCell>
                                     <TableCell >Jon Doe</TableCell>
-                                    <TableCell >Oct 25, 2023 at 10 am</TableCell>
-                                    <TableCell >Oct 25, 2023 at 1 pm</TableCell>
+                                    <TableCell >Oct 25, 2023</TableCell>
                                     <TableCell ></TableCell>
+                                    <TableCell ></TableCell>
+                                    <TableCell ><Chip label="Approved" color="primary" /></TableCell>
                                     <TableCell align='right'>
                                         <IconButton aria-label="" 
                                             onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
@@ -69,11 +72,29 @@ function Dashboard() {
                                 <TableRow sx={{background:"#D7D7D7"}}>
                                     <TableCell >#2W23e2</TableCell>
                                     <TableCell >Row Chris</TableCell>
+                                    <TableCell >Oct 25, 2023</TableCell>
                                     <TableCell >Oct 25, 2023 at 10 am</TableCell>
-                                    <TableCell >Oct 25, 2023 at 1 pm</TableCell>
-                                    <TableCell ></TableCell>        
+                                    <TableCell ></TableCell>
+                                    <TableCell ><Chip label="Checked In" color="success" /></TableCell>        
                                     <TableCell align='right'>
                                         <IconButton aria-label="" 
+                                            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                                                setAnchorElMoreMenu(event.currentTarget);
+                                            }}>
+                                            <MoreVertIcon/>
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow sx={{background:"#D7D7D7"}}>
+                                    <TableCell >#2W23e23</TableCell>
+                                    <TableCell >Jon Doe</TableCell>
+                                    <TableCell >Oct 27, 2023</TableCell>
+                                    <TableCell ></TableCell>
+                                    <TableCell ></TableCell>
+                                    <TableCell ><Chip label="Canceled" color="error" /></TableCell>
+                                    <TableCell align='right'>
+                                        <IconButton aria-label="" 
+                                            disabled
                                             onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                                                 setAnchorElMoreMenu(event.currentTarget);
                                             }}>
@@ -85,11 +106,10 @@ function Dashboard() {
                         </Table>
                     </TableContainer>
                 </Grid>
-                <Grid item  md={3}>
-                    <Box display="flex" flexDirection={"column"} gap={"15px"} >
-                        <ReportCard variant='reservation' title={"Today’s Reservation"} value={5}/>
-                        <ReportCard variant='accommodation' title={"Today’s Accommodation"} value={25}/>
-                    </Box>
+                <Grid item  md={3} sx={{display:"flex"}}>
+                    <Paper variant="elevation" elevation={3}>
+                        <TESTCalendar/>
+                    </Paper>
                 </Grid>
             </Grid>
             <Menu
@@ -107,7 +127,8 @@ function Dashboard() {
                 <MenuItem onClick={()=>setAnchorElMoreMenu(null)}>Cancel</MenuItem>
             </Menu>
         </div>
-    )
+    </>
+    
 }
 
-export default Dashboard
+export default ListReservation
