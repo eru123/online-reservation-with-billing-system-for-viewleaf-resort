@@ -7,8 +7,6 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import Box from '@mui/material/Box'
-import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
-import EventIcon from '@mui/icons-material/Event';
 
 
 function BookingStatement() {

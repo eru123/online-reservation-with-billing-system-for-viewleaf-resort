@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Container, Paper, Typography, TextField, Button, Box } from '@mui/material';
-import { AccountCircle, Lock } from '@mui/icons-material';
 import LogoImage from '../../Images/ViewLeafLogo.jpg'
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
