@@ -20,8 +20,8 @@ function Requests() {
             <Grid container spacing={2}>
                 <Grid item  xs={12}>
                     <Box display="flex" flexDirection={"column"} gap={"15px"} >
-                        <RequestsCard variant='reschedule'/>
-                        <RequestsCard variant='pending'/>
+                        <RequestsCard status='rescheduling'/>
+                        <RequestsCard status='pending'/>
                     </Box>
                 </Grid>
             </Grid>

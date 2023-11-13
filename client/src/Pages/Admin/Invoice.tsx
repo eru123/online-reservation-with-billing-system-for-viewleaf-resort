@@ -159,7 +159,6 @@ function Invoice() {
                         <ReceiptLongIcon  fontSize="inherit"/>
                     </IconButton>
                 </Tooltip>
-                
             </Paper>
             <Typography variant="h6" color="initial">Billing Statement #1</Typography>
             <BookingStatement/>
