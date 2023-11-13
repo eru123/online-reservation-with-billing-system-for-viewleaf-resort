@@ -3,15 +3,11 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 
-import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import AccommodationCard from '../../../Components/AccommodationCard';
 
 import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal';
-import Paper from '@mui/material/Paper';
-import TESTCalendar from '../../../Components/TESTCalendar';
-import Checkbox from '@mui/material/Checkbox';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -20,6 +16,11 @@ import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton'
 
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 
 
@@ -45,26 +46,44 @@ function Accommodation() {
         <div>
             <Typography variant="h4" fontWeight={600} color="primary">Manage Accommodations</Typography>
             <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>List of all Accommodation</Typography>
-            <Box display="flex" sx={{margin:"2em 0"}}>
-                <Box sx={{flexGrow:"1",display:"flex"}}>
-                    <Box display="flex" gap={"10px"} alignItems={"center"} sx={{background:"#D9D9D9",border:"1px solid #B9B9B9",padding:".5em 1em",borderRadius:"1000px"}}>
-                        <Box display={"flex"} gap={"8px"}>
-                            <Typography variant="subtitle1" fontWeight={600} color="initial">Day Shift:</Typography>
-                            <Typography variant="subtitle1" color="initial">8 am to 12 pm</Typography>
+            <Box display="flex" sx={{margin:"2em 0 "}}>
+                <Box sx={{flexGrow:"1",display:"flex",gap:'10px'}}>
+                    <Box display="flex" gap={"10px"} alignItems={"center"} sx={{background:"#D9D9D9",border:"1px solid #B9B9B9",padding:".5em .5em .5em 1.5em" ,borderRadius:"1000px"}}>
+                        <Box>
+                            <Typography variant="subtitle2" fontWeight={600} color="initial">Day Shift:</Typography>
+                            <Typography variant="body1" color="initial">8 am to 12 pm</Typography>
                         </Box>
-                        <Box display={"flex"} gap={"8px"}>
-                            <Typography variant="subtitle1" fontWeight={600} color="initial">Night Shift:</Typography>
-                            <Typography variant="subtitle1" color="initial">2 pm to 7 pm</Typography>
+                        <Box>
+                            <Typography variant="subtitle2" fontWeight={600} color="initial">Night Shift:</Typography>
+                            <Typography variant="body1" color="initial">2 pm to 7 pm</Typography>
                         </Box>
-                        <Box display={"flex"} gap={"8px"}>
-                            <Typography variant="subtitle1" fontWeight={600} color="initial">Whole Day:</Typography>
-                            <Typography variant="subtitle1" color="initial"> 9 am to 6 pm</Typography>
+                        <Box>
+                            <Typography variant="subtitle2" fontWeight={600} color="initial">Whole Day:</Typography>
+                            <Typography variant="body1" color="initial"> 9 am to 6 pm</Typography>
                         </Box>
-                        <IconButton aria-label="edit" onClick={()=>{}}>
+                        <IconButton aria-label="edit" onClick={()=>{setOpen("editShift")}}>
+                            <ModeEditIcon/>
+                        </IconButton>
+                    </Box>
+                    <Box display="flex" gap={"10px"} alignItems={"center"} sx={{background:"#D9D9D9",border:"1px solid #B9B9B9",padding:".5em .5em .5em 1.5em",borderRadius:"1000px"}}>
+                        <Box>
+                            <Typography variant="subtitle2" fontWeight={600} color="initial">Kids Fee:</Typography>
+                            <Typography variant="body1" color="initial">150</Typography>
+                        </Box>
+                        <Box>
+                            <Typography variant="subtitle2" fontWeight={600} color="initial">Adult Fee:</Typography>
+                            <Typography variant="body1" color="initial">200</Typography>
+                        </Box>
+                        <Box>
+                            <Typography variant="subtitle2" fontWeight={600} color="initial">Senior / PWD Fee:</Typography>
+                            <Typography variant="body1" color="initial">150</Typography>
+                        </Box>
+                        <IconButton aria-label="edit" onClick={()=>{setOpen("editEntranceFee")}}>
                             <ModeEditIcon/>
                         </IconButton>
                     </Box>
                 </Box>
+                
                 <Button variant="contained" color="primary" onClick={()=>{setOpen("addAccommodation")}}>
                     Add Accommodation
                 </Button>
@@ -320,6 +339,132 @@ function Accommodation() {
                                 <Chip label="Slippers (150) " variant="outlined" onDelete={()=>{}} />
                             </Box>
                         </Grid>
+                        <Grid item  xs={12} sx={{margin:"2em"}}>
+                            
+                        </Grid>
+                        <Grid item  xs={4}>
+                            <Button variant="text" color="primary" fullWidth onClick={()=>setOpen("")}>
+                                Cancel
+                            </Button>
+                        </Grid>
+                        <Grid item  xs={8}>
+                            <Button variant="contained" color="primary" fullWidth>
+                                Update
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </>:""}
+                {open === "editEntranceFee"?<>
+                    <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
+                        Edit Entrance Fee
+                    </Typography>
+                    <Typography id="keep-mounted-modal-description" sx={{marginBottom:"25px"}}>
+                        Swimming Pool
+                    </Typography>
+                    <Grid container spacing={2}>
+                        <Grid item  md={4} xs={12}>
+                            <TextField
+                                type='number'
+                                fullWidth
+                                id="kids"
+                                label="Kids"
+                            />
+                        </Grid>
+                        <Grid item  md={4} xs={12}>
+                            <TextField
+                                type='number'
+                                fullWidth
+                                id="adult"
+                                label="Adult"
+                            />
+                        </Grid>
+                        <Grid item  md={4} xs={12}>
+                            <TextField
+                                type='number'
+                                fullWidth
+                                id="seniorPwd"
+                                label="Senior / PWD"
+                            />
+                        </Grid>
+
+
+
+                        <Grid item  xs={12} sx={{margin:"2em"}}>
+                            
+                        </Grid>
+                        <Grid item  xs={4}>
+                            <Button variant="text" color="primary" fullWidth onClick={()=>setOpen("")}>
+                                Cancel
+                            </Button>
+                        </Grid>
+                        <Grid item  xs={8}>
+                            <Button variant="contained" color="primary" fullWidth>
+                                Update
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </>:""}
+                {open === "editShift"?<>
+                    <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
+                        Edit Shift Schedule
+                    </Typography>
+                    <Typography id="keep-mounted-modal-description" sx={{marginBottom:"25px"}}>
+                        
+                    </Typography>
+                    <Grid container spacing={2}>
+                        <Grid item   xs={12}>
+                            <Typography variant="subtitle1" color="initial">Day Shift</Typography>
+                        </Grid>
+                        <Grid item  md={6} xs={12}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['TimePicker']} >
+                                    <TimePicker label="Start"   sx={{ width: '100%' }}/>
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </Grid>
+                        <Grid item  md={6} xs={12}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['TimePicker']} >
+                                    <TimePicker label="End"   sx={{ width: '100%' }}/>
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </Grid>
+                        <Grid item   xs={12}>
+                            <Typography variant="subtitle1" color="initial">Night Shift</Typography>
+                        </Grid>
+                        <Grid item  md={6} xs={12}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['TimePicker']} >
+                                    <TimePicker label="Start"   sx={{ width: '100%' }}/>
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </Grid>
+                        <Grid item  md={6} xs={12}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['TimePicker']} >
+                                    <TimePicker label="End"   sx={{ width: '100%' }}/>
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </Grid>
+
+                        <Grid item   xs={12}>
+                            <Typography variant="subtitle1" color="initial">Whole Day Shift</Typography>
+                        </Grid>
+                        <Grid item  md={6} xs={12}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['TimePicker']} >
+                                    <TimePicker label="Start"   sx={{ width: '100%' }}/>
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </Grid>
+                        <Grid item  md={6} xs={12}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['TimePicker']} >
+                                    <TimePicker label="End"   sx={{ width: '100%' }}/>
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </Grid>
+
                         <Grid item  xs={12} sx={{margin:"2em"}}>
                             
                         </Grid>

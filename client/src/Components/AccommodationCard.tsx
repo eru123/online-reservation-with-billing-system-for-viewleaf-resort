@@ -55,8 +55,9 @@ function AccommodationCard({variant,openModal}:Props) {
                                                 defaultValue={30}
                                                 input={<InputBase name="shift" id="uncontrolled-native" />}
                                             >
-                                                <option value={10}>Day Shift</option>
-                                                <option value={20}>Night Shift</option>
+                                                <option value={"Day"}>Day Shift</option>
+                                                <option value={"Night"}>Night Shift</option>
+                                                <option value={"Whole Day"}>Whole Day Shift</option>
                                             </NativeSelect>
                                         </FormControl>
                                         <Typography variant="h4" color="Primary" fontWeight={700} >₱4000</Typography>
