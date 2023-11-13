@@ -68,7 +68,7 @@ export default function Header() {
               textDecoration: 'none',
             }}
           >
-            Accommodations
+            Contact Us
           </Typography>
           <a href="/">
             <Box >
@@ -88,7 +88,7 @@ export default function Header() {
               textDecoration: 'none',
             }}
           >
-            Contact Us 
+            Accommodations
           </Typography>
           <Typography
             variant="h6"

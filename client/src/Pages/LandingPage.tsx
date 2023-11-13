@@ -1,8 +1,7 @@
 import React from 'react'
+
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import Section1Img from '../Images/Resources/Section1BG.jpg'
-import Section2Img from '../Images/Resources/Section2BG.jpg'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
@@ -10,8 +9,6 @@ import TextField from '@mui/material/TextField'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
-
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -19,94 +16,31 @@ import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button'
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import Accordion from '@mui/material/Accordion'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import ExpandMore from '@mui/icons-material/ExpandMore'
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+
+// Components
+import AccommodationCard from '../Components/AccommodationCard';
+
+// Images 
+import logoDrop from '../Images/LogoDrop.png';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import EmailIcon from '@mui/icons-material/Email';
 import CallIcon from '@mui/icons-material/Call';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
+import Section1Img from '../Images/Resources/Section1BG.jpg';
+import Section2Img from '../Images/Resources/Section2BG.jpg';
 
-import logoDrop from '../Images/LogoDrop.png'
-// lAYOUTS
+import itemData from './_Test/itemData'
 
-
-
-
-function srcset(image: string, size: number, rows = 1, cols = 1) {
-    return {
-        src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-        srcSet: `${image}?w=${size * cols}&h=${
-            size * rows
-        }&fit=crop&auto=format&dpr=2 2x`,
-    };
-}
 function LandingPage() {
     const [age, setAge] = React.useState('');
-
+    const [open, setOpen] = React.useState("");
     const handleChange = (event: SelectChangeEvent) => {
         setAge(event.target.value as string);
     };
-    const itemData = [
-        {
-            img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-            title: 'Breakfast',
-            rows: 2,
-            cols: 2,
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-            title: 'Burger',
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-            title: 'Camera',
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-            title: 'Coffee',
-            cols: 2,
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-            title: 'Hats',
-            cols: 2,
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-            title: 'Honey',
-            author: '@arwinneil',
-            rows: 2,
-            cols: 2,
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-            title: 'Basketball',
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-            title: 'Fern',
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-            title: 'Mushrooms',
-            rows: 2,
-            cols: 2,
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-            title: 'Tomato basil',
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-            title: 'Sea star',
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-            title: 'Bike',
-            cols: 2,
-        },
-    ];
+
     return (
         <div>
             <Box position="relative" height="400px" sx={{ backgroundImage: "url('../Images/Resources/Section1BG.jpg')", backgroundSize: "cover",overflow:"hidden"}}>
@@ -138,12 +72,12 @@ function LandingPage() {
                         <Paper variant="elevation" elevation={3} style={{padding:"1em",width:"100%"}}>
                             <Typography variant="h6" color="primary" style={{marginBottom:"20px"}}>Book Now</Typography>
                             <Grid container spacing={2}>
-                                <Grid item xs={12}>
+                                <Grid item md={7} xs={12}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker slotProps={{ textField: { fullWidth: true } }}/>
                                     </LocalizationProvider>
                                 </Grid>
-                                <Grid item md={8} xs={12}>
+                                <Grid item md={5} xs={12}>
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">Age</InputLabel>
                                         <Select
@@ -159,13 +93,27 @@ function LandingPage() {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                                <Grid item md={4} xs={12}>
-                                    <TextField id="shift" label="Shift" fullWidth/>
-                                </Grid>
                                 <Grid item xs={12}>
                                     <Button variant="contained" color="primary" href='booking' fullWidth>
                                         Book Now
                                     </Button>
+                                </Grid>
+                                <Grid item xs={12} display={"flex"} alignItems={"center"} gap={"10px"}>
+                                    <hr style={{flexGrow:"1"}}/>
+                                    <Typography  variant="subtitle1" color="initial">Have Reservation?</Typography>
+                                    <hr style={{flexGrow:"1"}}/>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Box display="flex" gap={"15px"}>
+                                        <TextField
+                                            fullWidth
+                                            id="refID"
+                                            placeholder='Reference ID'
+                                        />
+                                        <Button variant="contained" color="primary" href='invoice'>
+                                            Check
+                                        </Button>
+                                    </Box>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -173,16 +121,14 @@ function LandingPage() {
                 </Grid>
                 <div style={{margin:"4em 0"}}>
                     <Typography variant="h5" color="primary" style={{marginBottom:"15px"}} align='center' fontWeight={600}>Gallery</Typography>
-                    <ImageList
-                        sx={{ width: "100%"}}
-                        variant="masonry"
-                        cols={4}
-                        rowHeight={121}
-                        >
+                    {/* // TODO Display Images */}
+
+                    <ImageList sx={{ width: "100%"}} cols={4} >
                         {itemData.map((item) => (
-                            <ImageListItem key={item.img} cols={item.cols || 1} rows={item.rows || 1}>
+                            <ImageListItem key={item.img}>
                             <img
-                                {...srcset(item.img, 121, item.rows, item.cols)}
+                                srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                                src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
                                 alt={item.title}
                                 loading="lazy"
                             />
@@ -192,6 +138,13 @@ function LandingPage() {
                 </div>
                 <div style={{margin:"4em 0"}}>
                     <Typography variant="h5" color="primary" style={{marginBottom:"40px"}} align='center' fontWeight={600}>Accommodation to Offer</Typography>
+
+
+                    <Box display="flex" flexDirection={"column"} gap={"15px"}>
+                        <AccommodationCard variant="view" openModal={setOpen}/>
+                        <AccommodationCard variant="view" openModal={setOpen}/>
+                        <AccommodationCard variant="view" openModal={setOpen}/>
+                    </Box>
                 </div>
                 <div style={{margin:"4em 0"}}>
                     <Typography variant="h5" color="primary" style={{marginBottom:"40px"}} align='center' fontWeight={600}>Frequently Ask Question</Typography>
