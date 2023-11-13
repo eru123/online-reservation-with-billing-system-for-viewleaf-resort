@@ -18,6 +18,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import TESTCalendar from '../../../Components/TESTCalendar';
+import { Link } from 'react-router-dom';
 function ListReservation() {
     const [anchorElMoreMenu, setAnchorElMoreMenu] = React.useState<null | HTMLElement>(null);
     const openMenu = Boolean(anchorElMoreMenu);
@@ -49,58 +50,35 @@ function ListReservation() {
                                     <TableCell >Check In </TableCell>
                                     <TableCell >Check Out </TableCell>
                                     <TableCell >Status </TableCell>
-                                    <TableCell ></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody >
-                                <TableRow sx={{background:"#D7D7D7"}}>
+                                <TableRow sx={{background:"#D7D7D7"}} component={Link} to="/admin/reservation/view">
                                     <TableCell >#2W23e23</TableCell>
                                     <TableCell >Jon Doe</TableCell>
                                     <TableCell >Oct 25, 2023</TableCell>
                                     <TableCell ></TableCell>
                                     <TableCell ></TableCell>
                                     <TableCell ><Chip label="Approved" color="primary" /></TableCell>
-                                    <TableCell align='right'>
-                                        <IconButton aria-label="" 
-                                            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                                                setAnchorElMoreMenu(event.currentTarget);
-                                            }}>
-                                            <MoreVertIcon/>
-                                        </IconButton>
-                                    </TableCell>
+                                    
                                 </TableRow>
-                                <TableRow sx={{background:"#D7D7D7"}}>
+                                <TableRow sx={{background:"#D7D7D7"}} component={Link} to="/admin/reservation/view">
                                     <TableCell >#2W23e2</TableCell>
                                     <TableCell >Row Chris</TableCell>
                                     <TableCell >Oct 25, 2023</TableCell>
                                     <TableCell >Oct 25, 2023 at 10 am</TableCell>
                                     <TableCell ></TableCell>
                                     <TableCell ><Chip label="Checked In" color="success" /></TableCell>        
-                                    <TableCell align='right'>
-                                        <IconButton aria-label="" 
-                                            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                                                setAnchorElMoreMenu(event.currentTarget);
-                                            }}>
-                                            <MoreVertIcon/>
-                                        </IconButton>
-                                    </TableCell>
+                                    
                                 </TableRow>
-                                <TableRow sx={{background:"#D7D7D7"}}>
+                                <TableRow sx={{background:"#D7D7D7"}} component={Link} to="/admin/reservation/view">
                                     <TableCell >#2W23e23</TableCell>
                                     <TableCell >Jon Doe</TableCell>
                                     <TableCell >Oct 27, 2023</TableCell>
                                     <TableCell ></TableCell>
                                     <TableCell ></TableCell>
                                     <TableCell ><Chip label="Canceled" color="error" /></TableCell>
-                                    <TableCell align='right'>
-                                        <IconButton aria-label="" 
-                                            disabled
-                                            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                                                setAnchorElMoreMenu(event.currentTarget);
-                                            }}>
-                                            <MoreVertIcon/>
-                                        </IconButton>
-                                    </TableCell>
+                                    
                                 </TableRow>
                             </TableBody>
                         </Table>

@@ -12,13 +12,10 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import { Chip } from '@mui/material';
+import { Link } from 'react-router-dom';
 function Dashboard() {
-    const [anchorElMoreMenu, setAnchorElMoreMenu] = React.useState<null | HTMLElement>(null);
-    const openMenu = Boolean(anchorElMoreMenu);
- 
+    
     
     return (
         <div>
@@ -47,39 +44,23 @@ function Dashboard() {
                                     <TableCell >Check In </TableCell>
                                     <TableCell >Check Out </TableCell>
                                     <TableCell >Status </TableCell>
-                                    <TableCell ></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody >
-                                <TableRow sx={{background:"#D7D7D7"}}>
+                                <TableRow sx={{background:"#D7D7D7"}} component={Link} to="/admin/reservation/view">
                                     <TableCell >#2W23e23</TableCell>
                                     <TableCell >Jon Doe</TableCell>
                                     <TableCell >Oct 25, 2023 at 10 am</TableCell>
-                                    <TableCell >Oct 25, 2023 at 1 pm</TableCell>
                                     <TableCell ></TableCell>
-                                    <TableCell align='right'>
-                                        <IconButton aria-label="" 
-                                            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                                                setAnchorElMoreMenu(event.currentTarget);
-                                            }}>
-                                            <MoreVertIcon/>
-                                        </IconButton>
-                                    </TableCell>
+                                    <TableCell ><Chip label="Checked In" color="warning" /></TableCell>
+                                    
                                 </TableRow>
-                                <TableRow sx={{background:"#D7D7D7"}}>
+                                <TableRow sx={{background:"#D7D7D7"}} component={Link} to="/admin/reservation/view">
                                     <TableCell >#2W23e2</TableCell>
                                     <TableCell >Row Chris</TableCell>
                                     <TableCell >Oct 25, 2023 at 10 am</TableCell>
                                     <TableCell >Oct 25, 2023 at 1 pm</TableCell>
-                                    <TableCell ></TableCell>        
-                                    <TableCell align='right'>
-                                        <IconButton aria-label="" 
-                                            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                                                setAnchorElMoreMenu(event.currentTarget);
-                                            }}>
-                                            <MoreVertIcon/>
-                                        </IconButton>
-                                    </TableCell>
+                                    <TableCell ><Chip label="Complete" color="success" /></TableCell>        
                                 </TableRow>
                             </TableBody>
                         </Table>
@@ -92,20 +73,6 @@ function Dashboard() {
                     </Box>
                 </Grid>
             </Grid>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorElMoreMenu}
-                open={openMenu}
-                onClose={()=>setAnchorElMoreMenu(null)}
-                MenuListProps={{
-                'aria-labelledby': 'basic-button',
-                }}
-            >
-                <MenuItem onClick={()=>setAnchorElMoreMenu(null)}>View Invoice</MenuItem>
-                <MenuItem onClick={()=>setAnchorElMoreMenu(null)}>Additional</MenuItem>
-                <MenuItem onClick={()=>setAnchorElMoreMenu(null)}>Reschedule</MenuItem>
-                <MenuItem onClick={()=>setAnchorElMoreMenu(null)}>Cancel</MenuItem>
-            </Menu>
         </div>
     )
 }

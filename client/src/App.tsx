@@ -18,10 +18,12 @@ import ListReservation from './Pages/Admin/Reservation/ListReservation';
 import Requests from './Pages/Admin/Reservation/Requests';
 import Accommodation from './Pages/Admin/Manage/Accommodation';
 import Content from './Pages/Admin/Manage/Content';
+import InvoiceManage from './Pages/Admin/Invoice'
 import PaymentInstruction from './Pages/Admin/Manage/PaymentInstruction';
 import Policy from './Pages/Admin/Manage/Policy';
 import CreateResrvation from './Pages/Admin/Reservation/CreateResrvation';
 import Report from './Pages/Admin/Report/Report';
+import Additional from './Pages/Admin/Reservation/Additional/Additional';
 function App() {
   return (
     <Routes>
@@ -40,8 +42,9 @@ function App() {
 
           <Route path="/admin/reservation/list" element={<ListReservation/>}/>
           <Route path="/admin/reservation/create" element={<CreateResrvation/>}/>
+          <Route path="/admin/reservation/add" element={<Additional/>}/>
           <Route path="/admin/reservation/requests" element={<Requests/>}/>
-          <Route path="/admin/reservation/view" element={<Invoice variant={"manage"}/>}/>
+          <Route path="/admin/reservation/view" element={<InvoiceManage/>}/>
 
           <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
           <Route path="/admin/manage/content" element={<Content/>}/>

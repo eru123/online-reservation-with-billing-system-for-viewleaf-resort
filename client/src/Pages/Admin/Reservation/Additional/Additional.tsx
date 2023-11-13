@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box';
+import AccommodationCard from '../../../../Components/AccommodationCard';
 import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import Timeline from '@mui/lab/Timeline';
@@ -11,18 +12,12 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
+import Accommodation from './Accommodation';
 
-
-
-import Accommodation from '../../Guests/Booking/Accommodation';
-
-
-function CreateResrvation() {
+function Additional() {
     const [step,setStep] = useState(1);
-
-
-
-    return <>
+    return (
+        
         <Container maxWidth="lg">
             {step===1?<>
                 <Box display="flex" alignItems={"center"} sx={{marginTop:"50px",marginBottom:"2em"}}>
@@ -51,8 +46,8 @@ function CreateResrvation() {
                         <Button variant="text" color="primary" onClick={()=>{setStep(1)}}>
                             Back
                         </Button>
-                        <Button variant="contained" color="primary" onClick={()=>{setStep(3)}}>
-                        Set as Paid
+                        <Button variant="contained" color="primary" href='/admin/reservation/view'>
+                            Set as Paid
                         </Button>
                     </Box>
                     
@@ -153,45 +148,9 @@ function CreateResrvation() {
                 </Box>
                 
             </>:""}
-            {step===3?<>
-                <Box display="flex" alignItems={"center"} sx={{marginTop:"50px",marginBottom:"2em"}}>
-                    <div style={{flexGrow:'1'}}>
-                        <Typography variant="h4" fontWeight={600} color="primary">Guest Details</Typography>
-                        <Typography variant="h6" fontWeight={400} color="initial">Please Provide the information of the Guest</Typography>
-                    </div>
-                    
-                    <Button variant="contained" color="primary" href='/admin/reservation/view'>
-                        Finish
-                    </Button>
-                </Box>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField
-                            id="name"
-                            label="Name"
-                            required
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item md={6} xs={8}>
-                        <TextField
-                            id="email"
-                            label="Email"
-                            required
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item md={6} xs={12}>
-                        <TextField
-                            id="contactNo"
-                            label="Contact Number"
-                            required
-                            fullWidth
-                        />
-                    </Grid>
-                </Grid>
-            </>:""}
+            
         </Container>
-    </>
+    )
 }
-export default CreateResrvation
+
+export default Additional

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import AccommodationCard from '../../../Components/AccommodationCard'
+import AccommodationCard from '../../../../Components/AccommodationCard';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -14,11 +14,9 @@ import Paper from '@mui/material/Paper'
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import TESTCalendar from '../../../Components/TESTCalendar';
+import TESTCalendar from '../../../../Components/TESTCalendar';
 import Checkbox from '@mui/material/Checkbox';
-
-
-import QuantitySelector from '../../../Components/QuantitySelector';
+import QuantitySelector from '../../../../Components/QuantitySelector';
 
 
 const style = {
@@ -37,7 +35,7 @@ function Accommodation() {
     const [open, setOpen] = React.useState("");
 
     const [calendarValue, setCalendarValue] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
-    const [shift, setShift] = React.useState('');
+    const [shift, setShift] = React.useState('Night Shift');
 
     const [kidsEntranceFee,setKidsEntranceFee]= useState(0);
     const [adultEntranceFee,setAdultEntranceFee]= useState(0);
@@ -53,12 +51,13 @@ function Accommodation() {
         <Box display="flex"  my={"20px"} gap={"10px"}>  
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
+                    disabled
                     label="Date Schedule"   
                     value={calendarValue}
                     onChange={(newValue) => setCalendarValue(newValue)}
                 />
             </LocalizationProvider>
-            <FormControl sx={{width:"150px"}}>
+            <FormControl sx={{width:"150px"}} disabled>
                 <InputLabel id="demo-simple-select-label">Shift</InputLabel>
                 <Select
                 labelId="demo-simple-select-label"
@@ -76,6 +75,9 @@ function Accommodation() {
             </FormControl>
         </Box>   
         <Box display="flex" flexDirection={"column"} gap={"25px"} >
+            {/* If the accommodation is already book and wants additional */}
+            <AccommodationCard variant="additional" openModal={setOpen}/>
+            {/* If the accommodation just added to be the additional */}
             <AccommodationCard variant="selected" openModal={setOpen}/>
         </Box>
 

@@ -13,7 +13,7 @@ import QuantitySelector from './QuantitySelector';
 
 
 type Props={
-    variant: "selected"|"view"|"manage"
+    variant: "selected"|"view"|"manage"|"additional"
     openModal : React.Dispatch<React.SetStateAction<string>>
 }
 
@@ -49,17 +49,19 @@ function AccommodationCard({variant,openModal}:Props) {
                         <Grid item xs={3}>
                             <div style={{padding:'1em 1em 1em 0',display:"flex",flexDirection:"column",height:"100%"}}>
                                 <div style={{display:"flex",flexDirection:"column",alignItems:"end",flexGrow:"1"}}>
-                                    <FormControl sx={{ borderBottom: 'none' ,}}>
-                                        <NativeSelect
-                                            defaultValue={30}
-                                            input={<InputBase name="shift" id="uncontrolled-native" />}
-                                        >
-                                            <option value={10}>Day Shift</option>
-                                            <option value={20}>Night Shift</option>
-                                        </NativeSelect>
-                                    </FormControl>
-                                    <Typography variant="h4" color="Primary" fontWeight={700} >₱4000</Typography>
-                                    <Typography variant="subtitle2" color="inital" >for 8 pax</Typography>
+                                    {variant === "additional"?"": <>
+                                        <FormControl sx={{ borderBottom: 'none' ,}}>
+                                            <NativeSelect
+                                                defaultValue={30}
+                                                input={<InputBase name="shift" id="uncontrolled-native" />}
+                                            >
+                                                <option value={10}>Day Shift</option>
+                                                <option value={20}>Night Shift</option>
+                                            </NativeSelect>
+                                        </FormControl>
+                                        <Typography variant="h4" color="Primary" fontWeight={700} >₱4000</Typography>
+                                        <Typography variant="subtitle2" color="inital" >for 8 pax</Typography>
+                                    </>}
                                 </div>
                                 <div style={{display:"flex",justifyContent:"end"}}>
                                     {(variant==="selected")?
@@ -78,6 +80,7 @@ function AccommodationCard({variant,openModal}:Props) {
                                             Edit
                                         </Button>
                                     :""}
+                                    
                                 </div>
                             </div>
                         </Grid>
@@ -85,7 +88,7 @@ function AccommodationCard({variant,openModal}:Props) {
                     </Grid>
                 </Paper>
             </div>
-            {(variant==="selected")?<>
+            {(variant==="selected" ||variant === "additional")?<>
                 <div style={{background:"#DADADA",padding:"1em",borderBottomLeftRadius:"8px",borderBottomRightRadius:"8px"}}>
                     <Typography variant="h5" fontWeight={600} color="primary">Manage Inclusion</Typography>
                     <Typography variant="subtitle1" color="initial">You can add inclussion to be included to your accommodation</Typography>
