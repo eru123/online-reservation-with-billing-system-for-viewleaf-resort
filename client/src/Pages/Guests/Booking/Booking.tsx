@@ -42,8 +42,8 @@ function Booking() {
 
                 <Container maxWidth="lg"sx={{display:"flex",alignItems:"center",marginTop:"1em"}}>
                     <div style={{flexGrow:"1"}}>
-                        <Typography variant="subtitle2" color="initial">TOTAL</Typography>
-                        <Typography variant="h6" color="initial" fontWeight={600}>₱1,150</Typography>
+                        <Typography variant="h6" color="initial">TOTAL : ₱1,150</Typography>
+                        <Typography variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of ₱400  </Typography>
                     </div>
                     <div style={{display:"flex",gap:"10px"}}>
                         <Button variant="text" onClick={()=> {if(active>1){setActive(active-1)}}}>
