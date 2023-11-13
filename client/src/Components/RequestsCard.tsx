@@ -5,7 +5,7 @@ import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-
+import { Link } from 'react-router-dom';
 
 
 
@@ -15,7 +15,7 @@ type Props = {
 }
 function RequestsCard({status}:Props) {
     return <>
-        <Paper variant="elevation" elevation={3} sx={{padding:"1em",borderRadius:"8px",maxWidth:"1200px"}}>
+        <Paper variant="elevation" component={Link} to="/admin/reservation/view" elevation={3} sx={{padding:"1em",borderRadius:"8px",maxWidth:"1200px"}}>
             <Box display="flex">
                 <Box flexGrow={"1"}>
                     <Typography variant="h5" color="initial">#123A23123</Typography>
