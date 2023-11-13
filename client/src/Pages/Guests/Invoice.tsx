@@ -29,6 +29,8 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
 
+
+
 type Props = {
     variant: "manage"|"view"
 }
@@ -45,6 +47,8 @@ const style = {
 };
 function Invoice({variant}:Props) {
     const [open, setOpen] = React.useState("");
+    // approved,pending, checkedOut, canceled, refunded
+    const [status, setStatus] = React.useState("pending");
     return<>
         <Container maxWidth="lg"  sx={{padding:"6em 0 7em"}}>
             {/* 
@@ -55,20 +59,49 @@ function Invoice({variant}:Props) {
             
             */}
             <Box display="flex" gap={"15px"} sx={{flexWrap:"wrap"}} mt={2}>
-                <Chip icon={<CurrencyExchangeIcon />} label="Get ERefund" variant="outlined" onClick={()=>{setOpen("refund")}} />
-                <Chip icon={<EventRepeatIcon     />} label="Reschedule Reservation" variant="outlined" onClick={()=>{setOpen("reschedule")}} />
-                <Chip icon={<DoNotDisturbAltIcon />} label="Cancel Reservation" variant="outlined" onClick={()=>{setOpen("cancel")}} />
+                {status ==="checkedOut" || status === "pending" || status === "canceled" || status === "refunded"?"":<>
+                    <Chip icon={<CurrencyExchangeIcon />} label="Get ERefund" variant="outlined" onClick={()=>{setOpen("refund")}} />
+                    <Chip icon={<EventRepeatIcon     />} label="Reschedule Reservation" variant="outlined" onClick={()=>{setOpen("reschedule")}} />
+                    <Chip icon={<DoNotDisturbAltIcon />} label="Cancel Reservation" variant="outlined" onClick={()=>{setOpen("cancel")}} />
+                </>}
                 <Box sx={{flexGrow:"1"}} ></Box>
-                {variant ==="view"?
+                {variant ==="view" && status === "checkedOut"?
                     <Chip icon={<StarIcon />} label="Rate our Service" variant="filled" onClick={()=>{setOpen("rate")}} color="primary" />:""    
                 }
                 {variant ==="manage"?
                     <Chip icon={<AddIcon />} label="Add" variant="filled" onClick={()=>{}} color="primary" />:""    
                 }
             </Box>
-            <Alert severity="info" sx={{margin:"2em 0"}}>Your requests is pending for verification</Alert>
-            <Typography variant="h4" color="primary" sx={{marginTop:"25px"}}>#123A23123</Typography>
-            <Typography variant="h6" color="initial" sx={{opacity:".6"}}>Reference Number</Typography>
+
+            {status==="pending"?
+                <Alert severity="warning" sx={{margin:"2em 0"}}>Your reservation is pending for verification</Alert>
+            :""}
+            {status==="rescheduling"?
+                <Alert severity="info" sx={{margin:"2em 0"}}>Your reservation is ongoing for reschedule</Alert>
+            :""}
+            {status==="canceled"?
+                <Alert severity="error" sx={{margin:"2em 0"}}>Your reservation is canceled</Alert>
+            :""}
+            {status==="refunded"?
+                <Alert severity="error" sx={{margin:"2em 0"}}>Your reservation is refunded</Alert>
+            :""}
+            {status==="approved"?
+                <Alert severity="info" sx={{margin:"2em 0"}}>Your reservation is approved</Alert>
+            :""}
+            
+
+
+
+            <Box display="flex" sx={{margin:"25px 0"}}>
+                <Box sx={{flexGrow:"1"}}>
+                    <Typography variant="h4" color="primary" >#123A23123</Typography>
+                    <Typography variant="h6" color="initial" sx={{opacity:".6"}}>Reference Number</Typography>
+                </Box>
+                <Box >
+                    <Typography textAlign={"end"} variant="h4" color="primary" >Oct 25, 2023 - Day Shift</Typography>
+                    <Typography textAlign={"end"} variant="h6" color="initial" sx={{opacity:".6"}}>Scheduled Date</Typography>
+                </Box>
+            </Box>
             
             
             <Paper variant="elevation" elevation={3} sx={{borderRadius:"8px",background:"#e3e3e3",padding:"1em",margin:"2em 0" ,display:"flex",alignItems:"center"}}>
@@ -95,15 +128,17 @@ function Invoice({variant}:Props) {
             <Typography variant="h6" color="initial">Billing Statement #1</Typography>
             <BookingStatement/>
             <Box sx={{padding:"0 32px"}}>
-                <Typography variant="subtitle1" textAlign="end" color="initial" fontWeight={600} sx={{opacity:".6"}}>TOTAL</Typography>
-                <Typography variant="h5" textAlign="end" color="initial" fontWeight={600}>₱300</Typography>
+                <Typography textAlign={"end"} variant="h6" color="initial">TOTAL : ₱1,150</Typography>
+                <Typography textAlign={"end"} variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of ₱400  </Typography>
             </Box>
+
             <hr style={{margin:"2em 0"}}/>
+
             <Typography variant="h6" color="initial">Billing Statement #2</Typography>
             <BookingStatement/>
             <Box sx={{padding:"0 32px"}}>
-                <Typography variant="subtitle1" textAlign="end" color="initial" fontWeight={600} sx={{opacity:".6"}}>TOTAL</Typography>
-                <Typography variant="h5" textAlign="end" color="initial" fontWeight={600}>₱300</Typography>
+                <Typography textAlign={"end"} variant="h6" color="initial">TOTAL : ₱1,150</Typography>
+                <Typography textAlign={"end"} variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of ₱400  </Typography>
             </Box>
         </Container>
 
@@ -202,8 +237,6 @@ function Invoice({variant}:Props) {
                                 required
                             />
                         </Grid>
-
-
                         <Grid item xs={5} marginBottom={"20px"}>
                             <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
@@ -238,10 +271,10 @@ function Invoice({variant}:Props) {
                 </>:""}
                 {open ==="viewReceipt"?<>
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
-                        Cancel Reservation
+                        View Receipt 
                     </Typography>
                     <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
-                        Provide a reason why you want to cancel
+                        Attached Image for receipt 
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sx={{marginBottom:"25px",overflowY:"scroll",maxHeight:"500px"}}>
