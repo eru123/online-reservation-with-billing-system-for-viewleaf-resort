@@ -16,8 +16,7 @@ function Booking() {
     return (
         <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
             {active === 1?<>
-                <Typography variant="h4" color="primary" fontWeight={600}>Selected Accommodation</Typography>
-                <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent  </Typography>
+                
                 <Accommodation/>
             </>:""}
             {active === 2?<>
