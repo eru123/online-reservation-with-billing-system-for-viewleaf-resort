@@ -27,9 +27,13 @@ import Additional from './Pages/Admin/Reservation/Additional/Additional';
 import Staff from './Pages/Admin/staff/ManageStaffs';
 import Notifications from './Pages/Admin/Notifications/Notifications';
 import Profile from './Pages/Admin/Profile/Profile';
+
+import Error from './Pages/Error';
 function App() {
   return (
+    
     <Routes>
+      <Route path="/*" element={<Error/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
 
