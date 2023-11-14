@@ -5,11 +5,6 @@ import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Modal from '@mui/material/Modal';
 import { Grid,Button, TextField, IconButton } from '@mui/material'
-import InputAdornment from '@mui/material/InputAdornment';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const style = {
     position: 'absolute' as 'absolute',
