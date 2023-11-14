@@ -144,7 +144,7 @@ function App({}:Props) {
               <Box display="flex" gap={"10px"} alignItems={"center"} ><PersonIcon/> Staff </Box>
             </Typography>
 
-            <Typography variant="h6" component={"a"} href='/admin' color="initial" sx={{
+            <Typography variant="h6" component={"a"} href='/admin/notifications' color="initial" sx={{
               padding:".5em 1em",
               color:"#5C5C5C",
               '&:hover': {
