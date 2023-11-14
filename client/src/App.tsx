@@ -24,6 +24,7 @@ import Policy from './Pages/Admin/Manage/Policy';
 import CreateResrvation from './Pages/Admin/Reservation/CreateResrvation';
 import Report from './Pages/Admin/Report/Report';
 import Additional from './Pages/Admin/Reservation/Additional/Additional';
+import Staff from './Pages/Admin/staff/ManageStaffs';
 function App() {
   return (
     <Routes>
@@ -52,6 +53,7 @@ function App() {
           <Route path="/admin/manage/policy" element={<Policy/>}/>
 
           <Route path="/admin/report" element={<Report/>}/>
+          <Route path="/admin/staff" element={<Staff/>}/>
         </Route>
     </Routes>
   );

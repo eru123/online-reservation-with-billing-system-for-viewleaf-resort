@@ -11,8 +11,6 @@ import TableCell from '@mui/material/TableCell'
 import Chip from '@mui/material/Chip';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 function Report() {
-    const [anchorElMoreMenu, setAnchorElMoreMenu] = React.useState<null | HTMLElement>(null);
-    const openMenu = Boolean(anchorElMoreMenu);
     return (
         <div>
             <Typography variant="h4" fontWeight={600} color="primary">Report</Typography>
@@ -40,8 +38,8 @@ function Report() {
                     variant="contained"
                     aria-label="Disabled elevation buttons"
                 >
-                    <Button>Import</Button>
-                    <Button>Export</Button>
+                    <Button>Backup</Button>
+                    <Button>Restore</Button>
                 </ButtonGroup>
             </Box>
 
