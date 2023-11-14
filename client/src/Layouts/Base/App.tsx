@@ -14,7 +14,7 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Fade from '@mui/material/Fade';
-
+import { Link } from 'react-router-dom'
 type Props = {
 }
 function App({}:Props) {
@@ -177,9 +177,8 @@ function App({}:Props) {
             onClose={handleClose}
             TransitionComponent={Fade}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+            <MenuItem component={Link} to={'/admin/profile'} >Profile</MenuItem>
+            <MenuItem >Logout</MenuItem>
           </Menu>
           <div style={{padding:"4em 1em 1em 0"}}>
             <Container maxWidth="lg">
