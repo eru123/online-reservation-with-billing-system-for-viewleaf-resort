@@ -10,7 +10,7 @@ import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField'
 import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton'
