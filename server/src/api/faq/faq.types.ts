@@ -1,6 +1,6 @@
 // types.ts
 export interface FAQDocument extends Document {
-  id: number;
+  faqId: number;
   question: string;
   answer: string;
 }
