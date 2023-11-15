@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(helmet());
 
 app.use('/faqs', faqRoute);
-app.use('/content', contentRoute);
+app.use('/contents', contentRoute);
 
 app.use((_req, _res, next) => next(new NotFound()));
 app.use(errorHandler);
