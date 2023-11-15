@@ -3,7 +3,7 @@ import express from 'express';
 import {
   createFAQs,
   getFAQs,
-  // editFAQ,
+  editFAQ,
   // deleteFAQ,
 } from './faq.controller';
 import { Router } from 'express';
@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.post('/', asynchronousHandler(createFAQs));
 router.get('/', asynchronousHandler(getFAQs));
-// router.patch('/faqs', asynchronousHandler(editFAQ));
+router.patch('/', asynchronousHandler(editFAQ));
 // router.delete('/faqs', asynchronousHandler(deleteFAQ));
 
 export default router;

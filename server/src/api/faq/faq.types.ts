@@ -11,6 +11,7 @@ export interface CreateFAQInput {
 }
 
 export interface UpdateFAQInput {
+  faqId: number;
   question?: string;
   answer?: string;
 }
