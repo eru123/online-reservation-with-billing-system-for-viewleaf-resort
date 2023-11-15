@@ -20,3 +20,13 @@ export const createFAQs = async (req: Request<any, any, CreateFAQInput>, res: Re
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+export const getFAQs = async (req: Request<any, any, CreateFAQInput>, res: Response) => {
+  try {
+    const faqs = await FAQModel.find();
+    res.json(faqs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
