@@ -2,7 +2,8 @@ import React, {useEffect} from 'react'
 
 import { 
   Button, 
-  TextField
+  TextField,
+  Typography
 } from '@mui/material'
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -56,8 +57,15 @@ export default function TestFAQ() {
       {data?.map((faq: any) => {
         return (
           <div>
-            <p>{faq.question}</p>
-            <p>{faq.answer}</p>
+            <Typography variant="h6" color="initial">{faq.question}</Typography>
+            <Typography variant="h6" color="initial">{faq.answer}</Typography>
+
+            <Button variant="contained" color="primary" onClick={() => updateFAQ({...faq, form})}>
+              Update
+            </Button>
+            <Button variant="contained" color="error" onClick={() => deleteFAQ(faq)}>
+              Delete
+            </Button>
           </div>
         )
       })}
