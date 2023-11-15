@@ -35,6 +35,7 @@ export default function TestFAQ() {
         variant="outlined"
         fullWidth
         margin="normal"
+        value={form.question}
         onChange={(e) => setForm({...form, question: e.target.value})}
       />
       <TextField
@@ -45,8 +46,10 @@ export default function TestFAQ() {
         margin="normal"
         multiline
         rows={4}
+        value={form.answer}
+        onChange={(e) => setForm({...form, answer: e.target.value})}
       />
-      <Button variant="contained" color="primary">
+      <Button variant="contained" color="primary" onClick={() => handleCreateFAQ(form)}>
         Create
       </Button>
 
