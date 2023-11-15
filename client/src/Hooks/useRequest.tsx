@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import axios, { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig } from 'axios';
+import axios from './useAxios';
 
 interface RequestData {
   data: any;
