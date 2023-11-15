@@ -17,5 +17,10 @@ export interface UpdateFAQInput {
 }
 
 export interface GetFAQs {
-  id?: number;
+  faqId?: number;
+}
+
+
+export interface DeleteFAQs {
+  faqId: number;
 }

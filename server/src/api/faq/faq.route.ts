@@ -4,7 +4,7 @@ import {
   createFAQs,
   getFAQs,
   editFAQ,
-  // deleteFAQ,
+  deleteFAQ,
 } from './faq.controller';
 import { Router } from 'express';
 import asynchronousHandler from '../../middlewares/asynchronousHandler';
@@ -14,6 +14,6 @@ const router = express.Router();
 router.post('/', asynchronousHandler(createFAQs));
 router.get('/', asynchronousHandler(getFAQs));
 router.patch('/', asynchronousHandler(editFAQ));
-// router.delete('/faqs', asynchronousHandler(deleteFAQ));
+router.delete('/', asynchronousHandler(deleteFAQ));
 
 export default router;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import FAQModel from './faq.model';
 
-import { CreateFAQInput, UpdateFAQInput, FAQDocument } from './faq.types';
+import { CreateFAQInput, UpdateFAQInput, DeleteFAQs, GetFAQs, FAQDocument } from './faq.types';
 
 export const createFAQs = async (req: Request<any, any, CreateFAQInput>, res: Response) => {
   try {
@@ -21,7 +21,7 @@ export const createFAQs = async (req: Request<any, any, CreateFAQInput>, res: Re
   }
 };
 
-export const getFAQs = async (req: Request<any, any, CreateFAQInput>, res: Response) => {
+export const getFAQs = async (req: Request<any, any, GetFAQs>, res: Response) => {
   try {
     const faqs = await FAQModel.find();
     res.json(faqs);
@@ -51,6 +51,23 @@ export const editFAQ = async (req: Request<any, any, UpdateFAQInput>, res: Respo
     }
 
     res.json(faq);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export const deleteFAQ = async (req: Request<any, any, DeleteFAQs>, res: Response) => {
+  try {
+    const { faqId } = req.body;
+
+    const deletedFAQ = await FAQModel.findOneAndDelete({ faqId });
+
+    if (!deletedFAQ) {
+      return res.status(404).json({ error: 'FAQ not found' });
+    }
+
+    res.json({ message: 'FAQ deleted successfully', deletedFAQ });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
