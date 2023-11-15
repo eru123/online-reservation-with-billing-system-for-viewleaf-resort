@@ -12,9 +12,11 @@ import errorHandler from './middlewares/errorHandler';
 import { NotFound } from './utilities/errors';
 import envs from './utilities/envs';
 
+// Routes
+import faqRoute from './api/faq/faq.route';
+
 // Environment Variables
 const { PORT, MONGO_URI, CORS_ORIGIN,  } = envs;
-
 
 const app = express();
 
@@ -23,11 +25,10 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(helmet());
 
+app.use('/faqs', faqRoute);
+
 app.use((_req, _res, next) => next(new NotFound()));
 app.use(errorHandler);
-
-// // Example usage of sendSMS function
-
 
 mongoose
     .connect(MONGO_URI)
