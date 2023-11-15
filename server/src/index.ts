@@ -14,6 +14,7 @@ import envs from './utilities/envs';
 
 // Routes
 import faqRoute from './api/faq/faq.route';
+import contentRoute from './api/content/content.route';
 
 // Environment Variables
 const { PORT, MONGO_URI, CORS_ORIGIN,  } = envs;
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use(helmet());
 
 app.use('/faqs', faqRoute);
+app.use('/content', contentRoute);
 
 app.use((_req, _res, next) => next(new NotFound()));
 app.use(errorHandler);
