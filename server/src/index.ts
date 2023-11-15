@@ -13,7 +13,8 @@ import { NotFound } from './utilities/errors';
 import envs from './utilities/envs';
 
 // Environment Variables
-const { PORT, MONGO_URI, CORS_ORIGIN } = envs;
+const { PORT, MONGO_URI, CORS_ORIGIN,  } = envs;
+
 
 const app = express();
 
@@ -25,6 +26,9 @@ app.use(helmet());
 app.use((_req, _res, next) => next(new NotFound()));
 app.use(errorHandler);
 
+// // Example usage of sendSMS function
+
+
 mongoose
     .connect(MONGO_URI)
     .then(() => {
@@ -32,3 +36,4 @@ mongoose
         app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
     })
     .catch(console.error);
+
