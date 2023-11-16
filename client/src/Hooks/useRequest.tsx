@@ -33,6 +33,8 @@ function useRequest(): RequestHook {
         alert(response.data.message)
       }
 
+      console.log(response.data)
+
     } catch (error: any) {
       setError(error);
       console.error('Error making request:', error);

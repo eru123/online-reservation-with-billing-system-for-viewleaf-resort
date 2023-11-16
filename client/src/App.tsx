@@ -30,6 +30,7 @@ import Notifications from './Pages/Admin/Notifications/Notifications';
 
 // Test
 import TestFAQ from './Test/TestFAQ';
+import TestContent from './Test/TestContent';
 
 
 function App() {
@@ -64,6 +65,7 @@ function App() {
         </Route>
 
         <Route path="/testfaq" element={<TestFAQ/>} />
+        <Route path="/testcontent" element={<TestContent/>} />
     </Routes>
   );
 }
