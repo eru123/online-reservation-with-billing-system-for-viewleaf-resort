@@ -38,6 +38,47 @@ const ContentSchema = new Schema<ContentDocument>(
       required: true,
       default: 'Default Promo Value', // Set your default value here
     },
+    shift: {
+      type: {
+        day: {
+          start: {
+            type: String,
+            required: true,
+            default: 'Default Shift Value',
+          },
+          end: {
+            type: String,
+            required: true,
+            default: 'Default Shift Value',
+          },
+        },
+        night: {
+          start: {
+            type: String,
+            required: true,
+            default: 'Default Shift Value',
+          },
+          end: {
+            type: String,
+            required: true,
+            default: 'Default Shift Value',
+          },
+        },
+        whole: {
+          start: {
+            type: String,
+            required: true,
+            default: 'Default Shift Value',
+          },
+          end: {
+            type: String,
+            required: true,
+            default: 'Default Shift Value',
+          },
+        },
+      },
+      required: true,
+    },
   },
   { timestamps: true }
 );
