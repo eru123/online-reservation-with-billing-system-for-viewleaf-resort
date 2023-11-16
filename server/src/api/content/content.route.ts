@@ -3,7 +3,9 @@ import express from 'express';
 import {
   initializeContent,
   getContent,
-  editContent
+  editContent,
+  getShifts,
+  editShifts
 } from './content.controller';
 import { Router } from 'express';
 import asynchronousHandler from '../../middlewares/asynchronousHandler';
@@ -14,5 +16,8 @@ initializeContent();
 
 router.get('/', asynchronousHandler(getContent));
 router.patch('/', asynchronousHandler(editContent));
+
+router.get('/shifts', asynchronousHandler(getShifts));
+router.patch('/shifts', asynchronousHandler(editShifts));
 
 export default router;
