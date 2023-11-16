@@ -43,7 +43,7 @@ export const initializeContent = async () => {
   }
 };
 
-export const getContent = async (req: Request, res: Response) => {
+export const getContent = async (_req: Request, res: Response) => {
   try {
     // Fetch the content document
     const existingContent = await ContentModel.findOne();
@@ -58,7 +58,6 @@ export const getContent = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
 
 export const editContent = async (req: Request<any, any, Partial<ContentDocument>>, res: Response) => {
   try {
@@ -89,7 +88,7 @@ export const editContent = async (req: Request<any, any, Partial<ContentDocument
   }
 };
 
-export const getShifts = async (req: Request, res: Response) => {
+export const getShifts = async (_req: Request, res: Response) => {
   try {
     // Fetch the content document
     const existingContent = await ContentModel.findOne();
@@ -142,7 +141,7 @@ export const editShifts = async (req: Request<any, any, Partial<Shift>>, res: Re
   }
 };
 
-export const getFees = async (req: Request, res: Response) => {
+export const getFees = async (_req: Request, res: Response) => {
   try {
     // Fetch the content document
     const existingContent = await ContentModel.findOne();

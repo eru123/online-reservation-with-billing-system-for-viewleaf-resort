@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import FAQModel from './faq.model';
 
-import { CreateFAQInput, UpdateFAQInput, DeleteFAQs, GetFAQs, FAQDocument } from './faq.types';
+import { CreateFAQInput, UpdateFAQInput, DeleteFAQs, GetFAQs } from './faq.types';
 
 export const createFAQs = async (req: Request<any, any, CreateFAQInput>, res: Response) => {
   try {
@@ -21,7 +21,7 @@ export const createFAQs = async (req: Request<any, any, CreateFAQInput>, res: Re
   }
 };
 
-export const getFAQs = async (req: Request<any, any, GetFAQs>, res: Response) => {
+export const getFAQs = async (_req: Request<any, any, GetFAQs>, res: Response) => {
   try {
     const faqs = await FAQModel.find();
     res.json(faqs);

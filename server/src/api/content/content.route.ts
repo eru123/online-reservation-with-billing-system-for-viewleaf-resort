@@ -9,7 +9,6 @@ import {
   getFees,
   editFees,
 } from './content.controller';
-import { Router } from 'express';
 import asynchronousHandler from '../../middlewares/asynchronousHandler';
 
 const router = express.Router();

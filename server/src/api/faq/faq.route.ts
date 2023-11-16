@@ -6,7 +6,6 @@ import {
   editFAQ,
   deleteFAQ,
 } from './faq.controller';
-import { Router } from 'express';
 import asynchronousHandler from '../../middlewares/asynchronousHandler';
 
 const router = express.Router();
