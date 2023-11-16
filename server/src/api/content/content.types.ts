@@ -1,3 +1,14 @@
+export interface Duration {
+  start: string;
+  end: string; 
+}
+
+export interface Shift {
+  day: Duration;
+  night: Duration; 
+  whole: Duration;
+}
+
 export interface ContentDocument extends Document {
   about: string;
   phone: number;
@@ -6,4 +17,5 @@ export interface ContentDocument extends Document {
   policy: string,
   payment: string,
   promo: string,
+  shift: Shift,
 }
