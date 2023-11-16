@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import ContentModel from './content.model';
-import { ContentDocument, Shift } from './content.types';
+import { ContentDocument, Shift, Fee } from './content.types';
 
 export const initializeContent = async () => {
   try {
@@ -29,7 +29,12 @@ export const initializeContent = async () => {
             end: '4:00 AM',
           },
         },
-      };
+        fee: {
+          kid: 0,
+          adult: 0,
+          senior: 0,
+        }
+      }
       
       await ContentModel.create(defaultContentData);
     }
@@ -133,6 +138,54 @@ export const editShifts = async (req: Request<any, any, Partial<Shift>>, res: Re
     res.json(updatedContent.shift);
   } catch (error) {
     console.error('Error editing shifts:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export const getFees = async (req: Request, res: Response) => {
+  try {
+    // Fetch the content document
+    const existingContent = await ContentModel.findOne();
+
+    if (!existingContent) {
+      initializeContent();
+      return res.status(404).json({ error: 'Content not found' });
+    }
+
+    // Extract and return only the fee information
+    const { fee } = existingContent;
+    res.json({ fee });
+  } catch (error) {
+    console.error('Error getting fees:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export const editFees = async (req: Request<any, any, Partial<Fee>>, res: Response) => {
+  try {
+    const newFees: Partial<Fee> = req.body;
+
+    // Ensure there is only one content document
+    const existingContent = await ContentModel.findOne();
+    if (!existingContent) {
+      return res.status(404).json({ error: 'Content not found' });
+    }
+
+    // Update the existing content with the new fee data
+    existingContent.fee.kid = newFees.kid || existingContent.fee.kid;
+    existingContent.fee.adult = newFees.adult || existingContent.fee.adult;
+    existingContent.fee.senior = newFees.senior || existingContent.fee.senior;
+
+    const updatedContent = await existingContent.save();
+
+    // Check if the fee property is present in the updated content
+    if (!updatedContent || !updatedContent.fee) {
+      return res.status(500).json({ error: 'Failed to update fees' });
+    }
+
+    res.json(updatedContent.fee);
+  } catch (error) {
+    console.error('Error editing fees:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
