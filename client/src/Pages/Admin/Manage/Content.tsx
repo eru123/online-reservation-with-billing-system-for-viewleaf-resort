@@ -13,6 +13,7 @@ import { Grid,Button, TextField } from '@mui/material'
 import TESTCalendar from '../../../Components/TESTCalendar'
 
 import useFAQ from '../../../Hooks/useFAQ'
+import useContent from '../../../Hooks/useContent'
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -37,12 +38,15 @@ function Content() {
         }
     }
 
-    const {data, loading, error, getFAQ, createFAQ, updateFAQ, deleteFAQ} = useFAQ();
+    const {data: faqs, loading: faqLoading, error: faqError, getFAQ, createFAQ, updateFAQ, deleteFAQ} = useFAQ();
+    const {data: contents, loading: contentLoading, error: contentError, getContent, updateContent} = useContent();
 
     const [form, setForm] = React.useState({
       question: '',
       answer: '',
     })
+
+    const [about, setAbout] = useState("");
 
     const [selectedFaq, setSelectedFaq] = useState<any>(null);
 
@@ -55,6 +59,7 @@ function Content() {
         question: '',
         answer: '',
       })
+      setAbout("")
     }
 
     const handleCreateFAQ: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -109,12 +114,30 @@ function Content() {
       clearForm()
     }
 
+    const handleEditAbout: React.FormEventHandler<HTMLFormElement> = (e) => {
+      e.preventDefault()
+
+      // Edit About
+      updateContent({
+        about: about
+      })
+
+      // Refresh data
+      getFAQ();
+      getFAQ();
+      getFAQ();
+
+      // Clear Form
+      clearForm()
+    }
+
     useEffect(() => {
       getFAQ();
+      getContent();
     }, [])
 
-    if (!data || loading) return <p>Loading...</p>
-    if (error) return <p>Error : {error.message}</p>
+    if (faqLoading || contentLoading) return <p>Loading...</p>
+    if (faqError || contentError) return <p>Error</p>
 
     return (
         <div>
@@ -144,7 +167,7 @@ function Content() {
                     {accordionOpen === "about"?
                         <Box sx={{padding:"0 1em 1em"}}>
                             <hr style={{marginBottom:"1em"}}/>
-                            <Typography variant="body1" color="initial" textAlign={"justify"}>Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus..Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus..</Typography>
+                            <Typography variant="body1" color="initial" textAlign={"justify"}>{contents?.about}</Typography>
                         </Box>
                     :""}
                 </Paper>
@@ -173,7 +196,7 @@ function Content() {
                       
                         <Box sx={{padding:"0 1em 1em"}}>
                             <hr style={{marginBottom:"1em"}}/>
-                            {Array.isArray(data) && data?.map((faq: any) => (
+                            {Array.isArray(faqs) && faqs?.map((faq: any) => (
                               <Box >
                                   <Box display="flex" alignItems={"center"} marginBottom={".2em"} >
                                       <Typography sx={{flexGrow:"1"}} variant="subtitle1" fontWeight={500} color="initial" textAlign={"justify"}>{faq.question}</Typography>
@@ -336,31 +359,33 @@ function Content() {
                         <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
                             About Content
                         </Typography>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
+                        <form onSubmit={handleEditAbout}>
+                          <Grid container spacing={2}>
+                              <Grid item xs={12}>
                                 <TextField
-                                    id="about"
-                                    label="Content"
-                                    fullWidth
-                                    multiline
+                                  id="about"
+                                  label="Content"
+                                  fullWidth
+                                  multiline
+                                  defaultValue={contents?.about}
+                                  onChange={(e) => setAbout(e.target.value)}
                                 />
-                            </Grid>
-                            
-                            <Grid item xs={12} padding={"1em 0"}>
-                                
-                            </Grid>
-                            <Grid item xs={5}>
+                              </Grid>
+                              <Grid item xs={12} padding={"1em 0"}>
+
+                              </Grid>
+                              <Grid item xs={5}>
                                 <Button variant="text" fullWidth onClick={()=>{setOpen("")}}>
-                                    back
+                                  back
                                 </Button>
-                            </Grid>
-                            <Grid item xs={7}>
-                                <Button variant="contained" color='primary' fullWidth onClick={()=>setOpen("")}>
+                              </Grid>
+                              <Grid item xs={7}>
+                                  <Button variant="contained" color='primary' fullWidth onClick={()=>setOpen("")} type='submit'>
                                     Confirm
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    
+                                  </Button>
+                              </Grid>
+                          </Grid>
+                        </form>
                     </>:""}
                 </Box>
             </Modal>
