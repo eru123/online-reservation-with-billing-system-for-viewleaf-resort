@@ -31,6 +31,7 @@ import Notifications from './Pages/Admin/Notifications/Notifications';
 // Test
 import TestFAQ from './Test/TestFAQ';
 import TestContent from './Test/TestContent';
+import TestShift from './Test/TestShift';
 
 
 function App() {
@@ -66,6 +67,8 @@ function App() {
 
         <Route path="/testfaq" element={<TestFAQ/>} />
         <Route path="/testcontent" element={<TestContent/>} />
+        <Route path="/testshift" element={<TestShift/>} />
+
     </Routes>
   );
 }

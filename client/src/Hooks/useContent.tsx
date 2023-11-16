@@ -77,6 +77,8 @@ function useContent() {
     error,
     getContent,
     updateContent,
+    getShift,
+    updateShift,
   };
 }
 
