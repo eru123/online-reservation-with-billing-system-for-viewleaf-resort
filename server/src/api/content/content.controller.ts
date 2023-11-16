@@ -24,6 +24,23 @@ export const initializeContent = async () => {
   }
 };
 
+export const getContent = async (req: Request, res: Response) => {
+  try {
+    // Fetch the content document
+    const existingContent = await ContentModel.findOne();
+
+    if (!existingContent) {
+      initializeContent();
+    }
+
+    res.json(existingContent);
+  } catch (error) {
+    console.error('Error getting content:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 export const editContent = async (req: Request<any, any, Partial<ContentDocument>>, res: Response) => {
   try {
     const newData = req.body;
