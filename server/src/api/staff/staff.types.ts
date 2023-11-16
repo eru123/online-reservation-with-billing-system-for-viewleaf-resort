@@ -6,6 +6,7 @@ export enum Role {
 export interface Staff {
     staffId: string;
     username: string;
+    contact?: string;
     credentials: {
         email: string;
         password: string;
