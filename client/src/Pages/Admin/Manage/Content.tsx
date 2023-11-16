@@ -60,16 +60,21 @@ function Content() {
     const handleCreateFAQ: React.FormEventHandler<HTMLFormElement> = (e) => {
       e.preventDefault()
 
-      // Clear Form
-      clearForm()
-
       // Create FAQ
       createFAQ(form)
+
+      // Clear Selected FAQ
+      setSelectedFaq(null)
+
+      // Refresh data
+      getFAQ();
+
+      // Clear Form
+      clearForm()
     }
 
     const handleEditFAQ: React.FormEventHandler<HTMLFormElement> = (e) => {
-      // Clear Form
-      clearForm()
+      e.preventDefault()
 
       // Edit FAQ
       updateFAQ({
@@ -77,6 +82,25 @@ function Content() {
         question: form.question,
         answer: form.answer
       })
+
+      // Refresh data
+      getFAQ();
+
+      // Clear Form
+      clearForm()
+    }
+
+    const handleDeleteFaq: React.FormEventHandler<HTMLFormElement> = (e) => {
+      e.preventDefault()
+
+      // Edit FAQ
+      deleteFAQ(selectedFaq)
+
+      // Refresh data
+      getFAQ();
+
+      // Clear Form
+      clearForm()
     }
 
     useEffect(() => {
@@ -153,7 +177,10 @@ function Content() {
                                       }}>
                                           <EditIcon />
                                       </IconButton>
-                                      <IconButton aria-label="" onClick={() => {setOpen("deleteFAQ")}}>
+                                      <IconButton aria-label="" onClick={() => {
+                                        setOpen("deleteFAQ")
+                                        setSelectedFaq(faq)
+                                      }}>
                                           <DeleteIcon />
                                       </IconButton>
                                   </Box>
@@ -274,7 +301,6 @@ function Content() {
                         </Typography>
                         <Grid container spacing={2}>
                             
-                            
                             <Grid item xs={12} padding={"1em 0"}>
                                 
                             </Grid>
@@ -284,9 +310,11 @@ function Content() {
                                 </Button>
                             </Grid>
                             <Grid item xs={7}>
-                                <Button variant="contained" color='primary' fullWidth onClick={()=>setOpen("")}>
+                              <form onSubmit={handleDeleteFaq}>
+                                <Button variant="contained" color='primary' fullWidth type='submit'>
                                     Confirm
                                 </Button>
+                              </form>
                             </Grid>
                         </Grid>
                     
