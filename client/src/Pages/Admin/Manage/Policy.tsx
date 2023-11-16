@@ -35,6 +35,10 @@ function Policy() {
       getContent();
     },[])
 
+    if (contentLoading) {
+      return <div>Loading...</div>;
+    }
+
     return <>
         <Typography variant="h4" fontWeight={600} color="primary">Manage Policy </Typography>
         <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>Update your policy</Typography>
@@ -47,16 +51,14 @@ function Policy() {
                 </Button>
             </Box>
         <Box>
-            <Box display="flex" justifyContent={"center"} alignItems={"center"}  minHeight={"800px"} sx={{background:"#B8B8B8",borderRadius:"12px"}}>   
-                <PictureAsPdfIcon sx={{fill:"#626262",fontSize:"100px"}}/>
-                <iframe
-                  title="PDF Viewer" 
-                  src={content?.policy} 
-                  width="100%"
-                  height="500px" // You can adjust the height based on your preference
-                  frameBorder="0"
-                />
-            </Box>
+          <Box display="flex" justifyContent={"center"} alignItems={"center"}  minHeight={"800px"} sx={{background:"#B8B8B8",borderRadius:"12px"}}>   
+            <iframe
+              title="PDF Viewer" 
+              src={content?.policy} 
+              width="100%"
+              height="500px"
+            />
+          </Box>
         </Box>
         <Modal
             keepMounted
@@ -76,9 +78,9 @@ function Policy() {
                     <Grid container spacing={2}>
                         <Grid item xs={12} >
                             <TextField
-                                type='file'
-                                id="policy"
-                                fullWidth
+                              type='file'
+                              id="policy"
+                              fullWidth
                             />
                             <input
                               type="file"
