@@ -445,7 +445,7 @@ function Accommodation() {
                                 fullWidth
                                 id="kids"
                                 label="Kids"
-                                defaultValue={feeForm?.kid}
+                                defaultValue={fees?.fee?.kid}
                                 onChange={(e)=>setFeeForm({...feeForm, kid: e.target.value})}
                             />
                         </Grid>
@@ -455,7 +455,7 @@ function Accommodation() {
                                 fullWidth
                                 id="adult"
                                 label="Adult"
-                                defaultValue={feeForm?.adult}
+                                defaultValue={fees?.fee?.adult}
                                 onChange={(e)=>setFeeForm({...feeForm, adult: e.target.value})}
                             />
                         </Grid>
@@ -465,7 +465,7 @@ function Accommodation() {
                                 fullWidth
                                 id="seniorPwd"
                                 label="Senior / PWD"
-                                defaultValue={feeForm?.senior}
+                                defaultValue={fees?.fee?.senior}
                                 onChange={(e)=>setFeeForm({...feeForm, senior: e.target.value})}
                             />
                         </Grid>
