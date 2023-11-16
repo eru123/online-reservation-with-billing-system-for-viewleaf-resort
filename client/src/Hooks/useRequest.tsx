@@ -36,6 +36,7 @@ function useRequest(): RequestHook {
     } catch (error: any) {
       setError(error);
       console.error('Error making request:', error);
+      alert(error)
     } finally {
       setLoading(false);
     }
