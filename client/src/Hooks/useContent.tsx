@@ -1,6 +1,16 @@
 import { useState } from 'react';
 import useRequest from './useRequest';
 
+export interface Duration {
+  start: string;
+  end: string; 
+}
+export interface Shift {
+  day: Duration;
+  night: Duration; 
+  whole: Duration;
+}
+
 interface ContentData {
   about: string;
   phone: number;
@@ -9,6 +19,7 @@ interface ContentData {
   policy: string,
   payment: string,
   promo: string,
+  shift: Shift,
 }
 
 interface UpdateContentData {
@@ -19,6 +30,12 @@ interface UpdateContentData {
   policy?: string,
   payment?: string,
   promo?: string,
+}
+
+interface UpdateShiftData {
+  day?: Duration;
+  night?: Duration; 
+  whole?: Duration;
 }
 
 function useContent() {
@@ -35,6 +52,21 @@ function useContent() {
     makeRequest({
       method: 'patch',
       url: `/contents`,
+      data: content,
+    });
+  };
+
+  const getShift = () => {
+    makeRequest({
+      method: 'get',
+      url: `/contents/shifts`,
+    });
+  };
+
+  const updateShift = (content: UpdateShiftData) => {
+    makeRequest({
+      method: 'patch',
+      url: `/contents/shifts`,
       data: content,
     });
   };
