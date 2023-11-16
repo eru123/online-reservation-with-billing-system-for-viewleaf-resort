@@ -79,6 +79,26 @@ const ContentSchema = new Schema<ContentDocument>(
       },
       required: true,
     },
+    fee: {
+      type : {
+        kid : {
+          type: Number,
+          required: true,
+          default: 0,
+        },
+        adult : {
+          type: Number,
+          required: true,
+          default: 0,
+        },
+        senior : {
+          type: Number,
+          required: true,
+          default: 0,
+        }
+      },
+      required: true,
+    }
   },
   { timestamps: true }
 );
