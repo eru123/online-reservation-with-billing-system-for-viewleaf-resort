@@ -68,6 +68,8 @@ function Content() {
 
       // Refresh data
       getFAQ();
+      getFAQ();
+      getFAQ();
 
       // Clear Form
       clearForm()
@@ -85,6 +87,8 @@ function Content() {
 
       // Refresh data
       getFAQ();
+      getFAQ();
+      getFAQ();
 
       // Clear Form
       clearForm()
@@ -98,6 +102,8 @@ function Content() {
 
       // Refresh data
       getFAQ();
+      getFAQ();
+      getFAQ();
 
       // Clear Form
       clearForm()
@@ -107,7 +113,7 @@ function Content() {
       getFAQ();
     }, [])
 
-    if (loading) return <p>Loading...</p>
+    if (!data || loading) return <p>Loading...</p>
     if (error) return <p>Error : {error.message}</p>
 
     return (
@@ -317,7 +323,6 @@ function Content() {
                               </form>
                             </Grid>
                         </Grid>
-                    
                     </>:""}
 
 
