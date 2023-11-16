@@ -8,7 +8,6 @@ interface FAQData {
 }
 
 interface CreateFAQData {
-  faqId: number;
   question: string;
   answer: string;
 }
