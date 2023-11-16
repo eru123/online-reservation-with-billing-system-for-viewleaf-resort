@@ -11,6 +11,12 @@ export interface Shift {
   whole: Duration;
 }
 
+export interface Fee {
+  kid: number;
+  adult: number; 
+  senior: number;
+}
+
 interface ContentData {
   about: string;
   phone: number;
@@ -20,6 +26,7 @@ interface ContentData {
   payment: string,
   promo: string,
   shift: Shift,
+  fee: Fee
 }
 
 interface UpdateContentData {
@@ -36,6 +43,12 @@ interface UpdateShiftData {
   day?: Duration;
   night?: Duration; 
   whole?: Duration;
+}
+
+interface UpdateFeeData {
+  kid?: number;
+  adult?: number; 
+  senior?: number;
 }
 
 function useContent() {
@@ -71,6 +84,22 @@ function useContent() {
     });
   };
 
+  const getFee = () => {
+    makeRequest({
+      method: 'get',
+      url: `/contents/fees`,
+    });
+  };
+
+  const updateFee = (content: UpdateFeeData) => {
+    makeRequest({
+      method: 'patch',
+      url: `/contents/fees`,
+      data: content,
+    })
+  }
+  
+
   return {
     data,
     loading,
@@ -79,6 +108,8 @@ function useContent() {
     updateContent,
     getShift,
     updateShift,
+    getFee,
+    updateFee
   };
 }
 
