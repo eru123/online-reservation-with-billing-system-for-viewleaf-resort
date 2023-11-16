@@ -60,7 +60,13 @@ export default function TestFAQ() {
             <Typography variant="h6" color="initial">{faq.question}</Typography>
             <Typography variant="h6" color="initial">{faq.answer}</Typography>
 
-            <Button variant="contained" color="primary" onClick={() => updateFAQ({...faq, form})}>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              onClick={()=>{
+                updateFAQ({...faq, question: form.question, answer: form.answer})
+              }}
+            >
               Update
             </Button>
             <Button variant="contained" color="error" onClick={() => deleteFAQ(faq)}>
@@ -69,7 +75,6 @@ export default function TestFAQ() {
           </div>
         )
       })}
-
     </div>
   )
 }
