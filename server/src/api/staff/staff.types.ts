@@ -17,3 +17,8 @@ export interface StaffDocument extends Staff, Document {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export type CreateStaff = {
+    username: string;
+    email: string;
+}
