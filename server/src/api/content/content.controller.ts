@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import ContentModel from './content.model';
-import { ContentDocument } from './content.types';
+import { ContentDocument, Shift } from './content.types';
 
 export const initializeContent = async () => {
   try {
@@ -15,6 +15,20 @@ export const initializeContent = async () => {
         policy: 'Default Policy Value',
         payment: 'Default Payment Value',
         promo: 'Default Promo Value',
+        shift: {
+          day: {
+            start: '6:00 AM',
+            end: '4:00 PM',
+          },
+          night: {
+            start: '6:00 PM',
+            end: '4:00 AM',
+          },
+          whole: {
+            start: '6:00 AM',
+            end: '4:00 AM',
+          },
+        },
       };
       
       await ContentModel.create(defaultContentData);
@@ -69,3 +83,57 @@ export const editContent = async (req: Request<any, any, Partial<ContentDocument
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+export const getShifts = async (req: Request, res: Response) => {
+  try {
+    // Fetch the content document
+    const existingContent = await ContentModel.findOne();
+
+    if (!existingContent) {
+      initializeContent();
+      return res.status(404).json({ error: 'Content not found' });
+    }
+
+    // Extract and return only the shift information
+    const { shift } = existingContent;
+    res.json({ shift });
+  } catch (error) {
+    console.error('Error getting shifts:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export const editShifts = async (req: Request<any, any, Partial<Shift>>, res: Response) => {
+  try {
+    const newShifts: Partial<Shift> = req.body;
+
+    // Ensure there is only one content document
+    const existingContent = await ContentModel.findOne();
+    if (!existingContent) {
+      return res.status(404).json({ error: 'Content not found' });
+    }
+
+    // Update the existing content with the new shift data
+    existingContent.shift.day = { ...existingContent.shift.day, ...newShifts.day };
+    existingContent.shift.night = { ...existingContent.shift.night, ...newShifts.night };
+    existingContent.shift.whole = { ...existingContent.shift.whole, ...newShifts.whole };
+
+    const updatedContent = await existingContent.save();
+
+    // Check if the shift property is present in the updated content
+    if (!updatedContent || !updatedContent.shift) {
+      return res.status(500).json({ error: 'Failed to update shifts' });
+    }
+
+    // Check if the shift property is present in the updated content
+    if (!updatedContent || !updatedContent.shift) {
+      return res.status(500).json({ error: 'Failed to update shifts' });
+    }
+
+    res.json(updatedContent.shift);
+  } catch (error) {
+    console.error('Error editing shifts:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
