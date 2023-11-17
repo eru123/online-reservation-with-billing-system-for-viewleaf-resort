@@ -13,7 +13,7 @@ export interface Inclusion {
 }
 
 export interface Accommodation {
-    accommodataionId: string;
+    accommodationId: string;
     description: string;
     rate: number[];
     pax: number;
