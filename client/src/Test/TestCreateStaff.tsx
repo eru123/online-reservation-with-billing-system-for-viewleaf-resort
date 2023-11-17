@@ -8,11 +8,12 @@ import {
 
 import { useAuth } from '../Hooks/useAuth';
 
-export default function TestLogin() {
+export default function TestCreateStaff() {
 
-  const { login } = useAuth();
+  const { register } = useAuth();
 
   const [form, setForm] = useState({
+    username: '',
     email: '',
     password: '',
   })
@@ -20,12 +21,21 @@ export default function TestLogin() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(form)
-    login(form);
+    register(form);
   }
 
   return (
     <div>
       <form onSubmit={handleLogin}>
+        <TextField
+          id="username"
+          label="Username"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={form.username}
+          onChange={(e) => setForm({...form, username: e.target.value})}
+        />
         <TextField
           id="email"
           label="Email"
@@ -35,7 +45,6 @@ export default function TestLogin() {
           value={form.email}
           onChange={(e) => setForm({...form, email: e.target.value})}
         />
-
         <TextField
           id="password"
           label="Password"
@@ -45,7 +54,6 @@ export default function TestLogin() {
           value={form.password}
           onChange={(e) => setForm({...form, password: e.target.value})}
         />
-
         <Button variant="contained" color="primary" type='submit'>
           Login
         </Button>

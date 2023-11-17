@@ -34,6 +34,7 @@ import TestContent from './Test/TestContent';
 import TestShift from './Test/TestShift';
 import TestFee from './Test/TestFee';
 import TestLogin from './Test/TestLogin';
+import TestCreateStaff from './Test/TestCreateStaff';
 
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
         <Route path="/testshift" element={<TestShift/>} />
         <Route path="/testfee" element={<TestFee/>} />
         <Route path="/testlogin" element={<TestLogin/>} />
+        <Route path="/testcreatestaff" element={<TestCreateStaff/>} />
 
     </Routes>
   );
