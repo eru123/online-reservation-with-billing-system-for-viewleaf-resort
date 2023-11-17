@@ -19,7 +19,6 @@ import StaffModel from './api/staff/staff.model';
 // Routes
 import faqRoute from './api/faq/faq.route';
 import contentRoute from './api/content/content.route';
-import staffRoute from './api/staff/staff.route';
 
 // Environment Variables
 const { PORT, MONGO_URI, CORS_ORIGIN, USERNAME, PASSWORD, EMAIL } = envs;
