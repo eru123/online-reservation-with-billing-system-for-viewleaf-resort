@@ -22,7 +22,13 @@ export interface Duration {
 }
 
 export interface Fee {
-  kid: number;
-  adult: number; 
-  senior: number;
+  kid: FeeShift;
+  adult: FeeShift; 
+  senior: FeeShift;
+}
+
+export interface FeeShift {
+  day: number;
+  night: number; 
+  whole: number;
 }
