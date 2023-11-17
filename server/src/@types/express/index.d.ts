@@ -1,4 +1,4 @@
-import { StaffDocument } from '../../staff/staff.types';
+import { StaffDocument } from '../../api/staff/staff.types';
 import * as express from 'express';
 
 declare global {
