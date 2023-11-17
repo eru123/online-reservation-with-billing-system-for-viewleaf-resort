@@ -30,12 +30,23 @@ export const initializeContent = async () => {
           },
         },
         fee: {
-          kid: 0,
-          adult: 0,
-          senior: 0,
+          kid: {
+            day: 0,
+            night: 0,
+            whole: 0,
+          },
+          adult: {
+            day: 0,
+            night: 0,
+            whole: 0,
+          },
+          senior: {
+            day: 0,
+            night: 0,
+            whole: 0,
+          },
         }
       }
-      
       await ContentModel.create(defaultContentData);
     }
   } catch (error) {
@@ -171,9 +182,7 @@ export const editFees = async (req: Request<any, any, Partial<Fee>>, res: Respon
     }
 
     // Update the existing content with the new fee data
-    existingContent.fee.kid = newFees.kid || existingContent.fee.kid;
-    existingContent.fee.adult = newFees.adult || existingContent.fee.adult;
-    existingContent.fee.senior = newFees.senior || existingContent.fee.senior;
+    updateFee(existingContent, newFees);
 
     const updatedContent = await existingContent.save();
 
@@ -187,5 +196,20 @@ export const editFees = async (req: Request<any, any, Partial<Fee>>, res: Respon
     console.error('Error editing fees:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+};
+
+// Helper function to update fees
+const updateFee = (content: ContentDocument, newFees: Partial<Fee>) => {
+  content.fee.kid.day = newFees.kid?.day ?? content.fee.kid.day;
+  content.fee.kid.night = newFees.kid?.night ?? content.fee.kid.night;
+  content.fee.kid.whole = newFees.kid?.whole ?? content.fee.kid.whole;
+
+  content.fee.adult.day = newFees.adult?.day ?? content.fee.adult.day;
+  content.fee.adult.night = newFees.adult?.night ?? content.fee.adult.night;
+  content.fee.adult.whole = newFees.adult?.whole ?? content.fee.adult.whole;
+
+  content.fee.senior.day = newFees.senior?.day ?? content.fee.senior.day;
+  content.fee.senior.night = newFees.senior?.night ?? content.fee.senior.night;
+  content.fee.senior.whole = newFees.senior?.whole ?? content.fee.senior.whole;
 };
 

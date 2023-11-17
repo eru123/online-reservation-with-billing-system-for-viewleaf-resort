@@ -17,7 +17,7 @@ import StaffModel from './api/staff/staff.model';
 // Routes
 import faqRoute from './api/faq/faq.route';
 import contentRoute from './api/content/content.route';
-import staffRoute from './api/staff/staff.route';
+// import staffRoute from './api/staff/staff.route';
 
 // Environment Variables
 const { PORT, MONGO_URI, CORS_ORIGIN, USERNAME, PASSWORD, EMAIL } = envs;
@@ -31,7 +31,7 @@ app.use(helmet());
 
 app.use('/faqs', faqRoute);
 app.use('/contents', contentRoute);
-app.use('/staff', staffRoute);
+// app.use('/staff', staffRoute);
 
 app.use((_req, _res, next) => next(new NotFound()));
 app.use(errorHandler);
