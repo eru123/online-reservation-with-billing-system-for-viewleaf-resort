@@ -8,6 +8,8 @@ import mongoose from 'mongoose';
 // Middlewares
 import errorHandler from './middlewares/errorHandler';
 
+import staffRoute from './api/staff/staff.route';
+
 // Utilities
 import { NotFound } from './utilities/errors';
 import { Role } from './api/staff/staff.types';
@@ -23,6 +25,8 @@ app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(helmet());
+
+app.use('/staffs', staffRoute);
 
 app.use((_req, _res, next) => next(new NotFound()));
 app.use(errorHandler);
