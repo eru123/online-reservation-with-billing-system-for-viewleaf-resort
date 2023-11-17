@@ -25,6 +25,7 @@ export interface Fee {
   kid: FeeShift;
   adult: FeeShift; 
   senior: FeeShift;
+  pwd: FeeShift;
 }
 
 export interface FeeShift {

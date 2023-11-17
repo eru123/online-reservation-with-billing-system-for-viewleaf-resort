@@ -104,6 +104,14 @@ const ContentSchema = new Schema<ContentDocument>(
             whole: Number,
           },
           required: true,
+        },
+        pwd : {
+          type: {
+            day: Number,
+            night: Number,
+            whole: Number,
+          },
+          required: true,
         }
       },
       required: true,

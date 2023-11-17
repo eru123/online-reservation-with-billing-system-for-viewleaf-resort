@@ -45,6 +45,11 @@ export const initializeContent = async () => {
             night: 0,
             whole: 0,
           },
+          pwd: {
+            day: 0,
+            night: 0,
+            whole: 0,
+          }
         }
       }
       await ContentModel.create(defaultContentData);
@@ -211,5 +216,10 @@ const updateFee = (content: ContentDocument, newFees: Partial<Fee>) => {
   content.fee.senior.day = newFees.senior?.day ?? content.fee.senior.day;
   content.fee.senior.night = newFees.senior?.night ?? content.fee.senior.night;
   content.fee.senior.whole = newFees.senior?.whole ?? content.fee.senior.whole;
+
+  content.fee.pwd.day = newFees.pwd?.day ?? content.fee.pwd.day;
+  content.fee.pwd.night = newFees.pwd?.night ?? content.fee.pwd.night;
+  content.fee.pwd.whole = newFees.pwd?.whole ?? content.fee.pwd.whole;
+  
 };
 
