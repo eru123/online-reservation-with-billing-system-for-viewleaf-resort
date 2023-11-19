@@ -74,7 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
-    await axios.post(`/auth/logout`)
+    await axios.post(`/staffs/logout`)
     localStorage.clear();
     navigate("/");
   };

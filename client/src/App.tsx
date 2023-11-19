@@ -35,6 +35,7 @@ import TestShift from './Test/TestShift';
 import TestFee from './Test/TestFee';
 import TestLogin from './Test/TestLogin';
 import TestCreateStaff from './Test/TestCreateStaff';
+import TestLogout from './Test/TestLogout';
 
 
 function App() {
@@ -74,7 +75,7 @@ function App() {
         <Route path="/testfee" element={<TestFee/>} />
         <Route path="/testlogin" element={<TestLogin/>} />
         <Route path="/testcreatestaff" element={<TestCreateStaff/>} />
-
+        <Route path="/testlogout" element={<TestLogout/>} />
     </Routes>
   );
 }
