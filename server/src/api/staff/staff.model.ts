@@ -48,7 +48,7 @@ const staffSchema = new Schema(
             transform(_doc, ret) {
                 const {
                     _id,
-                    credential: { email },
+                    credentials: { email },
                     ...rest
                 } = ret;
 
