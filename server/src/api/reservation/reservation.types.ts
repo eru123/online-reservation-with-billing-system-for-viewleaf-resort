@@ -1,5 +1,4 @@
-import { Types } from 'mongoose';
-import { AccommodationDocument } from '../accommodation/accommodation.types';
+import { Document } from "mongoose";
 
 export enum ReservationStatus {
     PENDING = 'pending',
@@ -31,42 +30,9 @@ export interface Reservation {
     schedule: Date;
     status: ReservationStatus;
     notes: Note[];
-    invoices: {
-        accommodation: [Types.ObjectId | Record <string, unknown>];
-        guests: {
-            adult: number;
-            kids: number;
-            senior: number;
-            pwd: number;
-        };
-        receipt: string;
-    }[];
 }
 
 export interface ReservationDocument extends Reservation, Document {
-    invoices: {
-        accommodation: [AccommodationDocument['_id']];
-        guests: {
-            adult: number;
-            kids: number;
-            senior: number;
-            pwd: number;
-        };
-        receipt: string;
-    }[];
     createdAt: Date;
     updatedAt: Date;
-}
-
-export interface ReservationPopulatedDocument extends ReservationDocument {
-    invoices: {
-        accommodation: [AccommodationDocument];
-        guests: {
-            adult: number;
-            kids: number;
-            senior: number;
-            pwd: number;
-        };
-        receipt: string;
-    }[];
 }

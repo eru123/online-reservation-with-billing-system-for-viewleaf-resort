@@ -1,5 +1,11 @@
 import { Document } from "mongoose";
 
+export enum Shift {
+    DAY = 'day',
+    NIGHT = 'night',
+    WHOLE = 'whole day'
+}
+
 export enum AccommodationType {
     ROOM = 'room',
     COTTAGE = 'cottage',
@@ -12,12 +18,21 @@ export interface Inclusion {
     price: number;
 }
 
+export interface Fee {
+    shift: Shift;
+    rate: number;
+    guestFee: {
+        adult: number;
+        kids: number;
+    }
+}
+
 export interface Accommodation {
     accommodataionId: string;
     description: string;
-    rate: number[];
     pax: number;
     image: string;
+    fees: Fee[];
     type: AccommodationType;
     inclusions: Inclusion[];
 }
