@@ -11,7 +11,6 @@ import Box from '@mui/material/Box'
 
 function BookingStatement() {
     return <>
-        
         <Timeline
             sx={{
                 [`& .${timelineItemClasses.root}:before`]: {
