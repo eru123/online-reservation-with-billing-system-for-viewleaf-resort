@@ -9,7 +9,7 @@ interface SlackConfirmEmailProps {
 
 const baseUrl = "google.com";
 
-export const SlackConfirmEmail = ({ reservationNumber, reservationDate, reservationStatus }: SlackConfirmEmailProps) => (
+export const ReservationStatusEmail = ({ reservationNumber, reservationDate, reservationStatus }: SlackConfirmEmailProps) => (
     <Html>
         <Head />
         <Preview>Confirm your email address</Preview>
@@ -56,7 +56,7 @@ export const SlackConfirmEmail = ({ reservationNumber, reservationDate, reservat
     </Html>
 );
 
-export default SlackConfirmEmail;
+export default ReservationStatusEmail;
 
 const footerText = {
     fontSize: '12px',

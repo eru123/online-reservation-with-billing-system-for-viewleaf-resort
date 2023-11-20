@@ -1,13 +1,14 @@
-import { SlackConfirmEmail } from './reservationStatusTemplate';
+import { ReservationStatusEmail } from './reservationStatusTemplate';
 import { Resend } from 'resend';
 
 import React from 'react';
 import { Button } from '@react-email/components';
-import { FormLabel  } from "@mui/material"
+import { FormLabel } from '@mui/material';
 import { Input } from '@mui/material';
 import axios from 'axios';
+import { Emails } from 'resend/build/src/emails/emails';
 
-const resend = new Resend(process.env.RESEND_KEY);
+import useEmail from './../../Hooks/useEmail';
 
 interface sendingEmail {
     from: string;
@@ -18,35 +19,36 @@ interface sendingEmail {
 
 const dateAsString = '2023-11-10T12:00:00Z';
 
-export async function POST(){
-    
-}
+// export async function POST(requests: Request) {
+//     try {
+//         await resend.emails.send({
+//             from: 'onboarding@resend.dev',
+//             to: 'deuzaxel@gmail.com',
+//             subject: 'Reservation Status',
+//             react: ReservationStatusEmail({
+//                 reservationNumber: '12345',
+//                 reservationDate: new Date(dateAsString),
+//                 reservationStatus: 'Pending',
+//             }),
+//         });
+
+//         console.log("Email sent!");
+//     } catch (error) {
+//         console.error(error);
+//     }
+// }
 
 const SendEmails = () => {
+    const { sendEmail } = useEmail();
 
     async function handleOnSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const formData: Record<string, string> = {};
-        try{
-            await axios
-            .post('/otp', {
-                from: 'v0h7H@example.com',
-                to: 'deuzaxel@gmail.com',
-                subject: 'Slack Confirm Email',
-                react: SlackConfirmEmail({
-                    reservationNumber: '12345',
-                    reservationDate: new Date(dateAsString),
-                    reservationStatus: 'Pending',
-                })
-            })
-            .then((response:any)=>{
-                console.log(response.data);
-                alert("Email sent!");
-            });
-        } catch (error: any) {
-            console.log(error);
-        }
+        sendEmail({
+            to: 'carlocruz635@gmail.com',
+            subject: 'Reservation Details',
+            content: 'test'
+        });
     }
 
     return (
@@ -55,14 +57,11 @@ const SendEmails = () => {
             <Input id="firstName" name="firstName" />
             <FormLabel htmlFor="email">Email</FormLabel>
             <Input id="email" name="email" />
-            <button
-                className={"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"}
-                type="submit"
-            >
+            <button className={'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'} type="submit">
                 Sign Up
             </button>
         </form>
     );
-}
+};
 
 export default SendEmails;

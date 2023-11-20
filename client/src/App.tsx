@@ -36,15 +36,17 @@ import TestFee from './Test/TestFee';
 import TestLogin from './Test/TestLogin';
 import TestCreateStaff from './Test/TestCreateStaff';
 import TestLogout from './Test/TestLogout';
+import SendEmails from './Pages/_Test/sendEmail';
 
 
 function App() {
   return (
     
     <Routes>
-      <Route path="/*" element={<Error/>} />
+      {/* <Route path="/*" element={<Error/>} /> */}
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
+        <Route path="/sendEmailReservation" element={<SendEmails/>} />
 
         <Route element={<Base />} >
           <Route path="/" element={<LandingPage/>} />
@@ -69,7 +71,7 @@ function App() {
           <Route path="/admin/report" element={<Report/>}/>
           <Route path="/admin/staff" element={<Staff/>}/>
           <Route path="/admin/notifications" element={<Notifications/>}/>
-          <Route path="/admin/profile" element={<Profile/>}/>
+          {/* <Route path="/admin/profile" element={<Profile/>}/> */}
         </Route>
 
         <Route path="/testfaq" element={<TestFAQ/>} />
