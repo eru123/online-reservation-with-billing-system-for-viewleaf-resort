@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
@@ -6,6 +6,9 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import { Modal,Grid,TextField } from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+
+import useContent from '../../../Hooks/useContent';
+import useFirebase from '../../../Hooks/useFirebase';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -23,6 +26,22 @@ const style = {
 
 function PaymentInstruction() {
     const [open, setOpen] = useState("");
+    const {data:content, loading:contentLoading, error:contentError, getContent, updateContent} = useContent();
+    
+    const {
+      downloadURL, 
+      uploading, 
+      uploadFile
+    } = useFirebase();
+
+    useEffect(()=>{
+      getContent();
+    },[])
+
+    if (contentLoading) {
+      return <div>Loading...</div>;
+    }
+
     return <>
         <div>
             <Typography variant="h4" fontWeight={600} color="primary">Manage Payment Instruction</Typography>
@@ -44,9 +63,14 @@ function PaymentInstruction() {
                 </Button>
             </Box>
             <Box>
-                <Box display="flex" justifyContent={"center"} alignItems={"center"}  minHeight={"800px"} sx={{background:"#B8B8B8",borderRadius:"12px"}}>   
-                    <PictureAsPdfIcon sx={{fill:"#626262",fontSize:"100px"}}/>
-                </Box>
+              <Box display="flex" justifyContent={"center"} alignItems={"center"}  minHeight={"800px"} sx={{background:"#B8B8B8",borderRadius:"12px"}}>   
+                <iframe
+                  title="PDF Viewer" 
+                  src={content?.payment} 
+                  width="100%"
+                  height="500px" 
+                />
+              </Box>
             </Box>
         </div>
         <Modal
@@ -77,6 +101,7 @@ function PaymentInstruction() {
                                     max: 100, 
                                 }}
                             />
+                            
                         </Grid>
                         
                         <Grid item xs={12} padding={"1em 0"}>
@@ -88,7 +113,10 @@ function PaymentInstruction() {
                             </Button>
                         </Grid>
                         <Grid item xs={7}>
-                            <Button variant="contained" color='primary' fullWidth onClick={()=>setOpen("")}>
+                            <Button variant="contained" color='primary' fullWidth onClick={()=>{
+                              setOpen("")
+                              // updateContent({payment: downloadURL});
+                              }}>
                                 Confirm
                             </Button>
                         </Grid>
@@ -109,6 +137,12 @@ function PaymentInstruction() {
                                 id="promo"
                                 fullWidth
                             />
+                            <input
+                              type="file"
+                              accept=".pdf"
+                              onChange={(e:any)=>{uploadFile(e.target.files[0], 'orbs')}}
+                              id="file-upload-input"
+                            />
                         </Grid>
                         
                         <Grid item xs={12} padding={"1em 0"}>
@@ -120,7 +154,10 @@ function PaymentInstruction() {
                             </Button>
                         </Grid>
                         <Grid item xs={7}>
-                            <Button variant="contained" color='primary' fullWidth onClick={()=>setOpen("")}>
+                            <Button variant="contained" color='primary' fullWidth onClick={()=>{
+                              setOpen("");
+                              updateContent({payment: downloadURL});
+                            }}>
                                 Confirm
                             </Button>
                         </Grid>

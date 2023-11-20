@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import Base from './Layouts/Base/Base';
 import AppLayout from './Layouts/Base/App';
 
-// Pages
+// Pages Public
 import Default from './Pages/Default/Default';
 import Login from './Pages/Login/Login';
 import Register from './Pages/Register/Register';
@@ -13,6 +13,7 @@ import LandingPage from './Pages/LandingPage';
 import Booking from './Pages/Guests/Booking/Booking';
 import Invoice from './Pages/Guests/Invoice'
 
+// Pages Private
 import Dashboard from './Pages/Admin/Dashboard';
 import ListReservation from './Pages/Admin/Reservation/ListReservation';
 import Requests from './Pages/Admin/Reservation/Requests';
@@ -26,9 +27,17 @@ import Report from './Pages/Admin/Report/Report';
 import Additional from './Pages/Admin/Reservation/Additional/Additional';
 import Staff from './Pages/Admin/staff/ManageStaffs';
 import Notifications from './Pages/Admin/Notifications/Notifications';
-import Profile from './Pages/Admin/Profile/Profile';
 
-import Error from './Pages/Error';
+// Test
+import TestFAQ from './Test/TestFAQ';
+import TestContent from './Test/TestContent';
+import TestShift from './Test/TestShift';
+import TestFee from './Test/TestFee';
+import TestLogin from './Test/TestLogin';
+import TestCreateStaff from './Test/TestCreateStaff';
+import TestLogout from './Test/TestLogout';
+
+
 function App() {
   return (
     
@@ -36,7 +45,6 @@ function App() {
       <Route path="/*" element={<Error/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
-
 
         <Route element={<Base />} >
           <Route path="/" element={<LandingPage/>} />
@@ -63,6 +71,14 @@ function App() {
           <Route path="/admin/notifications" element={<Notifications/>}/>
           <Route path="/admin/profile" element={<Profile/>}/>
         </Route>
+
+        <Route path="/testfaq" element={<TestFAQ/>} />
+        <Route path="/testcontent" element={<TestContent/>} />
+        <Route path="/testshift" element={<TestShift/>} />
+        <Route path="/testfee" element={<TestFee/>} />
+        <Route path="/testlogin" element={<TestLogin/>} />
+        <Route path="/testcreatestaff" element={<TestCreateStaff/>} />
+        <Route path="/testlogout" element={<TestLogout/>} />
     </Routes>
   );
 }

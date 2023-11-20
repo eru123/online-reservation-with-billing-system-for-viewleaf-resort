@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -22,8 +22,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
-
-
+import useContent from '../../../Hooks/useContent';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -41,6 +40,82 @@ const style = {
 
 function Accommodation() {
     const [open, setOpen] = useState("");
+    const { data: fees, loading: feeLoading, error: feeError, getFee, updateFee } = useContent();
+    const { data: shifts, loading: shiftLoading, error: shiftError, getShift, updateShift } = useContent();
+
+    const [feeForm, setFeeForm] = useState<any>({
+      kid: 0,
+      adult: 0,
+      senior: 0
+    })
+
+    const [shiftForm, setShiftForm] = useState<any>({
+      day: {
+        start: '',
+        end: ''
+      },
+      night: {
+        start: '',
+        end: ''
+      },
+      whole: {
+        start: '',
+        end: ''
+      }
+    })
+
+    const clear = () => {
+      // Close Modal
+      setOpen("")
+    }
+
+    const handleUpdateFee: React.FormEventHandler<HTMLFormElement> = (e) => {
+      e.preventDefault()
+
+      // Update Fee
+      updateFee(feeForm);
+
+      // Clear Form
+      clear()
+    }
+
+    const handleUpdateShift: React.FormEventHandler<HTMLFormElement> = (e) => {
+      e.preventDefault()
+
+      // Update Shift
+      updateShift(shiftForm);
+
+      // Clear Form
+      clear()
+    }
+    
+    useEffect(() => {
+      getFee();
+      getShift();
+      setFeeForm({
+        kid: fees?.fee?.kid,
+        adult: fees?.fee?.adult,
+        senior: fees?.fee?.senior
+      });
+      setShiftForm({
+        day: {
+          start: shifts?.shift?.day?.start,
+          end: shifts?.shift?.day?.end
+        },
+        night: {
+          start: shifts?.shift?.night?.start,
+          end: shifts?.shift?.night?.end
+        },
+        whole: {
+          start: shifts?.shift?.whole?.start,
+          end: shifts?.shift?.whole?.end
+        }
+      })
+    }, [])
+
+    if (feeLoading || shiftLoading) {
+      return <Typography>Loading...</Typography>
+    }
 
     return <>
         <div>
@@ -51,15 +126,15 @@ function Accommodation() {
                     <Box display="flex" gap={"10px"} alignItems={"center"} sx={{background:"#D9D9D9",border:"1px solid #B9B9B9",padding:".5em .5em .5em 1.5em" ,borderRadius:"1000px"}}>
                         <Box>
                             <Typography variant="subtitle2" fontWeight={600} color="initial">Day Shift:</Typography>
-                            <Typography variant="body1" color="initial">8 am to 12 pm</Typography>
+                            <Typography variant="body1" color="initial">{shifts?.shift?.day?.start} to {shifts?.shift?.day?.end}</Typography>
                         </Box>
                         <Box>
                             <Typography variant="subtitle2" fontWeight={600} color="initial">Night Shift:</Typography>
-                            <Typography variant="body1" color="initial">2 pm to 7 pm</Typography>
+                            <Typography variant="body1" color="initial">{shifts?.shift?.night?.start} to {shifts?.shift?.night?.end}</Typography>
                         </Box>
                         <Box>
                             <Typography variant="subtitle2" fontWeight={600} color="initial">Whole Day:</Typography>
-                            <Typography variant="body1" color="initial"> 9 am to 6 pm</Typography>
+                            <Typography variant="body1" color="initial">{shifts?.shift?.whole?.start} to {shifts?.shift?.whole?.end}</Typography>
                         </Box>
                         <IconButton aria-label="edit" onClick={()=>{setOpen("editShift")}}>
                             <ModeEditIcon/>
@@ -68,15 +143,15 @@ function Accommodation() {
                     <Box display="flex" gap={"10px"} alignItems={"center"} sx={{background:"#D9D9D9",border:"1px solid #B9B9B9",padding:".5em .5em .5em 1.5em",borderRadius:"1000px"}}>
                         <Box>
                             <Typography variant="subtitle2" fontWeight={600} color="initial">Kids Fee:</Typography>
-                            <Typography variant="body1" color="initial">150</Typography>
+                            <Typography variant="body1" color="initial">{fees?.fee?.kid}</Typography>
                         </Box>
                         <Box>
                             <Typography variant="subtitle2" fontWeight={600} color="initial">Adult Fee:</Typography>
-                            <Typography variant="body1" color="initial">200</Typography>
+                            <Typography variant="body1" color="initial">{fees?.fee?.adult}</Typography>
                         </Box>
                         <Box>
                             <Typography variant="subtitle2" fontWeight={600} color="initial">Senior / PWD Fee:</Typography>
-                            <Typography variant="body1" color="initial">150</Typography>
+                            <Typography variant="body1" color="initial">{fees?.fee?.senior}</Typography>
                         </Box>
                         <IconButton aria-label="edit" onClick={()=>{setOpen("editEntranceFee")}}>
                             <ModeEditIcon/>
@@ -361,13 +436,17 @@ function Accommodation() {
                     <Typography id="keep-mounted-modal-description" sx={{marginBottom:"25px"}}>
                         Swimming Pool
                     </Typography>
+                    <form onSubmit={handleUpdateFee}>
                     <Grid container spacing={2}>
+                      
                         <Grid item  md={4} xs={12}>
                             <TextField
                                 type='number'
                                 fullWidth
                                 id="kids"
                                 label="Kids"
+                                defaultValue={fees?.fee?.kid}
+                                onChange={(e)=>setFeeForm({...feeForm, kid: e.target.value})}
                             />
                         </Grid>
                         <Grid item  md={4} xs={12}>
@@ -376,6 +455,8 @@ function Accommodation() {
                                 fullWidth
                                 id="adult"
                                 label="Adult"
+                                defaultValue={fees?.fee?.adult}
+                                onChange={(e)=>setFeeForm({...feeForm, adult: e.target.value})}
                             />
                         </Grid>
                         <Grid item  md={4} xs={12}>
@@ -384,10 +465,10 @@ function Accommodation() {
                                 fullWidth
                                 id="seniorPwd"
                                 label="Senior / PWD"
+                                defaultValue={fees?.fee?.senior}
+                                onChange={(e)=>setFeeForm({...feeForm, senior: e.target.value})}
                             />
                         </Grid>
-
-
 
                         <Grid item  xs={12} sx={{margin:"2em"}}>
                             
@@ -398,11 +479,13 @@ function Accommodation() {
                             </Button>
                         </Grid>
                         <Grid item  xs={8}>
-                            <Button variant="contained" color="primary" fullWidth>
+                            <Button variant="contained" color="primary" fullWidth type="submit">
                                 Update
                             </Button>
                         </Grid>
+                     
                     </Grid>
+                    </form>
                 </>:""}
                 {open === "editShift"?<>
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
