@@ -41,3 +41,50 @@ export interface AccommodationDocument extends Accommodation, Document {
     createdAt: Date;
     updatedAt: Date;
 }
+
+/* REQUESTS */
+
+export type AddShift = {
+    accommodationId: string;
+    shift: Shift;
+    rate: number;
+    adultFee: number;
+    kidsFee: number;
+}
+
+export type UpdateShiftFees = {
+    accommodationId: string;
+    shift: Shift;
+    rate?: number;
+    adultFee?: number;
+    kidsFee?: number;
+}
+
+export type CreateAccommodation = {
+    description: string;
+    pax: string;
+    image: string;
+    type: AccommodationType;
+    fees: Omit<AddShift, 'accommodationId'>[];
+}
+
+export type UpdateAccommodation = {
+    accommodationId: string;
+    description?: string;
+    pax?: string;
+    image?: string;
+    type?: AccommodationType;
+}
+
+export type GetAccommodation = {
+    accommodationId: string;
+    schedule: number;
+    shift: Shift;
+}
+
+/* HELPERS */
+
+export type CombinedInvoiceAccommodation = {
+    accommodationId: string;
+    fees: Fee[];
+}

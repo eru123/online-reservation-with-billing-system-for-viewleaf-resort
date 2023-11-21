@@ -1,15 +1,17 @@
 import { Document } from "mongoose";
 
 export enum ReservationStatus {
+    CANCELLING = 'cancelling',
     PENDING = 'pending',
     REFUNDING = 'refunding',
     RESCHEDULING = 'rescheduling',
-    CANCELLING = 'cancelling',
 
     APPROVED = 'approved',
-    DECLINED = 'declined',
-    REFUNDED = 'refunded',
     CANCELLED = 'cancelled',
+    DECLINED = 'declined',
+    PAID = 'paid',
+    REFUNDED = 'refunded',
+    VERIFIED = 'verified',
 
     CHECKED_IN = 'checked in',
     CHECKED_OUT = 'checked out'

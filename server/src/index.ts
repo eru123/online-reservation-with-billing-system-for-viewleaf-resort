@@ -9,6 +9,7 @@ import mongoose from 'mongoose';
 import errorHandler from './middlewares/errorHandler';
 
 import staffRoute from './api/staff/staff.route';
+import accommodationRoute from './api/accommodation/accommodation.route';
 
 // Utilities
 import { NotFound } from './utilities/errors';
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use(helmet());
 
 app.use('/staffs', staffRoute);
+app.use('/accommodations', accommodationRoute);
 
 app.use((_req, _res, next) => next(new NotFound()));
 app.use(errorHandler);

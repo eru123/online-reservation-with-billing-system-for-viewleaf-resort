@@ -1,6 +1,11 @@
 import { Document, Types } from "mongoose";
-import { Inclusion, Shift } from "../accommodation/accommodation.types";
+import { Fee, Inclusion } from "../accommodation/accommodation.types";
 import { ReservationDocument } from "../reservation/reservation.types";
+
+export interface InvoiceAccommodation {
+    accommodationId: string;
+    fee: Fee;
+}
 
 export interface Guest {
     accommodationId: string;
@@ -13,11 +18,7 @@ export interface Guest {
 export interface Invoice {
     invoiceId: string;
     reservation: Types.ObjectId | Record<string, unknown>;
-    accommodation: {
-        accommodationId: string;
-        shift: Shift;
-        rate: number;
-    };
+    accommodation: InvoiceAccommodation;
     inclusions: Inclusion[];
     guests: Guest[];
 }
@@ -27,3 +28,5 @@ export interface InvoiceDocument extends Invoice, Document {
     createdAt: Date;
     updatedAt: Date;
 }
+
+/* HELPERS */
