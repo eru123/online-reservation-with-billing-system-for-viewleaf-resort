@@ -14,7 +14,7 @@ const accommodationSchema = new Schema(
             required: true
         },
         pax: {
-            type: Number,
+            type: String,
             required: true
         },
         image: {

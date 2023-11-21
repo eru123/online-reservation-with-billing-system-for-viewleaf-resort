@@ -30,7 +30,7 @@ export interface Fee {
 export interface Accommodation {
     accommodataionId: string;
     description: string;
-    pax: number;
+    pax: string;
     image: string;
     fees: Fee[];
     type: AccommodationType;
