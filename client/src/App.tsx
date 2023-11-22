@@ -43,7 +43,6 @@ import { ProtectedRoute } from './Hooks/useAuth';
 function App() {
   return (
     <Routes>
-      
         <Route path="/login" element={<Login/>} />
 
         <Route element={<Base />} >
@@ -53,10 +52,9 @@ function App() {
           <Route path="/reservation/:id" element={<Invoice variant={"view"}/>} />
         </Route>
 
-        <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]}/>}>
-          <Route element={<AppLayout />} >
+        <Route element={<AppLayout />} >
+          <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]}/>}>
             <Route path="/admin" element={<Dashboard/>}/>
-
             <Route path="/admin/reservation/list" element={<ListReservation/>}/>
             <Route path="/admin/reservation/create" element={<CreateResrvation/>}/>
             <Route path="/admin/reservation/add" element={<Additional/>}/>
@@ -64,14 +62,14 @@ function App() {
             <Route path="/admin/reservation/view" element={<InvoiceManage/>}/>
             <Route path="/admin/report" element={<Report/>}/>
             <Route path="/admin/notifications" element={<Notifications/>}/>
+          </Route>
 
-            <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
-              <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
-              <Route path="/admin/manage/content" element={<Content/>}/>
-              <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
-              <Route path="/admin/manage/policy" element={<Policy/>}/>
-              <Route path="/admin/staff" element={<Staff/>}/>
-            </Route>
+          <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
+            <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
+            <Route path="/admin/manage/content" element={<Content/>}/>
+            <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
+            <Route path="/admin/manage/policy" element={<Policy/>}/>
+            <Route path="/admin/staff" element={<Staff/>}/>
           </Route>
         </Route>
 
