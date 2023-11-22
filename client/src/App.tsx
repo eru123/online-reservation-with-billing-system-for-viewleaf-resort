@@ -50,6 +50,7 @@ function App() {
           <Route path="/" element={<LandingPage/>} />
           <Route path="/booking" element={<Booking/>} />
           <Route path="/invoice" element={<Invoice variant={"view"}/>} />
+          <Route path="/reservation/:id" element={<Invoice variant={"view"}/>} />
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]}/>}>
@@ -68,8 +69,11 @@ function App() {
             <Route path="/admin/manage/policy" element={<Policy/>}/>
 
             <Route path="/admin/report" element={<Report/>}/>
-            <Route path="/admin/staff" element={<Staff/>}/>
             <Route path="/admin/notifications" element={<Notifications/>}/>
+
+            <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
+              <Route path="/admin/staff" element={<Staff/>}/>
+            </Route>
           </Route>
         </Route>
 
