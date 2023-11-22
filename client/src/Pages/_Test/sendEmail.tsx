@@ -19,25 +19,6 @@ interface sendingEmail {
 
 const dateAsString = '2023-11-10T12:00:00Z';
 
-// export async function POST(requests: Request) {
-//     try {
-//         await resend.emails.send({
-//             from: 'onboarding@resend.dev',
-//             to: 'deuzaxel@gmail.com',
-//             subject: 'Reservation Status',
-//             react: ReservationStatusEmail({
-//                 reservationNumber: '12345',
-//                 reservationDate: new Date(dateAsString),
-//                 reservationStatus: 'Pending',
-//             }),
-//         });
-
-//         console.log("Email sent!");
-//     } catch (error) {
-//         console.error(error);
-//     }
-// }
-
 const SendEmails = () => {
     const { sendEmail } = useEmail();
 
@@ -45,7 +26,7 @@ const SendEmails = () => {
         e.preventDefault();
 
         sendEmail({
-            to: 'carlocruz635@gmail.com',
+            email: 'carlocruz635@gmail.com',
             subject: 'Reservation Details',
             content: 'test'
         });
