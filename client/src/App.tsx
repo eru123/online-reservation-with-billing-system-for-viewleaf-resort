@@ -62,16 +62,14 @@ function App() {
             <Route path="/admin/reservation/add" element={<Additional/>}/>
             <Route path="/admin/reservation/requests" element={<Requests/>}/>
             <Route path="/admin/reservation/view" element={<InvoiceManage/>}/>
-
-            <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
-            <Route path="/admin/manage/content" element={<Content/>}/>
-            <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
-            <Route path="/admin/manage/policy" element={<Policy/>}/>
-
             <Route path="/admin/report" element={<Report/>}/>
             <Route path="/admin/notifications" element={<Notifications/>}/>
 
             <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
+              <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
+              <Route path="/admin/manage/content" element={<Content/>}/>
+              <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
+              <Route path="/admin/manage/policy" element={<Policy/>}/>
               <Route path="/admin/staff" element={<Staff/>}/>
             </Route>
           </Route>
