@@ -31,8 +31,8 @@ export class Conflict extends Error {
     name: string = 'Duplicate';
     statusCode: number = 409;
 
-    constructor(message = 'Duplicate resource found') {
-        super(message);
+    constructor(resource = 'Resource') {
+        super(`${resource} already exists`);
     }
 }
 

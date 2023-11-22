@@ -55,55 +55,14 @@ const reservationSchema = new Schema(
                 }
             }
         ],
-        invoices: [
-            {
-                accommodation: [
-                    {
-                        type: Schema.Types.ObjectId,
-                        ref: 'Accommodation'
-                    }
-                ],
-                guests: {
-                    type: {
-                        adult: {
-                            type: Number,
-                            default: 0
-                        },
-                        kids: {
-                            type: Number,
-                            default: 0
-                        },
-                        senior: {
-                            type: Number,
-                            default: 0
-                        },
-                        pwd: {
-                            type: Number,
-                            default: 0
-                        }
-                    },
-                    required: true
-                }
-            }
-        ]
     },
     {
         timestamps: true,
         versionKey: false,
         toJSON: {
             transform(_doc, ret) {
-                const { _id, customer, notes, invoices, ...rest } = ret;
-                const { _id: id, ...rest1 } = customer;
-
-                return {
-                    ...rest,
-                    customer: rest1,
-                    notes: notes.map(({ _id, ...rest }: Record<string, unknown>) => rest),
-                    invoices: invoices.map(({ _id, guests, ...rest }: Record<string, unknown>) => {
-                        const { _id: id, ...rest1 } = guests as Record<string, unknown>;
-                        return { ...rest, guests: rest1 };
-                    })
-                };
+                const { _id, ...rest } = ret;
+                return rest;
             }
         }
     }

@@ -1,16 +1,17 @@
-import { Types } from 'mongoose';
-import { AccommodationDocument } from '../accommodation/accommodation.types';
+import { Document } from "mongoose";
 
 export enum ReservationStatus {
+    CANCELLING = 'cancelling',
     PENDING = 'pending',
     REFUNDING = 'refunding',
     RESCHEDULING = 'rescheduling',
-    CANCELLING = 'cancelling',
 
     APPROVED = 'approved',
-    DECLINED = 'declined',
-    REFUNDED = 'refunded',
     CANCELLED = 'cancelled',
+    DECLINED = 'declined',
+    PAID = 'paid',
+    REFUNDED = 'refunded',
+    VERIFIED = 'verified',
 
     CHECKED_IN = 'checked in',
     CHECKED_OUT = 'checked out'
@@ -31,42 +32,9 @@ export interface Reservation {
     schedule: Date;
     status: ReservationStatus;
     notes: Note[];
-    invoices: {
-        accommodation: [Types.ObjectId | Record <string, unknown>];
-        guests: {
-            adult: number;
-            kids: number;
-            senior: number;
-            pwd: number;
-        };
-        receipt: string;
-    }[];
 }
 
 export interface ReservationDocument extends Reservation, Document {
-    invoices: {
-        accommodation: [AccommodationDocument['_id']];
-        guests: {
-            adult: number;
-            kids: number;
-            senior: number;
-            pwd: number;
-        };
-        receipt: string;
-    }[];
     createdAt: Date;
     updatedAt: Date;
-}
-
-export interface ReservationPopulatedDocument extends ReservationDocument {
-    invoices: {
-        accommodation: [AccommodationDocument];
-        guests: {
-            adult: number;
-            kids: number;
-            senior: number;
-            pwd: number;
-        };
-        receipt: string;
-    }[];
 }
