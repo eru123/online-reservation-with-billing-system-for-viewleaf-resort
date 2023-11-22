@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.log(response.data)
           setUser(response.data);
           localStorage.setItem('user', JSON.stringify(response.data))
-          navigate("/profile")
+          navigate("/admin")
         });
       }
       catch (error: any){
