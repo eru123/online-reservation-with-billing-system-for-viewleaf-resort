@@ -27,7 +27,6 @@ const Login: React.FC = () => {
             <Typography variant="body1" color="initial">Manage the website</Typography>
           </Box>
         </Box>
-        
         <form onSubmit={handleLogin}>
           <TextField
             label="Email"
