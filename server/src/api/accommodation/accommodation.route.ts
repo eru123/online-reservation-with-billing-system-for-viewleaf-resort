@@ -24,7 +24,7 @@ router.use(authenticate, limitUsers(Role.ADMIN));
  *     rate
  *     adultFee
  *     kidsFee
- * ]
+ * ]  
  */
 router.post('/', asynchronousHandler(createAccommodation));
 

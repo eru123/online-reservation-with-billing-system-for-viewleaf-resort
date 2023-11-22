@@ -1,7 +1,7 @@
 import { BodyRequest, RequestHandler } from 'express';
 import {
     AddShift,
-    CombinedInvoiceAccommodation,
+    // CombinedInvoiceAccommodation,
     CreateAccommodation,
     Fee,
     UpdateAccommodation,
@@ -10,34 +10,37 @@ import {
 import { CheckData } from '../../utilities/checkData';
 import { Conflict, NotFound, UnprocessableEntity } from '../../utilities/errors';
 import accommodationModel from './accommodation.model';
-import reservationModel from '../reservation/reservation.model';
-import { ReservationDocument, ReservationStatus } from '../reservation/reservation.types';
-import invoiceModel from '../invoice/invoice.model';
-import { InvoiceDocument } from '../invoice/invoice.types';
+// import reservationModel from '../reservation/reservation.model';
+// import { 
+//   ReservationDocument, 
+//   ReservationStatus 
+// } from '../reservation/reservation.types';
+// import invoiceModel from '../invoice/invoice.model';
+// import { InvoiceDocument } from '../invoice/invoice.types';
 
 export const getAccommodations: RequestHandler = async (_req, _res) => {
     // Get all reservations where status are: cancelled, declined, refunded, checked out
-    const reservations = await reservationModel
-        .find({
-            status: {
-                $in: [
-                    ReservationStatus.CANCELLED,
-                    ReservationStatus.DECLINED,
-                    ReservationStatus.REFUNDED,
-                    ReservationStatus.CHECKED_OUT
-                ]
-            }
-        })
-        .exec();
+    // const reservations = await reservationModel
+    //     .find({
+    //         status: {
+    //             $in: [
+    //                 ReservationStatus.CANCELLED,
+    //                 ReservationStatus.DECLINED,
+    //                 ReservationStatus.REFUNDED,
+    //                 ReservationStatus.CHECKED_OUT
+    //             ]
+    //         }
+    //     })
+    //     .exec();
 
     // Get only the _id from the reservations
-    const reservationIds: ReservationDocument['_id'] = reservations.map((reservation) => reservation._id);
+    // const reservationIds: ReservationDocument['_id'] = reservations.map((reservation) => reservation._id);
 
     // Get all the accommodations from each of the reservations' invoices
-    const invoices: InvoiceDocument[] = await invoiceModel.find({ reservation: { $in: reservationIds } }).exec();
+    // const invoices: InvoiceDocument[] = await invoiceModel.find({ reservation: { $in: reservationIds } }).exec();
 
     // Get all the accmmodations from invoices
-    const invoiceAccommodations = invoices.map((invoice) => invoice.accommodation);
+    // const invoiceAccommodations = invoices.map((invoice) => invoice.accommodation);
 
     // Filter similar accommodations
 
