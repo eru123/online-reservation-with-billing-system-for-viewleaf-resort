@@ -9,6 +9,7 @@ import mongoose from 'mongoose';
 import errorHandler from './middlewares/errorHandler';
 
 import staffRoute from './api/staff/staff.route';
+import accommodationRoute from './api/accommodation/accommodation.route';
 
 // Utilities
 import { NotFound } from './utilities/errors';
@@ -19,6 +20,7 @@ import StaffModel from './api/staff/staff.model';
 // Routes
 import faqRoute from './api/faq/faq.route';
 import contentRoute from './api/content/content.route';
+import emailRoute from './api/email/email.route';
 
 // Environment Variables
 const { PORT, MONGO_URI, CORS_ORIGIN, USERNAME, PASSWORD, EMAIL } = envs;
@@ -33,6 +35,8 @@ app.use(helmet());
 app.use('/faqs', faqRoute);
 app.use('/contents', contentRoute);
 app.use('/staffs', staffRoute);
+app.use('/email', emailRoute);
+app.use('/accommodations', accommodationRoute);
 
 app.use((_req, _res, next) => next(new NotFound()));
 app.use(errorHandler);

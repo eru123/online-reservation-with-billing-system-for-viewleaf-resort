@@ -12,8 +12,9 @@ const Login: React.FC = () => {
   })
 
   const handleLogin = (e: React.FormEvent) => {
+    // Implement your login logic here
     e.preventDefault();
-    login(form);
+    login(form)
   };
 
   return (
@@ -34,7 +35,7 @@ const Login: React.FC = () => {
             fullWidth
             margin="normal"
             value={form.email}
-            onChange={(e) => setForm({...form, email: e.target.value})}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
           <TextField
             label="Password"
@@ -43,15 +44,14 @@ const Login: React.FC = () => {
             fullWidth
             margin="normal"
             value={form.password}
-            onChange={(e) => setForm({...form, password: e.target.value})}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
           <Button
             variant="contained"
             color="primary"
             fullWidth
-            onClick={handleLogin}
             sx={{marginTop:"25px"}}
-            type='submit'
+            type="submit"
           >
             Log In
           </Button>

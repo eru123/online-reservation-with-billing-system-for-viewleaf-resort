@@ -36,37 +36,41 @@ import TestFee from './Test/TestFee';
 import TestLogin from './Test/TestLogin';
 import TestCreateStaff from './Test/TestCreateStaff';
 import TestLogout from './Test/TestLogout';
+import TestAccommodation from './Test/TestAccommodation';
 
+import { ProtectedRoute } from './Hooks/useAuth';
 
 function App() {
   return (
     <Routes>
         <Route path="/login" element={<Login/>} />
-        <Route path="/register" element={<Register/>} />
 
         <Route element={<Base />} >
           <Route path="/" element={<LandingPage/>} />
           <Route path="/booking" element={<Booking/>} />
           <Route path="/invoice" element={<Invoice variant={"view"}/>} />
+          <Route path="/reservation/:id" element={<Invoice variant={"view"}/>} />
         </Route>
 
         <Route element={<AppLayout />} >
-          <Route path="/admin" element={<Dashboard/>}/>
+          <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]}/>}>
+            <Route path="/admin" element={<Dashboard/>}/>
+            <Route path="/admin/reservation/list" element={<ListReservation/>}/>
+            <Route path="/admin/reservation/create" element={<CreateResrvation/>}/>
+            <Route path="/admin/reservation/add" element={<Additional/>}/>
+            <Route path="/admin/reservation/requests" element={<Requests/>}/>
+            <Route path="/admin/reservation/view" element={<InvoiceManage/>}/>
+            <Route path="/admin/report" element={<Report/>}/>
+            <Route path="/admin/notifications" element={<Notifications/>}/>
+          </Route>
 
-          <Route path="/admin/reservation/list" element={<ListReservation/>}/>
-          <Route path="/admin/reservation/create" element={<CreateResrvation/>}/>
-          <Route path="/admin/reservation/add" element={<Additional/>}/>
-          <Route path="/admin/reservation/requests" element={<Requests/>}/>
-          <Route path="/admin/reservation/view" element={<InvoiceManage/>}/>
-
-          <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
-          <Route path="/admin/manage/content" element={<Content/>}/>
-          <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
-          <Route path="/admin/manage/policy" element={<Policy/>}/>
-
-          <Route path="/admin/report" element={<Report/>}/>
-          <Route path="/admin/staff" element={<Staff/>}/>
-          <Route path="/admin/notifications" element={<Notifications/>}/>
+          <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
+            <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
+            <Route path="/admin/manage/content" element={<Content/>}/>
+            <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
+            <Route path="/admin/manage/policy" element={<Policy/>}/>
+            <Route path="/admin/staff" element={<Staff/>}/>
+          </Route>
         </Route>
 
         <Route path="/testfaq" element={<TestFAQ/>} />
@@ -76,6 +80,7 @@ function App() {
         <Route path="/testlogin" element={<TestLogin/>} />
         <Route path="/testcreatestaff" element={<TestCreateStaff/>} />
         <Route path="/testlogout" element={<TestLogout/>} />
+        <Route path="/testaccommodation" element={<TestAccommodation/>} />
     </Routes>
   );
 }

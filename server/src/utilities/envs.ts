@@ -10,5 +10,7 @@ export default cleanEnv(process.env, {
     MONGO_URI: str(),
     USERNAME: str(),
     PASSWORD: str(),
-    EMAIL: str()
+    EMAIL: str(),
+    NODEMAILER_EMAIL: str(),
+    NODEMAILER_PASSWORD: str(),
 });

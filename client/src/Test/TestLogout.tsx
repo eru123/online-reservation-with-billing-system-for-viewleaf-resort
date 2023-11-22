@@ -14,6 +14,7 @@ export default function TestLogout() {
     e.preventDefault();
     logout();
   }
+  
 
   return (
     <div>
