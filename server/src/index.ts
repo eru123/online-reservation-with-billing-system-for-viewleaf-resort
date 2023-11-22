@@ -36,6 +36,7 @@ app.use('/emails', emailRoute);
 app.use('/faqs', faqRoute);
 app.use('/contents', contentRoute);
 app.use('/staffs', staffRoute);
+app.use('/email', emailRoute);
 
 app.use((_req, _res, next) => next(new NotFound()));
 app.use(errorHandler);

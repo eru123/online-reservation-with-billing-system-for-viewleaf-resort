@@ -11,5 +11,6 @@ export default cleanEnv(process.env, {
     USERNAME: str(),
     PASSWORD: str(),
     EMAIL: str(),
-    RESEND_KEY: str()
+    NODEMAILER_EMAIL: str(),
+    NODEMAILER_PASSWORD: str(),
 });

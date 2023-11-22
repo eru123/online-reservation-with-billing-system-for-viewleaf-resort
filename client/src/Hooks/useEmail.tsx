@@ -6,9 +6,9 @@ interface Data {
 }
 
 interface SendEmailData{
-  to: string,
+  email: string,
   subject: string,
-  content: any
+  content: string
 }
 
 function useEmail(): Data {
@@ -16,14 +16,14 @@ function useEmail(): Data {
   const sendEmail = async (data: SendEmailData) => {
     try {
       await axios
-      .post('/emails', {
-        to: data.to,
+      .post('/email', {
+        to: data.email,
         subject: data.subject,
         content: data.content
       })
       .then((response:any)=>{
         console.log(response.data);
-        alert("Email Sent!");
+        alert("OTP Sent!");
       });
     } catch (error: any) {
       console.log(error);
