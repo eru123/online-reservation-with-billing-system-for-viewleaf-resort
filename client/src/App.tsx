@@ -18,6 +18,7 @@ import Dashboard from './Pages/Admin/Dashboard';
 import ListReservation from './Pages/Admin/Reservation/ListReservation';
 import Requests from './Pages/Admin/Reservation/Requests';
 import Accommodation from './Pages/Admin/Manage/Accommodation';
+import AddAccommodation from './Pages/Admin/Manage/AddAccommodation';
 import Content from './Pages/Admin/Manage/Content';
 import InvoiceManage from './Pages/Admin/Invoice'
 import PaymentInstruction from './Pages/Admin/Manage/PaymentInstruction';
@@ -62,7 +63,7 @@ function App() {
           <Route path="/admin/report" element={<Report/>}/>
           <Route path="/admin/notifications" element={<Notifications/>}/>
 
-
+          <Route path="/admin/manage/accommodation/add" element={<AddAccommodation/>}/>
           <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
           <Route path="/admin/manage/content" element={<Content/>}/>
           <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
