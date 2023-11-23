@@ -30,7 +30,7 @@ function GuestDetails() {
                     fullWidth
                 />
             </Grid>
-            <Grid item md={5} xs={8}>
+            <Grid item md={6} xs={12}>
                 <TextField
                     id="email"
                     label="Email"
@@ -38,12 +38,7 @@ function GuestDetails() {
                     fullWidth
                 />
             </Grid>
-            <Grid item md={2} xs={4}>
-                <Button variant="contained" color="primary" fullWidth sx={{height:"100%",background:"#414141"}} onClick={()=>setOpen("verify")}>
-                    Verify
-                </Button>
-            </Grid>
-            <Grid item md={5} xs={12}>
+            <Grid item md={6} xs={12}>
                 <TextField
                     id="contactNo"
                     label="Contact Number"
@@ -61,31 +56,31 @@ function GuestDetails() {
         >
             <Box sx={style}>
                 {open === "verify"?<>
-                    <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
+                    <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={600} color={"primary"} component="h2">
                         Email verification
                     </Typography>
                     <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
                         We already email you a 6 digit code, Please check your email and enter the code to complete the verification
                     </Typography>
                     <Grid container spacing={2} sx={{marginTop:"35px"}}>
-                        <Grid item  xs={8}>
-                            <TextField
-                                id="OTP"
-                                label="OTP"
-                                required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Button variant="contained" color="primary" fullWidth sx={{height:"100%",background:"#414141"}} onClick={()=>setOpen("verify")}>
-                                Verify
-                            </Button>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button variant="text" color="primary" fullWidth sx={{marginTop:"25px"}} onClick={()=>setOpen("")}>
-                                cancel
-                            </Button>
-                        </Grid>
+                      <Grid item  xs={8}>
+                        <TextField
+                          id="OTP"
+                          label="OTP"
+                          required
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button variant="contained" color="primary" fullWidth sx={{height:"100%",background:"#414141"}} onClick={()=>setOpen("verify")}>
+                          Verify
+                        </Button>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button variant="text" color="primary" fullWidth sx={{marginTop:"25px"}} onClick={()=>setOpen("")}>
+                          cancel
+                        </Button>
+                      </Grid>
                     </Grid>
                 </>:""}
             </Box>

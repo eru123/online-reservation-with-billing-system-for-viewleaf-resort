@@ -8,7 +8,6 @@ function Payment() {
     return <>
         
         <div style={{marginTop:"25px",marginBottom:"25px"}}>
-
             {/* Replace this div if will put the PDF viewer */}
             <div style={{background:"#D9D9D9",height:"100vh",borderRadius:"8px",display:"flex",justifyContent:"center",alignItems:"center",maxHeight:"1100px"}}>
                 <PictureAsPdfIcon sx={{fontSize:"90px",opacity:".5",}}/>
