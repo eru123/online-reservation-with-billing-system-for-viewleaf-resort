@@ -54,22 +54,7 @@ function App() {
         </Route>
 
         <Route element={<AppLayout />} >
-          <Route path="/admin" element={<Dashboard/>}/>
-          <Route path="/admin/reservation/list" element={<ListReservation/>}/>
-          <Route path="/admin/reservation/create" element={<CreateResrvation/>}/>
-          <Route path="/admin/reservation/add" element={<Additional/>}/>
-          <Route path="/admin/reservation/requests" element={<Requests/>}/>
-          <Route path="/admin/reservation/view" element={<InvoiceManage/>}/>
-          <Route path="/admin/report" element={<Report/>}/>
-          <Route path="/admin/notifications" element={<Notifications/>}/>
-
-          <Route path="/admin/manage/accommodation/add" element={<AddAccommodation/>}/>
-          <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
-          <Route path="/admin/manage/content" element={<Content/>}/>
-          <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
-          <Route path="/admin/manage/policy" element={<Policy/>}/>
-          <Route path="/admin/staff" element={<Staff/>}/>
-          {/* <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]}/>}>
+          <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]}/>}>
             <Route path="/admin" element={<Dashboard/>}/>
             <Route path="/admin/reservation/list" element={<ListReservation/>}/>
             <Route path="/admin/reservation/create" element={<CreateResrvation/>}/>
@@ -78,15 +63,16 @@ function App() {
             <Route path="/admin/reservation/view" element={<InvoiceManage/>}/>
             <Route path="/admin/report" element={<Report/>}/>
             <Route path="/admin/notifications" element={<Notifications/>}/>
-          </Route> */}
+          </Route>
 
-          {/* <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
+          <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
             <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
+            <Route path="/admin/manage/accommodation/add" element={<AddAccommodation/>}/>
             <Route path="/admin/manage/content" element={<Content/>}/>
             <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
             <Route path="/admin/manage/policy" element={<Policy/>}/>
             <Route path="/admin/staff" element={<Staff/>}/>
-          </Route> */}
+          </Route>
         </Route>
 
         <Route path="/testfaq" element={<TestFAQ/>} />
