@@ -1,4 +1,4 @@
-import { AccommodationDocument, AccommodationType, Shift } from './accommodation.types';
+import { AccommodationAvailbility, AccommodationDocument, AccommodationType, Shift } from './accommodation.types';
 import { id } from '../../utilities/ids';
 import { Schema, model } from 'mongoose';
 
@@ -57,6 +57,14 @@ const accommodationSchema = new Schema(
                 message: '{VALUE} is not supported'
             },
             required: true
+        },
+        availability: {
+            type: String,
+            enum: {
+                values: Object.values(AccommodationAvailbility),
+                message: '{VALUE} is not supported'
+            },
+            default: AccommodationAvailbility.AVAILABLE,    
         },
         inclusions: [
             {
