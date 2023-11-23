@@ -1,5 +1,10 @@
 import { Document } from "mongoose";
 
+export interface AccommodationShift {
+    accommodationId: string;
+    shift: Shift;
+}
+
 export enum Shift {
     DAY = 'day',
     NIGHT = 'night',
@@ -10,6 +15,11 @@ export enum AccommodationType {
     ROOM = 'room',
     COTTAGE = 'cottage',
     RESORT = 'resort'
+}
+
+export enum AccommodationAvailbility {
+    AVAILABLE = 'available',
+    UNAVAILABLE = 'unavailable'
 }
 
 export interface Inclusion {
@@ -28,12 +38,13 @@ export interface Fee {
 }
 
 export interface Accommodation {
-    accommodataionId: string;
+    accommodationId: string;
     description: string;
     pax: string;
     image: string;
     fees: Fee[];
     type: AccommodationType;
+    availability: AccommodationAvailbility;
     inclusions: Inclusion[];
 }
 
@@ -74,12 +85,13 @@ export type UpdateAccommodation = {
     pax?: string;
     image?: string;
     type?: AccommodationType;
+    availability?: AccommodationAvailbility;
 }
 
-export type GetAccommodation = {
-    accommodationId: string;
-    schedule: number;
-    shift: Shift;
+export type GetAccommodations = {
+    accommodationId?: string;
+    schedule?: number;
+    shift?: Shift;
 }
 
 /* HELPERS */

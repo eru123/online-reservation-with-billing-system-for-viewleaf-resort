@@ -1,34 +1,52 @@
-import { BodyRequest, RequestHandler } from 'express';
 import {
+    AccommodationAvailbility,
+    AccommodationDocument,
+    AccommodationShift,
     AddShift,
-    CombinedInvoiceAccommodation,
     CreateAccommodation,
     Fee,
+    GetAccommodations,
+    Shift,
     UpdateAccommodation,
     UpdateShiftFees
 } from './accommodation.types';
+import { BodyRequest, QueryRequest, RequestHandler } from 'express';
 import { CheckData } from '../../utilities/checkData';
 import { Conflict, NotFound, UnprocessableEntity } from '../../utilities/errors';
-import accommodationModel from './accommodation.model';
-import reservationModel from '../reservation/reservation.model';
-import { ReservationDocument, ReservationStatus } from '../reservation/reservation.types';
-import invoiceModel from '../invoice/invoice.model';
 import { InvoiceDocument } from '../invoice/invoice.types';
+import { ReservationDocument, ReservationStatus } from '../reservation/reservation.types';
+import accommodationModel from './accommodation.model';
+import invoiceModel from '../invoice/invoice.model';
+import reservationModel from '../reservation/reservation.model';
 
-export const getAccommodations: RequestHandler = async (_req, _res) => {
-    // Get all reservations where status are: cancelled, declined, refunded, checked out
-    const reservations = await reservationModel
-        .find({
-            status: {
-                $in: [
-                    ReservationStatus.CANCELLED,
-                    ReservationStatus.DECLINED,
-                    ReservationStatus.REFUNDED,
-                    ReservationStatus.CHECKED_OUT
-                ]
-            }
-        })
-        .exec();
+export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAccommodations>, res) => {
+    const { accommodationId, schedule, shift } = req.query;
+    const checker = new CheckData();
+
+    const reservationQuery: Record<string, unknown> = {
+        status: {
+            $nin: [
+                ReservationStatus.CANCELLED,
+                ReservationStatus.DECLINED,
+                ReservationStatus.REFUNDED,
+                ReservationStatus.CHECKED_OUT
+            ]
+        }
+    };
+
+    if (schedule) {
+        checker.checkType(schedule, 'string', 'schedule');
+        if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+        // Get all reservations the given schedule's 00:00:00 to 23:59:59 time includes the reservation's schedule
+        reservationQuery.schedule = {
+            $gte: new Date(schedule).setHours(0, 0, 0, 0),
+            $lte: new Date(schedule).setHours(23, 59, 59, 999)
+        };
+    }
+
+    // Get all reservations where status are not: cancelled, declined, refunded, checked out
+    const reservations = await reservationModel.find(reservationQuery).exec();
 
     // Get only the _id from the reservations
     const reservationIds: ReservationDocument['_id'] = reservations.map((reservation) => reservation._id);
@@ -37,17 +55,76 @@ export const getAccommodations: RequestHandler = async (_req, _res) => {
     const invoices: InvoiceDocument[] = await invoiceModel.find({ reservation: { $in: reservationIds } }).exec();
 
     // Get all the accmmodations from invoices
-    const invoiceAccommodations = invoices.map((invoice) => invoice.accommodation);
+    const invoiceAccommodations: AccommodationShift[] = invoices
+        .map(({ accommodation }) => {
+            const shifts = [
+                {
+                    accommodationId: accommodation.accommodationId,
+                    shift: accommodation.fee.shift
+                }
+            ];
 
-    // Filter similar accommodations
+            if (accommodation.fee.shift == Shift.WHOLE)
+                shifts.push(
+                    {
+                        accommodationId: accommodation.accommodationId,
+                        shift: Shift.DAY
+                    },
+                    {
+                        accommodationId: accommodation.accommodationId,
+                        shift: Shift.NIGHT
+                    }
+                );
+            else
+                shifts.push({
+                    accommodationId: accommodation.accommodationId,
+                    shift: Shift.WHOLE
+                });
 
-    // Merge all remaining accommodations
+            return shifts;
+        })
+        .flat();
 
-    // Check the availability of the shifts
-    // If day or night is occupied, whole day is not available
-    // If whole day is occupied, day nor night is not available
+    // Get all available accommodations
+    let accommodations: AccommodationDocument[] = await accommodationModel
+        .find({ availability: AccommodationAvailbility.AVAILABLE })
+        .exec();
 
-    // Return only the available shifts
+    accommodations = accommodations
+        // Filter out accommodations where shift is in invoiceAccommodations
+        .map((accommodation) => {
+            accommodation.fees = accommodation.fees.filter(
+                (fee) =>
+                    !invoiceAccommodations.some(
+                        ({ accommodationId, shift }) =>
+                            accommodationId === accommodation.accommodationId && shift === fee.shift
+                    )
+            );
+
+            return accommodation;
+        })
+        // Filter out all accommodations where fees are empty
+        .filter(({ fees }) => fees.length > 0);
+
+    if (shift) {
+        checker.checkType(shift, 'string', 'shift');
+        if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+        // Filter out all accommodations where shift is not equal to shift
+        accommodations = accommodations.filter((accommodation) =>
+            accommodation.fees.some((fee) => fee.shift === shift)
+        );
+    }
+
+    if (accommodationId) {
+        checker.checkType(accommodationId, 'string', 'accommodationId');
+        if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+        // Get the accommodation with the given accommodationId
+        accommodations = accommodations.filter((accommodation) => accommodation.accommodationId === accommodationId);
+    }
+
+    res.json(accommodations);
 };
 
 export const createAccommodation: RequestHandler = async (req: BodyRequest<CreateAccommodation>, res) => {
@@ -145,7 +222,7 @@ export const addShift: RequestHandler = async (req: BodyRequest<AddShift>, res) 
 };
 
 export const updateAccommodationDetails: RequestHandler = async (req: BodyRequest<UpdateAccommodation>, res) => {
-    const { accommodationId, description, pax, image, type } = req.body;
+    const { accommodationId, description, pax, image, type, availability } = req.body;
 
     const checker = new CheckData();
     checker.checkType(accommodationId, 'string', 'accommodationId');
@@ -181,6 +258,13 @@ export const updateAccommodationDetails: RequestHandler = async (req: BodyReques
         if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
         accommodation.type = type;
+    }
+
+    if (availability) {
+        checker.checkType(availability, 'string', 'availability');
+        if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+        accommodation.availability = availability;
     }
 
     // Save changes
