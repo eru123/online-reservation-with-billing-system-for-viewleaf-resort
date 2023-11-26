@@ -1,4 +1,4 @@
-import { createStaff, login, logout } from "./staff.controller";
+import { createStaff, getStaffs, login, logout } from "./staff.controller";
 import { limitUsers } from "../../middlewares/authorize";
 import { Role } from "./staff.types";
 import { Router } from "express";
@@ -10,6 +10,8 @@ const router = Router();
 router.post('/login', asynchronousHandler(login));
 
 router.use(authenticate);
+
+router.get('/', limitUsers(Role.ADMIN), getStaffs);
 
 router.post('/logout', asynchronousHandler(logout));
 
