@@ -26,15 +26,8 @@ function useRequest(): RequestHook {
     try {
       const response = await axios(config);
       
-      if (config.method === 'get') {
-        setData(response.data);
-      }
-      else {
-        alert(response.data.message)
-      }
-
-      console.log(response.data)
-
+      setData(response.data);
+      console.log(response.data);
     } catch (error: any) {
       setError(error);
       console.error('Error making request:', error);

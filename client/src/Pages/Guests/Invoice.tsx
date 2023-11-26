@@ -89,9 +89,7 @@ function Invoice({variant}:Props) {
                 <Alert severity="info" sx={{margin:"2em 0"}}>Your reservation is approved</Alert>
             :""}
             
-
-
-
+            {/*Header  */}
             <Box display="flex" sx={{margin:"25px 0"}}>
                 <Box sx={{flexGrow:"1"}}>
                     <Typography variant="h4" color="primary" >#123A23123</Typography>
@@ -103,7 +101,7 @@ function Invoice({variant}:Props) {
                 </Box>
             </Box>
             
-            
+            {/* User Details */}
             <Paper variant="elevation" elevation={3} sx={{borderRadius:"8px",background:"#e3e3e3",padding:"1em",margin:"2em 0" ,display:"flex",alignItems:"center"}}>
                 <Box sx={{flexGrow:"1"}}>
                     <Typography variant="h5" color="initial" fontWeight={500}>Jon Doe</Typography>
@@ -127,19 +125,12 @@ function Invoice({variant}:Props) {
             </Paper>
             <Typography variant="h6" color="initial">Billing Statement #1</Typography>
             <BookingStatement/>
-            <Box sx={{padding:"0 32px"}}>
-                <Typography textAlign={"end"} variant="h6" color="initial">TOTAL : ₱1,150</Typography>
-                <Typography textAlign={"end"} variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of ₱400  </Typography>
-            </Box>
+
 
             <hr style={{margin:"2em 0"}}/>
 
             <Typography variant="h6" color="initial">Billing Statement #2</Typography>
             <BookingStatement/>
-            <Box sx={{padding:"0 32px"}}>
-                <Typography textAlign={"end"} variant="h6" color="initial">TOTAL : ₱1,150</Typography>
-                <Typography textAlign={"end"} variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of ₱400  </Typography>
-            </Box>
         </Container>
 
         <Modal

@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
+import { AccommodationAvailbility, AccommodationDocument, AccommodationType, Shift } from './accommodation.types';
 import { id } from '../../utilities/ids';
-import { AccommodationDocument, AccommodationType } from './accommodation.types';
+import { Schema, model } from 'mongoose';
 
 const accommodationSchema = new Schema(
     {
@@ -13,18 +13,43 @@ const accommodationSchema = new Schema(
             type: String,
             required: true
         },
-        rate: {
-            type: [Number],
-            required: true
-        },
         pax: {
-            type: Number,
+            type: String,
             required: true
         },
         image: {
             type: String,
             required: true
         },
+        fees: [
+            {
+                shift: {
+                    type: String,
+                    enum: {
+                        values: Object.values(Shift),
+                        message: '{VALUE} is not supported'
+                    },
+                    required: true
+                },
+                rate: {
+                    type: String,
+                    required: true
+                },
+                guestFee: {
+                    type: {
+                        adult: {
+                            type: Number,
+                            required: true
+                        },
+                        kids: {
+                            type: Number,
+                            required: true
+                        }
+                    },
+                    required: true
+                }
+            }
+        ],
         type: {
             type: String,
             enum: {
@@ -32,6 +57,14 @@ const accommodationSchema = new Schema(
                 message: '{VALUE} is not supported'
             },
             required: true
+        },
+        availability: {
+            type: String,
+            enum: {
+                values: Object.values(AccommodationAvailbility),
+                message: '{VALUE} is not supported'
+            },
+            default: AccommodationAvailbility.AVAILABLE,    
         },
         inclusions: [
             {
@@ -55,11 +88,8 @@ const accommodationSchema = new Schema(
         versionKey: false,
         toJSON: {
             transform(_doc, ret) {
-                const { _id, inclusions, ...rest } = ret;
-                return {
-                    ...rest,
-                    inclusions: inclusions.map(({ _id, ...rest }: Record<string, unknown>) => rest)
-                };
+                const { _id, ...rest } = ret;
+                return rest;
             }
         }
     }

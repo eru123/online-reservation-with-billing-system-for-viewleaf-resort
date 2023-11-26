@@ -22,7 +22,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.6.4",
     "nodemailer": "^6.9.7",
-    "resend": "^2.0.0",
     "twilio": "^4.19.0"
   },
   "devDependencies": {

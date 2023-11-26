@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Outlet, Navigate} from 'react-router-dom';
 import axios from './useAxios';
 
 interface AuthContextState {
@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.log(response.data)
           setUser(response.data);
           localStorage.setItem('user', JSON.stringify(response.data))
-          navigate("/profile")
+          navigate("/admin")
         });
       }
       catch (error: any){
@@ -107,3 +107,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 export const useAuth = () => {
     return useContext(AuthContext);
 }
+
+interface ProtectedRouteProps {
+  allowedRoles?: string[];
+}
+
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
+
+  // * Gets locally stored user
+  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '') : '';
+
+  return (
+    // Checks if user exists
+    user
+      // Checks if allowed roles are defined
+      ? allowedRoles 
+          // Checks if user type is part of allowed roles
+          ? allowedRoles?.includes(user.role)
+              ? <Outlet/>
+              // Redirects to forbidden if user is not allowed
+              : <Navigate to="/"/>
+          : <Outlet/>   
+      // Redirects to login if not logged in
+      : <Navigate to="/"/>
+  );
+};

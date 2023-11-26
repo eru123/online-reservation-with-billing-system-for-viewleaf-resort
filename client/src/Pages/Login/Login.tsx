@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { Container, Paper, Typography, TextField, Button, Box } from '@mui/material';
 import LogoImage from '../../Images/ViewLeafLogo.jpg'
-const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
+import { useAuth } from '../../Hooks/useAuth';
+
+const Login: React.FC = () => {
+  const { login } = useAuth();
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  })
+
+  const handleLogin = (e: React.FormEvent) => {
     // Implement your login logic here
+    e.preventDefault();
+    login(form)
   };
 
   return (
@@ -19,15 +27,14 @@ const Login: React.FC = () => {
             <Typography variant="body1" color="initial">Manage the website</Typography>
           </Box>
         </Box>
-        
-        <form>
+        <form onSubmit={handleLogin}>
           <TextField
             label="Email"
             variant="outlined"
             fullWidth
             margin="normal"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
           <TextField
             label="Password"
@@ -35,15 +42,15 @@ const Login: React.FC = () => {
             type="password"
             fullWidth
             margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
           <Button
             variant="contained"
             color="primary"
             fullWidth
-            onClick={handleLogin}
             sx={{marginTop:"25px"}}
+            type="submit"
           >
             Log In
           </Button>

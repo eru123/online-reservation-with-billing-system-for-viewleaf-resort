@@ -17,6 +17,9 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
+
+import useStaff from '../../../Hooks/useStaff'
+
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -32,6 +35,19 @@ const style = {
 };
 
 function ManageStaffs() {
+  const {data, loading, error, registerStaff, updateStaff} = useStaff();
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+  })
+  
+  async function createStaff(e: React.FormEvent) {
+    e.preventDefault();
+    setOpen("credential");
+    registerStaff(form);
+    console.log(form);
+  }
+
     const [open, setOpen] = useState("");
     return <>
         <Typography variant="h4" fontWeight={600} color="primary">Manage Staffs</Typography>
@@ -55,21 +71,21 @@ function ManageStaffs() {
                         <TableCell >Roled William</TableCell>
                         <TableCell >0915-661-4232</TableCell>
                         <TableCell >roldeWilliam@gmail.com</TableCell>
-                        <TableCell align='right'>
+                        {/* <TableCell align='right'>
                             <IconButton aria-label="" onClick={()=>{setOpen("delete")}}>
                                 <DeleteIcon/> 
                             </IconButton>
-                        </TableCell>
+                        </TableCell> */}
                     </TableRow>
                     <TableRow sx={{background:"#D7D7D7"}}>
                         <TableCell >Roled William</TableCell>
                         <TableCell >0915-661-4232</TableCell>
                         <TableCell >roldeWilliam@gmail.com</TableCell>
-                        <TableCell align='right'>
+                        {/* <TableCell align='right'>
                             <IconButton aria-label="" onClick={()=>{setOpen("delete")}}>
                                 <DeleteIcon/> 
                             </IconButton>
-                        </TableCell>
+                        </TableCell> */}
                     </TableRow>
                 </TableBody>
             </Table>
@@ -83,7 +99,7 @@ function ManageStaffs() {
         >
             <Box sx={style}>
             {open === "addStaff"?<>
-                <form action="">
+                <form onSubmit={createStaff}>
                     <Typography id="modal-modal-title"  variant="h5" color={"primary"} fontWeight={600} component="h2">
                         Add New Staff
                     </Typography>
@@ -97,15 +113,8 @@ function ManageStaffs() {
                                 required
                                 id="name"
                                 label="Full Name"
-                            />
-                        </Grid>
-                        
-                        <Grid item  xs={12}>
-                            <TextField
-                                fullWidth
-                                required
-                                id="contactNo"
-                                label="Contact Number"
+                                value={form.username}
+                                onChange={(e)=>{setForm({...form,username:e.target.value})}}
                             />
                         </Grid>
                         <Grid item  xs={12}>
@@ -114,6 +123,8 @@ function ManageStaffs() {
                                 required
                                 id="email"
                                 label="Email"
+                                value={form.email}
+                                onChange={(e)=>{setForm({...form,email:e.target.value})}}
                             />
                         </Grid>
                     </Grid>
@@ -125,7 +136,7 @@ function ManageStaffs() {
                             </Button>
                         </Grid>
                         <Grid item sm={8} xs={12}>
-                            <Button variant="contained" fullWidth color="primary" onClick={()=>{setOpen("credential")}}>
+                            <Button variant="contained" fullWidth color="primary" type='submit' >
                                 Create
                             </Button>
                         </Grid>
@@ -154,7 +165,9 @@ function ManageStaffs() {
                                     <InputAdornment position="end">
                                         <IconButton
                                         aria-label="toggle password visibility"
-                                        onClick={()=>{}}
+                                        onClick={()=>{
+                                          navigator.clipboard.writeText(data?.email);
+                                        }}
                                         edge="end"
                                         >
                                             <ContentCopyIcon /> 
@@ -162,6 +175,7 @@ function ManageStaffs() {
                                     </InputAdornment>
                                     }
                                     label="Email"
+                                    value={data?.email}
                                 />
                             </FormControl>
                         </Grid>
@@ -176,28 +190,26 @@ function ManageStaffs() {
                                     endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={()=>{}}
-                                        edge="end"
+                                          aria-label="toggle password visibility"
+                                          onClick={()=>{
+                                            navigator.clipboard.writeText(data?.password);
+                                          }}
+                                          edge="end"
                                         >
                                             <ContentCopyIcon /> 
                                         </IconButton>
                                     </InputAdornment>
                                     }
                                     label="Password"
+                                    value={data?.password}
                                 />
                             </FormControl>
                         </Grid>
                     </Grid>
 
                     <Grid container spacing={1} mt={4}>
-                        <Grid item sm={4} xs={12}>
-                            <Button variant="text" fullWidth color='primary' onClick={()=>{setOpen("")}}>
-                                cancel
-                            </Button>
-                        </Grid>
                         <Grid item sm={8} xs={12}>
-                            <Button variant="contained" fullWidth color="primary" onClick={()=>{}}>
+                            <Button variant="contained" fullWidth color="primary" onClick={()=>{setOpen("")}}>
                                 Done
                             </Button>
                         </Grid>
