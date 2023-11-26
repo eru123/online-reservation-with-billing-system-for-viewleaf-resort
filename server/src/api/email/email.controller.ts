@@ -5,11 +5,12 @@ import envs from '../../utilities/envs';
 const nodemailer = require('nodemailer');
 const { NODEMAILER_EMAIL, NODEMAILER_PASSWORD } = envs;
 
+
 export const sendEmail: RequestHandler = async (req: BodyRequest<Email>, res) => {
   const { to, subject, content } = req.body;
 
   const transporter = nodemailer.createTransport({
-    service: 'outlook',
+    service: 'hotmail',
     auth: {
       user: NODEMAILER_EMAIL,
       pass: NODEMAILER_PASSWORD,
