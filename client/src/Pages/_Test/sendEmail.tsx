@@ -1,7 +1,7 @@
 import { ReservationStatusEmail } from './reservationStatusTemplate';
 import { Resend } from 'resend';
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Button } from '@react-email/components';
 import { FormLabel } from '@mui/material';
 import { Input } from '@mui/material';
@@ -22,13 +22,26 @@ const dateAsString = '2023-11-10T12:00:00Z';
 const SendEmails = () => {
     const { sendEmail } = useEmail();
 
+    const customerName = "Gian";
+    const userEmail = "carlocruz635@gmail.com";
+    const reservationNumber = '123456789';
+    const reservationDate = new Date(dateAsString);
+    const reservationStatus = 'Confirmed';
+
     async function handleOnSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
         e.preventDefault();
 
         sendEmail({
-            email: 'carlocruz635@gmail.com',
+            email: userEmail,
             subject: 'Reservation Details',
-            content: 'test'
+            content: ` <h1><strong>Reservation Details</strong></h1><br>
+                    <br>Dear ${customerName},
+                    <br>The details of your reservation are as follows:
+                    <br>Reservation Number: ${reservationNumber}<br>
+                    Reservation Date: ${reservationDate}<br>
+                    Reservation Status: ${reservationStatus}<br>
+                    <br><br>
+                    If the following details on this email are incorrect, please contact the admin or the staff regarding your reservation.`,
         });
     }
 
