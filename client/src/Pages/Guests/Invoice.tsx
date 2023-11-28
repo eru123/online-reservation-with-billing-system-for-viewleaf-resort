@@ -124,13 +124,13 @@ function Invoice({variant}:Props) {
                 
             </Paper>
             <Typography variant="h6" color="initial">Billing Statement #1</Typography>
-            <BookingStatement/>
+            <BookingStatement additional={false}/>
 
 
             <hr style={{margin:"2em 0"}}/>
 
             <Typography variant="h6" color="initial">Billing Statement #2</Typography>
-            <BookingStatement/>
+            <BookingStatement additional={false}/>
         </Container>
 
         <Modal

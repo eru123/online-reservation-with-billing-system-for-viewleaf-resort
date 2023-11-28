@@ -9,12 +9,11 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import Box from '@mui/material/Box'
 
 
+type Props = { 
+  additional:boolean
+}
 
-
-
-
-
-function BookingStatement() {
+function BookingStatement({additional}:Props) {
   return <>
     <Timeline
       sx={{
@@ -99,7 +98,8 @@ function BookingStatement() {
     </Timeline>
     <Box display="flex" flexDirection={"column"} alignItems={"end"} padding={"1em 2.2em"}>
       <Typography variant="h6" color="initial" fontWeight={700}><span style={{opacity:".5"}}>Total:</span> ₱1,150</Typography>
-      <Typography variant="subtitle2" color="initial" style={{opacity:".5"}}>Min. Payment of ₱400  </Typography>
+      {additional?"":<Typography variant="subtitle2" color="initial" style={{opacity:".5"}}>Min. Payment of ₱400  </Typography>}
+      
     </Box>
   </>
 }

@@ -24,7 +24,7 @@ function Booking() {
       {active === 2?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Booking Statements</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Here you will see all breakdown to your reservation</Typography>   
-          <BookingStatement/>
+          <BookingStatement additional={false}/>
       </>:""}
       {active === 3?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Guest Details </Typography>

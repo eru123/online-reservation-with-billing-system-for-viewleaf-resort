@@ -81,19 +81,7 @@ function Accommodation() {
             <AccommodationCard variant="selected" openModal={setOpen}/>
         </Box>
 
-
-        <Paper variant="elevation" elevation={2} sx={{padding:"1em",marginTop:"2em",borderRadius:"12px"}}>
-            <Typography variant="h5" fontWeight={600} color="primary">Entrance Fee ({shift})   </Typography>
-            <Typography variant="subtitle1" color="initial" mb={"1em"}>Swimming Pool</Typography>
-            <div>
-                <QuantitySelector name={"Kids"} value={kidsEntranceFee} pricePerItem={150} setValue={setKidsEntranceFee}/>
-                <QuantitySelector name={"Adult"} value={adultEntranceFee} pricePerItem={200} setValue={setAdultEntranceFee}/>
-                <QuantitySelector name={"Senior / PWD"} value={senioerPwdEntranceFee} pricePerItem={150} setValue={setSenioerPwdEntranceFee}/>
-            </div>
-        </Paper>
-
-
-        {/*  List of Suggested Accommodation */}
+         {/*  List of Suggested Accommodation */}
         <Typography variant="h4" color="primary" mt={"3em"} fontWeight={600}>Suggested Accommodation</Typography>
         <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>List of all available accommodation</Typography>
         <Box display="flex" flexDirection={"column"} gap={"25px"} >
