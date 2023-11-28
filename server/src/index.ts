@@ -10,6 +10,7 @@ import errorHandler from './middlewares/errorHandler';
 
 import staffRoute from './api/staff/staff.route';
 import accommodationRoute from './api/accommodation/accommodation.route';
+import reservationRoute from './api/reservation/reservation.route';
 
 // Utilities
 import { NotFound } from './utilities/errors';
@@ -37,6 +38,8 @@ app.use('/contents', contentRoute);
 app.use('/staffs', staffRoute);
 app.use('/email', emailRoute);
 app.use('/accommodations', accommodationRoute);
+app.use('/reservations', reservationRoute);
+app.use('/staffs', staffRoute);
 
 app.use((_req, _res, next) => next(new NotFound()));
 app.use(errorHandler);

@@ -15,9 +15,9 @@ import { CheckData } from '../../utilities/checkData';
 import { Conflict, NotFound, UnprocessableEntity } from '../../utilities/errors';
 import { InvoiceDocument } from '../invoice/invoice.types';
 import { ReservationDocument, ReservationStatus } from '../reservation/reservation.types';
-import accommodationModel from './accommodation.model';
-import invoiceModel from '../invoice/invoice.model';
-import reservationModel from '../reservation/reservation.model';
+import AccommodationModel from './accommodation.model';
+import InvoiceModel from '../invoice/invoice.model';
+import ReservationModel from '../reservation/reservation.model';
 
 export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAccommodations>, res) => {
     const { accommodationId, schedule, shift } = req.query;
@@ -46,47 +46,29 @@ export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAcc
     }
 
     // Get all reservations where status are not: cancelled, declined, refunded, checked out
-    const reservations = await reservationModel.find(reservationQuery).exec();
+    const reservations = await ReservationModel.find(reservationQuery).exec();
 
     // Get only the _id from the reservations
     const reservationIds: ReservationDocument['_id'] = reservations.map((reservation) => reservation._id);
 
     // Get all the accommodations from each of the reservations' invoices
-    const invoices: InvoiceDocument[] = await invoiceModel.find({ reservation: { $in: reservationIds } }).exec();
+    const invoices: InvoiceDocument[] = await InvoiceModel.find({ reservation: { $in: reservationIds } }).exec();
 
     // Get all the accmmodations from invoices
     const invoiceAccommodations: AccommodationShift[] = invoices
-        .map(({ accommodation }) => {
-            const shifts = [
-                {
-                    accommodationId: accommodation.accommodationId,
-                    shift: accommodation.fee.shift
-                }
-            ];
+        .map(({ accommodationId, shift }) => {
+            const shifts = [{ accommodationId, shift }];
 
-            if (accommodation.fee.shift == Shift.WHOLE)
-                shifts.push(
-                    {
-                        accommodationId: accommodation.accommodationId,
-                        shift: Shift.DAY
-                    },
-                    {
-                        accommodationId: accommodation.accommodationId,
-                        shift: Shift.NIGHT
-                    }
-                );
-            else
-                shifts.push({
-                    accommodationId: accommodation.accommodationId,
-                    shift: Shift.WHOLE
-                });
+            if (shift == Shift.WHOLE)
+                shifts.push({ accommodationId, shift: Shift.DAY }, { accommodationId, shift: Shift.NIGHT });
+            else shifts.push({ accommodationId, shift: Shift.WHOLE });
 
             return shifts;
         })
         .flat();
 
     // Get all available accommodations
-    let accommodations: AccommodationDocument[] = await accommodationModel
+    let accommodations: AccommodationDocument[] = await AccommodationModel
         .find({ availability: AccommodationAvailbility.AVAILABLE })
         .exec();
 
@@ -175,7 +157,7 @@ export const createAccommodation: RequestHandler = async (req: BodyRequest<Creat
     }));
 
     // Save accommodation
-    await accommodationModel.create({
+    await AccommodationModel.create({
         description,
         pax,
         image,
@@ -198,7 +180,7 @@ export const addShift: RequestHandler = async (req: BodyRequest<AddShift>, res) 
 
     if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
-    const accommodation = await accommodationModel.findOne({ accommodationId }).exec();
+    const accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
     if (!accommodation) throw new NotFound('Accommodation');
 
     // Check if shift already exists
@@ -229,7 +211,7 @@ export const updateAccommodationDetails: RequestHandler = async (req: BodyReques
 
     if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
-    const accommodation = await accommodationModel.findOne({ accommodationId }).exec();
+    const accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
     if (!accommodation) throw new NotFound('Accommodation');
 
     if (description) {
@@ -282,7 +264,7 @@ export const updateShiftFees: RequestHandler = async (req: BodyRequest<UpdateShi
 
     if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
-    const accommodation = await accommodationModel.findOne({ accommodationId }).exec();
+    const accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
     if (!accommodation) throw new NotFound('Accommodation');
 
     // Check if shift already exists
