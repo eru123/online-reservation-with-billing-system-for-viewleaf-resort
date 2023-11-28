@@ -21,10 +21,7 @@ function RequestsCard({status}:Props) {
                     <Typography variant="h5" color="initial">#123A23123</Typography>
                     <Typography variant="subtitle1" color="#535353" >Reference Number</Typography>
                 </Box>
-
-
                 <Chip label={status.toUpperCase()} color='warning' />
-                
             </Box>
             <Paper variant="elevation" elevation={0} sx={{borderRadius:"8px",background:"#D9D9D9",padding:"1em",margin:"1em 0" ,display:"flex",alignItems:"center"}}>
                 <Box sx={{flexGrow:"1"}}>
