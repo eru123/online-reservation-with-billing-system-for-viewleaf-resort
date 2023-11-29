@@ -10,6 +10,13 @@ interface Staff {
 function useStaff() {
   const { data, loading, error, makeRequest } = useRequest();
 
+  const getStaff = () => {
+    makeRequest({
+      method: 'get',
+      url: `/staffs`,
+    });
+  };
+
   const registerStaff = (content: Staff) => {
     makeRequest({
       method: 'post',
@@ -30,6 +37,7 @@ function useStaff() {
     data,
     loading,
     error,
+    getStaff,
     registerStaff,
     updateStaff,
   };
