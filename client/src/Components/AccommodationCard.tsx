@@ -38,9 +38,9 @@ function AccommodationCard({variant,openModal, accommodation}:Props) {
                               <Typography variant="body2" color="initial"  textAlign={"justify"}>{accommodation?.description}</Typography>
                               <Typography variant="subtitle2" color="initial" fontWeight={500} sx={{marginTop:"10px",opacity:'.6',marginBottom:"5px"}}>Inclusion</Typography>
                               <Box display="flex" sx={{flexWrap:"wrap",gap:"10px"}}>
-                                  <Chip label="Towel" variant="outlined" />
-                                  <Chip label="Mattress" variant="outlined" />
-                                  <Chip label="Slipper" variant="outlined" />
+                                {accommodation?.inclusions?.map((inclusion:any)=>{
+                                    return <Chip label={inclusion.name + " (₱" + inclusion.price + ")"} variant="outlined" />
+                                })}
                               </Box>
                           </Box>
                       </Grid>
