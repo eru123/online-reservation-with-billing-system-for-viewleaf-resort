@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
@@ -16,13 +16,59 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
 
-
-
-
+import useAccommodation from '../../../Hooks/useAccommodation'
+import useFirebase from '../../../Hooks/useFirebase'
 
 function AddAccommodation() {
+  const { uploadFile, downloadURL } = useFirebase();
+  const { createAccommodation } = useAccommodation();
+  const [inclusions, setInclusions] = useState([]);
+  const [form, setForm] = useState({
+    type: '',
+    title: '',
+    description: '',
+    pax: '',
+    image: '',
+    fees: [{
+      shift: 'day',
+      rate: 0,
+      adultFee: 0,
+      kidsFee: 0
+    },
+    {
+      shift: 'night',
+      rate: 0,
+      adultFee: 0,
+      kidsFee: 0
+    },
+    {
+      shift: 'whole day',
+      rate: 0,
+      adultFee: 0,
+      kidsFee: 0
+    }]
+  })
+
+  async function uploadImage(file: File) {
+    const url = await uploadFile(file, 'orbs');
+    setForm({
+      ...form,
+      image: String(url)
+    })
+    console.log( url)
+  }
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(form)
+    createAccommodation(form)
+  }
+
+
+
   return <>
     <div>
+      <form onSubmit={submit}>
       <Typography variant="h4" fontWeight={600} color="primary">Add Accommodation</Typography>
       <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>Fill up information to add accommodation</Typography>
       <Grid container spacing={2}>
@@ -32,6 +78,7 @@ function AddAccommodation() {
             label="Type"
             required
             fullWidth
+            onChange={(e) => setForm({ ...form, type: e.target.value })}
           />
         </Grid>
         <Grid item md={6}>
@@ -43,6 +90,8 @@ function AddAccommodation() {
             label="Number of Pax"
             required
             fullWidth
+            value={form.pax}
+            onChange={(e) => setForm({ ...form, pax: e.target.value })}
           />
         </Grid>
         <Grid item xs={12}>
@@ -51,6 +100,8 @@ function AddAccommodation() {
             label="Title"
             required
             fullWidth
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
           />
         </Grid>
         <Grid item xs={12}>
@@ -61,6 +112,8 @@ function AddAccommodation() {
             fullWidth
             multiline
             maxRows={5}
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
           />
         </Grid>
         <Grid item md={3} xs={12}>
@@ -69,6 +122,7 @@ function AddAccommodation() {
             required
             fullWidth
             type='file'
+            onChange={(e:any)=>{uploadImage(e.target.files[0])}}
           />
         </Grid>
         <Grid item md={3} xs={12}>
@@ -77,6 +131,19 @@ function AddAccommodation() {
             label="Day Shift Price"
             required
             fullWidth
+            type='number'
+            onChange={(e) => {
+              setForm((prevForm) => ({
+                ...prevForm,
+                fees: [
+                  {
+                    ...prevForm.fees[0], // Copy the properties of the first element
+                    rate: Number(e.target.value) // Update the rate property
+                  },
+                  ...prevForm.fees.slice(1) // Copy the rest of the elements
+                ]
+              }));
+            }}
           />
         </Grid>
         <Grid item md={3} xs={12}>
@@ -85,6 +152,20 @@ function AddAccommodation() {
             label="Night Shift Price"
             required
             fullWidth
+            type='number'
+            onChange={(e) => {
+              setForm((prevForm) => ({
+                ...prevForm,
+                fees: [
+                  ...prevForm.fees.slice(0, 1), // Copy the first element
+                  {
+                    ...prevForm.fees[1], // Copy the properties of the second element
+                    rate: Number(e.target.value) // Update the rate property
+                  },
+                  ...prevForm.fees.slice(2) // Copy the rest of the elements
+                ]
+              }));
+            }}
           />
         </Grid>
         <Grid item md={3} xs={12}>
@@ -93,6 +174,19 @@ function AddAccommodation() {
             label="Whole Day Price"
             required
             fullWidth
+            type='number'
+            onChange={(e) => {
+              setForm((prevForm) => ({
+                ...prevForm,
+                fees: [
+                  ...prevForm.fees.slice(0, 2), // Copy the first and second elements
+                  {
+                    ...prevForm.fees[2], // Copy the properties of the third element
+                    rate: Number(e.target.value) // Update the rate property
+                  }
+                ]
+              }));
+            }}
           />
         </Grid>
       </Grid>
@@ -148,6 +242,18 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    onChange={(e) => {
+                      setForm((prevForm) => ({
+                        ...prevForm,
+                        fees: [
+                          {
+                            ...prevForm.fees[0], // Copy the properties of the first element
+                            kidsFee: Number(e.target.value) // Update the rate property
+                          },
+                          ...prevForm.fees.slice(1) // Copy the rest of the elements
+                        ]
+                      }));
+                    }}
                   />
                 </TableCell>
                 <TableCell >
@@ -155,6 +261,19 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    onChange={(e) => {
+                      setForm((prevForm) => ({
+                        ...prevForm,
+                        fees: [
+                          ...prevForm.fees.slice(0, 1), // Copy the first element
+                          {
+                            ...prevForm.fees[1], // Copy the properties of the second element
+                            kidsFee: Number(e.target.value) // Update the rate property
+                          },
+                          ...prevForm.fees.slice(2) // Copy the rest of the elements
+                        ]
+                      }));
+                    }}
                   />
                 </TableCell>
                 <TableCell >
@@ -162,6 +281,18 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    onChange={(e) => {
+                      setForm((prevForm) => ({
+                        ...prevForm,
+                        fees: [
+                          ...prevForm.fees.slice(0, 2), // Copy the first and second elements
+                          {
+                            ...prevForm.fees[2], // Copy the properties of the third element
+                            kidsFee: Number(e.target.value) // Update the rate property
+                          }
+                        ]
+                      }));
+                    }}
                   />
                 </TableCell>
               </TableRow>
@@ -174,6 +305,18 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    onChange={(e) => {
+                      setForm((prevForm) => ({
+                        ...prevForm,
+                        fees: [
+                          {
+                            ...prevForm.fees[0], // Copy the properties of the first element
+                            adultFee: Number(e.target.value) // Update the rate property
+                          },
+                          ...prevForm.fees.slice(1) // Copy the rest of the elements
+                        ]
+                      }));
+                    }}
                   />
                 </TableCell>
                 <TableCell >
@@ -181,6 +324,19 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    onChange={(e) => {
+                      setForm((prevForm) => ({
+                        ...prevForm,
+                        fees: [
+                          ...prevForm.fees.slice(0, 1), // Copy the first element
+                          {
+                            ...prevForm.fees[1], // Copy the properties of the second element
+                            adultFee: Number(e.target.value) // Update the rate property
+                          },
+                          ...prevForm.fees.slice(2) // Copy the rest of the elements
+                        ]
+                      }));
+                    }}
                   />
                 </TableCell>
                 <TableCell >
@@ -188,6 +344,18 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    onChange={(e) => {
+                      setForm((prevForm) => ({
+                        ...prevForm,
+                        fees: [
+                          ...prevForm.fees.slice(0, 2), // Copy the first and second elements
+                          {
+                            ...prevForm.fees[2], // Copy the properties of the third element
+                            adultFee: Number(e.target.value) // Update the rate property
+                          }
+                        ]
+                      }));
+                    }}
                   />
                 </TableCell>
               </TableRow>
@@ -197,13 +365,13 @@ function AddAccommodation() {
                   <Typography variant="subtitle2" fontSize={"10px"} color="initial">20% Off</Typography>
                 </TableCell>
                 <TableCell align='center'>
-                  0
+                  {form.fees[0].adultFee * 0.8}
                 </TableCell>
                 <TableCell align='center'>
-                  0
+                  {form.fees[1].adultFee * 0.8}
                 </TableCell>
                 <TableCell align='center'>
-                  0
+                  {form.fees[2].adultFee * 0.8}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -212,10 +380,11 @@ function AddAccommodation() {
       </Paper>
       <Box display="flex">
         <FormControlLabel sx={{flexGrow:"1"}} control={<Checkbox defaultChecked />} label="Make it this active?" />
-        <Button variant="contained" color="primary" href={"/admin/manage/accommodations"}>
+        <Button variant="contained" color="primary" type='submit'>
           Create
         </Button>
       </Box>
+      </form>
     </div>
   </>
 }
