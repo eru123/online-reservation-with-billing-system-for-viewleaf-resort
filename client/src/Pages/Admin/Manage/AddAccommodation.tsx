@@ -22,7 +22,13 @@ import useFirebase from '../../../Hooks/useFirebase'
 function AddAccommodation() {
   const { uploadFile, downloadURL } = useFirebase();
   const { createAccommodation } = useAccommodation();
-  const [inclusions, setInclusions] = useState([]);
+  const [inclusions, setInclusions] = useState<any>([]);
+
+  const [inclusionForm, setInclusionForm] = useState({
+    name: '',
+    price: 0
+  })
+
   const [form, setForm] = useState({
     type: '',
     title: '',
@@ -61,9 +67,32 @@ function AddAccommodation() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(form)
-    createAccommodation(form)
+    createAccommodation({...form, inclusions})
   }
 
+  const addInclusion = () => {
+    if (inclusionForm.name === '' || inclusionForm.price === 0) {
+      alert("Must fill in inclusion name and price")
+    } 
+    else{
+      setInclusions([...inclusions, inclusionForm])
+      setInclusionForm({
+        name: '',
+        price: 0
+      })
+    }
+    console.log(inclusions)
+    
+  }
+
+  const deleteInclusion = (index: number) => {
+    setInclusions((prevInclusions: any) => {
+      const newInclusions = [...prevInclusions];
+      newInclusions.splice(index, 1);
+      return newInclusions;
+    });
+    console.log(inclusions)
+  };
 
 
   return <>
@@ -198,6 +227,8 @@ function AddAccommodation() {
               id="nameInclusion"
               label="Name"
               fullWidth
+              value={inclusionForm.name}
+              onChange={(e) => setInclusionForm({ ...inclusionForm, name: e.target.value })}
             />
           </Grid>
           <Grid item md={4} xs={6}>
@@ -206,18 +237,22 @@ function AddAccommodation() {
               label="Price"
               fullWidth
               type='number'
+              value={inclusionForm.price}
+              onChange={(e) => setInclusionForm({ ...inclusionForm, price: Number(e.target.value) })}
             />
           </Grid>
           <Grid item md={2} xs={12}>
-            <Button variant="contained" color="primary" fullWidth sx={{height:"100%"}}>
+            <Button variant="contained" color="primary" fullWidth sx={{height:"100%"}} onClick={()=>addInclusion()}>
               ADD
             </Button>
           </Grid>
         </Grid>
         <Box display="flex" gap={".5em"} flexWrap={"wrap"} sx={{marginTop:"1em"}}>
-          <Chip label="Slippers (100)" variant="outlined" onDelete={()=>{alert("deleted")}} />
-          <Chip label="Mattress (200)" variant="outlined" onDelete={()=>{alert("deleted")}} />
-          <Chip label="Towel (300)" variant="outlined" onDelete={()=>{alert("deleted")}} />
+          {inclusions.map((inclusion: { name: any; price: any }, index: number)=>{
+            return(
+              <Chip key={index} label={`${inclusion.name} (${inclusion.price})`} variant="outlined" onDelete={()=>deleteInclusion(index)}/>
+            )
+          })}
         </Box>
       </Paper>
       <Paper variant="elevation" elevation={1} sx={{padding:"1em",background:"#D9D9D9",margin:"2em 0"}} >
