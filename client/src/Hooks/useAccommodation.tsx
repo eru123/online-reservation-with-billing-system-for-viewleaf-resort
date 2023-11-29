@@ -13,6 +13,10 @@ interface AccommodationData {
     adultFee: number;
     kidsFee: number;
   }[];
+  inclusions: {
+    name: string;
+    price: number;
+  }[];
 }
 
 interface ShiftData {
