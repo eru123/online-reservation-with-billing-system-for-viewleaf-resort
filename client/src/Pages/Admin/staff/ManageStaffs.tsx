@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import Typography from '@mui/material/Typography'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
@@ -35,7 +35,8 @@ const style = {
 };
 
 function ManageStaffs() {
-  const {data, loading, error, registerStaff, updateStaff} = useStaff();
+  const {data: staffs, loading: staffLoading, error: staffError, getStaff} = useStaff();
+  const {data: credentials, loading: credLoading, error: credError, registerStaff} = useStaff();
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -48,6 +49,10 @@ function ManageStaffs() {
     console.log(form);
   }
 
+  useEffect(()=>{
+    getStaff()
+  }, [])
+
     const [open, setOpen] = useState("");
     return <>
         <Typography variant="h4" fontWeight={600} color="primary">Manage Staffs</Typography>
@@ -57,7 +62,7 @@ function ManageStaffs() {
                 <TableHead>
                     <TableRow>
                         <TableCell sx={{display:"flex",alignItems:"center"}}>Name</TableCell>
-                        <TableCell >Contact Number </TableCell>
+                        <TableCell >Staff Id</TableCell>
                         <TableCell >Email</TableCell>
                         <TableCell align='right'>
                             <Button variant="contained" color="primary" onClick={()=>{setOpen("addStaff")}}>
@@ -67,26 +72,21 @@ function ManageStaffs() {
                     </TableRow>
                 </TableHead>
                 <TableBody >
+                  {staffs?.map((staff:any)=>(
                     <TableRow sx={{background:"#D7D7D7"}}>
-                        <TableCell >Roled William</TableCell>
-                        <TableCell >0915-661-4232</TableCell>
-                        <TableCell >roldeWilliam@gmail.com</TableCell>
+                        <TableCell >{staff.username}</TableCell>
+                        <TableCell >{staff.staffId}</TableCell>
+                        <TableCell >{staff.email}</TableCell>
                         {/* <TableCell align='right'>
                             <IconButton aria-label="" onClick={()=>{setOpen("delete")}}>
                                 <DeleteIcon/> 
                             </IconButton>
                         </TableCell> */}
                     </TableRow>
-                    <TableRow sx={{background:"#D7D7D7"}}>
-                        <TableCell >Roled William</TableCell>
-                        <TableCell >0915-661-4232</TableCell>
-                        <TableCell >roldeWilliam@gmail.com</TableCell>
-                        {/* <TableCell align='right'>
-                            <IconButton aria-label="" onClick={()=>{setOpen("delete")}}>
-                                <DeleteIcon/> 
-                            </IconButton>
-                        </TableCell> */}
-                    </TableRow>
+
+                  ))}
+                    
+                    
                 </TableBody>
             </Table>
         </TableContainer>
@@ -166,7 +166,7 @@ function ManageStaffs() {
                                         <IconButton
                                         aria-label="toggle password visibility"
                                         onClick={()=>{
-                                          navigator.clipboard.writeText(data?.email);
+                                          navigator.clipboard.writeText(credentials?.email);
                                         }}
                                         edge="end"
                                         >
@@ -175,7 +175,7 @@ function ManageStaffs() {
                                     </InputAdornment>
                                     }
                                     label="Email"
-                                    value={data?.email}
+                                    value={credentials?.email}
                                 />
                             </FormControl>
                         </Grid>
@@ -192,7 +192,7 @@ function ManageStaffs() {
                                         <IconButton
                                           aria-label="toggle password visibility"
                                           onClick={()=>{
-                                            navigator.clipboard.writeText(data?.password);
+                                            navigator.clipboard.writeText(credentials?.password);
                                           }}
                                           edge="end"
                                         >
@@ -201,7 +201,7 @@ function ManageStaffs() {
                                     </InputAdornment>
                                     }
                                     label="Password"
-                                    value={data?.password}
+                                    value={credentials?.password}
                                 />
                             </FormControl>
                         </Grid>
