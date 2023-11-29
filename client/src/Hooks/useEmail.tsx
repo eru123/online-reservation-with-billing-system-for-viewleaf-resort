@@ -5,10 +5,10 @@ interface Data {
   sendEmail: (data: SendEmailData ) => void;
 }
 
-interface SendEmailData{
+interface SendEmailData {
   email: string,
   subject: string,
-  content: string
+  content: unknown
 }
 
 function useEmail(): Data {

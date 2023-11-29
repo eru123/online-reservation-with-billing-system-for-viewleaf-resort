@@ -37,12 +37,15 @@ import TestLogin from './Test/TestLogin';
 import TestCreateStaff from './Test/TestCreateStaff';
 import TestLogout from './Test/TestLogout';
 import TestAccommodation from './Test/TestAccommodation';
+import SendEmails from './Pages/_Test/sendEmail';
 
 import { ProtectedRoute } from './Hooks/useAuth';
 
 function App() {
   return (
+    
     <Routes>
+      {/* <Route path="/*" element={<Error/>} /> */}
         <Route path="/login" element={<Login/>} />
 
         <Route element={<Base />} >
@@ -81,6 +84,7 @@ function App() {
         <Route path="/testcreatestaff" element={<TestCreateStaff/>} />
         <Route path="/testlogout" element={<TestLogout/>} />
         <Route path="/testaccommodation" element={<TestAccommodation/>} />
+        <Route path="/sendemail" element={<SendEmails/>} />
     </Routes>
   );
 }

@@ -18,6 +18,7 @@ import { Role } from './api/staff/staff.types';
 import envs from './utilities/envs';
 import StaffModel from './api/staff/staff.model';
 
+
 // Routes
 import faqRoute from './api/faq/faq.route';
 import contentRoute from './api/content/content.route';
@@ -33,6 +34,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(helmet());
 
+app.use('/emails', emailRoute);
 app.use('/faqs', faqRoute);
 app.use('/contents', contentRoute);
 app.use('/staffs', staffRoute);
