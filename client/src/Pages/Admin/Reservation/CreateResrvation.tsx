@@ -20,7 +20,7 @@ import Accommodation from '../../Guests/Booking/Accommodation';
 function CreateResrvation() {
     const [step,setStep] = useState(1);
 
-
+    const [selectedAccommodations, setSelectedAccommodations] = useState<any>([]);
 
     return <>
         <Container maxWidth="lg">
@@ -39,7 +39,7 @@ function CreateResrvation() {
                         </Button>
                     </Box>
                 </Box>
-                <Accommodation/>
+                {/* <Accommodation date={date||""} shift={shift||""} selectedAccommodations={selectedAccommodations} setSelectedAccommodations={setSelectedAccommodations}/> */}
             </>:""}
             {step===2?<>
                 <Box display="flex" alignItems={"center"} sx={{marginTop:"50px",marginBottom:"2em"}}>

@@ -18,19 +18,19 @@ import useAccommodation from '../../../Hooks/useAccommodation'
 function Booking() {
   const [active,setActive] =  useState(1);
   const {date, shift} = useParams();
+  const [selectedAccommodations, setSelectedAccommodations] = useState<any>([]);
   
-
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
       {active === 1?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Selected Accommodation</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
-          <Accommodation date={date||""} shift={shift||""}/>
+          <Accommodation date={date||""} shift={shift||""} selectedAccommodations={selectedAccommodations} setSelectedAccommodations={setSelectedAccommodations}/>
       </>:""}
       {active === 2?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Booking Statements</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Here you will see all breakdown to your reservation</Typography>   
-          <BookingStatement additional={false}/>
+          <BookingStatement additional={false} selectedAccommodations={selectedAccommodations}/>
       </>:""}
       {active === 3?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Guest Details </Typography>
