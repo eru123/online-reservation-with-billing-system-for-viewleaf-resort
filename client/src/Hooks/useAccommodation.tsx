@@ -2,14 +2,22 @@ import { useState } from 'react';
 import useRequest from './useRequest';
 
 interface AccommodationData {
-
+  type: string;
+  title: string;
+  description: string;
+  pax: string;
+  image: string;
+  fees: {
+    shift: string;
+    rate: number;
+    adultFee: number;
+    kidsFee: number;
+  }[];
 }
 
 interface ShiftData {
 
 }
-
-
 
 function useAccommodation() {
   const { data, loading, error, makeRequest } = useRequest();
