@@ -44,9 +44,7 @@ const style = {
 };
 function Invoice() {
     const [open, setOpen] = React.useState("");
-    // pending,canceling, refunding, rescheduling
-    // approved, checkedIn,checkedOut,
-    // canceled, refunded 
+    
     const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("paid");
     return<>
         <Container maxWidth="lg"  sx={{padding:"6em 0 7em"}}>
