@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import AccommodationCard from '../../../Components/AccommodationCard'
@@ -20,6 +20,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 import QuantitySelector from '../../../Components/QuantitySelector';
 
+import useAccommodation from '../../../Hooks/useAccommodation'
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -32,11 +33,17 @@ const style = {
     p: 4,
     borderRadius:"8px"
 };
-function Accommodation() {
+
+type Props = { 
+  date?:string;
+  shift?:string;
+}
+
+function Accommodation({date, shift}:Props) {
   const [open, setOpen] = React.useState("");
 
   const [calendarValue, setCalendarValue] = React.useState<Dayjs | null>(dayjs());
-  const [shift, setShift] = React.useState('');
+  // const [shift, setShift] = React.useState('');
 
   const [kidsEntranceFee,setKidsEntranceFee]= useState(0);
   const [adultEntranceFee,setAdultEntranceFee]= useState(0);
@@ -45,9 +52,26 @@ function Accommodation() {
   const [dayshift, setDayShift] = useState(false);
   const [nightShift, setNightShift] = useState(false);
 
+  const {data:accommodations, getAccommodation} = useAccommodation();
+  const [selectedAccommodations, setSelectedAccommodations] = useState<any>([]);
+
+  useEffect(()=>{
+    getAccommodation({
+      schedule: new Date(parseInt(date||"", 10)),
+      shift: shift==="1"? "day": shift==="2"? "night": "whole day"
+    })
+  }, [])
+
+  const selectAccommodation = (data: any) => {
+    if(selectedAccommodations.includes(data)) {
+      setSelectedAccommodations(selectedAccommodations.filter((item: any) => item !== data))
+    } else {
+      setSelectedAccommodations([...selectedAccommodations, data])
+    }
+  }
 
   return <>
-    <Box display="flex"  my={"20px"} gap={"10px"}>  
+    {/* <Box display="flex"  my={"20px"} gap={"10px"}>  
       <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
               label="Date Schedule" 
@@ -73,19 +97,33 @@ function Accommodation() {
           <MenuItem value={"Whole Shift"}>Whole Shift</MenuItem>
           </Select>
       </FormControl>
-    </Box>   
+    </Box>    */}
 
     {/* List of Selected */}
     <Box display="flex" flexDirection={"column"} gap={"25px"} >
-      <AccommodationCard variant="selected" openModal={setOpen}/>
-      <AccommodationCard variant="selected" openModal={setOpen}/>
+      {selectedAccommodations?.map((accommodation: any) => (
+        <AccommodationCard 
+          accommodation={accommodation}
+          variant="selected" 
+          openModal={setOpen}
+        />
+      ))}
+      
     </Box>
 
     {/*  List of Suggested Accommodation */}
     <Typography variant="h4" color="primary" mt={"3em"} fontWeight={600}>Suggested Accommodation</Typography>
     <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>List of all available accommodation</Typography>
     <Box display="flex" flexDirection={"column"} gap={"25px"} >
-      <AccommodationCard variant="view" openModal={setOpen}/>
+      {accommodations?.map((accommodation: any) => (
+        <AccommodationCard 
+          accommodation={accommodation} 
+          variant="view" 
+          openModal={setOpen}
+          selectAccommodation={selectAccommodation}
+        />
+      ))}
+      
     </Box>
   </>
 }

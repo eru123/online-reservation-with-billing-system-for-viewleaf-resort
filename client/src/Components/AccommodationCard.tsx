@@ -15,9 +15,10 @@ type Props={
   variant: "selected"|"view"|"manage"|"additional"
   openModal : React.Dispatch<React.SetStateAction<string>>
   accommodation?: any;
+  selectAccommodation?: any;
 }
 
-function AccommodationCard({variant,openModal, accommodation}:Props) {
+function AccommodationCard({variant,openModal, accommodation, selectAccommodation}:Props) {
   const [towel,setTowel] = useState(0);
   const [slippers ,setSlippers] = useState(0);
   const [mattress ,setMattress] = useState(0);
@@ -93,7 +94,7 @@ function AccommodationCard({variant,openModal, accommodation}:Props) {
                                       :""
                                   }
                                   {(variant==="view")?
-                                      <Button variant="contained" color="primary" onClick={()=>{}}>    
+                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation)}}>    
                                           Book
                                       </Button>
                                   :""}

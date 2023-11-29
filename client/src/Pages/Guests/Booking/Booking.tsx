@@ -18,23 +18,14 @@ import useAccommodation from '../../../Hooks/useAccommodation'
 function Booking() {
   const [active,setActive] =  useState(1);
   const {date, shift} = useParams();
-  const {data:accommodations, getAccommodation} = useAccommodation();
-
-  console.log(date, shift)
-
-  useEffect(()=>{
-    getAccommodation({
-      schedule: new Date(parseInt(date||"", 10)),
-      shift: shift==="1"? "day": shift==="2"? "night": "whole day"
-    })
-  }, [])
+  
 
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
       {active === 1?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Selected Accommodation</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
-          <Accommodation/>
+          <Accommodation date={date||""} shift={shift||""}/>
       </>:""}
       {active === 2?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Booking Statements</Typography>

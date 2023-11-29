@@ -42,12 +42,12 @@ function LandingPage() {
       shift : "",
     });
     const [open, setOpen] = React.useState("");
-
+    
+    
     const book = () => {
       console.log(bookingSchedule)
       navigate(`/booking/${new Date(bookingSchedule.date).getTime()}/${bookingSchedule.shift}`)
     }
-   
 
     return (
         <div>
@@ -152,8 +152,7 @@ function LandingPage() {
 
 
                     <Box display="flex" flexDirection={"column"} gap={"15px"}>
-                        <AccommodationCard variant="view" openModal={setOpen}/>
-                        <AccommodationCard variant="view" openModal={setOpen}/>
+                      
                         <AccommodationCard variant="view" openModal={setOpen}/>
                     </Box>
                 </div>
