@@ -78,6 +78,7 @@ export type CreateAccommodation = {
     image: string;
     type: AccommodationType;
     fees: Omit<AddShift, 'accommodationId'>[];
+    inclusions: Inclusion;
 }
 
 export type UpdateAccommodation = {
