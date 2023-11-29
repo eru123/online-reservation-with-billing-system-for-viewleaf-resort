@@ -10,7 +10,7 @@ export const sendEmail: RequestHandler = async (req: BodyRequest<Email>, res) =>
   const { to, subject, content } = req.body;
 
   const transporter = nodemailer.createTransport({
-    service: 'hotmail',
+    service: 'outlook',
     auth: {
       user: NODEMAILER_EMAIL,
       pass: NODEMAILER_PASSWORD,
