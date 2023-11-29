@@ -19,6 +19,7 @@ import ImageListItem from '@mui/material/ImageListItem';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import { useNavigate } from 'react-router-dom'
 
 // Components
 import AccommodationCard from '../Components/AccommodationCard';
@@ -35,11 +36,17 @@ import Section2Img from '../Images/Resources/Section2BG.jpg';
 import itemData from './_Test/itemData'
 
 function LandingPage() {
+    const navigate = useNavigate();
     const [bookingSchedule, setBookingSchedule] = useState<any>({
       date : "",
       shift : "",
     });
     const [open, setOpen] = React.useState("");
+
+    const book = () => {
+      console.log(bookingSchedule)
+      navigate(`/booking/${new Date(bookingSchedule.date).getTime()}/${bookingSchedule.shift}`)
+    }
    
 
     return (
@@ -100,7 +107,7 @@ function LandingPage() {
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Button variant="contained" color="primary" fullWidth onClick={() => console.log(bookingSchedule)}>
+                                    <Button variant="contained" color="primary" fullWidth onClick={() => book()}>
                                         Book Now
                                     </Button>
                                 </Grid>
