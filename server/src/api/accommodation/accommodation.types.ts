@@ -23,7 +23,7 @@ export enum AccommodationAvailbility {
 }
 
 export interface Inclusion {
-    accommodationId: string;
+    accommodationId?: string;
     name: string;
     price: number;
 }

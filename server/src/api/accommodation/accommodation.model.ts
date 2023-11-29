@@ -1,15 +1,13 @@
-import { AccommodationAvailbility, AccommodationDocument, AccommodationType, Shift } from './accommodation.types';
+import { AccommodationAvailbility, AccommodationDocument, AccommodationType, Inclusion, Shift } from './accommodation.types';
 import { id } from '../../utilities/ids';
 import { Schema, model } from 'mongoose';
-
-const generatedId = id();
 
 const accommodationSchema = new Schema(
     {
         accommodationId: {
             type: String,
             unique: true,
-            default: generatedId
+            default: id
         },
         title: {
             type: String,
@@ -76,8 +74,7 @@ const accommodationSchema = new Schema(
             {
                 accommodationId: {
                     type: String,
-                    required: true,
-                    default: generatedId
+                    // required: true
                 },
                 name: {
                     type: String,
@@ -101,5 +98,20 @@ const accommodationSchema = new Schema(
         }
     }
 );
+
+// Add a pre hook to set the accommodationId for inclusions
+accommodationSchema.pre('save', async function (next) {
+  const accommodationId = this.get('accommodationId'); // Get the accommodationId
+
+  if (accommodationId) {
+      // If accommodationId is set, update the inclusions
+      this.set('inclusions', this.inclusions.map((inclusion: Inclusion) => ({
+          ...inclusion,
+          accommodationId
+      })));
+  }
+
+  next();
+});
 
 export default model<AccommodationDocument>('Accommodation', accommodationSchema);
