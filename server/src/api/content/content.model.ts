@@ -79,43 +79,6 @@ const ContentSchema = new Schema<ContentDocument>(
       },
       required: true,
     },
-    fee: {
-      type : {
-        kid : {
-          type: {
-            day: Number,
-            night: Number,
-            whole: Number,
-          },
-          required: true,
-        },
-        adult : {
-          type: {
-            day: Number,
-            night: Number,
-            whole: Number,
-          },
-          required: true,
-        },
-        senior : {
-          type: {
-            day: Number,
-            night: Number,
-            whole: Number,
-          },
-          required: true,
-        },
-        pwd : {
-          type: {
-            day: Number,
-            night: Number,
-            whole: Number,
-          },
-          required: true,
-        }
-      },
-      required: true,
-    }
   },
   { timestamps: true }
 );

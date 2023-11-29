@@ -6,8 +6,6 @@ import {
   editContent,
   getShifts,
   editShifts,
-  getFees,
-  editFees,
 } from './content.controller';
 import asynchronousHandler from '../../middlewares/asynchronousHandler';
 
@@ -20,8 +18,5 @@ router.patch('/', asynchronousHandler(editContent));
 
 router.get('/shifts', asynchronousHandler(getShifts));
 router.patch('/shifts', asynchronousHandler(editShifts));
-
-router.get('/fees', asynchronousHandler(getFees));
-router.patch('/fees', asynchronousHandler(editFees));
 
 export default router;

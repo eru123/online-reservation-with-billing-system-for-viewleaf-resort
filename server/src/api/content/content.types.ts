@@ -7,7 +7,6 @@ export interface ContentDocument extends Document {
   payment: string,
   promo: string,
   shift: Shift,
-  fee: Fee
 }
 
 export interface Shift {
@@ -19,17 +18,4 @@ export interface Shift {
 export interface Duration {
   start: string;
   end: string; 
-}
-
-export interface Fee {
-  kid: FeeShift;
-  adult: FeeShift; 
-  senior: FeeShift;
-  pwd: FeeShift;
-}
-
-export interface FeeShift {
-  day: number;
-  night: number; 
-  whole: number;
 }
