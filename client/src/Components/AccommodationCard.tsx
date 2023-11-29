@@ -72,13 +72,13 @@ function AccommodationCard({variant,openModal, accommodation}:Props) {
                                   {variant === "additional"?"": <>
                                     <Typography variant="h4" color="Primary" fontWeight={700} >₱
                                       {selectedShift ==="Day Shift"?<>
-                                        {accommodation.fees[0].rate}
+                                        {accommodation?.fees[0].rate}
                                       </>:""}
                                       {selectedShift ==="Night Shift"?<>
-                                        {accommodation.fees[1].rate}
+                                        {accommodation?.fees[1].rate}
                                       </>:""}
                                       {selectedShift ==="Whole Day"?<>
-                                        {accommodation.fees[2].rate}
+                                        {accommodation?.fees[2].rate}
                                       </>:""}
                                     </Typography>
                                     <Typography variant="subtitle2" color="inital" >for {accommodation?.pax} pax</Typography>
