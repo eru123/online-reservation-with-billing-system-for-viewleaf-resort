@@ -15,7 +15,6 @@ import EmailIcon from '@mui/icons-material/Email';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import StarIcon from '@mui/icons-material/Star';
 import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';

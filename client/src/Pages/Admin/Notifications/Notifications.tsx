@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 function Notifications() {
     return<>
-        <Typography variant="h4" fontWeight=  {600} color="primary">Notifications</Typography>
+        <Typography variant="h4" fontWeight={600} color="primary">Notifications</Typography>
         <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>List of all notifications </Typography>
 
 

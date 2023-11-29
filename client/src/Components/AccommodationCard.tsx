@@ -2,7 +2,6 @@ import React,{useState} from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import SampleImage1 from '../Images/Resources/SampleImage1.jpg';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import FormControl from '@mui/material/FormControl';
