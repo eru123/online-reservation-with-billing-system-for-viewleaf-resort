@@ -22,13 +22,18 @@ interface ReservationData {
   }[]
 }
 
+interface GetReservation{
+  reservationId: string;
+}
+
 function useReservation() {
   const { data, loading, error, makeRequest } = useRequest();
 
-  const getReservation = () => {
+  const getReservation = (content: GetReservation) => {
     makeRequest({
       method: 'get',
       url: `/reservations`,
+      params: content
     });
   };
 
