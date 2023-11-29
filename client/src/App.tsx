@@ -28,6 +28,7 @@ import Report from './Pages/Admin/Report/Report';
 import Additional from './Pages/Admin/Reservation/Additional/Additional';
 import Staff from './Pages/Admin/staff/ManageStaffs';
 import Notifications from './Pages/Admin/Notifications/Notifications';
+import Profile from './Pages/Admin/Profile/Profile';
 
 // Test
 import TestFAQ from './Test/TestFAQ';
@@ -37,8 +38,9 @@ import TestLogin from './Test/TestLogin';
 import TestCreateStaff from './Test/TestCreateStaff';
 import TestLogout from './Test/TestLogout';
 import TestAccommodation from './Test/TestAccommodation';
+import TestReservation from './Test/TestReservation';
 import SendEmails from './Pages/_Test/sendEmail';
-import Profile from './Pages/Admin/Profile/Profile';
+
 import { ProtectedRoute } from './Hooks/useAuth';
 
 function App() {
@@ -87,6 +89,7 @@ function App() {
         <Route path="/testcreatestaff" element={<TestCreateStaff/>} />
         <Route path="/testlogout" element={<TestLogout/>} />
         <Route path="/testaccommodation" element={<TestAccommodation/>} />
+        <Route path="/testreservation" element={<TestReservation/>} />
         
     </Routes>
   );

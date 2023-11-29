@@ -16,9 +16,10 @@ type Props={
   openModal : React.Dispatch<React.SetStateAction<string>>
   accommodation?: any;
   selectAccommodation?: any;
+  deselectAccommodation?: any;
 }
 
-function AccommodationCard({variant,openModal, accommodation, selectAccommodation}:Props) {
+function AccommodationCard({variant,openModal, accommodation, selectAccommodation, deselectAccommodation}:Props) {
   const [towel,setTowel] = useState(0);
   const [slippers ,setSlippers] = useState(0);
   const [mattress ,setMattress] = useState(0);
@@ -88,7 +89,7 @@ function AccommodationCard({variant,openModal, accommodation, selectAccommodatio
                               </div>
                               <div style={{display:"flex",justifyContent:"end"}}>
                                   {(variant==="selected")?
-                                      <Button variant="contained" color="primary">    
+                                      <Button variant="contained" color="primary" onClick={()=>{deselectAccommodation(accommodation)}}>    
                                           Unbook
                                       </Button>
                                       :""
@@ -116,9 +117,9 @@ function AccommodationCard({variant,openModal, accommodation, selectAccommodatio
                   <Typography variant="h5" fontWeight={600} color="primary">Manage Inclusion</Typography>
                   <Typography variant="subtitle1" color="initial">Select your Inclusions</Typography>
                   <div>
-                      <QuantitySelector name={"Towel"} value={towel} pricePerItem={100} setValue={setTowel}/>
-                      <QuantitySelector name={"Slippers"} value={slippers} pricePerItem={150} setValue={setSlippers}/>
-                      <QuantitySelector name={"Mattress"} value={mattress} pricePerItem={500} setValue={setMattress}/>
+                    {accommodation?.inclusions?.map((inclusion:any)=>(
+                      <QuantitySelector name={inclusion.name} value={slippers} pricePerItem={inclusion.price} setValue={setSlippers}/>
+                    ))}
                   </div>
                   <hr style={{margin:"1em 0"}} />
                   <Typography variant="h5" fontWeight={600} color="primary">Entrance Fee</Typography>

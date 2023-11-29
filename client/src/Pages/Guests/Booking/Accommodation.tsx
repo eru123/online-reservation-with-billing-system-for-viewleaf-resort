@@ -37,9 +37,11 @@ const style = {
 type Props = { 
   date?:string;
   shift?:string;
+  selectedAccommodations: any;
+  setSelectedAccommodations: React.Dispatch<React.SetStateAction<any>>;
 }
 
-function Accommodation({date, shift}:Props) {
+function Accommodation({date, shift, selectedAccommodations, setSelectedAccommodations}:Props) {
   const [open, setOpen] = React.useState("");
 
   const [calendarValue, setCalendarValue] = React.useState<Dayjs | null>(dayjs());
@@ -53,9 +55,11 @@ function Accommodation({date, shift}:Props) {
   const [nightShift, setNightShift] = useState(false);
 
   const {data:accommodations, getAccommodation} = useAccommodation();
-  const [selectedAccommodations, setSelectedAccommodations] = useState<any>([]);
+
+  const [form, setForm] = useState()
 
   useEffect(()=>{
+    console.log(date)
     getAccommodation({
       schedule: new Date(parseInt(date||"", 10)),
       shift: shift==="1"? "day": shift==="2"? "night": "whole day"
@@ -64,9 +68,10 @@ function Accommodation({date, shift}:Props) {
 
   const selectAccommodation = (data: any) => {
     if(selectedAccommodations.includes(data)) {
-      setSelectedAccommodations(selectedAccommodations.filter((item: any) => item !== data))
+      // setSelectedAccommodations(selectedAccommodations.filter((item: any) => item !== data))
     } else {
       setSelectedAccommodations([...selectedAccommodations, data])
+      // setForm([...form, ])
     }
   }
 

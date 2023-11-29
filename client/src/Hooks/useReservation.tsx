@@ -2,18 +2,38 @@ import { useState } from 'react';
 import useRequest from './useRequest';
 
 interface ReservationData {
-  faqId: number;
-  question: string;
-  answer: string;
+  name: string;
+  email: string;
+  phone: string;
+  schedule: number;
+  accommodations: {
+    accommodationId: string;
+    shift: string;
+    guests: {
+      adult: number;
+      children: number;
+      senior: number;
+      pwd: number;
+    },
+    inclusions: {
+        name: string;
+        quantity: number;
+    }[]
+  }[]
+}
+
+interface GetReservation{
+  reservationId: string;
 }
 
 function useReservation() {
   const { data, loading, error, makeRequest } = useRequest();
 
-  const getReservation = () => {
+  const getReservation = (content: GetReservation) => {
     makeRequest({
       method: 'get',
       url: `/reservations`,
+      params: content
     });
   };
 
