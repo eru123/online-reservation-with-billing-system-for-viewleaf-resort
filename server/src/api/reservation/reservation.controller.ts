@@ -1,7 +1,12 @@
 import { BodyRequest, QueryRequest, RequestHandler } from 'express';
 import { CheckData } from '../../utilities/checkData';
 import { Conflict, NotFound, UnprocessableEntity } from '../../utilities/errors';
-import { AddExtras, CreateReservation, GetReservations, ReservationStatus } from './reservation.types';
+import { 
+  // AddExtras, 
+  CreateReservation, 
+  GetReservations, 
+  ReservationStatus 
+} from './reservation.types';
 import { InvoiceDocument, InvoicePopulatedDocument } from '../invoice/invoice.types';
 import { Shift } from '../accommodation/accommodation.types';
 import AccommodationModel from '../accommodation/accommodation.model';
@@ -146,12 +151,12 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
     res.sendStatus(201);
 };
 
-export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res) => {
-    const { reservationId, accommodations } = req.body;
+// export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res) => {
+//     const { reservationId, accommodations } = req.body;
 
-    const reservation = await ReservationModel.findOne({ reservationId }).exec();
-    if (!reservation) throw new NotFound('Reservation');
+//     const reservation = await ReservationModel.findOne({ reservationId }).exec();
+//     if (!reservation) throw new NotFound('Reservation');
 
-    // Get invoices of reservation
-    const invoices = await InvoiceModel.find({ reservation: reservation._id }).exec();
-}
+//     // Get invoices of reservation
+//     const invoices = await InvoiceModel.find({ reservation: reservation._id }).exec();
+// }

@@ -1,4 +1,8 @@
-import { addExtras, createReservation, getReservations } from "./reservation.controller";
+import { 
+  // addExtras, 
+  createReservation, 
+  getReservations 
+} from "./reservation.controller";
 import { Router } from "express";
 import asynchronousHandler from "../../middlewares/asynchronousHandler";
 
@@ -43,6 +47,6 @@ router.post('/', asynchronousHandler(createReservation));
  *     inclusions: [{name: string, quantity: number }] (optional)
  * }]
  */
-router.patch('/', asynchronousHandler(addExtras));
+// router.patch('/', asynchronousHandler(addExtras));
 
 export default router;
