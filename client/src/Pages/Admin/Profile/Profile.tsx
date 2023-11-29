@@ -24,7 +24,7 @@ const style = {
 function Profile() {
     const [open, setOpen] = useState("");
     return <>
-        <Box display={"flex"}>
+        <Box display={"flex"} flexWrap={"wrap"}>
             <Box width={"300px"} >
                 <Box position={"sticky"} sx={{display:"flex",flexDirection:"column",gap:"2em", alignItems:"center"}} top={"10px"} >
                     <Avatar

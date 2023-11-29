@@ -38,7 +38,7 @@ import TestCreateStaff from './Test/TestCreateStaff';
 import TestLogout from './Test/TestLogout';
 import TestAccommodation from './Test/TestAccommodation';
 import SendEmails from './Pages/_Test/sendEmail';
-
+import Profile from './Pages/Admin/Profile/Profile';
 import { ProtectedRoute } from './Hooks/useAuth';
 
 function App() {
@@ -65,6 +65,7 @@ function App() {
             <Route path="/admin/reservation/view" element={<InvoiceManage/>}/>
             <Route path="/admin/report" element={<Report/>}/>
             <Route path="/admin/notifications" element={<Notifications/>}/>
+            <Route path="/profile" element={<Profile/>} />
           {/* </Route> */}
 
           <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
@@ -78,13 +79,14 @@ function App() {
         </Route>
 
         <Route path="/testfaq" element={<TestFAQ/>} />
+        <Route path="/testfaq" element={<TestFAQ/>} />
         <Route path="/testcontent" element={<TestContent/>} />
         <Route path="/testshift" element={<TestShift/>} />
         <Route path="/testlogin" element={<TestLogin/>} />
         <Route path="/testcreatestaff" element={<TestCreateStaff/>} />
         <Route path="/testlogout" element={<TestLogout/>} />
         <Route path="/testaccommodation" element={<TestAccommodation/>} />
-        <Route path="/sendemail" element={<SendEmails/>} />
+        
     </Routes>
   );
 }
