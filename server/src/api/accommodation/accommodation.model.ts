@@ -2,12 +2,14 @@ import { AccommodationAvailbility, AccommodationDocument, AccommodationType, Shi
 import { id } from '../../utilities/ids';
 import { Schema, model } from 'mongoose';
 
+const generatedId = id();
+
 const accommodationSchema = new Schema(
     {
         accommodationId: {
             type: String,
             unique: true,
-            default: id
+            default: generatedId
         },
         title: {
             type: String,
@@ -74,7 +76,8 @@ const accommodationSchema = new Schema(
             {
                 accommodationId: {
                     type: String,
-                    required: true
+                    required: true,
+                    default: generatedId
                 },
                 name: {
                     type: String,
