@@ -40,14 +40,7 @@ const style = {
 
 function Accommodation() {
     const [open, setOpen] = useState("");
-    const { data: fees, loading: feeLoading, error: feeError, getFee, updateFee } = useContent();
     const { data: shifts, loading: shiftLoading, error: shiftError, getShift, updateShift } = useContent();
-
-    const [feeForm, setFeeForm] = useState<any>({
-      kid: 0,
-      adult: 0,
-      senior: 0
-    })
 
     const [shiftForm, setShiftForm] = useState<any>({
       day: {
@@ -69,16 +62,6 @@ function Accommodation() {
       setOpen("")
     }
 
-    const handleUpdateFee: React.FormEventHandler<HTMLFormElement> = (e) => {
-      e.preventDefault()
-
-      // Update Fee
-      updateFee(feeForm);
-
-      // Clear Form
-      clear()
-    }
-
     const handleUpdateShift: React.FormEventHandler<HTMLFormElement> = (e) => {
       e.preventDefault()
 
@@ -90,13 +73,7 @@ function Accommodation() {
     }
     
     useEffect(() => {
-      getFee();
       getShift();
-      setFeeForm({
-        kid: fees?.fee?.kid,
-        adult: fees?.fee?.adult,
-        senior: fees?.fee?.senior
-      });
       setShiftForm({
         day: {
           start: shifts?.shift?.day?.start,
