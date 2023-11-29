@@ -110,11 +110,11 @@ export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAcc
 };
 
 export const createAccommodation: RequestHandler = async (req: BodyRequest<CreateAccommodation>, res) => {
-    const { name, description, pax, image, type } = req.body;
+    const { title, description, pax, image, type } = req.body;
     let { fees } = req.body;
 
     const checker = new CheckData();
-    checker.checkType(name, 'string', 'name');
+    checker.checkType(title, 'string', 'title');
     checker.checkType(description, 'string', 'description');
     checker.checkType(pax, 'string', 'pax');
     checker.checkType(image, 'string', 'image');
@@ -159,7 +159,7 @@ export const createAccommodation: RequestHandler = async (req: BodyRequest<Creat
 
     // Save accommodation
     await AccommodationModel.create({
-        name,
+        title,
         description,
         pax,
         image,

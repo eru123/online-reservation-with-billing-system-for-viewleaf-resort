@@ -9,7 +9,7 @@ const accommodationSchema = new Schema(
             unique: true,
             default: id
         },
-        name: {
+        title: {
             type: String,
             required: true
         },
