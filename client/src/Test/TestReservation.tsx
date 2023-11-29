@@ -8,8 +8,8 @@ import useReservation from '../Hooks/useReservation';
 
 export default function TestReservation() {
 
-  const { createReservation } = useReservation();
-
+  const { createReservation, getReservation } = useReservation();
+  const [reservationId, setReservationId] = useState("");
   const [form, setForm] = useState({
     name: "Jane Doe",
     email: "jane@test.com",
@@ -35,14 +35,15 @@ export default function TestReservation() {
     ]
   })
 
-
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(form)
-    createReservation({...form})
+    // createReservation({...form})
+    getReservation({
+      reservationId: "-LUJs-e1L170zLCA-un5W9O3Kr75EXP0RI"
+    })
   }
   
-
   return (
     <div>
       <form onSubmit={submit}>
