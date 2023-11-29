@@ -61,7 +61,7 @@ function ManageStaffs() {
             <Table aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{display:"flex",alignItems:"center"}}>Name</TableCell>
+                        <TableCell >Name</TableCell>
                         <TableCell >Staff Id</TableCell>
                         <TableCell >Email</TableCell>
                         <TableCell align='right'>
@@ -77,11 +77,11 @@ function ManageStaffs() {
                         <TableCell >{staff.username}</TableCell>
                         <TableCell >{staff.staffId}</TableCell>
                         <TableCell >{staff.email}</TableCell>
-                        {/* <TableCell align='right'>
-                            <IconButton aria-label="" onClick={()=>{setOpen("delete")}}>
+                        <TableCell align='right'>
+                            {/* <IconButton aria-label="" onClick={()=>{setOpen("delete")}}>
                                 <DeleteIcon/> 
-                            </IconButton>
-                        </TableCell> */}
+                            </IconButton> */}
+                        </TableCell>
                     </TableRow>
 
                   ))}
@@ -154,8 +154,8 @@ function ManageStaffs() {
                     </Typography>
                     <Grid container spacing={2} mt={3}>
                         <Grid item  xs={12}>
+                            <Typography variant="subtitle2" color="initial">Email</Typography>
                             <FormControl sx={{ width: '100%' }} variant="outlined">
-                                <InputLabel  htmlFor="outlined-adornment-password">Email</InputLabel>
                                 <OutlinedInput
                                     id="outlined-adornment-password"
                                     type={"text"}
@@ -174,14 +174,13 @@ function ManageStaffs() {
                                         </IconButton>
                                     </InputAdornment>
                                     }
-                                    label="Email"
                                     value={credentials?.email}
                                 />
                             </FormControl>
                         </Grid>
                         <Grid item  xs={12}>
+                          <Typography variant="subtitle2" color="initial">Password</Typography>
                             <FormControl sx={{ width: '100%' }} variant="outlined">
-                                <InputLabel  htmlFor="outlined-adornment-password">Password</InputLabel>
                                 <OutlinedInput
                                     id="outlined-adornment-password"
                                     type={"text"}
@@ -200,7 +199,6 @@ function ManageStaffs() {
                                         </IconButton>
                                     </InputAdornment>
                                     }
-                                    label="Password"
                                     value={credentials?.password}
                                 />
                             </FormControl>
@@ -208,7 +206,7 @@ function ManageStaffs() {
                     </Grid>
 
                     <Grid container spacing={1} mt={4}>
-                        <Grid item sm={8} xs={12}>
+                        <Grid item xs={12}>
                             <Button variant="contained" fullWidth color="primary" onClick={()=>{setOpen("")}}>
                                 Done
                             </Button>
