@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
@@ -35,11 +35,12 @@ import Section2Img from '../Images/Resources/Section2BG.jpg';
 import itemData from './_Test/itemData'
 
 function LandingPage() {
-    const [age, setAge] = React.useState('');
+    const [bookingSchedule, setBookingSchedule] = useState({
+      date : "",
+      shift : "",
+    });
     const [open, setOpen] = React.useState("");
-    const handleChange = (event: SelectChangeEvent) => {
-        setAge(event.target.value as string);
-    };
+   
 
     return (
         <div>
@@ -79,17 +80,17 @@ function LandingPage() {
                                 </Grid>
                                 <Grid item md={5} xs={12}>
                                     <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                        <InputLabel id="demo-simple-select-label">shift</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            value={age}
-                                            label="Age"
-                                            onChange={handleChange}
+                                            value={bookingSchedule.shift}
+                                            label="shift"
+                                            onChange={()=>{}}
                                         >
-                                            <MenuItem value={10}>Ten</MenuItem>
-                                            <MenuItem value={20}>Twenty</MenuItem>
-                                            <MenuItem value={30}>Thirty</MenuItem>
+                                            <MenuItem value={"Day Shift"}>Day Shift</MenuItem>
+                                            <MenuItem value={"Night Shift"}>Night Shift</MenuItem>
+                                            <MenuItem value={"Whole Shift"}>Whole Shift</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
