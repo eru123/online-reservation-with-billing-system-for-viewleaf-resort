@@ -51,14 +51,12 @@ function Policy() {
                 </Button>
             </Box>
         <Box>
-          <Box display="flex" justifyContent={"center"} alignItems={"center"}  minHeight={"800px"} sx={{background:"#B8B8B8",borderRadius:"12px"}}>   
-            <iframe
-              title="PDF Viewer" 
-              src={content?.policy} 
-              width="100%"
-              height="500px"
-            />
-          </Box>
+          <iframe
+            title="PDF Viewer" 
+            src={content?.policy} 
+            width="100%"
+            height="900px"
+          />
         </Box>
         <Modal
             keepMounted
@@ -81,12 +79,10 @@ function Policy() {
                               type='file'
                               id="policy"
                               fullWidth
-                            />
-                            <input
-                              type="file"
-                              accept=".pdf"
+                              inputProps={{
+                                accept: '.pdf',
+                              }}
                               onChange={(e:any)=>{uploadFile(e.target.files[0], 'orbs')}}
-                              id="file-upload-input"
                             />
                         </Grid>
                         

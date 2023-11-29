@@ -12,15 +12,21 @@ import QuantitySelector from './QuantitySelector';
 
 
 type Props={
-    variant: "selected"|"view"|"manage"|"additional"
-    openModal : React.Dispatch<React.SetStateAction<string>>
-    accommodation?: any;
+  variant: "selected"|"view"|"manage"|"additional"
+  openModal : React.Dispatch<React.SetStateAction<string>>
+  accommodation?: any;
 }
 
 function AccommodationCard({variant,openModal, accommodation}:Props) {
   const [towel,setTowel] = useState(0);
   const [slippers ,setSlippers] = useState(0);
   const [mattress ,setMattress] = useState(0);
+  const [selectedShift,setSelectedShift] = useState("Day Shift");
+  const [shiftPrice,setShiftPrice] = useState({
+    dayShift : 300,
+    nightShift:400,
+    wholeDay:500
+  })
 
   return <>
       <div>
@@ -52,16 +58,31 @@ function AccommodationCard({variant,openModal, accommodation}:Props) {
                                             defaultValue={30}
                                             sx={{padding:"0"}}
                                             input={<InputBase name="shift" id="uncontrolled-native"  />}
+                                            value={selectedShift}
+                                            onChange={(e)=>{
+                                              setSelectedShift(e.target.value)
+                                            }}
                                         >
-                                            <option style={{ textAlign: 'end' }} value={"Day"}>Day Shift</option>
-                                            <option style={{ textAlign: 'end' }} value={"Night"}>Night Shift</option>
-                                            <option  style={{ textAlign: 'end' }} value={"Whole Day"}>Whole Day Shift</option>
+                                            <option style={{ textAlign: 'end' }} value={"Day Shift"}>Day Shift</option>
+                                            <option style={{ textAlign: 'end' }} value={"Night Shift"}>Night Shift</option>
+                                            <option  style={{ textAlign: 'end' }} value={"Whole Day"}>Whole Day</option>
                                         </NativeSelect>
                                     </FormControl>
                                   }
                                   {variant === "additional"?"": <>
-                                      <Typography variant="h4" color="Primary" fontWeight={700} >₱4000</Typography>
-                                      <Typography variant="subtitle2" color="inital" >for {accommodation?.pax} pax</Typography>
+                                    <Typography variant="h4" color="Primary" fontWeight={700} >₱
+                                      {selectedShift ==="Day Shift"?<>
+                                        {accommodation.fees[0].rate}
+                                      </>:""}
+                                      {selectedShift ==="Night Shift"?<>
+                                        {accommodation.fees[1].rate}
+                                      </>:""}
+                                      {selectedShift ==="Whole Day"?<>
+                                        {accommodation.fees[2].rate}
+                                      </>:""}
+                                    </Typography>
+                                    <Typography variant="subtitle2" color="inital" >for {accommodation?.pax} pax</Typography>
+                                    
                                   </>}
                               </div>
                               <div style={{display:"flex",justifyContent:"end"}}>

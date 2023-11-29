@@ -14,6 +14,10 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 
 import useAccommodation from '../../../Hooks/useAccommodation'
@@ -102,13 +106,20 @@ function AddAccommodation() {
       <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>Fill up information to add accommodation</Typography>
       <Grid container spacing={2}>
         <Grid item md={3} xs={12}>
-          <TextField
-            id="type"
-            label="Type"
-            required
-            fullWidth
-            onChange={(e) => setForm({ ...form, type: e.target.value })}
-          />
+          <FormControl fullWidth required>
+            <InputLabel id="demo-simple-select-label">Type</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={form.type}
+              label="Type"
+              onChange={(e) => setForm({ ...form, type: e.target.value })}
+            >
+              <MenuItem value={"room"}>Room</MenuItem>
+              <MenuItem value={"cottage"}>Cottage</MenuItem>
+              <MenuItem value={"Resort"}>Resort</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item md={6}>
           
