@@ -22,12 +22,12 @@ interface ShiftData {
 function useAccommodation() {
   const { data, loading, error, makeRequest } = useRequest();
 
-  // const getAccommodation = () => {
-  //   makeRequest({
-  //     method: 'get',
-  //     url: `/faqs`,
-  //   });
-  // };
+  const getAccommodation = () => {
+    makeRequest({
+      method: 'get',
+      url: `/accommodations`,
+    });
+  };
 
   const createAccommodation = (content: AccommodationData) => {
     makeRequest({
@@ -66,6 +66,7 @@ function useAccommodation() {
     data,
     loading,
     error,
+    getAccommodation,
     createAccommodation,
     updateAccommodation,
     createShift,
