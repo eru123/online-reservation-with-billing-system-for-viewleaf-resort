@@ -29,7 +29,7 @@ function AccommodationCard({variant,openModal, accommodation}:Props) {
               <Paper variant="elevation" elevation={3} sx={{borderRadius:"10px",overflow:"hidden"}}>
                   <Grid container spacing={0}>
                       <Grid item md={3} xs={12}>
-                        <img width={"100%"} height={"100%"} src={SampleImage1} alt="" />
+                        <img width={"100%"} height={"100%"} src={accommodation?.image} alt="" />
                       </Grid>
                       <Grid item md={6} xs={9} sx={{padding:"1em"}}>
                           <Box >
