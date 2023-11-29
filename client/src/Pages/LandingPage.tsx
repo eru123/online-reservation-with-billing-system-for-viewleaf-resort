@@ -35,7 +35,7 @@ import Section2Img from '../Images/Resources/Section2BG.jpg';
 import itemData from './_Test/itemData'
 
 function LandingPage() {
-    const [bookingSchedule, setBookingSchedule] = useState({
+    const [bookingSchedule, setBookingSchedule] = useState<any>({
       date : "",
       shift : "",
     });
@@ -75,7 +75,12 @@ function LandingPage() {
                             <Grid container spacing={2}>
                                 <Grid item md={7} xs={12}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DatePicker slotProps={{ textField: { fullWidth: true } }}/>
+                                        <DatePicker 
+                                          slotProps={{ 
+                                            textField: { fullWidth: true } 
+                                          }}
+                                          onChange={(newDate) => setBookingSchedule({ ...bookingSchedule, date: newDate })}
+                                        />
                                     </LocalizationProvider>
                                 </Grid>
                                 <Grid item md={5} xs={12}>
@@ -86,16 +91,16 @@ function LandingPage() {
                                             id="demo-simple-select"
                                             value={bookingSchedule.shift}
                                             label="shift"
-                                            onChange={()=>{}}
+                                            onChange={(e) => setBookingSchedule({ ...bookingSchedule, shift: e.target.value })}
                                         >
-                                            <MenuItem value={"Day Shift"}>Day Shift</MenuItem>
-                                            <MenuItem value={"Night Shift"}>Night Shift</MenuItem>
-                                            <MenuItem value={"Whole Shift"}>Whole Day</MenuItem>
+                                            <MenuItem value={"0"}>Day Shift</MenuItem>
+                                            <MenuItem value={"1"}>Night Shift</MenuItem>
+                                            <MenuItem value={"2"}>Whole Shift</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Button variant="contained" color="primary" href='booking' fullWidth>
+                                    <Button variant="contained" color="primary" fullWidth onClick={() => console.log(bookingSchedule)}>
                                         Book Now
                                     </Button>
                                 </Grid>

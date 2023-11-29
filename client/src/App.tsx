@@ -51,6 +51,7 @@ function App() {
         <Route element={<Base />} >
           <Route path="/" element={<LandingPage/>} />
           <Route path="/booking" element={<Booking/>} />
+          <Route path="/booking/:date/:shift" element={<Booking/>} />
           <Route path="/invoice" element={<Invoice variant={"view"}/>} />
           <Route path="/reservation/:id" element={<Invoice variant={"view"}/>} />
         </Route>

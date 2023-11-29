@@ -11,9 +11,14 @@ import Accommodation from './Accommodation'
 import GuestDetails from './GuestDetails'
 import BookingStatement from './BookingStatement'
 import Payment from './Payment'
+import { useParams } from 'react-router-dom'
 
 function Booking() {
   const [active,setActive] =  useState(1);
+  const {date, shift} = useParams();
+
+  console.log(date, shift)
+
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
       {active === 1?<>
