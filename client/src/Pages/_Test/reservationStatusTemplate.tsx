@@ -26,7 +26,7 @@ export const ReservationStatusEmail = ({ reservationNumber, reservationDate, res
                         <Text style={confirmationCodeText}>Reservation Number: {reservationNumber}</Text>
                     </Row>
                     <Row>
-                        <Text style={confirmationCodeText}>Reservation Date: {reservationDate}</Text>
+                        <Text style={confirmationCodeText}>Reservation Date: {String(reservationDate)}</Text>
                     </Row>
                     <Row>
                         <Text style={confirmationCodeText}>Reservation Status: {reservationStatus}</Text>
