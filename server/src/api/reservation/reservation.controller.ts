@@ -92,9 +92,11 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
     const accommodationIds: string[] = [...new Set(accommodations.map(({ accommodationId }) => accommodationId))];
 
     const reservation = new ReservationModel({
-        name,
-        phone,
-        email,
+        customer: {
+          name,
+          phone,
+          email,
+        },
         schedule
     });
     const invoices: InvoiceDocument[] = [];
