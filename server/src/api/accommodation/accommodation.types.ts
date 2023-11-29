@@ -72,6 +72,7 @@ export type UpdateShiftFees = {
 }
 
 export type CreateAccommodation = {
+    name: string;
     description: string;
     pax: string;
     image: string;

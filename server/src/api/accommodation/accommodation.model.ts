@@ -9,6 +9,10 @@ const accommodationSchema = new Schema(
             unique: true,
             default: id
         },
+        name: {
+            type: String,
+            required: true
+        },
         description: {
             type: String,
             required: true
