@@ -25,12 +25,13 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import useContent from '../../../Hooks/useContent';
 import useAccommodation from '../../../Hooks/useAccommodation';
 
+
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 700,
+    width: 600,
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
@@ -132,6 +133,107 @@ function Accommodation() {
         ))}
       </Box>
     </div>
+
+    <Modal
+          keepMounted
+          open={!(open==="")}
+          onClose={()=>{setOpen("")}}
+          aria-labelledby="keep-mounted-modal-title"
+          aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={style}>
+            {open === "editShift"?<>
+                <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
+                    Upload PDF
+                </Typography>
+                <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
+                    Set policy for the guests
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1" fontWeight={600} color="initial">Day Shift </Typography>
+                  </Grid>
+                  <Grid item md={5} xs={12}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={['TimePicker']}>
+                        <TimePicker label="Basic time picker" />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </Grid>
+                  <Grid item md={2} xs={12} sx={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+                    <Typography variant="subtitle1" color="initial">to</Typography>
+                  </Grid>
+                  <Grid item md={5} xs={12}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={['TimePicker']}>
+                        <TimePicker label="Basic time picker" />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </Grid>
+
+
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1" fontWeight={600} color="initial">Night Shift </Typography>
+                  </Grid>
+                  <Grid item md={5} xs={12}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={['TimePicker']}>
+                        <TimePicker label="Basic time picker" />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </Grid>
+                  <Grid item md={2} xs={12} sx={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+                    <Typography variant="subtitle1" color="initial">to</Typography>
+                  </Grid>
+                  <Grid item md={5} xs={12}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={['TimePicker']}>
+                        <TimePicker label="Basic time picker" />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1" fontWeight={600} color="initial">Whole Day </Typography>
+                  </Grid>
+                  <Grid item md={5} xs={12}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={['TimePicker']}>
+                        <TimePicker label="Basic time picker" />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </Grid>
+                  <Grid item md={2} xs={12} sx={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+                    <Typography variant="subtitle1" color="initial">to</Typography>
+                  </Grid>
+                  <Grid item md={5} xs={12}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={['TimePicker']}>
+                        <TimePicker label="Basic time picker" />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </Grid>
+
+                  <Grid item xs={12} padding={"1em 0"}>
+                  </Grid>
+                  <Grid item xs={5}>
+                      <Button variant="text" fullWidth onClick={()=>{setOpen("")}}>
+                          back
+                      </Button>
+                  </Grid>
+                  <Grid item xs={7}>
+                      <Button variant="contained" color='primary' fullWidth onClick={()=>{
+                        setOpen("");
+                      }}>
+                          Confirm
+                      </Button>
+                  </Grid>
+                </Grid>
+            
+            </>:""}
+
+        </Box>
+    </Modal>
   </>
 }
 

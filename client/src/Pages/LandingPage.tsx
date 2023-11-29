@@ -90,7 +90,7 @@ function LandingPage() {
                                         >
                                             <MenuItem value={"Day Shift"}>Day Shift</MenuItem>
                                             <MenuItem value={"Night Shift"}>Night Shift</MenuItem>
-                                            <MenuItem value={"Whole Shift"}>Whole Shift</MenuItem>
+                                            <MenuItem value={"Whole Shift"}>Whole Day</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
