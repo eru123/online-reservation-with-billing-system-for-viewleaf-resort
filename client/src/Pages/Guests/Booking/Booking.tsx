@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
@@ -13,11 +13,21 @@ import BookingStatement from './BookingStatement'
 import Payment from './Payment'
 import { useParams } from 'react-router-dom'
 
+import useAccommodation from '../../../Hooks/useAccommodation'
+
 function Booking() {
   const [active,setActive] =  useState(1);
   const {date, shift} = useParams();
+  const {data:accommodations, getAccommodation} = useAccommodation();
 
   console.log(date, shift)
+
+  useEffect(()=>{
+    getAccommodation({
+      schedule: new Date(parseInt(date||"", 10)),
+      shift: shift==="1"? "day": shift==="2"? "night": "whole day"
+    })
+  }, [])
 
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>

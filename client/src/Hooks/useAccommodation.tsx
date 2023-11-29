@@ -19,6 +19,12 @@ interface AccommodationData {
   }[];
 }
 
+interface GetAccommodationData {
+  accommodationId?: string | null;
+  schedule?: any | null;
+  shift?: string | null;
+}
+
 interface ShiftData {
 
 }
@@ -26,10 +32,11 @@ interface ShiftData {
 function useAccommodation() {
   const { data, loading, error, makeRequest } = useRequest();
 
-  const getAccommodation = () => {
+  const getAccommodation = (content?: GetAccommodationData) => {
     makeRequest({
       method: 'get',
       url: `/accommodations`,
+      params: content || {},
     });
   };
 
