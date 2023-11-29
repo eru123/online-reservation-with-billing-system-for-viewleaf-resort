@@ -15,9 +15,10 @@ import QuantitySelector from './QuantitySelector';
 type Props={
     variant: "selected"|"view"|"manage"|"additional"
     openModal : React.Dispatch<React.SetStateAction<string>>
+    accommodation?: any;
 }
 
-function AccommodationCard({variant,openModal}:Props) {
+function AccommodationCard({variant,openModal, accommodation}:Props) {
   const [towel,setTowel] = useState(0);
   const [slippers ,setSlippers] = useState(0);
   const [mattress ,setMattress] = useState(0);
@@ -32,9 +33,9 @@ function AccommodationCard({variant,openModal}:Props) {
                       </Grid>
                       <Grid item md={6} xs={9} sx={{padding:"1em"}}>
                           <Box >
-                              <Typography variant="subtitle2" color="initial" fontWeight={500}>COTTAGE</Typography>
-                              <Typography variant="h5" color="Primary" fontWeight={600} >Duplex Renov delux</Typography>
-                              <Typography variant="body2" color="initial"  textAlign={"justify"}>Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien.</Typography>
+                              <Typography variant="subtitle2" color="initial" fontWeight={500}>{accommodation?.type}</Typography>
+                              <Typography variant="h5" color="Primary" fontWeight={600} >{accommodation?.title}</Typography>
+                              <Typography variant="body2" color="initial"  textAlign={"justify"}>{accommodation?.description}</Typography>
                               <Typography variant="subtitle2" color="initial" fontWeight={500} sx={{marginTop:"10px",opacity:'.6',marginBottom:"5px"}}>Inclusion</Typography>
                               <Box display="flex" sx={{flexWrap:"wrap",gap:"10px"}}>
                                   <Chip label="Towel" variant="outlined" />
@@ -60,9 +61,8 @@ function AccommodationCard({variant,openModal}:Props) {
                                     </FormControl>
                                   }
                                   {variant === "additional"?"": <>
-                                      
                                       <Typography variant="h4" color="Primary" fontWeight={700} >₱4000</Typography>
-                                      <Typography variant="subtitle2" color="inital" >for 8 pax</Typography>
+                                      <Typography variant="subtitle2" color="inital" >for {accommodation?.pax} pax</Typography>
                                   </>}
                               </div>
                               <div style={{display:"flex",justifyContent:"end"}}>

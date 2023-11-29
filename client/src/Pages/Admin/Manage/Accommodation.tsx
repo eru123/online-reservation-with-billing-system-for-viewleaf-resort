@@ -23,6 +23,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 import useContent from '../../../Hooks/useContent';
+import useAccommodation from '../../../Hooks/useAccommodation';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -41,6 +42,7 @@ const style = {
 function Accommodation() {
     const [open, setOpen] = useState("");
     const { data: shifts, loading: shiftLoading, error: shiftError, getShift, updateShift } = useContent();
+    const {data: accommodations, loading: accommodationLoading, error: accommodationError, getAccommodation} = useAccommodation();
 
     const [shiftForm, setShiftForm] = useState<any>({
       day: {
@@ -73,6 +75,7 @@ function Accommodation() {
     }
     
     useEffect(() => {
+      getAccommodation();
       getShift();
       setShiftForm({
         day: {
@@ -90,9 +93,9 @@ function Accommodation() {
       })
     }, [])
 
-    // if (feeLoading || shiftLoading) {
-    //   return <Typography>Loading...</Typography>
-    // }
+    if (accommodationLoading || shiftLoading) {
+      return <Typography>Loading...</Typography>
+    }
 
   return <>
     <div>
@@ -124,7 +127,9 @@ function Accommodation() {
           </Button>
       </Box>
       <Box display="flex" gap={"10px"}>
-          <AccommodationCard variant="manage" openModal={setOpen}/>
+        {accommodations?.map((accommodation: any) => (
+          <AccommodationCard key={accommodation._id} accommodation={accommodation} variant="manage" openModal={setOpen}/>
+        ))}
       </Box>
     </div>
   </>
