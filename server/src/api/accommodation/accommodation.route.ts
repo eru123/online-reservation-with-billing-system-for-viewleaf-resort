@@ -1,5 +1,6 @@
 import {
     addShift, 
+    getAccommodations,
     createAccommodation, 
     updateAccommodationDetails, 
     updateShiftFees 
@@ -13,6 +14,8 @@ import authenticate from '../../middlewares/authenticate';
 const router = Router();
 
 router.use(authenticate, limitUsers(Role.ADMIN));
+
+router.get('/', asynchronousHandler(getAccommodations));
 
 /**
  * description: string
