@@ -110,7 +110,7 @@ export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAcc
 };
 
 export const createAccommodation: RequestHandler = async (req: BodyRequest<CreateAccommodation>, res) => {
-    const { title, description, pax, image, type } = req.body;
+    const { title, description, pax, image, type, inclusions } = req.body;
     let { fees } = req.body;
 
     const checker = new CheckData();
@@ -129,6 +129,17 @@ export const createAccommodation: RequestHandler = async (req: BodyRequest<Creat
         checker.checkType(rate, 'number', `fees[${i}].rate`);
         checker.checkType(adultFee, 'number', `fees[${i}].adultFee`);
         checker.checkType(kidsFee, 'number', `fees[${i}].kidsFee`);
+    }
+
+    // Additional check for inclusions
+    if (!Array.isArray(inclusions)) {
+      checker.addError('inclusions', 'inclusions must be an array');
+    } else {
+        for (let i = 0; i < inclusions.length; i++) {
+            const { name, price } = inclusions[i];
+            checker.checkType(name, 'string', `inclusions[${i}].name`);
+            checker.checkType(price, 'number', `inclusions[${i}].price`);
+        }
     }
 
     if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
@@ -164,7 +175,8 @@ export const createAccommodation: RequestHandler = async (req: BodyRequest<Creat
         pax,
         image,
         type,
-        fees: formattedFees
+        fees: formattedFees,
+        inclusions
     });
 
     res.sendStatus(201);
