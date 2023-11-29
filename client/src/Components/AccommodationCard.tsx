@@ -27,7 +27,6 @@ function AccommodationCard({variant,openModal, accommodation}:Props) {
     nightShift:400,
     wholeDay:500
   })
-  console.log(accommodation)
 
   return <>
       <div>
