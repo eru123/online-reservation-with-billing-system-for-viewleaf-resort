@@ -13,9 +13,11 @@ import authenticate from '../../middlewares/authenticate';
 
 const router = Router();
 
-router.use(authenticate, limitUsers(Role.ADMIN));
+
 
 router.get('/', asynchronousHandler(getAccommodations));
+
+router.use(authenticate, limitUsers(Role.ADMIN));
 
 /**
  * description: string
