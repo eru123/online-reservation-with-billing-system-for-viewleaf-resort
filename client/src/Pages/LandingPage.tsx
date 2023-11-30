@@ -134,7 +134,7 @@ function LandingPage() {
                 </Grid>
                 <div style={{margin:"4em 0"}}>
                     <Typography variant="h5" color="primary" style={{marginBottom:"15px"}} align='center' fontWeight={600}>Gallery</Typography>
-                    <ImageList sx={{ width: "100%"}} cols={4} >
+                    <ImageList sx={{ width: "100%"}} cols={3} >
                         {itemData.map((item) => (
                             <ImageListItem key={item.img}>
                             <img

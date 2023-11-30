@@ -127,7 +127,7 @@ function Accommodation() {
               Add Accommodation
           </Button>
       </Box>
-      <Box display="flex" gap={"10px"}>
+      <Box display="flex" flexDirection={"column"} gap={"10px"}>
         {accommodations?.map((accommodation: any) => (
           <AccommodationCard key={accommodation._id} accommodation={accommodation} variant="manage" openModal={setOpen}/>
         ))}
