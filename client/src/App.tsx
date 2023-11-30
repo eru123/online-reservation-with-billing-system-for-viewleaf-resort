@@ -40,58 +40,82 @@ import TestLogout from './Test/TestLogout';
 import TestAccommodation from './Test/TestAccommodation';
 import TestReservation from './Test/TestReservation';
 import SendEmails from './Pages/_Test/sendEmail';
-
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ProtectedRoute } from './Hooks/useAuth';
+
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#70AE45',
+    },
+    secondary: {
+      main: '#2F2E5A',
+      dark: '#1C1B45',
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          color: 'white',
+        },
+      },
+    },
+  },
+});
+
 
 function App() {
   return (
-    
-    <Routes>
-      {/* <Route path="/*" element={<Error/>} /> */}
-        <Route path="/login" element={<Login/>} />
+    <ThemeProvider theme={theme}>
+      <Routes>
+        {/* <Route path="/*" element={<Error/>} /> */}
+          <Route path="/login" element={<Login/>} />
 
-        <Route element={<Base />} >
-          <Route path="/" element={<LandingPage/>} />
-          <Route path="/booking" element={<Booking/>} />
-          <Route path="/booking/:date/:shift" element={<Booking/>} />
-          <Route path="/invoice" element={<Invoice />} />
-          <Route path="/reservation/:id" element={<Invoice />} />
-        </Route>
-
-        <Route element={<AppLayout />} >
-          {/* <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]}/>}> */}
-            <Route path="/admin" element={<Dashboard/>}/>
-            <Route path="/admin/reservation/list" element={<ListReservation/>}/>
-            <Route path="/admin/reservation/create" element={<CreateResrvation/>}/>
-            <Route path="/admin/reservation/add" element={<Additional/>}/>
-            <Route path="/admin/reservation/requests" element={<Requests/>}/>
-            <Route path="/admin/reservation/view" element={<InvoiceManage/>}/>
-            <Route path="/admin/report" element={<Report/>}/>
-            <Route path="/admin/notifications" element={<Notifications/>}/>
-            <Route path="/profile" element={<Profile/>} />
-          {/* </Route> */}
-
-          <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
-            <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
-            <Route path="/admin/manage/accommodation/add" element={<AddAccommodation/>}/>
-            <Route path="/admin/manage/content" element={<Content/>}/>
-            <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
-            <Route path="/admin/manage/policy" element={<Policy/>}/>
-            <Route path="/admin/staff" element={<Staff/>}/>
+          <Route element={<Base />} >
+            <Route path="/" element={<LandingPage/>} />
+            <Route path="/booking" element={<Booking/>} />
+            <Route path="/booking/:date/:shift" element={<Booking/>} />
+            <Route path="/invoice" element={<Invoice />} />
+            <Route path="/reservation/:id" element={<Invoice />} />
           </Route>
-        </Route>
 
-        <Route path="/testfaq" element={<TestFAQ/>} />
-        <Route path="/testfaq" element={<TestFAQ/>} />
-        <Route path="/testcontent" element={<TestContent/>} />
-        <Route path="/testshift" element={<TestShift/>} />
-        <Route path="/testlogin" element={<TestLogin/>} />
-        <Route path="/testcreatestaff" element={<TestCreateStaff/>} />
-        <Route path="/testlogout" element={<TestLogout/>} />
-        <Route path="/testaccommodation" element={<TestAccommodation/>} />
-        <Route path="/testreservation" element={<TestReservation/>} />
-        
-    </Routes>
+          <Route element={<AppLayout />} >
+            {/* <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]}/>}> */}
+              <Route path="/admin" element={<Dashboard/>}/>
+              <Route path="/admin/reservation/list" element={<ListReservation/>}/>
+              <Route path="/admin/reservation/create" element={<CreateResrvation/>}/>
+              <Route path="/admin/reservation/add" element={<Additional/>}/>
+              <Route path="/admin/reservation/requests" element={<Requests/>}/>
+              <Route path="/admin/reservation/view" element={<InvoiceManage/>}/>
+              <Route path="/admin/report" element={<Report/>}/>
+              <Route path="/admin/notifications" element={<Notifications/>}/>
+              <Route path="/profile" element={<Profile/>} />
+            {/* </Route> */}
+
+            <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
+              <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
+              <Route path="/admin/manage/accommodation/add" element={<AddAccommodation/>}/>
+              <Route path="/admin/manage/content" element={<Content/>}/>
+              <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
+              <Route path="/admin/manage/policy" element={<Policy/>}/>
+              <Route path="/admin/staff" element={<Staff/>}/>
+            </Route>
+          </Route>
+
+          <Route path="/testfaq" element={<TestFAQ/>} />
+          <Route path="/testfaq" element={<TestFAQ/>} />
+          <Route path="/testcontent" element={<TestContent/>} />
+          <Route path="/testshift" element={<TestShift/>} />
+          <Route path="/testlogin" element={<TestLogin/>} />
+          <Route path="/testcreatestaff" element={<TestCreateStaff/>} />
+          <Route path="/testlogout" element={<TestLogout/>} />
+          <Route path="/testaccommodation" element={<TestAccommodation/>} />
+          <Route path="/testreservation" element={<TestReservation/>} />
+          
+      </Routes>
+    </ThemeProvider>
   );
 }
 
