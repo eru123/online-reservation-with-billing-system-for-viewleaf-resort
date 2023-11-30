@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 // Layouts
 import Base from './Layouts/Base/Base';
-import AppLayout from './Layouts/Base/App';
+import AppLayout from './Layouts/Base/AppBase/App';
 
 // Pages Public
 import Default from './Pages/Default/Default';
