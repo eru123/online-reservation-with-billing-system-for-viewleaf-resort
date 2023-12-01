@@ -114,6 +114,8 @@ function Accommodation({
           variant="selected" 
           openModal={setOpen}
           selectAccommodation={selectAccommodation}
+          addInclusion={addInclusion}
+          editGuests={editGuests}
         />
       ))}
       

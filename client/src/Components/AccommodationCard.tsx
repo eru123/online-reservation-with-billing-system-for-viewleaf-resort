@@ -16,9 +16,18 @@ type Props={
   openModal : React.Dispatch<React.SetStateAction<string>>
   accommodation?: any;
   selectAccommodation?: any;
+  addInclusion?: any;
+  editGuests?: any;
 }
 
-function AccommodationCard({variant,openModal, accommodation, selectAccommodation}:Props) {
+function AccommodationCard({
+  variant,
+  openModal, 
+  accommodation, 
+  selectAccommodation,
+  addInclusion,
+  editGuests
+}:Props) {
   const [towel,setTowel] = useState(0);
   const [slippers ,setSlippers] = useState(0);
   const [mattress ,setMattress] = useState(0);
@@ -116,22 +125,50 @@ function AccommodationCard({variant,openModal, accommodation, selectAccommodatio
                   <Typography variant="h5" fontWeight={600} color="primary">Manage Inclusion</Typography>
                   <Typography variant="subtitle1" color="initial">Select your Inclusions</Typography>
                   <div>
-                    {accommodation?.inclusions?.map((inclusion:any)=>(
-                      <QuantitySelector 
-                        name={inclusion.name} 
-                        value={slippers} 
-                        pricePerItem={inclusion.price} 
-                        setValue={setSlippers}
-                      />
-                    ))}
+                  {accommodation?.inclusions?.map((inclusion: any) => (
+                    <QuantitySelector
+                      key={inclusion.inclusionId}
+                      name={inclusion.name}
+                      value={inclusion.quantity ? inclusion.quantity : 0}
+                      pricePerItem={inclusion.price}
+                      inclusion={inclusion}
+                      type="inclusion"
+                      setValue={(newValue) => addInclusion(accommodation.accommodationId, { ...inclusion, quantity: newValue })}
+                    />
+                  ))}
                   </div>
                   <hr style={{margin:"1em 0"}} />
                   <Typography variant="h5" fontWeight={600} color="primary">Entrance Fee</Typography>
                   <Typography variant="subtitle1" color="initial">Swimming Pool</Typography>
                   <div>
-                      <QuantitySelector name={"Kids"} value={towel} pricePerItem={100} setValue={setTowel}/>
-                      <QuantitySelector name={"Adult"} value={slippers} pricePerItem={150} setValue={setSlippers}/>
-                      <QuantitySelector name={"Senior/PWD"} value={mattress} pricePerItem={500} setValue={setMattress}/>
+                      <QuantitySelector 
+                        name={"Kids"} 
+                        value={towel} 
+                        pricePerItem={100} 
+                        setValue={setTowel}
+                        type="guest"
+                      />
+                      <QuantitySelector 
+                        name={"Adult"} 
+                        value={slippers} 
+                        pricePerItem={150} 
+                        setValue={setSlippers}
+                        type="guest"
+                      />
+                      <QuantitySelector 
+                        name={"Senior/PWD"} 
+                        value={mattress} 
+                        pricePerItem={500} 
+                        setValue={setMattress}
+                        type="guest"
+                      />
+                      <QuantitySelector 
+                        name={"PWD"} 
+                        value={mattress} 
+                        pricePerItem={500} 
+                        setValue={setMattress}
+                        type="guest"
+                      />
                   </div>
               </div>
           </>:""}

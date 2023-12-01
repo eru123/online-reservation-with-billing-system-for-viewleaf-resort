@@ -95,21 +95,52 @@ function Booking() {
     }));
   };
   
+  // const addInclusion = (accommodationId: string, inclusion: any) => {
+  //   setForm((prevForm: { accommodations: any }) => ({
+  //     ...prevForm,
+  //     accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any }) =>
+  //       accommodation.accommodationId === accommodationId
+  //         ? {
+  //             ...accommodation,
+  //             inclusions: [...(accommodation.inclusions || []), inclusion],
+  //           }
+  //         : accommodation
+  //     ),
+  //   }));
+  // };
+
   const addInclusion = (accommodationId: string, inclusion: any) => {
     setForm((prevForm: { accommodations: any }) => ({
       ...prevForm,
-      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any }) =>
-        accommodation.accommodationId === accommodationId
-          ? {
+      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any }) => {
+        if (accommodation.accommodationId === accommodationId) {
+          // Check if the inclusion already exists in the inclusions array
+          const existingInclusion = accommodation.inclusions.find((existing: any) => existing.name === inclusion.name);
+  
+          // If it exists, update the quantity
+          if (existingInclusion) {
+            return {
               ...accommodation,
-              inclusions: [...(accommodation.inclusions || []), inclusion],
-            }
-          : accommodation
-      ),
+              inclusions: accommodation.inclusions.map((existing: any) =>
+                existing.name === inclusion.name
+                  ? { ...existing, quantity: inclusion.quantity }
+                  : existing
+              ),
+            };
+          } else {
+            // If it doesn't exist, add it with the given quantity
+            return {
+              ...accommodation,
+              inclusions: [...(accommodation.inclusions || []), { ...inclusion, quantity: inclusion.quantity }],
+            };
+          }
+        } else {
+          return accommodation;
+        }
+      }),
     }));
   };
-
-  let called = false
+  
 
   useEffect(() => {
     updateSchedule(date, shift)
