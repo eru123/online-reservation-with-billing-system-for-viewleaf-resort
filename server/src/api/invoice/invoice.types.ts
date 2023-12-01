@@ -1,6 +1,6 @@
 import { Document, Types } from "mongoose";
 import { Fee, Shift } from "../accommodation/accommodation.types";
-import { ReservationDocument } from "../reservation/reservation.types";
+import { ReservationDocument, ReservationStatus } from "../reservation/reservation.types";
 
 export interface InvoiceAccommodation {
     accommodationId: string;
@@ -48,4 +48,9 @@ export interface InvoicePopulatedDocument extends InvoiceDocument {
     reservation: ReservationDocument;
 }
 
-/* HELPERS */
+/* REQUESTS */
+
+export type GetInvoices = {
+    reservationId?: string;
+    status?: ReservationStatus;
+};
