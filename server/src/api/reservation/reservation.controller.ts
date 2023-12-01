@@ -170,8 +170,8 @@ export const updateStatus: RequestHandler = async (req: BodyRequest<UpdateStatus
 
     if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
-//     const reservation = await ReservationModel.findOne({ reservationId }).exec();
-//     if (!reservation) throw new NotFound('Reservation');
+    const reservation = await ReservationModel.findOne({ reservationId }).exec();
+    if (!reservation) throw new NotFound('Reservation');
 
     reservation.status = status;
     await reservation.save();
