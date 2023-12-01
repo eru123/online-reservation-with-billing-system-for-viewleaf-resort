@@ -16,10 +16,9 @@ type Props={
   openModal : React.Dispatch<React.SetStateAction<string>>
   accommodation?: any;
   selectAccommodation?: any;
-  deselectAccommodation?: any;
 }
 
-function AccommodationCard({variant,openModal, accommodation, selectAccommodation, deselectAccommodation}:Props) {
+function AccommodationCard({variant,openModal, accommodation, selectAccommodation}:Props) {
   const [towel,setTowel] = useState(0);
   const [slippers ,setSlippers] = useState(0);
   const [mattress ,setMattress] = useState(0);
@@ -89,7 +88,7 @@ function AccommodationCard({variant,openModal, accommodation, selectAccommodatio
                               </div>
                               <div style={{display:"flex",justifyContent:"end"}}>
                                   {(variant==="selected")?
-                                      <Button variant="contained" color="primary" onClick={()=>{deselectAccommodation(accommodation)}}>    
+                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation)}}>    
                                           Unbook
                                       </Button>
                                       :""
@@ -118,7 +117,12 @@ function AccommodationCard({variant,openModal, accommodation, selectAccommodatio
                   <Typography variant="subtitle1" color="initial">Select your Inclusions</Typography>
                   <div>
                     {accommodation?.inclusions?.map((inclusion:any)=>(
-                      <QuantitySelector name={inclusion.name} value={slippers} pricePerItem={inclusion.price} setValue={setSlippers}/>
+                      <QuantitySelector 
+                        name={inclusion.name} 
+                        value={slippers} 
+                        pricePerItem={inclusion.price} 
+                        setValue={setSlippers}
+                      />
                     ))}
                   </div>
                   <hr style={{margin:"1em 0"}} />

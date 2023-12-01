@@ -37,25 +37,21 @@ const style = {
 type Props = { 
   date?:string;
   shift?:string;
-  selectedAccommodations: any;
-  setSelectedAccommodations: React.Dispatch<React.SetStateAction<any>>;
   form?: any;
   updateSchedule?: any;
   updateCustomer?: any;
-  addAccommodation?: any;
+  selectAccommodation?: any;
   editGuests?: any;
   addInclusion?: any;
 }
 
 function Accommodation({
   date, 
-  shift, 
-  selectedAccommodations, 
-  setSelectedAccommodations,
+  shift,
   form,
   updateSchedule,
   updateCustomer,
-  addAccommodation,
+  selectAccommodation,
   editGuests,
   addInclusion
 }:Props) {
@@ -80,18 +76,6 @@ function Accommodation({
       shift: shift==="1"? "day": shift==="2"? "night": "whole day"
     })
   }, [])
-
-  const selectAccommodation = (data: any) => {
-    // if(selectedAccommodations.includes(data)) {
-    //   // setSelectedAccommodations(selectedAccommodations.filter((item: any) => item !== data))
-    // } else {
-    //   setSelectedAccommodations([...selectedAccommodations, data])
-    //   // setForm(...form, accommodations: [...selectedAccommodations, data])
-    // }
-    addAccommodation(data)
-  }
-
-
 
   return <>
     {/* <Box display="flex"  my={"20px"} gap={"10px"}>  
@@ -129,6 +113,7 @@ function Accommodation({
           accommodation={accommodation}
           variant="selected" 
           openModal={setOpen}
+          selectAccommodation={selectAccommodation}
         />
       ))}
       

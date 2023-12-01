@@ -67,7 +67,7 @@ function Booking() {
     }));
   };
 
-  const addAccommodation = (accommodationData: any) => {
+  const selectAccommodation = (accommodationData: any) => {
     if (form?.accommodations?.some((item: any) => item.accommodationId === accommodationData.accommodationId)) {
       // If the accommodation with the same accommodationId exists, remove it
       setForm((prevForm: { accommodations: any }) => ({
@@ -163,13 +163,11 @@ function Booking() {
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
           <Accommodation 
             date={date||""} 
-            shift={shift||""} 
-            selectedAccommodations={selectedAccommodations} 
-            setSelectedAccommodations={setSelectedAccommodations}
+            shift={shift||""}
             form={form}
             updateSchedule={updateSchedule}
             updateCustomer={updateCustomer}
-            addAccommodation={addAccommodation}
+            selectAccommodation={selectAccommodation}
             editGuests={editGuests}
             addInclusion={addInclusion}
           />
