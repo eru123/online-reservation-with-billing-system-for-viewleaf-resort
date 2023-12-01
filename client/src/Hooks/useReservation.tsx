@@ -26,6 +26,16 @@ interface GetReservation{
   reservationId: string;
 }
 
+interface PayReservation{
+  reservationId: string;
+  receipt: string;
+}
+
+interface UpdateReservation{
+  reservationId: string;
+  status: string;
+}
+
 function useReservation() {
   const { data, loading, error, makeRequest } = useRequest();
 
@@ -45,12 +55,30 @@ function useReservation() {
     });
   };
 
+  const payReservation = (content: PayReservation) => {
+    makeRequest({
+      method: 'post',
+      url: '/reservations/pay',
+      data: content,
+    });
+  };
+
+  const updateReservation = (content: UpdateReservation) => {
+    makeRequest({
+      method: 'patch',
+      url: '/reservations/update',
+      data: content,
+    });
+  };
+
   return {
     data,
     loading,
     error,
     getReservation,
-    createReservation
+    createReservation,
+    payReservation,
+    updateReservation
   };
 }
 
