@@ -14,12 +14,10 @@ const receiptSchema = new Schema(
             ref: 'Reservation',
             required: true
         },
-        invoices: [
-            {
-                type: Types.ObjectId,
-                ref: 'Invoice'
-            }
-        ]
+        image: {
+            type: String,
+            required: true
+        }
     },
     {
         timestamps: true,

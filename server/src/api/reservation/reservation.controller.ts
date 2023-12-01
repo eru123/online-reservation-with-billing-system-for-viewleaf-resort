@@ -1,12 +1,13 @@
 import { BodyRequest, QueryRequest, RequestHandler } from 'express';
 import { CheckData } from '../../utilities/checkData';
 import { Conflict, NotFound, UnprocessableEntity } from '../../utilities/errors';
-import { AddExtras, CreateReservation, GetReservations, ReservationStatus } from './reservation.types';
+import { AddExtras, CreateReservation, GetReservations, PayReservation, ReservationStatus, UpdateStatus } from './reservation.types';
 import { InvoiceDocument, InvoicePopulatedDocument } from '../invoice/invoice.types';
 import { Shift } from '../accommodation/accommodation.types';
 import AccommodationModel from '../accommodation/accommodation.model';
 import InvoiceModel from '../invoice/invoice.model';
 import ReservationModel from './reservation.model';
+import receiptModel from '../receipt/receipt.model';
 
 const openReservationStatuses = [
     ReservationStatus.CANCELLED,
@@ -43,6 +44,7 @@ export const getReservations: RequestHandler = async (req: QueryRequest<GetReser
     res.json({ reservations, invoices });
 }
 
+const reservationTimeLimitInMinutes = 15;
 export const createReservation: RequestHandler = async (req: BodyRequest<CreateReservation>, res) => {
     const { name, phone, email, schedule } = req.body;
     let { accommodations } = req.body;
@@ -143,15 +145,54 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
     await reservation.save();
     await InvoiceModel.insertMany(invoices);
 
+    setTimeout(() => {
+        if (reservation.status === ReservationStatus.PENDING) {
+            reservation.status = ReservationStatus.CANCELLED;
+            reservation.save();
+        }
+    }, 1000 * 60 * reservationTimeLimitInMinutes);
+
     res.sendStatus(201);
 };
 
-export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res) => {
-    const { reservationId, accommodations } = req.body;
+export const addExtras: RequestHandler = async (_req: BodyRequest<AddExtras>, _res) => {
+    
+}
+
+export const updateStatus: RequestHandler = async (req: BodyRequest<UpdateStatus>, res) => {
+    const { reservationId, status } = req.body;
+
+    const checker = new CheckData();
+    checker.checkType(reservationId, 'string', 'reservationId');
+    checker.checkType(status, 'string', 'status');
+
+    if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
     const reservation = await ReservationModel.findOne({ reservationId }).exec();
     if (!reservation) throw new NotFound('Reservation');
 
-    // Get invoices of reservation
-    const invoices = await InvoiceModel.find({ reservation: reservation._id }).exec();
+    reservation.status = status;
+    await reservation.save();
+
+    res.sendStatus(204);
+}
+
+export const payReservation: RequestHandler = async (req: BodyRequest<PayReservation>, res) => {
+    const { reservationId, receipt } = req.body;
+
+    const checker = new CheckData();
+    checker.checkType(reservationId, 'string', 'reservationId');
+    checker.checkType(receipt, 'string', 'receipt');
+
+    if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+    const reservation = await ReservationModel.findOne({ reservationId }).exec();
+    if (!reservation) throw new NotFound('Reservation');
+
+    await receiptModel.create({
+        reservation: reservation._id,
+        image: receipt
+    });
+
+    res.sendStatus(204);
 }
