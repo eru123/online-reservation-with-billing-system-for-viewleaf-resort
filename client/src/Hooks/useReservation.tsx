@@ -34,6 +34,7 @@ interface PayReservation{
 interface UpdateReservation{
   reservationId: string;
   status: string;
+  note: string;
 }
 
 function useReservation() {
