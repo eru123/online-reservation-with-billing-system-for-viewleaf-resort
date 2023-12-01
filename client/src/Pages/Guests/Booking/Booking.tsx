@@ -15,6 +15,7 @@ import { useParams } from 'react-router-dom'
 
 import useAccommodation from '../../../Hooks/useAccommodation'
 import useEmail from '../../../Hooks/useEmail'
+import useReservation from '../../../Hooks/useReservation'
 
 interface ReservationForm {
   name?: string;
@@ -45,8 +46,10 @@ interface CustomerData {
 
 function Booking() {
   const {sendEmail} = useEmail();
+  const {createReservation} = useReservation();
   const [active,setActive] =  useState(1);
   const {date, shift} = useParams();
+  const [otpCode, setOtpCode] = useState("");
   const [form, setForm] = useState<any>({});
   const [billing, setBilling] = useState<any>({
     total: 0,
@@ -69,10 +72,15 @@ function Booking() {
       ...(data.name && { name: data.name }),
       ...(data.email && { email: data.email }),
       ...(data.phone && { phone: data.phone }),
+      schedule: new Date(parseInt(date||"", 10)).getTime(),
+      shift: shift==="1"? "day": shift==="2"? "night": "whole day"
     }));
   };
 
   const selectAccommodation = (accommodationData: any) => {
+    // Add shift property to the accommodationData
+    const modifiedAccommodationData = { ...accommodationData, shift: shift==="1"? "day": shift==="2"? "night": "whole day" };
+  
     if (form?.accommodations?.some((item: any) => item.accommodationId === accommodationData.accommodationId)) {
       // If the accommodation with the same accommodationId exists, remove it
       setForm((prevForm: { accommodations: any }) => ({
@@ -80,13 +88,14 @@ function Booking() {
         accommodations: prevForm.accommodations.filter((item: any) => item.accommodationId !== accommodationData.accommodationId),
       }));
     } else {
-      // If the accommodation with the same accommodationId doesn't exist, add it
+      // If the accommodation with the same accommodationId doesn't exist, add it with the shift property
       setForm((prevForm: { accommodations: any }) => ({
         ...prevForm,
-        accommodations: [...(prevForm.accommodations || []), accommodationData],
+        accommodations: [...(prevForm.accommodations || []), modifiedAccommodationData],
       }));
     }
   };
+  
 
   const editGuests = (accommodationId: string, guests: { adult?: number; children?: number; senior?: number; pwd?: number }) => {
     setForm((prevForm: { accommodations: any }) => ({
@@ -198,6 +207,7 @@ function Booking() {
   const sendVerification = () => {
     if (form.email) {
       let otp = generateOTP();
+      setOtpCode(otp)
       sendEmail({
         email: form.email,
         subject: "View Leaf: Email Verification",
@@ -205,8 +215,21 @@ function Booking() {
       })
       console.log(otp)
     }
+    console.log(form)
+    createReservation(form)
   }
-  
+
+  async function verifyOTP(e: React.FormEvent<HTMLFormElement>){
+    e.preventDefault();
+    let verificationCode
+    if (otpCode === verificationCode) {
+      alert("OTP Verified!")
+      
+    } 
+    else {
+      alert("Invalid OTP")
+    }
+  }
 
   useEffect(() => {
     updateSchedule(date, shift)
