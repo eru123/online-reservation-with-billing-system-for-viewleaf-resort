@@ -15,17 +15,121 @@ import { useParams } from 'react-router-dom'
 
 import useAccommodation from '../../../Hooks/useAccommodation'
 
+interface ReservationForm {
+  name?: string;
+  email?: string;
+  phone?: string;
+  schedule?: number;
+  shift?: string;
+  accommodations?: {
+    accommodationId: string;
+    guests: {
+      adult: number;
+      children: number;
+      senior: number;
+      pwd: number;
+    };
+    inclusions: {
+      name: string;
+      quantity: number;
+    }[];
+  }[];
+}
+
+interface CustomerData {
+  name?: string;
+  email?: string;
+  phone?: string;
+}
+
 function Booking() {
   const [active,setActive] =  useState(1);
   const {date, shift} = useParams();
   const [selectedAccommodations, setSelectedAccommodations] = useState<any>([]);
+
+  const [form, setForm] = useState<any>({});
+
+
+  const updateSchedule = (date: any, shift: any) => {
+    setForm((prevForm: any) => ({
+      ...prevForm,
+      schedule: new Date(parseInt(date||"", 10)),
+      shift: shift==="1"? "day": shift==="2"? "night": "whole day"
+    }));
+  }
+
+  const updateCustomer = (data: CustomerData) => {
+    setForm((prevForm: any) => ({
+      ...prevForm,
+      name: data.name,
+      email: data.email,
+      phone: data.phone
+    }));
+  };
+
+  const addAccommodation = (accommodationData: any) => {
+    setForm((prevForm: { accommodations: any }) => ({
+      ...prevForm,
+      accommodations: [...(prevForm.accommodations || []), accommodationData],
+    }));
+  };
+
+  const editGuests = (accommodationId: string, adults: number, children: number, senior: number, pwd: number) => {
+    setForm((prevForm: { accommodations: any }) => ({
+      ...prevForm,
+      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string }) =>
+        accommodation.accommodationId === accommodationId
+          ? { ...accommodation, guests: { adult: adults, children: children, senior: senior, pwd: pwd } }
+          : accommodation
+      ),
+    }));
+  };
   
+  const addInclusion = (accommodationId: string, inclusion: any) => {
+    setForm((prevForm: { accommodations: any }) => ({
+      ...prevForm,
+      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any }) =>
+        accommodation.accommodationId === accommodationId
+          ? {
+              ...accommodation,
+              inclusions: [...(accommodation.inclusions || []), inclusion],
+            }
+          : accommodation
+      ),
+    }));
+  };
+
+  let called = false
+
+  useEffect(() => {
+    updateSchedule(date, shift)
+  }, [])
+
+  const testFunction = () => {
+    
+    console.log(form)
+  }
+
+  
+
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
+      {JSON.stringify(form)}
       {active === 1?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Selected Accommodation</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
-          <Accommodation date={date||""} shift={shift||""} selectedAccommodations={selectedAccommodations} setSelectedAccommodations={setSelectedAccommodations}/>
+          <Accommodation 
+            date={date||""} 
+            shift={shift||""} 
+            selectedAccommodations={selectedAccommodations} 
+            setSelectedAccommodations={setSelectedAccommodations}
+            form={form}
+            updateSchedule={updateSchedule}
+            updateCustomer={updateCustomer}
+            addAccommodation={addAccommodation}
+            editGuests={editGuests}
+            addInclusion={addInclusion}
+          />
       </>:""}
       {active === 2?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Booking Statements</Typography>
