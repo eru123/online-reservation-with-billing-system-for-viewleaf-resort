@@ -162,11 +162,12 @@ export const addExtras: RequestHandler = async (_req: BodyRequest<AddExtras>, _r
 }
 
 export const updateStatus: RequestHandler = async (req: BodyRequest<UpdateStatus>, res) => {
-    const { reservationId, status } = req.body;
+    const { reservationId, status, note } = req.body;
 
     const checker = new CheckData();
     checker.checkType(reservationId, 'string', 'reservationId');
     checker.checkType(status, 'string', 'status');
+    checker.checkType(note, 'string', 'note');
 
     if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
@@ -174,6 +175,7 @@ export const updateStatus: RequestHandler = async (req: BodyRequest<UpdateStatus
     if (!reservation) throw new NotFound('Reservation');
 
     reservation.status = status;
+    reservation.notes = [...reservation.notes, { status, note }];
     await reservation.save();
 
     res.sendStatus(204);
