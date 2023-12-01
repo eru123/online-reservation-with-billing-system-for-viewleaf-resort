@@ -14,6 +14,7 @@ import Payment from './Payment'
 import { useParams } from 'react-router-dom'
 
 import useAccommodation from '../../../Hooks/useAccommodation'
+import useEmail from '../../../Hooks/useEmail'
 
 interface ReservationForm {
   name?: string;
@@ -43,6 +44,7 @@ interface CustomerData {
 }
 
 function Booking() {
+  const {sendEmail} = useEmail();
   const [active,setActive] =  useState(1);
   const {date, shift} = useParams();
   const [form, setForm] = useState<any>({});
@@ -64,9 +66,9 @@ function Booking() {
   const updateCustomer = (data: CustomerData) => {
     setForm((prevForm: any) => ({
       ...prevForm,
-      name: data.name,
-      email: data.email,
-      phone: data.phone
+      ...(data.name && { name: data.name }),
+      ...(data.email && { email: data.email }),
+      ...(data.phone && { phone: data.phone }),
     }));
   };
 
@@ -130,8 +132,6 @@ function Booking() {
   };
 
   const calculateCost = (data: any, shift: number) => {
-    console.log(data, shift)
-
     let accommodations = 0;
     let inclusions = 0;
     let guests = 0;
@@ -172,12 +172,25 @@ function Booking() {
       accommodations: accommodations
     })
 
-    console.log({
-      total: total,
-      guests: guests,
-      inclusions: inclusions,
-      accommodations: accommodations
+    setForm({
+      ...data,
+      costs: {
+        total: total,
+        guests: guests,
+        inclusions: inclusions,
+        accommodations: accommodations
+      }
     })
+  }
+
+  const sendVerification = () => {
+    if (form.email) {
+      sendEmail({
+        email: form.email,
+        subject: "View Leaf: Email Verification",
+        content: `Your One Time Password (OTP) is: ${form.email}`,
+      })
+    }
   }
   
 
@@ -188,7 +201,6 @@ function Booking() {
 
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
-      {JSON.stringify(form)}
       {active === 1?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Selected Accommodation</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
@@ -214,7 +226,7 @@ function Booking() {
       {active === 3?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Guest Details </Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Please provide your information to so we can send update to you</Typography>
-          <GuestDetails/>
+          <GuestDetails updateCustomer={updateCustomer} form={form} />
       </>:""}
       
 
@@ -233,7 +245,7 @@ function Booking() {
                       back
                   </Button>
                   {active===3?
-                    <Button variant="contained" color="primary" href='Invoice'>
+                    <Button variant="contained" color="primary" onClick={()=> {}}>
                         Finish
                     </Button>
                   :

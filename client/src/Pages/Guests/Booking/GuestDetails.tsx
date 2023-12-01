@@ -18,7 +18,13 @@ const style = {
     p: 4,
     borderRadius:"8px"
 };
-function GuestDetails() {
+
+type Props = {
+  updateCustomer: any;
+  form: any;
+}
+
+function GuestDetails({updateCustomer, form}:Props) {
     const [open, setOpen] = React.useState("");
     return <>
         <Grid container spacing={2}>
@@ -28,6 +34,12 @@ function GuestDetails() {
                     label="Name"
                     required
                     fullWidth
+                    onChange={(e)=>{
+                      updateCustomer({
+                        name: e.target.value
+                      });
+                      console.log(e.target.value)
+                    }}  
                 />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -36,6 +48,11 @@ function GuestDetails() {
                     label="Email"
                     required
                     fullWidth
+                    onChange={(e)=>{
+                      updateCustomer({
+                        email: e.target.value
+                      })  
+                    }}
                 />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -44,6 +61,11 @@ function GuestDetails() {
                     label="Contact Number"
                     required
                     fullWidth
+                    onChange={(e)=>{
+                      updateCustomer({
+                        phone: e.target.value
+                      })
+                    }}
                 />
             </Grid>
         </Grid>
