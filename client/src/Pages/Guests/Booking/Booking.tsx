@@ -183,13 +183,27 @@ function Booking() {
     })
   }
 
+  function generateOTP(){
+    const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let otp = '';
+  
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      otp += characters.charAt(randomIndex);
+    }
+  
+    return otp;
+  }
+
   const sendVerification = () => {
     if (form.email) {
+      let otp = generateOTP();
       sendEmail({
         email: form.email,
         subject: "View Leaf: Email Verification",
-        content: `Your One Time Password (OTP) is: ${form.email}`,
+        content: `Your One Time Password (OTP) is: ${otp}`,
       })
+      console.log(otp)
     }
   }
   
@@ -245,7 +259,7 @@ function Booking() {
                       back
                   </Button>
                   {active===3?
-                    <Button variant="contained" color="primary" onClick={()=> {}}>
+                    <Button variant="contained" color="primary" onClick={()=> {sendVerification()}}>
                         Finish
                     </Button>
                   :
