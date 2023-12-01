@@ -39,9 +39,26 @@ type Props = {
   shift?:string;
   selectedAccommodations: any;
   setSelectedAccommodations: React.Dispatch<React.SetStateAction<any>>;
+  form?: any;
+  updateSchedule?: any;
+  updateCustomer?: any;
+  addAccommodation?: any;
+  editGuests?: any;
+  addInclusion?: any;
 }
 
-function Accommodation({date, shift, selectedAccommodations, setSelectedAccommodations}:Props) {
+function Accommodation({
+  date, 
+  shift, 
+  selectedAccommodations, 
+  setSelectedAccommodations,
+  form,
+  updateSchedule,
+  updateCustomer,
+  addAccommodation,
+  editGuests,
+  addInclusion
+}:Props) {
   const [open, setOpen] = React.useState("");
 
   const [calendarValue, setCalendarValue] = React.useState<Dayjs | null>(dayjs());
@@ -56,8 +73,6 @@ function Accommodation({date, shift, selectedAccommodations, setSelectedAccommod
 
   const {data:accommodations, getAccommodation} = useAccommodation();
 
-  const [form, setForm] = useState()
-
   useEffect(()=>{
     console.log(date)
     getAccommodation({
@@ -67,13 +82,16 @@ function Accommodation({date, shift, selectedAccommodations, setSelectedAccommod
   }, [])
 
   const selectAccommodation = (data: any) => {
-    if(selectedAccommodations.includes(data)) {
-      // setSelectedAccommodations(selectedAccommodations.filter((item: any) => item !== data))
-    } else {
-      setSelectedAccommodations([...selectedAccommodations, data])
-      // setForm([...form, ])
-    }
+    // if(selectedAccommodations.includes(data)) {
+    //   // setSelectedAccommodations(selectedAccommodations.filter((item: any) => item !== data))
+    // } else {
+    //   setSelectedAccommodations([...selectedAccommodations, data])
+    //   // setForm(...form, accommodations: [...selectedAccommodations, data])
+    // }
+    addAccommodation(data)
   }
+
+
 
   return <>
     {/* <Box display="flex"  my={"20px"} gap={"10px"}>  
@@ -106,7 +124,7 @@ function Accommodation({date, shift, selectedAccommodations, setSelectedAccommod
 
     {/* List of Selected */}
     <Box display="flex" flexDirection={"column"} gap={"25px"} >
-      {selectedAccommodations?.map((accommodation: any) => (
+      {form.accommodations?.map((accommodation: any) => (
         <AccommodationCard 
           accommodation={accommodation}
           variant="selected" 
@@ -128,7 +146,6 @@ function Accommodation({date, shift, selectedAccommodations, setSelectedAccommod
           selectAccommodation={selectAccommodation}
         />
       ))}
-      
     </Box>
   </>
 }
