@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box'
@@ -27,15 +27,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import RateInput from '../../Components/RateInput';
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
-
-
-
-
-
-
-
+import useReservation from '../../Hooks/useReservation';
 
 type Props = {
 }
@@ -53,9 +47,19 @@ const style = {
 function Invoice({}:Props) {
     const [open, setOpen] = React.useState("");
     // approved,pending, checkedOut, canceled, refunded
+    const {id} = useParams();
+    const {data, loading, error, getReservation} = useReservation();
+    const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("declined");
+    
+
+    useEffect(()=>{
+      getReservation({
+        reservationId: id || ""
+      })
+      setStatus(data?.reservations?.status || "pending")
+    }, [])
 
     // 
-    const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("declined");
     return<>
         <Container maxWidth="lg"  sx={{padding:"6em 0 7em"}}>
           <Box display="flex" gap={"15px"} sx={{flexWrap:"wrap"}} mt={2}>
@@ -137,11 +141,11 @@ function Invoice({}:Props) {
           {/*Header  */}
           <Box display="flex" sx={{margin:"25px 0"}}>
               <Box sx={{flexGrow:"1"}}>
-                <Typography variant="h4" color="primary" >#123A23123</Typography>
+                <Typography variant="h4" color="primary" >#{data?.reservations?.reservationId}</Typography>
                 <Typography variant="h6" color="initial" sx={{opacity:".6"}}>Reference Number</Typography>
               </Box>
               <Box >
-                <Typography textAlign={"end"} variant="h4" color="primary" >Oct 25, 2023 - Day Shift</Typography>
+                <Typography textAlign={"end"} variant="h4" color="primary" >{data?.reservations?.schedule} - Shift</Typography>
                 <Typography textAlign={"end"} variant="h6" color="initial" sx={{opacity:".6"}}>Scheduled Date</Typography>
               </Box>
           </Box>
@@ -149,15 +153,15 @@ function Invoice({}:Props) {
           {/* User Details */}
           <Paper variant="elevation" elevation={3} sx={{borderRadius:"8px",background:"#e3e3e3",padding:"1em",margin:"2em 0" ,display:"flex",alignItems:"center"}}>
             <Box sx={{flexGrow:"1"}}>
-              <Typography variant="h5" color="initial" fontWeight={500}>Jon Doe</Typography>
+              <Typography variant="h5" color="initial" fontWeight={500}>{data?.reservations?.customer?.name}</Typography>
               <Box display="flex" gap={"15px"} mt={1}>
                 <Box display="flex" gap="5px">
                     <CallIcon/>
-                    <Typography variant="body1" color="initial">0915-232-1231</Typography>
+                    <Typography variant="body1" color="initial">{data?.reservations?.customer?.phone}</Typography>
                 </Box>
                 <Box display="flex" gap="5px">
                     <EmailIcon/>
-                    <Typography variant="body1" color="initial">jondoe@gmail.com</Typography>
+                    <Typography variant="body1" color="initial">{data?.reservations?.customer?.email}</Typography>
                 </Box>
               </Box>
             </Box>
@@ -168,10 +172,10 @@ function Invoice({}:Props) {
             </Tooltip>
           </Paper>
           <Typography variant="h6" color="initial">Billing Statement #1</Typography>
-          <BookingStatement additional={false}/>
+          {/* <BookingStatement additional={false}/> */}
           <hr style={{margin:"2em 0"}}/>
           <Typography variant="h6" color="initial">Billing Statement #2</Typography>
-          <BookingStatement additional={false}/>
+          {/* <BookingStatement additional={false}/> */}
         </Container>
 
         <Modal
