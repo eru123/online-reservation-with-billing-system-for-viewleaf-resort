@@ -27,7 +27,7 @@ const style = {
 function PaymentInstruction() {
     const [open, setOpen] = useState("");
     const {data:content, loading:contentLoading, error:contentError, getContent, updateContent} = useContent();
-    
+    const [promoVal,setPromoVal]= useState<string>("")
     const {
       downloadURL, 
       uploading, 
@@ -37,6 +37,20 @@ function PaymentInstruction() {
     useEffect(()=>{
       getContent();
     },[])
+
+    const handleEditPromo: React.FormEventHandler<HTMLFormElement> = (e) => {
+      e.preventDefault()
+
+      // Edit Promo
+      updateContent({promo: promoVal});
+      
+      // Refresh Data
+      getContent();
+
+      // Clear Form
+      setPromoVal("")
+      setOpen("")
+    }
 
     if (contentLoading) {
       return <div>Loading...</div>;
@@ -51,7 +65,7 @@ function PaymentInstruction() {
                     <Box display="flex" gap={"10px"} alignItems={"center"} sx={{background:"#D9D9D9",border:"1px solid #B9B9B9",padding:".5em 1em",borderRadius:"1000px"}}>
                         <Box display={"flex"} gap={"8px"}>
                             <Typography variant="subtitle1" fontWeight={600} color="initial">Promo:</Typography>
-                            <Typography variant="subtitle1" color="initial">80%</Typography>
+                            <Typography variant="subtitle1" color="initial">{content?.promo}%</Typography>
                         </Box>
                         <IconButton aria-label="edit" onClick={()=>{setOpen("editPromo")}}>
                             <ModeEditIcon/>
@@ -59,7 +73,7 @@ function PaymentInstruction() {
                     </Box>
                 </Box>
                 <Button variant="contained" color="primary" onClick={()=>{setOpen("editPDF")}}>
-                    Upload PDF
+                  Upload PDF
                 </Button>
             </Box>
             <Box>
@@ -87,39 +101,40 @@ function PaymentInstruction() {
                     <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
                         
                     </Typography>
-                    <Grid container spacing={2}>
+                    <form onSubmit={handleEditPromo}>
+                      <Grid container spacing={2}>
                         <Grid item xs={12} >
-                            <TextField
-                                type='number'
-                                id="promo"
-                                label="Promo"
-                                fullWidth
-                                inputProps={{
-                                    min: 0, 
-                                    max: 100, 
-                                }}
-                            />
-                            
+                          <TextField
+                            type='number'
+                            id="promo"
+                            label="Promo Percentage(%)"
+                            fullWidth
+                            inputProps={{
+                              min: 0, 
+                              max: 100, 
+                            }}
+                            value={promoVal}
+                            onChange={(e)=>{
+                              setPromoVal(e.target.value)
+                            }}
+                          />
                         </Grid>
-                        
                         <Grid item xs={12} padding={"1em 0"}>
                             
                         </Grid>
                         <Grid item xs={5}>
-                            <Button variant="text" fullWidth onClick={()=>{setOpen("")}}>
+                            <Button variant="text" fullWidth onClick={()=>{setOpen("")}} sx={{color:"black"}}>
                                 back
                             </Button>
                         </Grid>
                         <Grid item xs={7}>
-                            <Button variant="contained" color='primary' fullWidth onClick={()=>{
-                              setOpen("")
-                              // updateContent({payment: downloadURL});
-                              }}>
+                            <Button variant="contained" color='primary' fullWidth type='submit'>
                                 Confirm
                             </Button>
                         </Grid>
-                    </Grid>
-                
+                      
+                      </Grid>
+                    </form>
                 </>:""}
                 {open === "editPDF"?<>
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
@@ -145,9 +160,9 @@ function PaymentInstruction() {
                             
                         </Grid>
                         <Grid item xs={5}>
-                            <Button variant="text" fullWidth onClick={()=>{setOpen("")}}>
-                                back
-                            </Button>
+                          <Button variant="text" fullWidth onClick={()=>{setOpen("")}}>
+                            back
+                          </Button>
                         </Grid>
                         <Grid item xs={7}>
                             <Button variant="contained" color='primary' fullWidth onClick={()=>{
