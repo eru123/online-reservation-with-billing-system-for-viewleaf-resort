@@ -42,9 +42,14 @@ export default function TestReservation() {
     // getReservation({
     //   reservationId: "-LUJs-e1L170zLCA-un5W9O3Kr75EXP0RI"
     // })
-    payReservation({
+    // payReservation({
+    //   reservationId: "7CZ-sIdws1XahsSu7ncj2ojWCXEB-Fo_Ng",
+    //   receipt: "test"
+    // })
+    updateReservation({
       reservationId: "7CZ-sIdws1XahsSu7ncj2ojWCXEB-Fo_Ng",
-      receipt: "test"
+      status: "approved",
+      note: "testing"
     })
   }
   
