@@ -45,10 +45,13 @@ interface CustomerData {
 function Booking() {
   const [active,setActive] =  useState(1);
   const {date, shift} = useParams();
-  const [selectedAccommodations, setSelectedAccommodations] = useState<any>([]);
-
   const [form, setForm] = useState<any>({});
-
+  const [billing, setBilling] = useState<any>({
+    total: 0,
+    guests: 0,
+    inclusions: 0,
+    accommodations: 0
+  })
 
   const updateSchedule = (date: any, shift: any) => {
     setForm((prevForm: any) => ({
@@ -125,23 +128,67 @@ function Booking() {
       }),
     }));
   };
+
+  const calculateCost = (data: any, shift: number) => {
+    console.log(data, shift)
+
+    let accommodations = 0;
+    let inclusions = 0;
+    let guests = 0;
+    let total = 0;
+
+    data.accommodations?.map((accommodation: any) => {
+      accommodations += parseInt(accommodation.fees[shift].rate)
+      if (accommodation.inclusions) {
+        accommodation.inclusions?.map((inclusion: any) => {
+          if (inclusion.quantity) {
+            
+            inclusions += (inclusion.quantity * inclusion.price)
+          }
+        })
+      }
+      if (accommodation.guests) {
+        if (accommodation.guests.adult) {
+          guests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[shift].guestFee.adult)
+        }
+        if(accommodation.guests.children) {
+          guests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[shift].guestFee.kids)
+        }
+        if(accommodation.guests.senior) {
+          guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[shift].guestFee.adult) * 0.8)
+        }
+        if(accommodation.guests.pwd) {
+          guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[shift].guestFee.adult) * 0.8)
+        }
+      }
+    })
+
+    total = accommodations + inclusions + guests
+
+    setBilling({
+      total: total,
+      guests: guests,
+      inclusions: inclusions,
+      accommodations: accommodations
+    })
+
+    console.log({
+      total: total,
+      guests: guests,
+      inclusions: inclusions,
+      accommodations: accommodations
+    })
+  }
   
 
   useEffect(() => {
     updateSchedule(date, shift)
-  }, [])
-
-  const testFunction = () => {
-    editGuests(
-      "-Y-DsIcys1b5t6AflYazcp0SFw5l0llrxI", {children: 5})
-  }
-
-  
+    calculateCost(form,parseInt(shift||"0"))
+  }, [form])
 
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
       {JSON.stringify(form)}
-      <Button onClick={testFunction}>Test</Button>
       {active === 1?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Selected Accommodation</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
@@ -178,8 +225,8 @@ function Booking() {
 
           <Container maxWidth="lg"sx={{display:"flex",alignItems:"center",marginTop:"1em"}}>
               <div style={{flexGrow:"1"}}>
-                  <Typography variant="h6" color="initial">TOTAL : ₱1,150</Typography>
-                  <Typography variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of ₱400  </Typography>
+                  <Typography variant="h6" color="initial">TOTAL : ₱{billing?.total}</Typography>
+                  <Typography variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of ₱{billing?.accommodations}  </Typography>
               </div>
               <div style={{display:"flex",gap:"10px"}}>
                   <Button variant="text" onClick={()=> {if(active>1){setActive(active-1)}}}>

@@ -10,6 +10,7 @@ import InputBase from '@mui/material/InputBase';
 import Button from '@mui/material/Button';
 import QuantitySelector from './QuantitySelector';
 
+import { useParams } from 'react-router-dom';
 
 type Props={
   variant: "selected"|"view"|"manage"|"additional"
@@ -28,15 +29,9 @@ function AccommodationCard({
   addInclusion,
   editGuests
 }:Props) {
-  const [towel,setTowel] = useState(0);
-  const [slippers ,setSlippers] = useState(0);
-  const [mattress ,setMattress] = useState(0);
+
+  const {date, shift} = useParams();
   const [selectedShift,setSelectedShift] = useState("Day Shift");
-  const [shiftPrice,setShiftPrice] = useState({
-    dayShift : 300,
-    nightShift:400,
-    wholeDay:500
-  })
 
   return <>
       <div>
@@ -144,28 +139,28 @@ function AccommodationCard({
                       <QuantitySelector 
                         name={"Kids"} 
                         value={accommodation?.guests?.children ? accommodation?.guests?.children : 0} 
-                        pricePerItem={100} 
+                        pricePerItem={accommodation?.fees[parseInt(shift||"0")].guestFee.kids} 
                         setValue={(value) => editGuests(accommodation.accommodationId, { children: value })}
                         type="guest"
                       />
                       <QuantitySelector 
                         name={"Adult"} 
                         value={ accommodation?.guests?.adult ? accommodation?.guests?.adult : 0} 
-                        pricePerItem={150} 
+                        pricePerItem={accommodation?.fees[parseInt(shift||"0")].guestFee.adult} 
                         setValue={(value) => editGuests(accommodation.accommodationId, { adult: value })}
                         type="guest"
                       />
                       <QuantitySelector 
                         name={"Senior"} 
                         value={ accommodation?.guests?.senior ? accommodation?.guests?.senior : 0} 
-                        pricePerItem={500} 
+                        pricePerItem={accommodation?.fees[parseInt(shift||"0")].guestFee.adult * 0.8} 
                         setValue={(value) => editGuests(accommodation.accommodationId, { senior: value })}
                         type="guest"
                       />
                       <QuantitySelector 
                         name={"PWD"} 
                         value={ accommodation?.guests?.pwd ? accommodation?.guests?.pwd : 0} 
-                        pricePerItem={500} 
+                        pricePerItem={accommodation?.fees[parseInt(shift||"0")].guestFee.adult * 0.8} 
                         setValue={(value) => editGuests(accommodation.accommodationId, { pwd: value })}
                         type="guest"
                       />
