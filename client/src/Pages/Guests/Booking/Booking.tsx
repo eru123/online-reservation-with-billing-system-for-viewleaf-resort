@@ -1,4 +1,6 @@
 import React,{useState, useEffect} from 'react'
+import {useNavigate} from 'react-router-dom';
+
 import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
@@ -57,12 +59,14 @@ const style = {
 };
 
 function Booking() {
+  const navigate = useNavigate()
   const [open, setOpen] = React.useState("");
   const {sendEmail} = useEmail();
   const {createReservation} = useReservation();
   const [active,setActive] =  useState(1);
   const {date, shift} = useParams();
   const [otpCode, setOtpCode] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
   const [form, setForm] = useState<any>({});
   const [billing, setBilling] = useState<any>({
     total: 0,
@@ -226,10 +230,7 @@ function Booking() {
         subject: "View Leaf: Email Verification",
         content: `Your One Time Password (OTP) is: ${otp}`,
       })
-      console.log(otp)
     }
-    console.log(form)
-    createReservation(form)
   }
 
   async function verifyOTP(e: React.FormEvent<HTMLFormElement>){
@@ -237,7 +238,8 @@ function Booking() {
     let verificationCode
     if (otpCode === verificationCode) {
       alert("OTP Verified!")
-      
+      createReservation(form)
+      navigate("/reservation/:id")
     } 
     else {
       alert("Invalid OTP")
@@ -313,17 +315,18 @@ function Booking() {
       <Modal
           keepMounted
           open={!(open==="")}
-          onClose={()=>{setOpen("")}}
+          // onClose={()=>{setOpen("")}}
           aria-labelledby="keep-mounted-modal-title"
           aria-describedby="keep-mounted-modal-description"
         >
             <Box sx={style}>
                 {open === "verify"?<>
+                <form onSubmit={verifyOTP}>
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={600} color={"primary"} component="h2">
                         Email verification
                     </Typography>
                     <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
-                        We already email you a 6 digit code, Please check your email and enter the code to complete the verification
+                        We sent you a 6 digit code, please check your email and enter the code to complete the verification and reservation
                     </Typography>
                     <Grid container spacing={2} sx={{marginTop:"35px"}}>
                       <Grid item  xs={8}>
@@ -332,19 +335,16 @@ function Booking() {
                           label="OTP"
                           required
                           fullWidth
+                          onChange={(e)=>setVerificationCode(e.target.value)}
                         />
                       </Grid>
                       <Grid item xs={4}>
-                        <Button variant="contained" color="primary" fullWidth sx={{height:"100%",background:"#414141"}} onClick={()=>setOpen("verify")}>
+                        <Button variant="contained" color="primary" fullWidth sx={{height:"100%",background:"#414141"}} type="submit">
                           Verify
                         </Button>
                       </Grid>
-                      <Grid item xs={12}>
-                        <Button variant="contained" color="primary" fullWidth sx={{marginTop:"25px",background:"white",color:"black"}} onClick={()=>setOpen("")}>
-                          cancel
-                        </Button>
-                      </Grid>
                     </Grid>
+                </form>
                 </>:""}
             </Box>
         </Modal>
