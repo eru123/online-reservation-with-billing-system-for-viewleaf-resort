@@ -8,7 +8,7 @@ import useReservation from '../Hooks/useReservation';
 
 export default function TestReservation() {
 
-  const { createReservation, getReservation } = useReservation();
+  const { createReservation, getReservation, payReservation, updateReservation } = useReservation();
   const [reservationId, setReservationId] = useState("");
   const [form, setForm] = useState({
     name: "Jane Doe",
@@ -39,8 +39,12 @@ export default function TestReservation() {
     e.preventDefault();
     console.log(form)
     // createReservation({...form})
-    getReservation({
-      reservationId: "-LUJs-e1L170zLCA-un5W9O3Kr75EXP0RI"
+    // getReservation({
+    //   reservationId: "-LUJs-e1L170zLCA-un5W9O3Kr75EXP0RI"
+    // })
+    payReservation({
+      reservationId: "7CZ-sIdws1XahsSu7ncj2ojWCXEB-Fo_Ng",
+      receipt: "test"
     })
   }
   
