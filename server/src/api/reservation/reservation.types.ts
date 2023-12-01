@@ -78,6 +78,7 @@ export type AddExtras = {
 export type UpdateStatus = {
     reservationId: string;
     status: ReservationStatus;
+    note: string;
 }
 
 export type PayReservation = {
