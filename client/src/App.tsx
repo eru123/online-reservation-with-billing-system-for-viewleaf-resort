@@ -12,6 +12,7 @@ import Register from './Pages/Register/Register';
 import LandingPage from './Pages/LandingPage';
 import Booking from './Pages/Guests/Booking/Booking';
 import Invoice from './Pages/Guests/Invoice'
+import Payment from './Pages/Guests/Booking/Payment';
 
 // Pages Private
 import Dashboard from './Pages/Admin/Dashboard';
@@ -79,6 +80,7 @@ function App() {
             <Route path="/booking/:date/:shift" element={<Booking/>} />
             <Route path="/invoice" element={<Invoice />} />
             <Route path="/reservation/:id" element={<Invoice />} />
+            <Route path="/payment/:id" element={<Payment />} />
           </Route>
 
           <Route element={<AppLayout />} >
