@@ -11,7 +11,7 @@ type Props = {
   value: number;
   inclusion?: any;
   type: string;
-  setValue: (newValue: number, inclusion: any) => void;
+  setValue: (newValue: number, inclusion?: any) => void;
 };
 
 function QuantitySelector({ name, value, inclusion, type, setValue, pricePerItem }: Props) {
@@ -41,7 +41,7 @@ function QuantitySelector({ name, value, inclusion, type, setValue, pricePerItem
               }
             } 
             else if (type==="guest"){
-
+              setValue(value - 1);
             }
             
           }}
@@ -58,7 +58,7 @@ function QuantitySelector({ name, value, inclusion, type, setValue, pricePerItem
               setValue(value + 1, inclusion);
             } 
             else if (type==="guest"){
-
+              setValue(value + 1);
             }
             
           }}

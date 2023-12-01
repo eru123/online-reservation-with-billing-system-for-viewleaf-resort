@@ -143,30 +143,30 @@ function AccommodationCard({
                   <div>
                       <QuantitySelector 
                         name={"Kids"} 
-                        value={towel} 
+                        value={accommodation?.guests?.children ? accommodation?.guests?.children : 0} 
                         pricePerItem={100} 
-                        setValue={setTowel}
+                        setValue={(value) => editGuests(accommodation.accommodationId, { children: value })}
                         type="guest"
                       />
                       <QuantitySelector 
                         name={"Adult"} 
-                        value={slippers} 
+                        value={ accommodation?.guests?.adult ? accommodation?.guests?.adult : 0} 
                         pricePerItem={150} 
-                        setValue={setSlippers}
+                        setValue={(value) => editGuests(accommodation.accommodationId, { adult: value })}
                         type="guest"
                       />
                       <QuantitySelector 
-                        name={"Senior/PWD"} 
-                        value={mattress} 
+                        name={"Senior"} 
+                        value={ accommodation?.guests?.senior ? accommodation?.guests?.senior : 0} 
                         pricePerItem={500} 
-                        setValue={setMattress}
+                        setValue={(value) => editGuests(accommodation.accommodationId, { senior: value })}
                         type="guest"
                       />
                       <QuantitySelector 
                         name={"PWD"} 
-                        value={mattress} 
+                        value={ accommodation?.guests?.pwd ? accommodation?.guests?.pwd : 0} 
                         pricePerItem={500} 
-                        setValue={setMattress}
+                        setValue={(value) => editGuests(accommodation.accommodationId, { pwd: value })}
                         type="guest"
                       />
                   </div>

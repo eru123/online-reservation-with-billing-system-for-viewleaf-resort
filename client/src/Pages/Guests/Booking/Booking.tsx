@@ -82,32 +82,17 @@ function Booking() {
       }));
     }
   };
-  
 
-  const editGuests = (accommodationId: string, adults: number, children: number, senior: number, pwd: number) => {
+  const editGuests = (accommodationId: string, guests: { adult?: number; children?: number; senior?: number; pwd?: number }) => {
     setForm((prevForm: { accommodations: any }) => ({
       ...prevForm,
-      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string }) =>
+      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string, guests?: any }) =>
         accommodation.accommodationId === accommodationId
-          ? { ...accommodation, guests: { adult: adults, children: children, senior: senior, pwd: pwd } }
+          ? { ...accommodation, guests: { ...(accommodation.guests || {}), ...guests } }
           : accommodation
       ),
     }));
   };
-  
-  // const addInclusion = (accommodationId: string, inclusion: any) => {
-  //   setForm((prevForm: { accommodations: any }) => ({
-  //     ...prevForm,
-  //     accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any }) =>
-  //       accommodation.accommodationId === accommodationId
-  //         ? {
-  //             ...accommodation,
-  //             inclusions: [...(accommodation.inclusions || []), inclusion],
-  //           }
-  //         : accommodation
-  //     ),
-  //   }));
-  // };
 
   const addInclusion = (accommodationId: string, inclusion: any) => {
     setForm((prevForm: { accommodations: any }) => ({
@@ -144,44 +129,11 @@ function Booking() {
 
   useEffect(() => {
     updateSchedule(date, shift)
-    // if (!called) {
-    //   updateCustomer({
-    //     name: "Jane Doe",
-    //     email: "jane@test.com",
-    //     phone: "09123455"
-    //   })
-    //   addAccommodation({
-    //     accommodationId: "1",
-    //     guests: {
-    //       adult: 1,
-    //       children: 0,
-    //       senior: 0,
-    //       pwd: 0
-    //     },
-    //     inclusions: []
-    //   })
-    //   addAccommodation({
-    //     accommodationId: "2",
-    //     guests: {
-    //       adult: 1,
-    //       children: 5,
-    //       senior: 4,
-    //       pwd: 2
-    //     },
-    //     inclusions: []
-    //   })
-    //   addInclusion("1", {
-    //     name: "Breakfast",
-    //     quantity: 1
-    //   })
-    //   editGuests("1", 9, 8, 7, 6)
-    //   called = true
-    // }
   }, [])
 
   const testFunction = () => {
-    
-    console.log(form)
+    editGuests(
+      "-Y-DsIcys1b5t6AflYazcp0SFw5l0llrxI", {children: 5})
   }
 
   
@@ -189,6 +141,7 @@ function Booking() {
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
       {JSON.stringify(form)}
+      <Button onClick={testFunction}>Test</Button>
       {active === 1?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Selected Accommodation</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
@@ -206,7 +159,10 @@ function Booking() {
       {active === 2?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Booking Statements</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Here you will see all breakdown to your reservation</Typography>   
-          <BookingStatement additional={false} selectedAccommodations={selectedAccommodations}/>
+          <BookingStatement 
+            additional={false} 
+            form={form}
+          />
       </>:""}
       {active === 3?<>
           <Typography variant="h4" color="primary" fontWeight={600}>Guest Details </Typography>
