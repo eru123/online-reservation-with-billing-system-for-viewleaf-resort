@@ -17,16 +17,16 @@ export const initializeContent = async () => {
         promo: 'Default Promo Value',
         shift: {
           day: {
-            start: '6:00 AM',
-            end: '4:00 PM',
+            start: new Date(),
+            end: new Date(),
           },
           night: {
-            start: '6:00 PM',
-            end: '4:00 AM',
+            start: new Date(),
+            end: new Date(),
           },
           whole: {
-            start: '6:00 AM',
-            end: '4:00 AM',
+            start: new Date(),
+            end: new Date(),
           },
         },
       }

@@ -42,38 +42,38 @@ const ContentSchema = new Schema<ContentDocument>(
       type: {
         day: {
           start: {
-            type: String,
+            type: Date,
             required: true,
-            default: 'Default Shift Value',
+            default: new Date(),
           },
           end: {
-            type: String,
+            type: Date,
             required: true,
-            default: 'Default Shift Value',
+            default: new Date(),
           },
         },
         night: {
           start: {
-            type: String,
+            type: Date,
             required: true,
-            default: 'Default Shift Value',
+            default: new Date(),
           },
           end: {
-            type: String,
+            type: Date,
             required: true,
-            default: 'Default Shift Value',
+            default: new Date(),
           },
         },
         whole: {
           start: {
-            type: String,
+            type: Date,
             required: true,
-            default: 'Default Shift Value',
+            default: new Date(),
           },
           end: {
-            type: String,
+            type: Date,
             required: true,
-            default: 'Default Shift Value',
+            default: new Date(),
           },
         },
       },
