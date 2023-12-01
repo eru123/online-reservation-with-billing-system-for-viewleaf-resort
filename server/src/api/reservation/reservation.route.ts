@@ -1,7 +1,9 @@
 import { 
   // addExtras, 
   createReservation, 
-  getReservations 
+  getReservations,
+  payReservation,
+  updateStatus
 } from "./reservation.controller";
 import { Router } from "express";
 import asynchronousHandler from "../../middlewares/asynchronousHandler";
@@ -48,5 +50,8 @@ router.post('/', asynchronousHandler(createReservation));
  * }]
  */
 // router.patch('/', asynchronousHandler(addExtras));
+
+router.post('/pay', asynchronousHandler(payReservation));
+router.patch('/update', asynchronousHandler(updateStatus))
 
 export default router;
