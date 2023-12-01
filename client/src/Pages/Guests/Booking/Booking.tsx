@@ -68,11 +68,21 @@ function Booking() {
   };
 
   const addAccommodation = (accommodationData: any) => {
-    setForm((prevForm: { accommodations: any }) => ({
-      ...prevForm,
-      accommodations: [...(prevForm.accommodations || []), accommodationData],
-    }));
+    if (form?.accommodations?.some((item: any) => item.accommodationId === accommodationData.accommodationId)) {
+      // If the accommodation with the same accommodationId exists, remove it
+      setForm((prevForm: { accommodations: any }) => ({
+        ...prevForm,
+        accommodations: prevForm.accommodations.filter((item: any) => item.accommodationId !== accommodationData.accommodationId),
+      }));
+    } else {
+      // If the accommodation with the same accommodationId doesn't exist, add it
+      setForm((prevForm: { accommodations: any }) => ({
+        ...prevForm,
+        accommodations: [...(prevForm.accommodations || []), accommodationData],
+      }));
+    }
   };
+  
 
   const editGuests = (accommodationId: string, adults: number, children: number, senior: number, pwd: number) => {
     setForm((prevForm: { accommodations: any }) => ({
@@ -103,6 +113,39 @@ function Booking() {
 
   useEffect(() => {
     updateSchedule(date, shift)
+    // if (!called) {
+    //   updateCustomer({
+    //     name: "Jane Doe",
+    //     email: "jane@test.com",
+    //     phone: "09123455"
+    //   })
+    //   addAccommodation({
+    //     accommodationId: "1",
+    //     guests: {
+    //       adult: 1,
+    //       children: 0,
+    //       senior: 0,
+    //       pwd: 0
+    //     },
+    //     inclusions: []
+    //   })
+    //   addAccommodation({
+    //     accommodationId: "2",
+    //     guests: {
+    //       adult: 1,
+    //       children: 5,
+    //       senior: 4,
+    //       pwd: 2
+    //     },
+    //     inclusions: []
+    //   })
+    //   addInclusion("1", {
+    //     name: "Breakfast",
+    //     quantity: 1
+    //   })
+    //   editGuests("1", 9, 8, 7, 6)
+    //   called = true
+    // }
   }, [])
 
   const testFunction = () => {
