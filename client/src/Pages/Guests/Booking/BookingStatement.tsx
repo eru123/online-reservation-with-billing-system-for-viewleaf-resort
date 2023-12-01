@@ -65,7 +65,7 @@ function BookingStatement({additional, form}:Props) {
                 <Typography variant="h6" fontWeight={600} color="initial" sx={{opacity:".6"}}>Entrance Fee</Typography>
 
                 
-              {accommodation.guests.adult ?
+              {accommodation?.guests?.adult ?
                 <Box display="flex" >
                     <div style={{flexGrow:"1"}}>
                       <Typography variant="subtitle1" fontWeight={500}  color="initial">Adult</Typography>
@@ -75,7 +75,7 @@ function BookingStatement({additional, form}:Props) {
                 </Box>
               :<></>}
 
-              {accommodation.guests.children ? 
+              {accommodation?.guests?.children ? 
                 <Box display="flex" >
                     <div style={{flexGrow:"1"}}>
                       <Typography variant="subtitle1" fontWeight={500}  color="initial">Kids</Typography>
@@ -85,7 +85,7 @@ function BookingStatement({additional, form}:Props) {
                 </Box>
               :<></>}
 
-              {accommodation.guests.senior ? 
+              {accommodation?.guests?.senior ? 
                 <Box display="flex" >
                     <div style={{flexGrow:"1"}}>
                       <Typography variant="subtitle1" fontWeight={500}  color="initial">Senior</Typography>
@@ -95,7 +95,7 @@ function BookingStatement({additional, form}:Props) {
                 </Box>
               :<></>}
 
-              {accommodation.guests.pwd ? 
+              {accommodation?.guests?.pwd ? 
                 <Box display="flex" >
                     <div style={{flexGrow:"1"}}>
                       <Typography variant="subtitle1" fontWeight={500}  color="initial">PWD</Typography>
