@@ -17,7 +17,6 @@ import Button from '@mui/material/Button';
 import TESTCalendar from '../../../Components/TESTCalendar';
 import Checkbox from '@mui/material/Checkbox';
 
-
 import QuantitySelector from '../../../Components/QuantitySelector';
 
 import useAccommodation from '../../../Hooks/useAccommodation'

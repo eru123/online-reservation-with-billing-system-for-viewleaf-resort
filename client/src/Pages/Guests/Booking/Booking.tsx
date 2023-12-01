@@ -61,7 +61,7 @@ const style = {
 function Booking() {
   const navigate = useNavigate()
   const [open, setOpen] = React.useState("");
-  const {sendEmail} = useEmail();
+  const {sendEmail, sendReservation} = useEmail();
   const {createReservation} = useReservation();
   const [active,setActive] =  useState(1);
   const {date, shift} = useParams();
@@ -241,6 +241,11 @@ function Booking() {
     if (otpCode === verificationCode) {
       alert("OTP Verified!")
       createReservation(form)
+      sendReservation({
+        ...form,
+        email: form.email,
+        subject: "View Leaf: Reservation Details"
+      })
       navigate("/reservation/:id")
     } 
     else {
