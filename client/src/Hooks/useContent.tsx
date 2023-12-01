@@ -51,7 +51,7 @@ function useContent() {
 
   const updateContent = (content: UpdateContentData) => {
     makeRequest({
-      method: 'patch',
+      method:'patch',
       url: `/contents`,
       data: content,
     });
