@@ -16,7 +16,7 @@ function useEmail(): Data {
   const sendEmail = async (data: SendEmailData) => {
     try {
       await axios
-      .post('/email', {
+      .post('/emails', {
         to: data.email,
         subject: data.subject,
         content: data.content
