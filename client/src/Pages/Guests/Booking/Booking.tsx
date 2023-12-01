@@ -230,12 +230,14 @@ function Booking() {
         subject: "View Leaf: Email Verification",
         content: `Your One Time Password (OTP) is: ${otp}`,
       })
+      console.log(otp)
     }
   }
 
   async function verifyOTP(e: React.FormEvent<HTMLFormElement>){
     e.preventDefault();
-    let verificationCode
+    console.log(otpCode)
+    console.log(verificationCode)
     if (otpCode === verificationCode) {
       alert("OTP Verified!")
       createReservation(form)
