@@ -74,3 +74,13 @@ export type AddExtras = {
     reservationId: string;
     accommodations: ReserveAccommodation[];
 };
+
+export type UpdateStatus = {
+    reservationId: string;
+    status: ReservationStatus;
+}
+
+export type PayReservation = {
+    reservationId: string;
+    receipt: string;
+}
