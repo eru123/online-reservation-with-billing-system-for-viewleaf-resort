@@ -77,7 +77,7 @@ function Invoice({}:Props) {
           {status==="pending"?
             <Box sx={{position:"relative"}}>
               <Alert severity="warning" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>Please make the payment to finalize your reservation, Thank you!</Alert>
-              <Chip label="Pay now" variant="outlined" onClick={()=>{}} component={Link} to={"/payment"} color="primary" sx={{position:"absolute",top:"50%",right:"10px",transform:"translateY(-50%)"}}/>   
+              <Chip label="Pay now" variant="outlined" onClick={()=>{}} component={Link} to={"/payment/:id"} color="primary" sx={{position:"absolute",top:"50%",right:"10px",transform:"translateY(-50%)"}}/>   
             </Box>
           :""}
           {status==="paid"?
