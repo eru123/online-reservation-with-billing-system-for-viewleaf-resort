@@ -45,7 +45,6 @@ function Accommodation() {
   const { data: shifts, loading: shiftLoading, error: shiftError, getShift, updateShift } = useContent();
   const {data: accommodations, loading: accommodationLoading, error: accommodationError, getAccommodation} = useAccommodation();
 
-  const [shiftVal,setShiftVal] = useState<any>({shifts})
   const [shiftForm, setShiftForm] = useState<any>({
     day: {
       start: "",
@@ -72,39 +71,39 @@ function Accommodation() {
     // setShiftForm(shifts)
   }, []);
 
-  useEffect(()=>{
-    setShiftForm({
-      day: {
-        start: dayjs(shifts?.shift?.day?.start),
-        end: dayjs(shifts?.shift?.day?.end),
-      },
-      night: {
-        start: dayjs(shifts?.shift?.night?.start),
-        end: dayjs(shifts?.shift?.night?.end),
-      },
-      whole: {
-        start: dayjs(shifts?.shift?.whole?.start),
-        end: dayjs(shifts?.shift?.whole?.end),
-      },
-    });
-  },[shiftLoading])
+  useEffect(() => {
+    if (shifts) {
+      setShiftForm({
+        day: {
+          start: dayjs(shifts?.shift?.day?.start),
+          end: dayjs(shifts?.shift?.day?.end),
+        },
+        night: {
+          start: dayjs(shifts?.shift?.night?.start),
+          end: dayjs(shifts?.shift?.night?.end),
+        },
+        whole: {
+          start: dayjs(shifts?.shift?.whole?.start),
+          end: dayjs(shifts?.shift?.whole?.end),
+        },
+      });
+    }
+  }, [shifts]);
 
   const handleUpdateShift: React.FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Update Shift
     await updateShift(shiftForm);
-    // refresh value
-    
+    // Refresh value
     await getShift();
 
-    window.location.reload()
     // Clear Form
-    clear()
-    
-
-    
-  }
+    clear();
+    // Set open to an empty string to close the modal
+    setOpen("");
+  };
+  
     
   // Make the date val to date appealing for UI
   const timestampToTime = (timestamp:string) =>{
@@ -174,7 +173,6 @@ function Accommodation() {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['TimePicker']}>
                         <TimePicker 
-                          defaultValue={dayjs(shifts?.shift?.day?.end)}
                           value={dayjs(shiftForm.day.start)}
                           onChange={(newValue)=>{setShiftForm({
                             ...shiftForm,
@@ -194,7 +192,6 @@ function Accommodation() {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['TimePicker']}>
                         <TimePicker 
-                          defaultValue={dayjs(shifts?.shift?.day?.end)}
                           value={dayjs(shiftForm.day.end)}
                           onChange={(newValue)=>{setShiftForm({
                             ...shiftForm,
@@ -216,7 +213,6 @@ function Accommodation() {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['TimePicker']}>
                         <TimePicker
-                          defaultValue={dayjs(shifts?.shift?.night?.start)}
                           value={dayjs(shiftForm.night.start)}
                           onChange={(newValue)=>{setShiftForm({
                             ...shiftForm,
@@ -236,7 +232,6 @@ function Accommodation() {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['TimePicker']}>
                         <TimePicker
-                          defaultValue={dayjs(shifts?.shift?.night?.end)}
                           value={dayjs(shiftForm.night.end)}
                           onChange={(newValue)=>{setShiftForm({
                             ...shiftForm,
@@ -257,7 +252,6 @@ function Accommodation() {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['TimePicker']}>
                         <TimePicker 
-                          defaultValue={dayjs(shifts?.shift?.whole?.start)}
                           value={dayjs(shiftForm.whole.start)}
                           onChange={(newValue)=>{setShiftForm({
                             ...shiftForm,
@@ -276,7 +270,6 @@ function Accommodation() {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['TimePicker']}>
                         <TimePicker
-                          defaultValue={dayjs(shifts?.shift?.whole?.end)}
                           value={dayjs(shiftForm.whole.end)}
                           onChange={(newValue)=>{setShiftForm({
                             ...shiftForm,
