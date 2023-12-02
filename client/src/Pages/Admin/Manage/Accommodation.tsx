@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid'
 
 import MenuItem from '@mui/material/MenuItem';
 import AccommodationCard from '../../../Components/AccommodationCard';
-
+import dayjs from 'dayjs';
 import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal';
 import InputLabel from '@mui/material/InputLabel';
@@ -41,63 +41,81 @@ const style = {
 };
 
 function Accommodation() {
-    const [open, setOpen] = useState("");
-    const { data: shifts, loading: shiftLoading, error: shiftError, getShift, updateShift } = useContent();
-    const {data: accommodations, loading: accommodationLoading, error: accommodationError, getAccommodation} = useAccommodation();
+  const [open, setOpen] = useState("");
+  const { data: shifts, loading: shiftLoading, error: shiftError, getShift, updateShift } = useContent();
+  const {data: accommodations, loading: accommodationLoading, error: accommodationError, getAccommodation} = useAccommodation();
 
-    const [shiftForm, setShiftForm] = useState<any>({
+  const [shiftVal,setShiftVal] = useState<any>({shifts})
+  const [shiftForm, setShiftForm] = useState<any>({
+    day: {
+      start: "",
+      end: ""
+    },
+    night: {
+      start:"",
+      end: ""
+    },
+    whole: {
+      start: "",
+      end: ""
+    }
+  })
+
+  const clear = () => {
+    // Close Modal
+    setOpen("")
+  }
+
+  useEffect(() => {
+    getAccommodation();
+    getShift();
+    // setShiftForm(shifts)
+  }, []);
+
+  useEffect(()=>{
+    setShiftForm({
       day: {
-        start: '',
-        end: ''
+        start: dayjs(shifts?.shift?.day?.start),
+        end: dayjs(shifts?.shift?.day?.end),
       },
       night: {
-        start: '',
-        end: ''
+        start: dayjs(shifts?.shift?.night?.start),
+        end: dayjs(shifts?.shift?.night?.end),
       },
       whole: {
-        start: '',
-        end: ''
-      }
-    })
+        start: dayjs(shifts?.shift?.whole?.start),
+        end: dayjs(shifts?.shift?.whole?.end),
+      },
+    });
+  },[shiftLoading])
 
-    const clear = () => {
-      // Close Modal
-      setOpen("")
-    }
+  const handleUpdateShift: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault()
 
-    const handleUpdateShift: React.FormEventHandler<HTMLFormElement> = (e) => {
-      e.preventDefault()
-
-      // Update Shift
-      updateShift(shiftForm);
-
-      // Clear Form
-      clear()
-    }
+    // Update Shift
+    await updateShift(shiftForm);
+    // refresh value
     
-    useEffect(() => {
-      getAccommodation();
-      getShift();
-      setShiftForm({
-        day: {
-          start: shifts?.shift?.day?.start,
-          end: shifts?.shift?.day?.end
-        },
-        night: {
-          start: shifts?.shift?.night?.start,
-          end: shifts?.shift?.night?.end
-        },
-        whole: {
-          start: shifts?.shift?.whole?.start,
-          end: shifts?.shift?.whole?.end
-        }
-      })
-    }, [])
+    await getShift();
 
-    if (accommodationLoading || shiftLoading) {
-      return <Typography>Loading...</Typography>
-    }
+    window.location.reload()
+    // Clear Form
+    clear()
+    
 
+    
+  }
+    
+  // Make the date val to date appealing for UI
+  const timestampToTime = (timestamp:string) =>{
+    return dayjs(timestamp).format('h:mm A')
+  }
+
+  if (accommodationLoading || shiftLoading ) {
+  
+    return <Typography>Loading...</Typography>
+  }
+  
   return <>
     <div>
       <Typography variant="h4" fontWeight={600} color="primary">Manage Accommodations</Typography>
@@ -107,15 +125,15 @@ function Accommodation() {
               <Box display="flex" gap={"10px"} alignItems={"center"} sx={{background:"#D9D9D9",border:"1px solid #B9B9B9",padding:".2em .2em .2em 1.2em" ,borderRadius:"1000px"}}>
                   <Box display={"flex"} alignItems={"center"} gap={"10px"}>
                       <Typography variant="subtitle2" fontWeight={600} color="initial">Day Shift:</Typography>
-                      <Typography variant="body1" color="initial">{shifts?.shift?.day?.start} to {shifts?.shift?.day?.end}</Typography>
+                      <Typography variant="body1" color="initial">{timestampToTime(shifts?.shift?.day?.start)} to {timestampToTime(shifts?.shift?.day?.end)}</Typography>
                   </Box>
                   <Box display={"flex"} alignItems={"center"} gap={"10px"}>
                       <Typography variant="subtitle2" fontWeight={600} color="initial">Night Shift:</Typography>
-                      <Typography variant="body1" color="initial">{shifts?.shift?.night?.start} to {shifts?.shift?.night?.end}</Typography>
+                      <Typography variant="body1" color="initial">{timestampToTime(shifts?.shift?.night?.start)} to {timestampToTime(shifts?.shift?.night?.end)}</Typography>
                   </Box>
                   <Box display={"flex"} alignItems={"center"} gap={"10px"}>
                       <Typography variant="subtitle2" fontWeight={600} color="initial">Whole Day:</Typography>
-                      <Typography variant="body1" color="initial">{shifts?.shift?.whole?.start} to {shifts?.shift?.whole?.end}</Typography>
+                      <Typography variant="body1" color="initial">{timestampToTime(shifts?.shift?.whole?.start)} to {timestampToTime(shifts?.shift?.whole?.end)}</Typography>
                   </Box>
                   <IconButton aria-label="edit" onClick={()=>{setOpen("editShift")}}>
                       <ModeEditIcon/>
@@ -142,13 +160,12 @@ function Accommodation() {
           aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style}>
-            {open === "editShift"?<>
-                <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
-                    Upload PDF
-                </Typography>
-                <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
-                    Set policy for the guests
-                </Typography>
+          {open === "editShift"?<>
+              <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">Shift Time Availability</Typography>
+              <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
+                Set shift time  
+              </Typography>
+              <form onSubmit={handleUpdateShift}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Typography variant="subtitle1" fontWeight={600} color="initial">Day Shift </Typography>
@@ -156,7 +173,17 @@ function Accommodation() {
                   <Grid item md={5} xs={12}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['TimePicker']}>
-                        <TimePicker label="Basic time picker" />
+                        <TimePicker 
+                          defaultValue={dayjs(shifts?.shift?.day?.end)}
+                          value={dayjs(shiftForm.day.start)}
+                          onChange={(newValue)=>{setShiftForm({
+                            ...shiftForm,
+                            day: {
+                              ...shiftForm.day,
+                              start: newValue
+                            }
+                          })}}
+                        />
                       </DemoContainer>
                     </LocalizationProvider>
                   </Grid>
@@ -164,9 +191,19 @@ function Accommodation() {
                     <Typography variant="subtitle1" color="initial">to</Typography>
                   </Grid>
                   <Grid item md={5} xs={12}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['TimePicker']}>
-                        <TimePicker label="Basic time picker" />
+                        <TimePicker 
+                          defaultValue={dayjs(shifts?.shift?.day?.end)}
+                          value={dayjs(shiftForm.day.end)}
+                          onChange={(newValue)=>{setShiftForm({
+                            ...shiftForm,
+                            day: {
+                              ...shiftForm.day,
+                              end: newValue
+                            }
+                          })}}
+                        />
                       </DemoContainer>
                     </LocalizationProvider>
                   </Grid>
@@ -178,7 +215,17 @@ function Accommodation() {
                   <Grid item md={5} xs={12}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['TimePicker']}>
-                        <TimePicker label="Basic time picker" />
+                        <TimePicker
+                          defaultValue={dayjs(shifts?.shift?.night?.start)}
+                          value={dayjs(shiftForm.night.start)}
+                          onChange={(newValue)=>{setShiftForm({
+                            ...shiftForm,
+                            night: {
+                              ...shiftForm.night,
+                              start: newValue
+                            }
+                          })}}
+                        />
                       </DemoContainer>
                     </LocalizationProvider>
                   </Grid>
@@ -188,18 +235,37 @@ function Accommodation() {
                   <Grid item md={5} xs={12}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['TimePicker']}>
-                        <TimePicker label="Basic time picker" />
+                        <TimePicker
+                          defaultValue={dayjs(shifts?.shift?.night?.end)}
+                          value={dayjs(shiftForm.night.end)}
+                          onChange={(newValue)=>{setShiftForm({
+                            ...shiftForm,
+                            night: {
+                              ...shiftForm.night,
+                              end: newValue
+                            }
+                          })}}
+                        />
                       </DemoContainer>
                     </LocalizationProvider>
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Typography variant="subtitle1" fontWeight={600} color="initial">Whole Day </Typography>
+                    <Typography variant="subtitle1" fontWeight={600} color="initial">Whole Day</Typography>
                   </Grid>
                   <Grid item md={5} xs={12}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['TimePicker']}>
-                        <TimePicker label="Basic time picker" />
+                        <TimePicker 
+                          defaultValue={dayjs(shifts?.shift?.whole?.start)}
+                          value={dayjs(shiftForm.whole.start)}
+                          onChange={(newValue)=>{setShiftForm({
+                            ...shiftForm,
+                            whole: {
+                              ...shiftForm.whole,
+                              start: newValue
+                            }
+                          })}}/>
                       </DemoContainer>
                     </LocalizationProvider>
                   </Grid>
@@ -209,7 +275,17 @@ function Accommodation() {
                   <Grid item md={5} xs={12}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['TimePicker']}>
-                        <TimePicker label="Basic time picker" />
+                        <TimePicker
+                          defaultValue={dayjs(shifts?.shift?.whole?.end)}
+                          value={dayjs(shiftForm.whole.end)}
+                          onChange={(newValue)=>{setShiftForm({
+                            ...shiftForm,
+                            whole: {
+                              ...shiftForm.whole,
+                              end: newValue
+                            }
+                          })}}
+                        />
                       </DemoContainer>
                     </LocalizationProvider>
                   </Grid>
@@ -217,21 +293,18 @@ function Accommodation() {
                   <Grid item xs={12} padding={"1em 0"}>
                   </Grid>
                   <Grid item xs={5}>
-                      <Button variant="text" fullWidth onClick={()=>{setOpen("")}}>
-                          back
+                      <Button variant="text" fullWidth onClick={()=>{setOpen("")}} sx={{color:"black"}}>
+                        back
                       </Button>
                   </Grid>
                   <Grid item xs={7}>
-                      <Button variant="contained" color='primary' fullWidth onClick={()=>{
-                        setOpen("");
-                      }}>
+                      <Button variant="contained" color='primary' fullWidth type='submit'>
                           Confirm
                       </Button>
                   </Grid>
                 </Grid>
-            
-            </>:""}
-
+              </form>
+          </>:""}
         </Box>
     </Modal>
   </>
