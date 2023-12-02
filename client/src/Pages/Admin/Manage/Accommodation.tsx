@@ -92,14 +92,13 @@ function Accommodation() {
 
   const handleUpdateShift: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-
+  
     // Update Shift
     await updateShift(shiftForm);
+  
     // Refresh value
     await getShift();
-
-    // Clear Form
-    clear();
+  
     // Set open to an empty string to close the modal
     setOpen("");
   };
@@ -111,7 +110,6 @@ function Accommodation() {
   }
 
   if (accommodationLoading || shiftLoading ) {
-  
     return <Typography>Loading...</Typography>
   }
   
@@ -119,7 +117,7 @@ function Accommodation() {
     <div>
       <Typography variant="h4" fontWeight={600} color="primary">Manage Accommodations</Typography>
       <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>List of all Accommodation</Typography>
-      <Box display="flex" sx={{margin:"2em 0 "}}>
+      <Box display="flex" sx={{margin:"2em 0 ",flexWrap:"wrap"}}  gap={4}>
           <Box sx={{flexGrow:"1",display:"flex"}}>
               <Box display="flex" gap={"10px"} alignItems={"center"} sx={{background:"#D9D9D9",border:"1px solid #B9B9B9",padding:".2em .2em .2em 1.2em" ,borderRadius:"1000px"}}>
                   <Box display={"flex"} alignItems={"center"} gap={"10px"}>
@@ -139,7 +137,6 @@ function Accommodation() {
                   </IconButton>
               </Box>
           </Box>
-          
           <Button variant="contained" color="primary" href='accommodation/add'>
               Add Accommodation
           </Button>
@@ -150,7 +147,6 @@ function Accommodation() {
         ))}
       </Box>
     </div>
-
     <Modal
           keepMounted
           open={!(open==="")}
