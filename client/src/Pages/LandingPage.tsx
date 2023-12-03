@@ -16,12 +16,12 @@ import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button'
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-
 import { useNavigate } from 'react-router-dom'
 
 // Components
 import AccommodationCard from '../Components/AccommodationCard';
 import AccordionFAQ from '../Components/AccordionFAQ'
+
 // Images 
 import logoDrop from '../Images/LogoDrop.png';
 import EmailIcon from '@mui/icons-material/Email';
@@ -30,10 +30,10 @@ import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import Section1Img from '../Images/Resources/Section1BG.jpg';
 import Section2Img from '../Images/Resources/Section2BG.jpg';
 
-import itemData from './_Test/itemData'
 import useContent from '../Hooks/useContent'
 import useFAQ from '../Hooks/useFAQ'
 import useAccommodation from '../Hooks/useAccommodation'
+import dayjs from 'dayjs'
 
 
 function LandingPage() {
@@ -50,18 +50,22 @@ function LandingPage() {
   });
   const[open,setOpen]=useState("");
   
-  
   const book = () => {
     console.log(bookingSchedule)
     navigate(`/booking/${new Date(bookingSchedule.date).getTime()}/${bookingSchedule.shift}`)
+  }
+  const timestampToTime = (timestamp:string) =>{
+    return dayjs(timestamp).format('h:mm A')
   }
   useEffect(()=>{
     getFAQ();
     getContent();
     getAccommodation();
   }, [])
+
   if (faqLoading || contentLoading || accommodationLoading) return <p>Loading...</p>
   if (faqError || contentError) return <p>Error</p>
+
   return (
       <div>
           <Box position="relative" height="400px" sx={{ backgroundImage: "url('../Images/Resources/Section1BG.jpg')", backgroundSize: "cover",overflow:"hidden"}}>
@@ -110,18 +114,31 @@ function LandingPage() {
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
                                         value={bookingSchedule.shift}
-                                        label="shift"
+                                        label="Shift"
                                         onChange={(e) => setBookingSchedule({ ...bookingSchedule, shift: e.target.value })}
                                     >
-                                        <MenuItem value={"0"}>Day Shift</MenuItem>
-                                        <MenuItem value={"1"}>Night Shift</MenuItem>
-                                        <MenuItem value={"2"}>Whole Shift</MenuItem>
+                                        <MenuItem value={"Day"}>Day Shift</MenuItem>
+                                        <MenuItem value={"Night"}>Night Shift</MenuItem>
+                                        <MenuItem value={"Whole"}>Whole Shift</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
+                            <Grid xs={12}>
+                              <Typography variant="body1" color="primary" textAlign={"center"} mt={2}>
+                                {bookingSchedule.shift === "Day"?<>
+                                  {bookingSchedule.shift} Shift is from {timestampToTime(contents?.shift.day.start)} to {timestampToTime(contents?.shift.day.end)}
+                                </> :""}
+                                {bookingSchedule.shift === "Night"?<>
+                                  {bookingSchedule.shift} Shift is from {timestampToTime(contents?.shift.night.start)} to {timestampToTime(contents?.shift.night.end)}
+                                </> :""}
+                                {bookingSchedule.shift === "Whole"?<>
+                                  {bookingSchedule.shift} Shift is from {timestampToTime(contents?.shift.whole.start)} to {timestampToTime(contents?.shift.whole.end)}
+                                </> :""}
+                              </Typography>
+                            </Grid>
                             <Grid item xs={12}>
                                 <Button variant="contained" color="primary" fullWidth onClick={() => book()}>
-                                    Book Now
+                                  Book Now
                                 </Button>
                             </Grid>
                             <Grid item xs={12} display={"flex"} alignItems={"center"} gap={"10px"}>
@@ -161,12 +178,13 @@ function LandingPage() {
                 </ImageList>
               </>:""}
             </div>
+
             <div style={{margin:"4em 0"}}>
                 <Typography variant="h5" color="primary" style={{marginBottom:"40px"}} align='center' fontWeight={600}>Accommodation to Offer</Typography>
                 {Array.isArray(accommodations) && !(accommodations.length <=0)?<>
                   <Box display="flex" flexDirection={"column"} gap={"15px"}>
                     {accommodations?.map((accommodation: any) => (
-                      <AccommodationCard key={accommodation._id} accommodation={accommodation} variant="view" openModal={setOpen}/>
+                      <AccommodationCard key={accommodation._id} accommodation={accommodation} variant="display" openModal={setOpen}/>
                     ))}
                   </Box>
                 </>:<>
