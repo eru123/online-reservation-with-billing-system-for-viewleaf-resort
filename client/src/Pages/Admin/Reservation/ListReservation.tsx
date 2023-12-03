@@ -66,12 +66,15 @@ function ListReservation() {
                             <>
                               {filteredData?.map((reservation: any) => (
                                 <TableRow key={reservation.reservationId} sx={{ background: "white" }} component={Link} to="/admin/reservation/view">
-                                  <TableCell>{reservation.reservationId}</TableCell>
+                                  <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
                                   <TableCell>{reservation.customer?.name || "Unknown"}</TableCell>
                                   <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })}</TableCell>
                                   <TableCell></TableCell>
                                   <TableCell></TableCell>
-                                  <TableCell><Chip label={reservation.status} color={reservation.status === 'cancelled' ? "error" : "primary"} /></TableCell>
+                                  <Chip 
+                                    label={reservation.status} 
+                                    color={reservation.status === 'cancelled' ? "error" : (reservation.status === "approved" ? "success" : "info")}
+                                  />
                                 </TableRow>
                               ))}
                             </>
