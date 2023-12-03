@@ -41,8 +41,8 @@ export const getReservations: RequestHandler = async (req: QueryRequest<GetReser
 
     const invoices = await InvoiceModel.find({ reservation: reservations._id }).exec();
 
-    res.json({ reservations, invoices });
-}
+    res.json({ reservations, ...invoices.map((invoice) => invoice.toJSON()) });
+};
 
 const reservationTimeLimitInMinutes = 15;
 export const createReservation: RequestHandler = async (req: BodyRequest<CreateReservation>, res) => {
@@ -108,8 +108,7 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
         if (shift === Shift.WHOLE) shiftQuery = { $in: [Shift.WHOLE, Shift.DAY, Shift.NIGHT] };
 
         // Find invoices whose accommodationId is the same
-        const invoices: InvoicePopulatedDocument[] = await InvoiceModel
-            .find({ accommodationId, shift: shiftQuery })
+        const invoices: InvoicePopulatedDocument[] = await InvoiceModel.find({ accommodationId, shift: shiftQuery })
             .populate('reservation')
             .exec();
 
@@ -145,7 +144,7 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
     }
 
     await reservation.save();
-    await InvoiceModel.insertMany(invoices);
+    await Promise.allSettled(invoices.map((invoice) => invoice.save()));
 
     setTimeout(() => {
         if (reservation.status === ReservationStatus.PENDING) {
@@ -154,7 +153,7 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
         }
     }, 1000 * 60 * reservationTimeLimitInMinutes);
 
-    res.sendStatus(201);
+    res.status(201).json({ reservationId: reservation.reservationId });
 };
 
 export const addExtras: RequestHandler = async (_req: BodyRequest<AddExtras>, _res) => {
@@ -197,6 +196,8 @@ export const payReservation: RequestHandler = async (req: BodyRequest<PayReserva
         reservation: reservation._id,
         image: receipt
     });
+
+    reservation.status = ReservationStatus.PAID;
 
     res.sendStatus(204);
 }
