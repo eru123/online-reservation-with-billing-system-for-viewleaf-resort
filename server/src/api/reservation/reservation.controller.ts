@@ -8,7 +8,7 @@ import {
     PayReservation,
     ReservationDocument,
     ReservationStatus,
-    ReservationInvoices,
+    ReservationInfo,
     UpdateStatus
 } from './reservation.types';
 import { InvoiceDocument, InvoicePopulatedDocument } from '../invoice/invoice.types';
@@ -48,14 +48,18 @@ export const getReservations: RequestHandler = async (req: QueryRequest<GetReser
     const reservations: ReservationDocument[] = await ReservationModel.find(reservationQuery).exec();
     if (!reservations) throw new NotFound('Reservation');
 
-    const reservationWithInvoices: ReservationInvoices[] = [];
+    const reservationWithInvoices: ReservationInfo[] = [];
     for (let i = 0; i < reservations.length; i++) {
         // Get the invoices of each reservation found
         const invoices = await InvoiceModel.find({ reservation: reservations[i]._id }, { reservation: 0 }).exec();
 
+        // Get receipts of reservation
+        const receipts = await receiptModel.find({ reservation: reservations[i]._id }).exec();
+
         reservationWithInvoices.push({
             ...reservations[i].toJSON(),
-            invoices
+            invoices,
+            receipts: receipts.map((receipt) => receipt.image)
         });
     }
 

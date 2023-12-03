@@ -87,7 +87,8 @@ export type PayReservation = {
     receipt: string;
 }
 
-export type ReservationInvoices = {
+export type ReservationInfo = {
     reservation: ReservationDocument,
-    invoices: Omit<InvoiceDocument, 'reservation'>[]
+    invoices: Omit<InvoiceDocument, 'reservation'>[],
+    receipts: string[]
 }
