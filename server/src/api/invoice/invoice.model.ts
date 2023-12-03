@@ -12,7 +12,7 @@ const invoiceSchema = new Schema(
         },
         reservation: {
             type: Types.ObjectId,
-            ref: 'Reseration',
+            ref: 'Reservation',
             required: true
         },
         accommodationId: {
