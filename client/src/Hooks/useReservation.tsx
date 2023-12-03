@@ -23,7 +23,7 @@ interface ReservationData {
 }
 
 interface GetReservation{
-  reservationId: string;
+  reservationId?: string;
 }
 
 interface PayReservation{
@@ -40,7 +40,7 @@ interface UpdateReservation{
 function useReservation() {
   const { data, loading, error, makeRequest } = useRequest();
 
-  const getReservation = (content: GetReservation) => {
+  const getReservation = (content?: GetReservation) => {
     makeRequest({
       method: 'get',
       url: `/reservations`,
