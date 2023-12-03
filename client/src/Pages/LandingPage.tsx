@@ -117,22 +117,22 @@ function LandingPage() {
                                         label="Shift"
                                         onChange={(e) => setBookingSchedule({ ...bookingSchedule, shift: e.target.value })}
                                     >
-                                        <MenuItem value={"Day"}>Day Shift</MenuItem>
-                                        <MenuItem value={"Night"}>Night Shift</MenuItem>
-                                        <MenuItem value={"Whole"}>Whole Shift</MenuItem>
+                                        <MenuItem value={"0"}>Day Shift</MenuItem>
+                                        <MenuItem value={"1"}>Night Shift</MenuItem>
+                                        <MenuItem value={"2"}>Whole Shift</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
                             <Grid xs={12}>
                               <Typography variant="body1" color="primary" textAlign={"center"} mt={2}>
-                                {bookingSchedule.shift === "Day"?<>
-                                  {bookingSchedule.shift} Shift is from {timestampToTime(contents?.shift.day.start)} to {timestampToTime(contents?.shift.day.end)}
+                                {bookingSchedule.shift === "0"?<>
+                                  Day Shift is from {timestampToTime(contents?.shift.day.start)} to {timestampToTime(contents?.shift.day.end)}
                                 </> :""}
-                                {bookingSchedule.shift === "Night"?<>
-                                  {bookingSchedule.shift} Shift is from {timestampToTime(contents?.shift.night.start)} to {timestampToTime(contents?.shift.night.end)}
+                                {bookingSchedule.shift === "1"?<>
+                                  Night Shift is from {timestampToTime(contents?.shift.night.start)} to {timestampToTime(contents?.shift.night.end)}
                                 </> :""}
-                                {bookingSchedule.shift === "Whole"?<>
-                                  {bookingSchedule.shift} Shift is from {timestampToTime(contents?.shift.whole.start)} to {timestampToTime(contents?.shift.whole.end)}
+                                {bookingSchedule.shift === "2"?<>
+                                  Whole Day Shift is from {timestampToTime(contents?.shift.whole.start)} to {timestampToTime(contents?.shift.whole.end)}
                                 </> :""}
                               </Typography>
                             </Grid>

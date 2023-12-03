@@ -47,7 +47,6 @@ function useEmail(): Data {
       })
       .then((response:any)=>{
         console.log(response.data);
-        alert("OTP Sent!");
       });
     } catch (error: any) {
       console.log(error);
@@ -64,7 +63,6 @@ function useEmail(): Data {
       })
       .then((response:any)=>{
         console.log(response.data);
-        alert("OTP Sent!");
       });
     } catch (error: any) {
       console.log(error);
@@ -82,7 +80,6 @@ function useEmail(): Data {
       })
       .then((response:any)=>{
         console.log(response.data);
-        alert("OTP Sent!");
       });
     } catch (error: any) {
       console.log(error);

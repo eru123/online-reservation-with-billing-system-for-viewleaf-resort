@@ -62,7 +62,7 @@ function Booking() {
   const navigate = useNavigate()
   const [open, setOpen] = React.useState("");
   const {sendEmail, sendReservation} = useEmail();
-  const {createReservation} = useReservation();
+  const {data: reservationData, createReservation} = useReservation();
   const [active,setActive] =  useState(1);
   const {date, shift} = useParams();
   const [otpCode, setOtpCode] = useState("");
@@ -234,28 +234,34 @@ function Booking() {
     }
   }
 
-  async function verifyOTP(e: React.FormEvent<HTMLFormElement>){
+  async function verifyOTP(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(otpCode)
-    console.log(verificationCode)
+    console.log(form);
+  
     if (otpCode === verificationCode) {
-      alert("OTP Verified!")
-      createReservation(form)
+      alert("OTP Verified!");
+  
+      // Wait for createReservation to complete before logging reservationData
+      await createReservation(form);
+
       sendReservation({
         ...form,
         email: form.email,
-        subject: "View Leaf: Reservation Details"
-      })
-      navigate("/reservation/:id")
-    } 
-    else {
-      alert("Invalid OTP")
+        subject: "View Leaf: Reservation Details",
+      });
+
+    } else {
+      alert("Invalid OTP");
     }
   }
 
   useEffect(() => {
     updateSchedule(date, shift)
     calculateCost(form,parseInt(shift||"0"))
+    if (reservationData) {
+      console.log(reservationData);
+      navigate(`/payment/${reservationData.reservationId}`);
+    }
   }, [form])
 
   return (
