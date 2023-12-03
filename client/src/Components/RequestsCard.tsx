@@ -11,14 +11,15 @@ import { Link } from 'react-router-dom';
 
 
 type Props = {
-  status: "paid" | "rescheduling" |  "cancelling" | "refunding"
+  status: "paid" | "rescheduling" |  "cancelling" | "refunding" |"never"
+  data:any
 }
-function RequestsCard({status}:Props) {
+function RequestsCard({status,data}:Props) {
     return <>
-        <Paper variant="elevation" component={Link} to="/admin/reservation/view" elevation={3} sx={{padding:"1em",borderRadius:"8px",maxWidth:"1200px"}}>
+        <Paper variant="elevation" component={Link} to={`/admin/invoice/${data.reservationId}`} elevation={3} sx={{padding:"1em",borderRadius:"8px",maxWidth:"1200px"}}>
             <Box display="flex">
               <Box flexGrow={"1"}>
-                  <Typography variant="h5" color="initial">#123A23123</Typography>
+                  <Typography variant="h5" color="initial">#{data?.reservationId}</Typography>
                   <Typography variant="subtitle1" color="#535353">Reference Number</Typography>
               </Box>
               {status === "paid"?<Chip label={"Reservation Request"} color='warning' />:""}
@@ -28,15 +29,15 @@ function RequestsCard({status}:Props) {
             </Box>
             <Paper variant="elevation" elevation={0} sx={{borderRadius:"8px",background:"#D9D9D9",padding:"1em",margin:"1em 0" ,display:"flex",alignItems:"center"}}>
                 <Box sx={{flexGrow:"1"}}>
-                    <Typography variant="h5" color="initial" fontWeight={500}>Jon Doe</Typography>
+                    <Typography variant="h5" color="initial" fontWeight={500}>{data?.customer.name}</Typography>
                     <Box display="flex" gap={"15px"} mt={1}>
                         <Box display="flex" gap="5px">
                             <CallIcon/>
-                            <Typography variant="body1" color="initial">0915-232-1231</Typography>
+                            <Typography variant="body1" color="initial">{data?.customer.phone}</Typography>
                         </Box>
                         <Box display="flex" gap="5px">
                             <EmailIcon/>
-                            <Typography variant="body1" color="initial">jondoe@gmail.com</Typography>
+                            <Typography variant="body1" color="initial">{data?.customer.email}</Typography>
                         </Box>
                     </Box>
                 </Box>
