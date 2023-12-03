@@ -20,10 +20,12 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 
+import {useNavigate} from 'react-router-dom'
 import useAccommodation from '../../../Hooks/useAccommodation'
 import useFirebase from '../../../Hooks/useFirebase'
 
 function AddAccommodation() {
+  const navigate = useNavigate();
   const { uploadFile, downloadURL } = useFirebase();
   const { createAccommodation } = useAccommodation();
   const [inclusions, setInclusions] = useState<any>([]);
@@ -72,6 +74,7 @@ function AddAccommodation() {
     e.preventDefault();
     console.log(form)
     createAccommodation({...form, inclusions})
+    navigate('/admin/manage/accommodation')
   }
 
   const addInclusion = () => {
