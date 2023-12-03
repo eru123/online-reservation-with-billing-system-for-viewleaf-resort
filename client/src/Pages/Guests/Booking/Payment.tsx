@@ -30,8 +30,6 @@ function Payment() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(downloadURL)
-    console.log(id)
     payReservation({
       reservationId: id||"",
       receipt: downloadURL
@@ -41,6 +39,7 @@ function Payment() {
       status: "paid",
       note: "Paid"
     })
+
     navigate(`/reservation/${id}`);
   }
 

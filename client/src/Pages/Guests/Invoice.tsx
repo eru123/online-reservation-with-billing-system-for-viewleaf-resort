@@ -52,10 +52,9 @@ function Invoice({}:Props) {
     const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("pending");
     
 
+    
+
     useEffect(()=>{
-
-      
-
       if (data?.[0]) {
         setStatus(data?.[0].status)
       } else {
@@ -180,11 +179,11 @@ function Invoice({}:Props) {
               </IconButton>
             </Tooltip>
           </Paper>
-          <Typography variant="h6" color="initial">Billing Statement #1</Typography>
-          {/* <BookingStatement additional={false}/> */}
+
+          <Typography variant="h6" color="initial">Billing Statement</Typography>
+          { data?.[0]?.invoices &&  <BookingStatement additional={false} form={data?.[0]?.invoices} invoices={data}/> }
+            
           <hr style={{margin:"2em 0"}}/>
-          <Typography variant="h6" color="initial">Billing Statement #2</Typography>
-          {/* <BookingStatement additional={false}/> */}
         </Container>
 
         <Modal
@@ -323,7 +322,6 @@ function Invoice({}:Props) {
                         <Grid item xs={12} sx={{marginBottom:"25px",overflowY:"scroll",maxHeight:"500px"}}>
                             <img style={{width:"100%"}} src="https://sp-uploads.s3.amazonaws.com/uploads/services/2452054/20220310214231_622a70c730534_gcash_skypay_paybills_10032022173641.png_blurred.jpeg" alt="" />
                         </Grid>
-
 
                         <Grid item xs={5} marginBottom={"20px"}>
                             <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
