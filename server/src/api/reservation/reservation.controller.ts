@@ -1,7 +1,16 @@
 import { BodyRequest, QueryRequest, RequestHandler } from 'express';
 import { CheckData } from '../../utilities/checkData';
 import { Conflict, NotFound, UnprocessableEntity } from '../../utilities/errors';
-import { AddExtras, CreateReservation, GetReservations, PayReservation, ReservationStatus, UpdateStatus } from './reservation.types';
+import {
+    AddExtras,
+    CreateReservation,
+    GetReservations,
+    PayReservation,
+    ReservationDocument,
+    ReservationStatus,
+    ReservationInvoices,
+    UpdateStatus
+} from './reservation.types';
 import { InvoiceDocument, InvoicePopulatedDocument } from '../invoice/invoice.types';
 import { Shift } from '../accommodation/accommodation.types';
 import AccommodationModel from '../accommodation/accommodation.model';
@@ -36,12 +45,21 @@ export const getReservations: RequestHandler = async (req: QueryRequest<GetReser
         reservationQuery.status = status;
     }
 
-    const reservations = await ReservationModel.findOne(reservationQuery).exec();
+    const reservations: ReservationDocument[] = await ReservationModel.find(reservationQuery).exec();
     if (!reservations) throw new NotFound('Reservation');
 
-    const invoices = await InvoiceModel.find({ reservation: reservations._id }).exec();
+    const reservationWithInvoices: ReservationInvoices[] = [];
+    for (let i = 0; i < reservations.length; i++) {
+        // Get the invoices of each reservation found
+        const invoices = await InvoiceModel.find({ reservation: reservations[i]._id }, { reservation: 0 }).exec();
+        
+        reservationWithInvoices.push({
+            ...reservations[i].toJSON(),
+            invoices
+        });
+    }
 
-    res.json({ reservations, ...invoices.map((invoice) => invoice.toJSON()) });
+    res.json(reservationWithInvoices);
 };
 
 const reservationTimeLimitInMinutes = 15;
@@ -90,9 +108,9 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
 
     const reservation = new ReservationModel({
         customer: {
-          name,
-          phone,
-          email,
+            name,
+            phone,
+            email
         },
         schedule
     });
@@ -108,12 +126,15 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
         if (shift === Shift.WHOLE) shiftQuery = { $in: [Shift.WHOLE, Shift.DAY, Shift.NIGHT] };
 
         // Find invoices whose accommodationId is the same
-        const invoices: InvoicePopulatedDocument[] = await InvoiceModel.find({ accommodationId, shift: shiftQuery })
+        const existingInvoices: InvoicePopulatedDocument[] = await InvoiceModel.find({
+            accommodationId,
+            shift: shiftQuery
+        })
             .populate('reservation')
             .exec();
 
         // Check if the reservation status is not an "open" status
-        if (invoices.some(({ reservation }) => !openReservationStatuses.includes(reservation.status))) {
+        if (existingInvoices.some(({ reservation }) => !openReservationStatuses.includes(reservation.status))) {
             // This means that there an reservation where the status is not available.
             // Accommodations from the said reservation is not available
             // Therefore, throw error
@@ -144,7 +165,7 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
     }
 
     await reservation.save();
-    await Promise.allSettled(invoices.map((invoice) => invoice.save()));
+    await Promise.all(invoices.map((invoice) => invoice.save()));
 
     setTimeout(() => {
         if (reservation.status === ReservationStatus.PENDING) {
@@ -156,9 +177,7 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
     res.status(201).json({ reservationId: reservation.reservationId });
 };
 
-export const addExtras: RequestHandler = async (_req: BodyRequest<AddExtras>, _res) => {
-    
-}
+export const addExtras: RequestHandler = async (_req: BodyRequest<AddExtras>, _res) => {};
 
 export const updateStatus: RequestHandler = async (req: BodyRequest<UpdateStatus>, res) => {
     const { reservationId, status, note } = req.body;
@@ -178,7 +197,7 @@ export const updateStatus: RequestHandler = async (req: BodyRequest<UpdateStatus
     await reservation.save();
 
     res.sendStatus(204);
-}
+};
 
 export const payReservation: RequestHandler = async (req: BodyRequest<PayReservation>, res) => {
     const { reservationId, receipt } = req.body;
@@ -200,4 +219,4 @@ export const payReservation: RequestHandler = async (req: BodyRequest<PayReserva
     reservation.status = ReservationStatus.PAID;
 
     res.sendStatus(204);
-}
+};
