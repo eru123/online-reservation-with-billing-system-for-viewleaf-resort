@@ -244,16 +244,12 @@ function Booking() {
       // Wait for createReservation to complete before logging reservationData
       await createReservation(form);
 
-      console.log(await reservationData);
-
       sendReservation({
         ...form,
         email: form.email,
         subject: "View Leaf: Reservation Details",
       });
 
-      navigate(`/reservation/${reservationData.reservationId}`);
-  
     } else {
       alert("Invalid OTP");
     }
@@ -262,6 +258,10 @@ function Booking() {
   useEffect(() => {
     updateSchedule(date, shift)
     calculateCost(form,parseInt(shift||"0"))
+    if (reservationData) {
+      console.log(reservationData);
+      navigate(`/payment/${reservationData.reservationId}`);
+    }
   }, [form])
 
   return (
