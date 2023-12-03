@@ -151,7 +151,7 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
         }
     }, 1000 * 60 * reservationTimeLimitInMinutes);
 
-    res.sendStatus(201);
+    res.status(201).json({ reservationId: reservation.reservationId });
 };
 
 export const addExtras: RequestHandler = async (_req: BodyRequest<AddExtras>, _res) => {
