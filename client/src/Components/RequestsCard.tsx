@@ -17,7 +17,7 @@ type Props = {
 function RequestsCard({status,data}:Props) {
     return <>
         <Paper variant="elevation" component={Link} to={`/admin/invoice/${data.reservationId}`} elevation={3} sx={{padding:"1em",borderRadius:"8px",maxWidth:"1200px"}}>
-            <Box display="flex">
+            <Box display="flex" flexWrap={"wrap"}>
               <Box flexGrow={"1"}>
                   <Typography variant="h5" color="initial">#{data?.reservationId}</Typography>
                   <Typography variant="subtitle1" color="#535353">Reference Number</Typography>
