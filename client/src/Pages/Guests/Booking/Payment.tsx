@@ -28,7 +28,6 @@ function Payment() {
   const {data: content, loading: contentLoading, error: contentError, getContent} = useContent();
   const {downloadURL, uploading, uploadFile } = useFirebase();
 
-
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(downloadURL)
@@ -43,6 +42,31 @@ function Payment() {
       note: "Paid"
     })
     navigate(`/reservation/${id}`);
+  }
+
+  const calculateCost = (data: any) =>{
+    let inclusions = 0
+    let guests = 0
+    let accommodations = 0
+    let total = 0
+
+    data[0].invoices.map((item: any)=>{
+      accommodations += item.rate
+
+      guests += 
+        parseFloat(item.guests.adult) * parseFloat(item.guestFee.adult) +
+        parseFloat(item.guests.kids) * parseFloat(item.guestFee.kids) +
+        parseFloat(item.guests.senior) * (parseFloat(item.guestFee.adult) * 0.8) +
+        parseFloat(item.guests.pwd) * (parseFloat(item.guestFee.adult) * 0.8)
+
+      item.inclusions.map((inclusion: any)=>{
+        inclusions += inclusion.price * inclusion.quantity
+      })
+    })
+    
+    total = accommodations + inclusions + guests
+
+    return {total: total, minimum: accommodations}
   }
 
   useEffect(()=>{
@@ -62,11 +86,11 @@ function Payment() {
           <Box display="flex" gap={4}>
             <Box >
               <Typography variant="subtitle2" color="initial" sx={{opacity:'.6'}}>Total</Typography>
-              <Typography variant="h6" color="initial" fontWeight={600}>₱1,150</Typography>
+              <Typography variant="h6" color="initial" fontWeight={600}>₱{reservation ? calculateCost(reservation)?.total : ""}</Typography>
             </Box>
             <Box >
               <Typography variant="subtitle2" color="initial" sx={{opacity:'.6'}}>Min. Payment</Typography>
-              <Typography variant="h6" color="initial" fontWeight={600}>₱400</Typography>
+              <Typography variant="h6" color="initial" fontWeight={600}>₱{reservation ? calculateCost(reservation)?.minimum : ""}</Typography>
             </Box>
           </Box>
           <div style={{marginTop:"25px",marginBottom:"25px"}}>

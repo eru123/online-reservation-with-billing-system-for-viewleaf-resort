@@ -52,7 +52,7 @@ export const getReservations: RequestHandler = async (req: QueryRequest<GetReser
     for (let i = 0; i < reservations.length; i++) {
         // Get the invoices of each reservation found
         const invoices = await InvoiceModel.find({ reservation: reservations[i]._id }, { reservation: 0 }).exec();
-        
+
         reservationWithInvoices.push({
             ...reservations[i].toJSON(),
             invoices
@@ -133,8 +133,22 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
             .populate('reservation')
             .exec();
 
-        // Check if the reservation status is not an "open" status
-        if (existingInvoices.some(({ reservation }) => !openReservationStatuses.includes(reservation.status))) {
+        // Get the bounds of the schedule
+        const minSchedule = new Date(schedule);
+        minSchedule.setHours(0, 0, 0, 0);
+
+        const maxSchedule = new Date(schedule);
+        maxSchedule.setHours(23, 59, 59, 999);
+
+        // Check if the reservation status is not an "open" status for the given schedule
+        if (
+            existingInvoices.some(
+                ({ reservation }) =>
+                    !openReservationStatuses.includes(reservation.status) &&
+                    reservation.schedule >= minSchedule &&
+                    reservation.schedule <= maxSchedule
+            )
+        ) {
             // This means that there an reservation where the status is not available.
             // Accommodations from the said reservation is not available
             // Therefore, throw error
