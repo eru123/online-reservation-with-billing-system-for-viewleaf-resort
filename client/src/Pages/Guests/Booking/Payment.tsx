@@ -93,31 +93,31 @@ function Payment() {
               <Typography variant="h6" color="initial" fontWeight={600}>₱{reservation ? calculateCost(reservation)?.minimum : ""}</Typography>
             </Box>
           </Box>
-            <div style={{marginTop:"25px",marginBottom:"25px"}}>
-              <iframe
-                title="PDF Viewer" 
-                src={content?.payment} 
-                width="100%"
-                height="800px" 
-              />
-            </div>
-            <div style={{display:"flex",alignItems:"center"}}>
-                <FormControlLabel control={<Checkbox defaultChecked />} label="I agree with ViewLeaf's" />
-                <Typography variant="body1" component={"a"} fontWeight={500} color="initial" marginLeft={"-12px"}>Policies</Typography>
-            </div>
-            <div style={{display:"flex",alignItems:"center",justifyContent:"center",margin:"2em 0"}}>
-              <img width={"50%"} src={downloadURL} alt="" />
-            </div>
-            <div style={{display:"flex",alignItems:"center",justifyContent:"center",margin:"2em 0",gap:'15px'}}>
-                <input required type="file" name="upload" id="upload" style={{display:"none"}} onChange={(e:any)=>{uploadFile(e.target.files[0], 'orbs')}}/>
-                <label htmlFor="upload">
-                  <Chip label="Upload Payment Receipt " variant="outlined" onClick={()=>{}}/>
-                </label>
-                {/* <Chip label="Send" variant="filled" color='primary' sx={{color:"white"}} onClick={()=>{}}/> */}
-                <Button variant="contained" color="primary" type="submit">
-                  Pay Now
-                </Button>
-            </div>
+          <div style={{marginTop:"25px",marginBottom:"25px"}}>
+            <iframe
+              title="PDF Viewer" 
+              src={content?.payment} 
+              width="100%"
+              height="800px" 
+            />
+          </div>
+          <div style={{display:"flex",alignItems:"center"}}>
+            <FormControlLabel control={<Checkbox defaultChecked />} label="I agree with ViewLeaf's" />
+            <Typography variant="body1" component={"a"} fontWeight={500} color="initial" marginLeft={"-12px"}>Policies</Typography>
+          </div>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"center",margin:"2em 0"}}>
+            <img width={"50%"} src={downloadURL} alt="" />
+          </div>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"center",margin:"2em 0",gap:'15px'}}>
+              <input required type="file" name="upload" id="upload" style={{display:"none"}} onChange={(e:any)=>{uploadFile(e.target.files[0], 'orbs')}}/>
+              <label htmlFor="upload">
+                <Chip label="Upload Payment Receipt " variant="outlined" onClick={()=>{}}/>
+              </label>
+              {/* <Chip label="Send" variant="filled" color='primary' sx={{color:"white"}} onClick={()=>{}}/> */}
+              <Button variant="contained" color="primary" type="submit">
+                Pay Now
+              </Button>
+          </div>
         </Container>
       </form>
     </>
