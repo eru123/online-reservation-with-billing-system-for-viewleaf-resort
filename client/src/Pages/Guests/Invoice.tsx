@@ -153,7 +153,7 @@ function Invoice({}:Props) {
                 <Typography variant="h6" color="initial" sx={{opacity:".6"}}>Reference Number</Typography>
               </Box>
               <Box >
-                <Typography textAlign={"end"} variant="h4" color="primary" >{data?.[0].schedule} - Shift</Typography>
+                <Typography textAlign={"end"} variant="h4" color="primary" >{data?.[0].schedule} - {data?.[0]?.invoices?.[0].shift}</Typography>
                 <Typography textAlign={"end"} variant="h6" color="initial" sx={{opacity:".6"}}>Scheduled Date</Typography>
               </Box>
           </Box>
