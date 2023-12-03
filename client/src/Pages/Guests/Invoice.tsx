@@ -49,17 +49,26 @@ function Invoice({}:Props) {
     // approved,pending, checkedOut, canceled, refunded
     const {id} = useParams();
     const {data, loading, error, getReservation} = useReservation();
-    const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("declined");
+    const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("pending");
     
 
     useEffect(()=>{
-      getReservation({
-        reservationId: id || ""
-      })
-      setStatus(data?.reservations?.status || "pending")
-    }, [])
 
-    // 
+      
+
+      if (data?.[0]) {
+        setStatus(data?.[0].status)
+      } else {
+        getReservation({
+          reservationId: id || ""
+        })
+      }
+    }, [data])
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
     return<>
         <Container maxWidth="lg"  sx={{padding:"6em 0 7em"}}>
           <Box display="flex" gap={"15px"} sx={{flexWrap:"wrap"}} mt={2}>
@@ -141,11 +150,11 @@ function Invoice({}:Props) {
           {/*Header  */}
           <Box display="flex" sx={{margin:"25px 0"}}>
               <Box sx={{flexGrow:"1"}}>
-                <Typography variant="h4" color="primary" >#{data?.reservations?.reservationId}</Typography>
+                <Typography variant="h4" color="primary" >#{data?.[0].reservationId}</Typography>
                 <Typography variant="h6" color="initial" sx={{opacity:".6"}}>Reference Number</Typography>
               </Box>
               <Box >
-                <Typography textAlign={"end"} variant="h4" color="primary" >{data?.reservations?.schedule} - Shift</Typography>
+                <Typography textAlign={"end"} variant="h4" color="primary" >{data?.[0].schedule} - Shift</Typography>
                 <Typography textAlign={"end"} variant="h6" color="initial" sx={{opacity:".6"}}>Scheduled Date</Typography>
               </Box>
           </Box>
@@ -153,15 +162,15 @@ function Invoice({}:Props) {
           {/* User Details */}
           <Paper variant="elevation" elevation={3} sx={{borderRadius:"8px",background:"#e3e3e3",padding:"1em",margin:"2em 0" ,display:"flex",alignItems:"center"}}>
             <Box sx={{flexGrow:"1"}}>
-              <Typography variant="h5" color="initial" fontWeight={500}>{data?.reservations?.customer?.name}</Typography>
+              <Typography variant="h5" color="initial" fontWeight={500}>{data?.[0].customer?.name}</Typography>
               <Box display="flex" gap={"15px"} mt={1}>
                 <Box display="flex" gap="5px">
                     <CallIcon/>
-                    <Typography variant="body1" color="initial">{data?.reservations?.customer?.phone}</Typography>
+                    <Typography variant="body1" color="initial">{data?.[0].customer?.phone}</Typography>
                 </Box>
                 <Box display="flex" gap="5px">
                     <EmailIcon/>
-                    <Typography variant="body1" color="initial">{data?.reservations?.customer?.email}</Typography>
+                    <Typography variant="body1" color="initial">{data?.[0].customer?.email}</Typography>
                 </Box>
               </Box>
             </Box>
