@@ -23,7 +23,7 @@ interface ReservationData {
 }
 
 interface GetReservation{
-  reservationId?: string;
+  reservationId?: string | undefined;
 }
 
 interface PayReservation{
