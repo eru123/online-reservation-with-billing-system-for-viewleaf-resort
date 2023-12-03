@@ -13,7 +13,7 @@ import QuantitySelector from './QuantitySelector';
 import { useParams } from 'react-router-dom';
 
 type Props={
-  variant: "selected"|"view"|"manage"|"additional"
+  variant: "selected"|"view"|"manage"|"additional" | "display"
   openModal : React.Dispatch<React.SetStateAction<string>>
   accommodation?: any;
   selectAccommodation?: any;
