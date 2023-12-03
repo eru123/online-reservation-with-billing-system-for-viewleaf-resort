@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 import { Shift } from '../accommodation/accommodation.types';
+import { InvoiceDocument } from '../invoice/invoice.types';
 
 export enum ReservationStatus {
     CANCELLING = 'cancelling',
@@ -84,4 +85,9 @@ export type UpdateStatus = {
 export type PayReservation = {
     reservationId: string;
     receipt: string;
+}
+
+export type ReservationInvoices = {
+    reservation: ReservationDocument,
+    invoices: Omit<InvoiceDocument, 'reservation'>[]
 }
