@@ -37,20 +37,20 @@ export default function TestReservation() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(form)
+    // console.log(form)
     // createReservation({...form})
-    // getReservation({
-    //   reservationId: "-LUJs-e1L170zLCA-un5W9O3Kr75EXP0RI"
-    // })
+    getReservation({
+      reservationId: "SNKbs-phJ1RuoGLGcZg6yB0y1ccfCTrCyv"
+    })
     // payReservation({
     //   reservationId: "7CZ-sIdws1XahsSu7ncj2ojWCXEB-Fo_Ng",
     //   receipt: "test"
     // })
-    updateReservation({
-      reservationId: "7CZ-sIdws1XahsSu7ncj2ojWCXEB-Fo_Ng",
-      status: "approved",
-      note: "testing"
-    })
+    // updateReservation({
+    //   reservationId: "7CZ-sIdws1XahsSu7ncj2ojWCXEB-Fo_Ng",
+    //   status: "approved",
+    //   note: "testing"
+    // })
   }
   
   return (
