@@ -93,18 +93,13 @@ function Payment() {
               <Typography variant="h6" color="initial" fontWeight={600}>₱{reservation ? calculateCost(reservation)?.minimum : ""}</Typography>
             </Box>
           </Box>
-          <div style={{marginTop:"25px",marginBottom:"25px"}}>
-              {/* Replace this div if will put the PDF viewer */}
-            <div style={{background:"#D9D9D9",height:"100vh",borderRadius:"8px",display:"flex",justifyContent:"center",alignItems:"center",maxHeight:"1100px"}}>
-              <Box>
-                <iframe
-                  title="PDF Viewer" 
-                  src={content?.payment} 
-                  width="100%"
-                  height="800px" 
-                />
-              </Box>
-            </div>
+            <div style={{marginTop:"25px",marginBottom:"25px"}}>
+              <iframe
+                title="PDF Viewer" 
+                src={content?.payment} 
+                width="100%"
+                height="800px" 
+              />
             </div>
             <div style={{display:"flex",alignItems:"center"}}>
                 <FormControlLabel control={<Checkbox defaultChecked />} label="I agree with ViewLeaf's" />
