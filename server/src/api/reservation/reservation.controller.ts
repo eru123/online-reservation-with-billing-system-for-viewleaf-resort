@@ -41,7 +41,7 @@ export const getReservations: RequestHandler = async (req: QueryRequest<GetReser
 
     const invoices = await InvoiceModel.find({ reservation: reservations._id }).exec();
 
-    res.json({ reservations, invoices });
+    res.json({ reservations, ...invoices.map((invoice) => invoice.toJSON()) });
 };
 
 const reservationTimeLimitInMinutes = 15;
@@ -142,7 +142,7 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
     }
 
     await reservation.save();
-    await InvoiceModel.insertMany(invoices);
+    await Promise.allSettled(invoices.map((invoice) => invoice.save()));
 
     setTimeout(() => {
         if (reservation.status === ReservationStatus.PENDING) {
