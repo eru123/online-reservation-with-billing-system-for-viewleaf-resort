@@ -1,5 +1,6 @@
 import {
     addShift, 
+    getAccommodations,
     createAccommodation, 
     updateAccommodationDetails, 
     updateShiftFees 
@@ -12,46 +13,51 @@ import authenticate from '../../middlewares/authenticate';
 
 const router = Router();
 
+
+
+router.get('/', asynchronousHandler(getAccommodations));
+
 router.use(authenticate, limitUsers(Role.ADMIN));
 
 /**
- * description
- * pax
- * image
- * type
+ * description: string
+ * pax: string
+ * image: string
+ * type: string
  * fees [
- *     shift
- *     rate
- *     adultFee
- *     kidsFee
- * ]  
+ *     shift: string
+ *     rate: number
+ *     adultFee: number
+ *     kidsFee: number
+ * ]
  */
 router.post('/', asynchronousHandler(createAccommodation));
 
 /**
- * accommodationId
- * description (optional)
- * pax (optional)
- * image (optional)
- * type (optional)
+ * accommodationId: string
+ * description?: string
+ * pax?: string
+ * image?: string
+ * type?: string
+ * availability?: string
  */
 router.patch('/', asynchronousHandler(updateAccommodationDetails));
 
 /**
  * accommodationId
- * shift
- * rate
- * adultFee
- * kidsFee
+ * shift: string
+ * rate: number
+ * adultFee: number
+ * kidsFee: number
  */
 router.post('/shifts', asynchronousHandler(addShift));
 
 /**
  * accommodationId
- * shift
- * rate (optional)
- * adultFee (optional)
- * kidsFee (optional)
+ * shift: string
+ * rate?: number
+ * adultFee?: number
+ * kidsFee?: number
  */
 router.patch('/shifts', asynchronousHandler(updateShiftFees));
 

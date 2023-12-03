@@ -1,4 +1,6 @@
-import { Document } from "mongoose";
+import { Document } from 'mongoose';
+import { Shift } from '../accommodation/accommodation.types';
+import { InvoiceDocument } from '../invoice/invoice.types';
 
 export enum ReservationStatus {
     CANCELLING = 'cancelling',
@@ -37,4 +39,55 @@ export interface Reservation {
 export interface ReservationDocument extends Reservation, Document {
     createdAt: Date;
     updatedAt: Date;
+}
+
+/* REQUESTS */
+
+type ReserveAccommodation = {
+    accommodationId: string;
+    shift: Shift;
+    guests: {
+        adult: number;
+        kids: number;
+        senior: number;
+        pwd: number;
+    };
+    inclusions: {
+        name: string;
+        quantity: number;
+    }[];
+};
+
+export type CreateReservation = {
+    name: string;
+    phone: string;
+    email: string;
+    schedule: number;
+    accommodations: ReserveAccommodation[];
+};
+
+export type GetReservations = {
+    reservationId?: string;
+    status?: ReservationStatus;
+};
+
+export type AddExtras = {
+    reservationId: string;
+    accommodations: ReserveAccommodation[];
+};
+
+export type UpdateStatus = {
+    reservationId: string;
+    status: ReservationStatus;
+    note: string;
+}
+
+export type PayReservation = {
+    reservationId: string;
+    receipt: string;
+}
+
+export type ReservationInvoices = {
+    reservation: ReservationDocument,
+    invoices: Omit<InvoiceDocument, 'reservation'>[]
 }

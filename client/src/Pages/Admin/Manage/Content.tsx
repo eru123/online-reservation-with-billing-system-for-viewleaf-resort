@@ -10,7 +10,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import Modal from '@mui/material/Modal';
 import { Grid,Button, TextField } from '@mui/material'
-import TESTCalendar from '../../../Components/TESTCalendar'
 
 import useFAQ from '../../../Hooks/useFAQ'
 import useContent from '../../../Hooks/useContent'
@@ -116,16 +115,14 @@ function Content() {
 
     const handleEditAbout: React.FormEventHandler<HTMLFormElement> = (e) => {
       e.preventDefault()
-
+      
       // Edit About
       updateContent({
         about: about
       })
 
       // Refresh data
-      getFAQ();
-      getFAQ();
-      getFAQ();
+      getContent();
 
       // Clear Form
       clearForm()
@@ -190,33 +187,30 @@ function Content() {
                             <NavigateNextIcon />
                         </IconButton>
                     </Box>
-
                     {accordionOpen === "faq"?
-
-                      
-                        <Box sx={{padding:"0 1em 1em"}}>
-                            <hr style={{marginBottom:"1em"}}/>
-                            {Array.isArray(faqs) && faqs?.map((faq: any) => (
-                              <Box >
-                                  <Box display="flex" alignItems={"center"} marginBottom={".2em"} >
-                                      <Typography sx={{flexGrow:"1"}} variant="subtitle1" fontWeight={500} color="initial" textAlign={"justify"}>{faq.question}</Typography>
-                                      <IconButton aria-label="" onClick={() => {
-                                        setOpen("editFAQ")
-                                        setSelectedFaq(faq)
-                                      }}>
-                                          <EditIcon />
-                                      </IconButton>
-                                      <IconButton aria-label="" onClick={() => {
-                                        setOpen("deleteFAQ")
-                                        setSelectedFaq(faq)
-                                      }}>
-                                          <DeleteIcon />
-                                      </IconButton>
-                                  </Box>
-                                  <Typography variant="body2" color="initial" textAlign={"justify"}>{faq.answer}</Typography>
-                              </Box>
-                            ))}
-                        </Box>
+                      <Box sx={{padding:"0 1em 1em"}}>
+                          <hr style={{marginBottom:"1em"}}/>
+                          {Array.isArray(faqs) && faqs?.map((faq: any) => (
+                            <Box >
+                                <Box display="flex" alignItems={"center"} marginBottom={".2em"} >
+                                    <Typography sx={{flexGrow:"1"}} variant="subtitle1" fontWeight={500} color="initial" textAlign={"justify"}>{faq.question}</Typography>
+                                    <IconButton aria-label="" onClick={() => {
+                                      setOpen("editFAQ")
+                                      setSelectedFaq(faq)
+                                    }}>
+                                        <EditIcon />
+                                    </IconButton>
+                                    <IconButton aria-label="" onClick={() => {
+                                      setOpen("deleteFAQ")
+                                      setSelectedFaq(faq)
+                                    }}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Box>
+                                <Typography variant="body2" color="initial" textAlign={"justify"}>{faq.answer}</Typography>
+                            </Box>
+                          ))}
+                      </Box>
                     :""}
                 </Paper>
             </Box>
@@ -349,9 +343,6 @@ function Content() {
                     </>:""}
 
 
-
-
-
                     {open === "editAbout"?<>
                         <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
                             Edit About
@@ -375,12 +366,12 @@ function Content() {
 
                               </Grid>
                               <Grid item xs={5}>
-                                <Button variant="text" fullWidth onClick={()=>{setOpen("")}}>
+                                <Button variant="text" sx={{color:"black"}} fullWidth onClick={()=>{setOpen("")}}>
                                   back
                                 </Button>
                               </Grid>
                               <Grid item xs={7}>
-                                  <Button variant="contained" color='primary' fullWidth onClick={()=>setOpen("")} type='submit'>
+                                  <Button variant="contained" color='primary' fullWidth type='submit'>
                                     Confirm
                                   </Button>
                               </Grid>

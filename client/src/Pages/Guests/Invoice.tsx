@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box'
@@ -27,12 +27,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import RateInput from '../../Components/RateInput';
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
+import { Link, useParams } from 'react-router-dom';
 
-
-
+import useReservation from '../../Hooks/useReservation';
 
 type Props = {
-    variant: "manage"|"view"
 }
 const style = {
     position: 'absolute' as 'absolute',
@@ -45,101 +44,146 @@ const style = {
     p: 4,
     borderRadius:"8px"
 };
-function Invoice({variant}:Props) {
+function Invoice({}:Props) {
     const [open, setOpen] = React.useState("");
     // approved,pending, checkedOut, canceled, refunded
-    const [status, setStatus] = React.useState("pending");
+    const {id} = useParams();
+    const {data, loading, error, getReservation} = useReservation();
+    const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("pending");
+    
+
+    
+
+    useEffect(()=>{
+      if (data?.[0]) {
+        setStatus(data?.[0].status)
+      } else {
+        getReservation({
+          reservationId: id || ""
+        })
+      }
+    }, [data])
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
     return<>
         <Container maxWidth="lg"  sx={{padding:"6em 0 7em"}}>
-            {/* 
-            ===== ALERT TYPES =====
-            <Alert severity="success">Your requests is got approved</Alert>
-            <Alert severity="error">Your requests is got declined</Alert>
-            <Alert severity="warning">Your requests is got approved</Alert> 
-            
-            */}
-            <Box display="flex" gap={"15px"} sx={{flexWrap:"wrap"}} mt={2}>
-                {status ==="checkedOut" || status === "pending" || status === "canceled" || status === "refunded"?"":<>
-                    <Chip icon={<CurrencyExchangeIcon />} label="Get ERefund" variant="outlined" onClick={()=>{setOpen("refund")}} />
-                    <Chip icon={<EventRepeatIcon     />} label="Reschedule Reservation" variant="outlined" onClick={()=>{setOpen("reschedule")}} />
-                    <Chip icon={<DoNotDisturbAltIcon />} label="Cancel Reservation" variant="outlined" onClick={()=>{setOpen("cancel")}} />
-                </>}
-                <Box sx={{flexGrow:"1"}} ></Box>
-                {variant ==="view" && status === "checkedOut"?
-                    <Chip icon={<StarIcon />} label="Rate our Service" variant="filled" onClick={()=>{setOpen("rate")}} color="primary" />:""    
-                }
-                {variant ==="manage"?
-                    <Chip icon={<AddIcon />} label="Add" variant="filled" onClick={()=>{}} color="primary" />:""    
-                }
+          <Box display="flex" gap={"15px"} sx={{flexWrap:"wrap"}} mt={2}>
+            {status === "approved"?<>
+              <Chip icon={<CurrencyExchangeIcon />} label="Get Refund" variant="outlined" onClick={()=>{setOpen("refund")}} />
+              <Chip icon={<EventRepeatIcon />} label="Reschedule Reservation" variant="outlined" onClick={()=>{setOpen("reschedule")}} />
+              <Chip icon={<DoNotDisturbAltIcon />} label="Cancel Reservation" variant="outlined" onClick={()=>{setOpen("cancel")}} />
+            </>:""}
+            <Box sx={{flexGrow:"1"}} ></Box>
+            {status === "checkedOut"?
+              <Chip icon={<StarIcon />} label="Rate our Service" variant="filled" onClick={()=>{setOpen("rate")}} color="primary" />:""    
+            }
+          </Box>
+
+          {status==="pending"?
+            <Box sx={{position:"relative"}}>
+              <Alert severity="warning" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>Please make the payment to finalize your reservation, Thank you!</Alert>
+              <Chip label="Pay now" variant="outlined" onClick={()=>{}} component={Link} to={"/payment/:id"} color="primary" sx={{position:"absolute",top:"50%",right:"10px",transform:"translateY(-50%)"}}/>   
             </Box>
-
-            {status==="pending"?
-                <Alert severity="warning" sx={{margin:"2em 0"}}>Your reservation is pending for verification</Alert>
-            :""}
-            {status==="rescheduling"?
-                <Alert severity="info" sx={{margin:"2em 0"}}>Your reservation is ongoing for reschedule</Alert>
-            :""}
-            {status==="canceled"?
-                <Alert severity="error" sx={{margin:"2em 0"}}>Your reservation is canceled</Alert>
-            :""}
-            {status==="refunded"?
-                <Alert severity="error" sx={{margin:"2em 0"}}>Your reservation is refunded</Alert>
-            :""}
-            {status==="approved"?
-                <Alert severity="info" sx={{margin:"2em 0"}}>Your reservation is approved</Alert>
-            :""}
-            
-
-
-
-            <Box display="flex" sx={{margin:"25px 0"}}>
-                <Box sx={{flexGrow:"1"}}>
-                    <Typography variant="h4" color="primary" >#123A23123</Typography>
-                    <Typography variant="h6" color="initial" sx={{opacity:".6"}}>Reference Number</Typography>
-                </Box>
-                <Box >
-                    <Typography textAlign={"end"} variant="h4" color="primary" >Oct 25, 2023 - Day Shift</Typography>
-                    <Typography textAlign={"end"} variant="h6" color="initial" sx={{opacity:".6"}}>Scheduled Date</Typography>
-                </Box>
-            </Box>
-            
-            
-            <Paper variant="elevation" elevation={3} sx={{borderRadius:"8px",background:"#e3e3e3",padding:"1em",margin:"2em 0" ,display:"flex",alignItems:"center"}}>
-                <Box sx={{flexGrow:"1"}}>
-                    <Typography variant="h5" color="initial" fontWeight={500}>Jon Doe</Typography>
-                    <Box display="flex" gap={"15px"} mt={1}>
-                        <Box display="flex" gap="5px">
-                            <CallIcon/>
-                            <Typography variant="body1" color="initial">0915-232-1231</Typography>
-                        </Box>
-                        <Box display="flex" gap="5px">
-                            <EmailIcon/>
-                            <Typography variant="body1" color="initial">jondoe@gmail.com</Typography>
-                        </Box>
-                    </Box>
-                </Box>
-                <Tooltip title="View Receipt">
-                    <IconButton aria-label="" onClick={()=>{setOpen("viewReceipt")}} size="large" >
-                        <ReceiptLongIcon  fontSize="inherit"/>
-                    </IconButton>
-                </Tooltip>
-                
+          :""}
+          {status==="paid"?
+            <Alert severity="info" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>Thanks for your reservation! We've received your payment and currently verifying it. We'll update you shortly!</Alert>
+          :""}
+          {status==="approved"?
+            <Alert severity="info" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>Your reservation is active, We are excited to see you here!</Alert>
+          :""}
+          {status==="checkedIn"?
+            <Alert severity="warning" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>Your reservation has been already been checked in</Alert>
+          :""}
+          {status==="checkedOut"?
+            <Alert severity="success" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>This reservation is done, We are happy to serve you!</Alert>
+          :""}
+          {status==="declined"?<>
+            <Alert severity="error" sx={{margin:"2em 0 0", zIndex:"23"}}>This reservation is declined, We are sorry!</Alert>
+            <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+              <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+              <Typography variant="body2"  color="initial">
+                Lorem, ipsum dolor sit amet cons dolorem animi? Ab quae a animi doloribus, debitis  corrupti assumenda dicta soluta laboriosam autem, necessitatibus dolorum eum, ducimus fugiat at adipisci quibusdam odio culpa obcaecati iure consequatur tempora eligendi distinctio quis numquam praesentium veritatis? Voluptate sapiente, inventore eveniet aspernatur harum delectus qui quo. Repellat quisquam minus fugit assumenda error nesciunt. Repellat corporis animi quam qui ab delectus deserunt a fugiat quod quae quibusdam natus explicabo necessitatibus eius, et corrupti illo neque ex molestiae voluptate itaque iste dolore ullam. Debitis quisquam harum voluptatum. Nesciunt, consectetur quas. Vero ducimus magnam laborum tempora, ea beatae sed. Id saepe vel voluptas iste. Quaerat, dignissimos. Asperiores mollitia culpa molestiae quasi. Iusto quisquam in voluptatum alias commodi obcaecati at, officiis quis eius ipsam eveniet soluta fuga, autem natus odit provident aut aliquam. Consequuntur ex excepturi, obcaecati doloremque rerum molestias natus animi autem illum maxime hic explicabo numquam voluptate quas suscipit atque commodi, molestiae aspernatur ipsa earum est quisquam vitae? Suscipit nesciunt voluptatem illum veniam, omnis praesentium iste recusandae architecto exercitationem ad temporibus quod quae sunt, sed officia explicabo culpa itaque iusto maxime asperiores hic sint! Nihil, vero! Autem blanditiis doloremque repellendus suscipit sed nobis, omnis dolore fuga laboriosam reprehenderit saepe temporibus inventore, possimus assumenda ipsum obcaecati ad sunt id!
+              </Typography>
             </Paper>
-            <Typography variant="h6" color="initial">Billing Statement #1</Typography>
-            <BookingStatement/>
-            <Box sx={{padding:"0 32px"}}>
-                <Typography textAlign={"end"} variant="h6" color="initial">TOTAL : ₱1,150</Typography>
-                <Typography textAlign={"end"} variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of ₱400  </Typography>
-            </Box>
+          </>:""}
+          {status==="refunding"?<>
+            <Alert severity="warning" sx={{margin:"2em 0 0", zIndex:"23"}}>This reservation requested to refund</Alert>
+            <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+              <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+              <Typography variant="body2"  color="initial">
+                Lorem, ipsum dolor sit amet cons dolorem animi? Ab quae a animi doloribus, debitis  corrupti assumenda dicta soluta laboriosam autem, necessitatibus dolorum eum, ducimus fugiat at adipisci quibusdam odio culpa obcaecati iure consequatur tempora eligendi distinctio quis numquam praesentium veritatis? Voluptate sapiente, inventore eveniet aspernatur harum delectus qui quo. Repellat quisquam minus fugit assumenda error nesciunt. Repellat corporis animi quam qui ab delectus deserunt a fugiat quod quae quibusdam natus explicabo necessitatibus eius, et corrupti illo neque ex molestiae voluptate itaque iste dolore ullam. Debitis quisquam harum voluptatum. Nesciunt, consectetur quas. Vero ducimus magnam laborum tempora, ea beatae sed. Id saepe vel voluptas iste. Quaerat, dignissimos. Asperiores mollitia culpa molestiae quasi. Iusto quisquam in voluptatum alias commodi obcaecati at, officiis quis eius ipsam eveniet soluta fuga, autem natus odit provident aut aliquam. Consequuntur ex excepturi, obcaecati doloremque rerum molestias natus animi autem illum maxime hic explicabo numquam voluptate quas suscipit atque commodi, molestiae aspernatur ipsa earum est quisquam vitae? Suscipit nesciunt voluptatem illum veniam, omnis praesentium iste recusandae architecto exercitationem ad temporibus quod quae sunt, sed officia explicabo culpa itaque iusto maxime asperiores hic sint! Nihil, vero! Autem blanditiis doloremque repellendus suscipit sed nobis, omnis dolore fuga laboriosam reprehenderit saepe temporibus inventore, possimus assumenda ipsum obcaecati ad sunt id!
+              </Typography>
+            </Paper>
+          </>:""}
+          {status==="cancelling"?<>
+            <Alert severity="warning" sx={{margin:"2em 0 0", zIndex:"23"}}>This reservation requested to cancel</Alert>
+            <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+              <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+              <Typography variant="body2"  color="initial">
+                Lorem, ipsum dolor sit amet cons dolorem animi? Ab quae a animi doloribus, debitis  corrupti assumenda dicta soluta laboriosam autem, necessitatibus dolorum eum, ducimus fugiat at adipisci quibusdam odio culpa obcaecati iure consequatur tempora eligendi distinctio quis numquam praesentium veritatis? Voluptate sapiente, inventore eveniet aspernatur harum delectus qui quo. Repellat quisquam minus fugit assumenda error nesciunt. Repellat corporis animi quam qui ab delectus deserunt a fugiat quod quae quibusdam natus explicabo necessitatibus eius, et corrupti illo neque ex molestiae voluptate itaque iste dolore ullam. Debitis quisquam harum voluptatum. Nesciunt, consectetur quas. Vero ducimus magnam laborum tempora, ea beatae sed. Id saepe vel voluptas iste. Quaerat, dignissimos. Asperiores mollitia culpa molestiae quasi. Iusto quisquam in voluptatum alias commodi obcaecati at, officiis quis eius ipsam eveniet soluta fuga, autem natus odit provident aut aliquam. Consequuntur ex excepturi, obcaecati doloremque rerum molestias natus animi autem illum maxime hic explicabo numquam voluptate quas suscipit atque commodi, molestiae aspernatur ipsa earum est quisquam vitae? Suscipit nesciunt voluptatem illum veniam, omnis praesentium iste recusandae architecto exercitationem ad temporibus quod quae sunt, sed officia explicabo culpa itaque iusto maxime asperiores hic sint! Nihil, vero! Autem blanditiis doloremque repellendus suscipit sed nobis, omnis dolore fuga laboriosam reprehenderit saepe temporibus inventore, possimus assumenda ipsum obcaecati ad sunt id!
+              </Typography>
+            </Paper>
+          </>:""}
+          {status==="rescheduling"?<>
+            <Alert severity="warning" sx={{margin:"2em 0 0", zIndex:"23"}}>This reservation requested to be reschedule</Alert>
+            <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+              <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+              <Typography variant="body2"  color="initial">
+                Lorem, ipsum dolor sit amet cons dolorem animi? Ab quae a animi doloribus, debitis  corrupti assumenda dicta soluta laboriosam autem, necessitatibus dolorum eum, ducimus fugiat at adipisci quibusdam odio culpa obcaecati iure consequatur tempora eligendi distinctio quis numquam praesentium veritatis? Voluptate sapiente, inventore eveniet aspernatur harum delectus qui quo. Repellat quisquam minus fugit assumenda error nesciunt. Repellat corporis animi quam qui ab delectus deserunt a fugiat quod quae quibusdam natus explicabo necessitatibus eius, et corrupti illo neque ex molestiae voluptate itaque iste dolore ullam. Debitis quisquam harum voluptatum. Nesciunt, consectetur quas. Vero ducimus magnam laborum tempora, ea beatae sed. Id saepe vel voluptas iste. Quaerat, dignissimos. Asperiores mollitia culpa molestiae quasi. Iusto quisquam in voluptatum alias commodi obcaecati at, officiis quis eius ipsam eveniet soluta fuga, autem natus odit provident aut aliquam. Consequuntur ex excepturi, obcaecati doloremque rerum molestias natus animi autem illum maxime hic explicabo numquam voluptate quas suscipit atque commodi, molestiae aspernatur ipsa earum est quisquam vitae? Suscipit nesciunt voluptatem illum veniam, omnis praesentium iste recusandae architecto exercitationem ad temporibus quod quae sunt, sed officia explicabo culpa itaque iusto maxime asperiores hic sint! Nihil, vero! Autem blanditiis doloremque repellendus suscipit sed nobis, omnis dolore fuga laboriosam reprehenderit saepe temporibus inventore, possimus assumenda ipsum obcaecati ad sunt id!
+              </Typography>
+            </Paper>
+          </>:""}
 
-            <hr style={{margin:"2em 0"}}/>
+          {status==="refunded"?<>
+            <Alert severity="error" sx={{margin:"2em 0 ", zIndex:"23"}}>This reservation is refunded</Alert>
+          </>:""}
 
-            <Typography variant="h6" color="initial">Billing Statement #2</Typography>
-            <BookingStatement/>
-            <Box sx={{padding:"0 32px"}}>
-                <Typography textAlign={"end"} variant="h6" color="initial">TOTAL : ₱1,150</Typography>
-                <Typography textAlign={"end"} variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of ₱400  </Typography>
+          {status==="cancelled"?<>
+            <Alert severity="error" sx={{margin:"2em 0 ", zIndex:"23"}}>This reservation is cancelled</Alert>
+          </>:""}
+          
+          
+          {/*Header  */}
+          <Box display="flex" sx={{margin:"25px 0"}}>
+              <Box sx={{flexGrow:"1"}}>
+                <Typography variant="h4" color="primary" >#{data?.[0].reservationId}</Typography>
+                <Typography variant="h6" color="initial" sx={{opacity:".6"}}>Reference Number</Typography>
+              </Box>
+              <Box >
+                <Typography textAlign={"end"} variant="h4" color="primary" >{data?.[0].schedule} - {data?.[0]?.invoices?.[0].shift}</Typography>
+                <Typography textAlign={"end"} variant="h6" color="initial" sx={{opacity:".6"}}>Scheduled Date</Typography>
+              </Box>
+          </Box>
+          
+          {/* User Details */}
+          <Paper variant="elevation" elevation={3} sx={{borderRadius:"8px",background:"#e3e3e3",padding:"1em",margin:"2em 0" ,display:"flex",alignItems:"center"}}>
+            <Box sx={{flexGrow:"1"}}>
+              <Typography variant="h5" color="initial" fontWeight={500}>{data?.[0].customer?.name}</Typography>
+              <Box display="flex" gap={"15px"} mt={1}>
+                <Box display="flex" gap="5px">
+                    <CallIcon/>
+                    <Typography variant="body1" color="initial">{data?.[0].customer?.phone}</Typography>
+                </Box>
+                <Box display="flex" gap="5px">
+                    <EmailIcon/>
+                    <Typography variant="body1" color="initial">{data?.[0].customer?.email}</Typography>
+                </Box>
+              </Box>
             </Box>
+            <Tooltip title="View Receipt">
+              <IconButton aria-label="" onClick={()=>{setOpen("viewReceipt")}} size="large" >
+                <ReceiptLongIcon  fontSize="inherit"/>
+              </IconButton>
+            </Tooltip>
+          </Paper>
+
+          <Typography variant="h6" color="initial">Billing Statement</Typography>
+          { data?.[0]?.invoices &&  <BookingStatement additional={false} form={data?.[0]?.invoices} invoices={data}/> }
+            
+          <hr style={{margin:"2em 0"}}/>
         </Container>
 
         <Modal
@@ -210,8 +254,6 @@ function Invoice({variant}:Props) {
                             />
                         </Grid>
 
-
-
                         <Grid item xs={5} marginBottom={"20px"}>
                             <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
@@ -280,7 +322,6 @@ function Invoice({variant}:Props) {
                         <Grid item xs={12} sx={{marginBottom:"25px",overflowY:"scroll",maxHeight:"500px"}}>
                             <img style={{width:"100%"}} src="https://sp-uploads.s3.amazonaws.com/uploads/services/2452054/20220310214231_622a70c730534_gcash_skypay_paybills_10032022173641.png_blurred.jpeg" alt="" />
                         </Grid>
-
 
                         <Grid item xs={5} marginBottom={"20px"}>
                             <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>

@@ -23,3 +23,7 @@ export type CreateStaff = {
     username: string;
     email: string;
 }
+
+export type GetStaff = {
+    staffId?: string;
+}

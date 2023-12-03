@@ -1,6 +1,5 @@
 import React from 'react'
 import Typography from '@mui/material/Typography'
-import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import BookingStatement from '../Guests/Booking/BookingStatement';
@@ -16,7 +15,6 @@ import EmailIcon from '@mui/icons-material/Email';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import StarIcon from '@mui/icons-material/Star';
 import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -28,7 +26,7 @@ import RateInput from '../../Components/RateInput';
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { Link } from 'react-router-dom';
-
+import InvoiceAlert from '../../Components/InvoiceAlert';
 
 
 type Props = {
@@ -46,87 +44,64 @@ const style = {
 };
 function Invoice() {
     const [open, setOpen] = React.useState("");
-    // pending,canceling, refunding, rescheduling
-    // approved, checkedIn,checkedOut,
-    // canceled, refunded 
-    const [status, setStatus] = React.useState("approved");
+    
+    const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("paid");
     return<>
         <Container maxWidth="lg"  sx={{padding:"6em 0 7em"}}>
             <Box display="flex" gap={"15px"} sx={{flexWrap:"wrap"}} mt={2}>
-                {status ==="checkedIn"?<Chip icon={<CurrencyExchangeIcon />} label="Get Refund" variant="outlined" onClick={()=>{setOpen("refund")}} />:""}
-                {status ==="checkedOut" || status === "pending" || status === "canceling" || status === "refunding"  || status === "rescheduling" || status === "checkedIn"  || status === "canceled"|| status === "refunded"?"":<>
-                    <Chip icon={<CurrencyExchangeIcon />} label="Get Refund" variant="outlined" onClick={()=>{setOpen("refund")}} />
-                    <Chip icon={<EventRepeatIcon     />} label="Reschedule Reservation" variant="outlined" onClick={()=>{setOpen("reschedule")}} />
-                    <Chip icon={<DoNotDisturbAltIcon />} label="Cancel Reservation" variant="outlined" onClick={()=>{setOpen("cancel")}} />
-                </>}
+
+                {status ==="approved"?<>
+                  <Chip icon={<CurrencyExchangeIcon />} label="Get Refund" variant="outlined" onClick={()=>{setOpen("refund")}} />
+                  <Chip icon={<EventRepeatIcon     />} label="Reschedule Reservation" variant="outlined" onClick={()=>{setOpen("reschedule")}} />
+                  <Chip icon={<DoNotDisturbAltIcon />} label="Cancel Reservation" variant="outlined" onClick={()=>{setOpen("cancel")}} />
+                </>:""}
+                {status ==="checkedIn"?<>
+                  <Chip icon={<CurrencyExchangeIcon />} label="Get Refund" variant="outlined" onClick={()=>{setOpen("refund")}} />
+                </>:""}
+
                 <Box sx={{flexGrow:"1"}} ></Box>
-                {status === "pending"?
-                    <>
-                        <Chip  label="Decline" variant="outlined" onClick={()=>{}} color="primary" />
-                        <Chip  label="Accept" variant="filled" onClick={()=>{}} color="primary" />
-                    </>:""    
+
+                {status === "paid"?
+                  <>
+                    <Chip  label="Decline" variant="outlined" onClick={()=>{}} color="primary" />
+                    <Chip  label="Accept" variant="filled" onClick={()=>{}} color="primary" />
+                  </>:""    
                 }
-                {status === "canceling"?
-                    <>
-                        <Chip  label="Decline" variant="outlined" onClick={()=>{}} color="primary" />
-                        <Chip  label="Accept" variant="filled" onClick={()=>{}} color="primary" />
-                    </>:""    
+
+                {status === "approved"?
+                  <>
+                    <Chip  label="Check In" variant="filled" onClick={()=>{}} color="primary" />
+                  </>:""    
                 }
                 {status === "refunding"?
-                    <>
-                        <Chip  label="Decline" variant="outlined" onClick={()=>{}} color="primary" />
-                        <Chip  label="Accept" variant="filled" onClick={()=>{}} color="primary" />
-                    </>:""    
+                  <>
+                    <Chip  label="Decline" variant="outlined" onClick={()=>{}} color="primary" />
+                    <Chip  label="Accept" variant="filled" onClick={()=>{}} color="primary" />
+                  </>:""    
                 }
                 {status === "rescheduling"?
-                    <>
-                        <Chip  label="Decline" variant="outlined" onClick={()=>{}} color="primary" />
-                        <Chip  label="Accept" variant="filled" onClick={()=>{}} color="primary" />
-                    </>:""    
+                  <>
+                    <Chip  label="Decline" variant="outlined" onClick={()=>{}} color="primary" />
+                    <Chip  label="Accept" variant="filled" onClick={()=>{}} color="primary" />
+                  </>:""    
                 }
-                {status === "approved" || status === "checkedIn"?
-                    <>
-                        <Chip icon={<AddIcon />} label="Add" variant="outlined" component={Link} to={'/admin/reservation/add'} color="primary" />
-                        <Chip  label="Checked Out" variant="filled" onClick={()=>{}} color="primary" />
-                    </>:""    
+                {status === "cancelling"?
+                  <>
+                    <Chip  label="Decline" variant="outlined" onClick={()=>{}} color="primary" />
+                    <Chip  label="Accept" variant="filled" onClick={()=>{}} color="primary" />
+                  </>:""    
                 }
-
+                {status === "checkedIn"?
+                  <>
+                    <Chip icon={<AddIcon />} label="Add" variant="outlined" component={Link} to={'/admin/reservation/add'} sx={{cursor:"pointer"}} color="primary" />
+                    <Chip  label="Checked Out" variant="filled" onClick={()=>{}} color="primary" />
+                  </>:""    
+                }
             </Box>
 
-            {status==="pending"?
-                <Alert severity="warning" sx={{margin:"2em 0"}}>This reservation is pending for verification</Alert>
-            :""}
-            {status==="canceling"?
-                <Alert severity="warning" sx={{margin:"2em 0"}}>This reservation is pending for canceling</Alert>
-            :""}
-            {status==="refunding"?
-                <Alert severity="warning" sx={{margin:"2em 0"}}>This reservation is pending for refunding</Alert>
-            :""}
-            {status==="rescheduling"?
-                <Alert severity="warning" sx={{margin:"2em 0"}}>This reservation is ongoing for rescheduling</Alert>
-            :""}
 
-            {status==="approved"?
-                <Alert severity="info" sx={{margin:"2em 0"}}>This reservation is approved</Alert>
-            :""}
-            {status==="checkedIn"?
-                <Alert severity="info" sx={{margin:"2em 0"}}>This reservation currently on going</Alert>
-            :""}
-            {status==="checkedOut"?
-                <Alert severity="success" sx={{margin:"2em 0"}}>This reservation is completed</Alert>
-            :""}
-
-
-            {status==="canceled"?
-                <Alert severity="error" sx={{margin:"2em 0"}}>This reservation is canceled</Alert>
-            :""}
-            {status==="refunded"?
-                <Alert severity="error" sx={{margin:"2em 0"}}>This reservation is refunded</Alert>
-            :""}
-            
-            
-
-
+            <InvoiceAlert status={status} note="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut maiores eius porro tempore sit? Quae, eos facere praesentium porro doloribus fugiat quo reprehenderit laborum ab, maiores iusto distinctio modi molestias!"/>
+                
 
             <Box display="flex" sx={{margin:"25px 0"}}>
                 <Box sx={{flexGrow:"1"}}>
@@ -154,27 +129,22 @@ function Invoice() {
                         </Box>
                     </Box>
                 </Box>
-                <Tooltip title="View Receipt">
-                    <IconButton aria-label="" onClick={()=>{setOpen("viewReceipt")}} size="large" >
-                        <ReceiptLongIcon  fontSize="inherit"/>
-                    </IconButton>
-                </Tooltip>
+                {status==="pending"?"":
+                  <Tooltip title="View Receipt">
+                      <IconButton aria-label="" onClick={()=>{setOpen("viewReceipt")}} size="large" >
+                          <ReceiptLongIcon  fontSize="inherit"/>
+                      </IconButton>
+                  </Tooltip>
+                }
+                
             </Paper>
+            
             <Typography variant="h6" color="initial">Billing Statement #1</Typography>
-            <BookingStatement/>
-            <Box sx={{padding:"0 32px"}}>
-                <Typography textAlign={"end"} variant="h6" color="initial">TOTAL : ₱1,150</Typography>
-                <Typography textAlign={"end"} variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of ₱400  </Typography>
-            </Box>
-
-            <hr style={{margin:"2em 0"}}/>
-
+            <BookingStatement additional={false}/>
+            
             <Typography variant="h6" color="initial">Billing Statement #2</Typography>
-            <BookingStatement/>
-            <Box sx={{padding:"0 32px"}}>
-                <Typography textAlign={"end"} variant="h6" color="initial">TOTAL : ₱1,150</Typography>
-                <Typography textAlign={"end"} variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of ₱400  </Typography>
-            </Box>
+            <BookingStatement additional={true}/>
+
         </Container>
 
         <Modal
@@ -244,8 +214,6 @@ function Invoice() {
                                 required
                             />
                         </Grid>
-
-
 
                         <Grid item xs={5} marginBottom={"20px"}>
                             <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>

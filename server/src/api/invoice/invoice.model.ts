@@ -12,36 +12,44 @@ const invoiceSchema = new Schema(
         },
         reservation: {
             type: Types.ObjectId,
-            ref: 'Reseration',
+            ref: 'Reservation',
             required: true
         },
-        accommodation: {
-            accommodationId: {
-                type: String,
+        accommodationId: {
+            type: String,
+            required: true
+        },
+        shift: {
+            type: String,
+            enum: {
+                values: Object.values(Shift),
+                message: '{VALUE} is not supported'
+            },
+            required: true
+        },
+        rate: {
+            type: Number,
+            required: true
+        },
+        guestFee: {
+            adult: {
+                type: Number,
                 required: true
             },
-            shift: {
-                type: String,
-                enum: {
-                    values: Object.values(Shift),
-                    message: '{VALUE} is not supported'
-                },
-                required: true
-            },
-            rate: {
+            kids: {
                 type: Number,
                 required: true
             }
         },
         inclusions: [
             {
-                accommodationId: {
-                    type: String,
-                    required: true
-                },
                 name: {
                     type: String,
                     required: true
+                },
+                quantity: {
+                    type: Number,
+                    default: 0
                 },
                 price: {
                     type: Number,
@@ -49,30 +57,24 @@ const invoiceSchema = new Schema(
                 }
             }
         ],
-        guests: [
-            {
-                accommodationId: {
-                    type: String,
-                    required: true
-                },
-                adult: {
-                    type: Number,
-                    requried: true
-                },
-                kids: {
-                    type: Number,
-                    required: true
-                },
-                senior: {
-                    type: Number,
-                    required: true
-                },
-                pwd: {
-                    type: Number,
-                    requried: true
-                }
+        guests: {
+            adult: {
+                type: Number,
+                default: 0
+            },
+            kids: {
+                type: Number,
+                default: 0
+            },
+            senior: {
+                type: Number,
+                default: 0
+            },
+            pwd: {
+                type: Number,
+                default: 0
             }
-        ]
+        }
     },
     {
         timestamps: true,

@@ -1,6 +1,6 @@
 import { Document, Types } from "mongoose";
-import { Fee, Inclusion } from "../accommodation/accommodation.types";
-import { ReservationDocument } from "../reservation/reservation.types";
+import { Fee, Shift } from "../accommodation/accommodation.types";
+import { ReservationDocument, ReservationStatus } from "../reservation/reservation.types";
 
 export interface InvoiceAccommodation {
     accommodationId: string;
@@ -18,9 +18,24 @@ export interface Guest {
 export interface Invoice {
     invoiceId: string;
     reservation: Types.ObjectId | Record<string, unknown>;
-    accommodation: InvoiceAccommodation;
-    inclusions: Inclusion[];
-    guests: Guest[];
+    accommodationId: string;
+    shift: Shift;
+    rate: number;
+    guestFee: {
+        adult: number;
+        kids: number;
+    };
+    inclusions: {
+        name: string;
+        quantity: number;
+        price: number;
+    }[];
+    guests: {
+        adult: number;
+        kids: number;
+        senior: number;
+        pwd: number;
+    }
 }
 
 export interface InvoiceDocument extends Invoice, Document {
@@ -29,4 +44,13 @@ export interface InvoiceDocument extends Invoice, Document {
     updatedAt: Date;
 }
 
-/* HELPERS */
+export interface InvoicePopulatedDocument extends InvoiceDocument {
+    reservation: ReservationDocument;
+}
+
+/* REQUESTS */
+
+export type GetInvoices = {
+    reservationId?: string;
+    status?: ReservationStatus;
+};

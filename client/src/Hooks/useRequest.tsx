@@ -25,7 +25,6 @@ function useRequest(): RequestHook {
     setLoading(true);
     try {
       const response = await axios(config);
-      
       setData(response.data);
       console.log(response.data);
     } catch (error: any) {

@@ -1,4 +1,4 @@
-import { AccommodationDocument, AccommodationType, Shift } from './accommodation.types';
+import { AccommodationAvailbility, AccommodationDocument, AccommodationType, Inclusion, Shift } from './accommodation.types';
 import { id } from '../../utilities/ids';
 import { Schema, model } from 'mongoose';
 
@@ -8,6 +8,10 @@ const accommodationSchema = new Schema(
             type: String,
             unique: true,
             default: id
+        },
+        title: {
+            type: String,
+            required: true
         },
         description: {
             type: String,
@@ -58,11 +62,19 @@ const accommodationSchema = new Schema(
             },
             required: true
         },
+        availability: {
+            type: String,
+            enum: {
+                values: Object.values(AccommodationAvailbility),
+                message: '{VALUE} is not supported'
+            },
+            default: AccommodationAvailbility.AVAILABLE,    
+        },
         inclusions: [
             {
                 accommodationId: {
                     type: String,
-                    required: true
+                    // required: true
                 },
                 name: {
                     type: String,
@@ -86,5 +98,20 @@ const accommodationSchema = new Schema(
         }
     }
 );
+
+// Add a pre hook to set the accommodationId for inclusions
+accommodationSchema.pre('save', async function (next) {
+  const accommodationId = this.get('accommodationId'); // Get the accommodationId
+
+  if (accommodationId) {
+      // If accommodationId is set, update the inclusions
+      this.set('inclusions', this.inclusions.map((inclusion: Inclusion) => ({
+          ...inclusion,
+          accommodationId
+      })));
+  }
+
+  next();
+});
 
 export default model<AccommodationDocument>('Accommodation', accommodationSchema);

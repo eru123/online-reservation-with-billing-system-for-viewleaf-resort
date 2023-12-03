@@ -42,80 +42,43 @@ const ContentSchema = new Schema<ContentDocument>(
       type: {
         day: {
           start: {
-            type: String,
+            type: Date,
             required: true,
-            default: 'Default Shift Value',
+            default: new Date(),
           },
           end: {
-            type: String,
+            type: Date,
             required: true,
-            default: 'Default Shift Value',
+            default: new Date(),
           },
         },
         night: {
           start: {
-            type: String,
+            type: Date,
             required: true,
-            default: 'Default Shift Value',
+            default: new Date(),
           },
           end: {
-            type: String,
+            type: Date,
             required: true,
-            default: 'Default Shift Value',
+            default: new Date(),
           },
         },
         whole: {
           start: {
-            type: String,
+            type: Date,
             required: true,
-            default: 'Default Shift Value',
+            default: new Date(),
           },
           end: {
-            type: String,
+            type: Date,
             required: true,
-            default: 'Default Shift Value',
+            default: new Date(),
           },
         },
       },
       required: true,
     },
-    fee: {
-      type : {
-        kid : {
-          type: {
-            day: Number,
-            night: Number,
-            whole: Number,
-          },
-          required: true,
-        },
-        adult : {
-          type: {
-            day: Number,
-            night: Number,
-            whole: Number,
-          },
-          required: true,
-        },
-        senior : {
-          type: {
-            day: Number,
-            night: Number,
-            whole: Number,
-          },
-          required: true,
-        },
-        pwd : {
-          type: {
-            day: Number,
-            night: Number,
-            whole: Number,
-          },
-          required: true,
-        }
-      },
-      required: true,
-    }
   },
   { timestamps: true }
 );
