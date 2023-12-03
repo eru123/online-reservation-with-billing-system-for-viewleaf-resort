@@ -43,9 +43,9 @@ function AccommodationCard({
                       </Grid>
                       <Grid item md={6} xs={9} sx={{padding:"1em"}}>
                           <Box >
-                              <Typography variant="subtitle2" color="initial" fontWeight={500}>{accommodation?.type}</Typography>
+                              <Typography variant="subtitle2" color="initial" fontWeight={500} textTransform={"uppercase"}>{accommodation?.type}</Typography>
                               <Typography variant="h5" color="Primary" fontWeight={600} >{accommodation?.title}</Typography>
-                              <Typography variant="body2" color="initial"  textAlign={"justify"}>{accommodation?.description}</Typography>
+                              <Typography sx={{minHeight:"100px"}} variant="body2" color="initial"  textAlign={"justify"}>{accommodation?.description}</Typography>
                               <Typography variant="subtitle2" color="initial" fontWeight={500} sx={{marginTop:"10px",opacity:'.6',marginBottom:"5px"}}>Inclusion</Typography>
                               <Box display="flex" sx={{flexWrap:"wrap",gap:"10px"}}>
                                 {accommodation?.inclusions?.map((inclusion:any)=>{
