@@ -74,7 +74,7 @@ function AddAccommodation() {
     e.preventDefault();
     console.log(form)
     createAccommodation({...form, inclusions})
-    navigate('/admin/manage/accommodation')
+    navigate('/admin/manage/accommodations')
   }
 
   const addInclusion = () => {
