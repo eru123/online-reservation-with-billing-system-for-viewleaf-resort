@@ -90,7 +90,7 @@ function App() {
               <Route path="/admin/reservation/create" element={<CreateResrvation/>}/>
               <Route path="/admin/reservation/add" element={<Additional/>}/>
               <Route path="/admin/reservation/requests" element={<Requests/>}/>
-              <Route path="/admin/reservation/view" element={<InvoiceManage/>}/>
+              <Route path="/admin/reservation/:id" element={<InvoiceManage/>}/>
               <Route path="/admin/report" element={<Report/>}/>
               <Route path="/admin/notifications" element={<Notifications/>}/>
               <Route path="/profile" element={<Profile/>} />

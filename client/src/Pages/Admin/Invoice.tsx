@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect}  from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
@@ -25,9 +25,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import RateInput from '../../Components/RateInput';
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import { Link } from 'react-router-dom';
+import { Link, useParams  } from 'react-router-dom';
 import InvoiceAlert from '../../Components/InvoiceAlert';
 
+
+import useReservation from '../../Hooks/useReservation';
 
 type Props = {
 }
@@ -44,8 +46,24 @@ const style = {
 };
 function Invoice() {
     const [open, setOpen] = React.useState("");
-    
+    const {id} = useParams();
+    const {data, loading, error, getReservation} = useReservation();
     const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("paid");
+    
+    useEffect(()=>{
+      if (data?.[0]) {
+        setStatus(data?.[0].status)
+      } else {
+        getReservation({
+          reservationId: id || ""
+        })
+      }
+    }, [data])
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+    
     return<>
         <Container maxWidth="lg"  sx={{padding:"6em 0 7em"}}>
             <Box display="flex" gap={"15px"} sx={{flexWrap:"wrap"}} mt={2}>
@@ -105,11 +123,11 @@ function Invoice() {
 
             <Box display="flex" sx={{margin:"25px 0"}}>
                 <Box sx={{flexGrow:"1"}}>
-                    <Typography variant="h4" color="primary" >#123A23123</Typography>
+                    <Typography variant="h4" color="primary" >#{data?.[0].reservationId}</Typography>
                     <Typography variant="h6" color="initial" sx={{opacity:".6"}}>Reference Number</Typography>
                 </Box>
                 <Box >
-                    <Typography textAlign={"end"} variant="h4" color="primary" >Oct 25, 2023 - Day Shift</Typography>
+                    <Typography textAlign={"end"} variant="h4" color="primary" >{data?.[0].schedule} - {data?.[0]?.invoices?.[0].shift}</Typography>
                     <Typography textAlign={"end"} variant="h6" color="initial" sx={{opacity:".6"}}>Scheduled Date</Typography>
                 </Box>
             </Box>
@@ -117,15 +135,15 @@ function Invoice() {
             
             <Paper variant="elevation" elevation={3} sx={{borderRadius:"8px",background:"#e3e3e3",padding:"1em",margin:"2em 0" ,display:"flex",alignItems:"center"}}>
                 <Box sx={{flexGrow:"1"}}>
-                    <Typography variant="h5" color="initial" fontWeight={500}>Jon Doe</Typography>
+                    <Typography variant="h5" color="initial" fontWeight={500}>{data?.[0].customer?.name}</Typography>
                     <Box display="flex" gap={"15px"} mt={1}>
                         <Box display="flex" gap="5px">
                             <CallIcon/>
-                            <Typography variant="body1" color="initial">0915-232-1231</Typography>
+                            <Typography variant="body1" color="initial">{data?.[0].customer?.phone}</Typography>
                         </Box>
                         <Box display="flex" gap="5px">
                             <EmailIcon/>
-                            <Typography variant="body1" color="initial">jondoe@gmail.com</Typography>
+                            <Typography variant="body1" color="initial">{data?.[0].customer?.email}</Typography>
                         </Box>
                     </Box>
                 </Box>
@@ -138,12 +156,17 @@ function Invoice() {
                 }
                 
             </Paper>
-            
+
+            <Typography variant="h6" color="initial">Billing Statement</Typography>
+            { data?.[0]?.invoices &&  <BookingStatement additional={false} form={data?.[0]?.invoices} invoices={data}/> }
+
+            <hr style={{margin:"2em 0"}}/>
+{/*             
             <Typography variant="h6" color="initial">Billing Statement #1</Typography>
             <BookingStatement additional={false}/>
             
             <Typography variant="h6" color="initial">Billing Statement #2</Typography>
-            <BookingStatement additional={true}/>
+            <BookingStatement additional={true}/> */}
 
         </Container>
 
@@ -280,17 +303,11 @@ function Invoice() {
                         Attached Image for receipt 
                     </Typography>
                     <Grid container spacing={2}>
+                      { data?.[0]?.receipts?.map((receipt:any)=>(
                         <Grid item xs={12} sx={{marginBottom:"25px",overflowY:"scroll",maxHeight:"500px"}}>
-                            <img style={{width:"100%"}} src="https://sp-uploads.s3.amazonaws.com/uploads/services/2452054/20220310214231_622a70c730534_gcash_skypay_paybills_10032022173641.png_blurred.jpeg" alt="" />
+                          <img style={{width:"100%"}} src={receipt} alt="" />
                         </Grid>
-
-
-                        <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
-                        </Grid>
-                        <Grid item xs={7} marginBottom={"20px"}>
-                            <Button variant="contained" fullWidth>Send</Button>
-                        </Grid>
+                      ))}
                     </Grid>
                 </>:""}
             </Box>

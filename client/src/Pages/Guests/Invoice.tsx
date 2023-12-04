@@ -315,9 +315,9 @@ function Invoice({}:Props) {
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
                         View Receipt 
                     </Typography>
-                    {/* <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
+                    <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
                         Attached Image for receipt 
-                    </Typography> */}
+                    </Typography>
                     <Grid container spacing={2}>
                       { data?.[0]?.receipts?.map((receipt:any)=>(
                         <Grid item xs={12} sx={{marginBottom:"25px",overflowY:"scroll",maxHeight:"500px"}}>
