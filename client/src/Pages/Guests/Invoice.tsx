@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box'
@@ -27,7 +27,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import RateInput from '../../Components/RateInput';
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 
 import useReservation from '../../Hooks/useReservation';
 
@@ -45,13 +45,32 @@ const style = {
     borderRadius:"8px"
 };
 function Invoice({}:Props) {
+    const navigate = useNavigate();
     const [open, setOpen] = React.useState("");
     // approved,pending, checkedOut, canceled, refunded
     const {id} = useParams();
-    const {data, loading, error, getReservation} = useReservation();
+    const {data, loading, error, getReservation, updateReservation} = useReservation();
     const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("pending");
-    
+    const [note, setNote] = useState<string>("")
 
+    const submit = async (status: string, note: string) => {
+      updateReservation({
+        reservationId: id||"",
+        status: status,
+        note: note
+      })
+      navigate(`/reservation/${id}`)
+    }
+    
+    interface DataItem {
+      status: string;
+      note: string;
+      _id: string;
+    }
+    
+    const filterByStatus = (data: any, status: string) => {
+      return data.filter((item: any) => item.status === status);
+    };
     
 
     useEffect(()=>{
@@ -85,7 +104,7 @@ function Invoice({}:Props) {
           {status==="pending"?
             <Box sx={{position:"relative"}}>
               <Alert severity="warning" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>Please make the payment to finalize your reservation, Thank you!</Alert>
-              <Chip label="Pay now" variant="outlined" onClick={()=>{}} component={Link} to={"/payment/:id"} color="primary" sx={{position:"absolute",top:"50%",right:"10px",transform:"translateY(-50%)"}}/>   
+              <Chip label="Pay now" variant="outlined" onClick={()=>{}} component={Link} to={`/payment/${data?.[0].reservationId}`} color="primary" sx={{position:"absolute",top:"50%",right:"10px",transform:"translateY(-50%)"}}/>   
             </Box>
           :""}
           {status==="paid"?
@@ -105,7 +124,7 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                Lorem, ipsum dolor sit amet cons dolorem animi? Ab quae a animi doloribus, debitis  corrupti assumenda dicta soluta laboriosam autem, necessitatibus dolorum eum, ducimus fugiat at adipisci quibusdam odio culpa obcaecati iure consequatur tempora eligendi distinctio quis numquam praesentium veritatis? Voluptate sapiente, inventore eveniet aspernatur harum delectus qui quo. Repellat quisquam minus fugit assumenda error nesciunt. Repellat corporis animi quam qui ab delectus deserunt a fugiat quod quae quibusdam natus explicabo necessitatibus eius, et corrupti illo neque ex molestiae voluptate itaque iste dolore ullam. Debitis quisquam harum voluptatum. Nesciunt, consectetur quas. Vero ducimus magnam laborum tempora, ea beatae sed. Id saepe vel voluptas iste. Quaerat, dignissimos. Asperiores mollitia culpa molestiae quasi. Iusto quisquam in voluptatum alias commodi obcaecati at, officiis quis eius ipsam eveniet soluta fuga, autem natus odit provident aut aliquam. Consequuntur ex excepturi, obcaecati doloremque rerum molestias natus animi autem illum maxime hic explicabo numquam voluptate quas suscipit atque commodi, molestiae aspernatur ipsa earum est quisquam vitae? Suscipit nesciunt voluptatem illum veniam, omnis praesentium iste recusandae architecto exercitationem ad temporibus quod quae sunt, sed officia explicabo culpa itaque iusto maxime asperiores hic sint! Nihil, vero! Autem blanditiis doloremque repellendus suscipit sed nobis, omnis dolore fuga laboriosam reprehenderit saepe temporibus inventore, possimus assumenda ipsum obcaecati ad sunt id!
+                {filterByStatus(data?.[0]?.notes, status)?.note}
               </Typography>
             </Paper>
           </>:""}
@@ -114,7 +133,7 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                Lorem, ipsum dolor sit amet cons dolorem animi? Ab quae a animi doloribus, debitis  corrupti assumenda dicta soluta laboriosam autem, necessitatibus dolorum eum, ducimus fugiat at adipisci quibusdam odio culpa obcaecati iure consequatur tempora eligendi distinctio quis numquam praesentium veritatis? Voluptate sapiente, inventore eveniet aspernatur harum delectus qui quo. Repellat quisquam minus fugit assumenda error nesciunt. Repellat corporis animi quam qui ab delectus deserunt a fugiat quod quae quibusdam natus explicabo necessitatibus eius, et corrupti illo neque ex molestiae voluptate itaque iste dolore ullam. Debitis quisquam harum voluptatum. Nesciunt, consectetur quas. Vero ducimus magnam laborum tempora, ea beatae sed. Id saepe vel voluptas iste. Quaerat, dignissimos. Asperiores mollitia culpa molestiae quasi. Iusto quisquam in voluptatum alias commodi obcaecati at, officiis quis eius ipsam eveniet soluta fuga, autem natus odit provident aut aliquam. Consequuntur ex excepturi, obcaecati doloremque rerum molestias natus animi autem illum maxime hic explicabo numquam voluptate quas suscipit atque commodi, molestiae aspernatur ipsa earum est quisquam vitae? Suscipit nesciunt voluptatem illum veniam, omnis praesentium iste recusandae architecto exercitationem ad temporibus quod quae sunt, sed officia explicabo culpa itaque iusto maxime asperiores hic sint! Nihil, vero! Autem blanditiis doloremque repellendus suscipit sed nobis, omnis dolore fuga laboriosam reprehenderit saepe temporibus inventore, possimus assumenda ipsum obcaecati ad sunt id!
+                {filterByStatus(data?.[0]?.notes, status)?.note}
               </Typography>
             </Paper>
           </>:""}
@@ -123,7 +142,7 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                Lorem, ipsum dolor sit amet cons dolorem animi? Ab quae a animi doloribus, debitis  corrupti assumenda dicta soluta laboriosam autem, necessitatibus dolorum eum, ducimus fugiat at adipisci quibusdam odio culpa obcaecati iure consequatur tempora eligendi distinctio quis numquam praesentium veritatis? Voluptate sapiente, inventore eveniet aspernatur harum delectus qui quo. Repellat quisquam minus fugit assumenda error nesciunt. Repellat corporis animi quam qui ab delectus deserunt a fugiat quod quae quibusdam natus explicabo necessitatibus eius, et corrupti illo neque ex molestiae voluptate itaque iste dolore ullam. Debitis quisquam harum voluptatum. Nesciunt, consectetur quas. Vero ducimus magnam laborum tempora, ea beatae sed. Id saepe vel voluptas iste. Quaerat, dignissimos. Asperiores mollitia culpa molestiae quasi. Iusto quisquam in voluptatum alias commodi obcaecati at, officiis quis eius ipsam eveniet soluta fuga, autem natus odit provident aut aliquam. Consequuntur ex excepturi, obcaecati doloremque rerum molestias natus animi autem illum maxime hic explicabo numquam voluptate quas suscipit atque commodi, molestiae aspernatur ipsa earum est quisquam vitae? Suscipit nesciunt voluptatem illum veniam, omnis praesentium iste recusandae architecto exercitationem ad temporibus quod quae sunt, sed officia explicabo culpa itaque iusto maxime asperiores hic sint! Nihil, vero! Autem blanditiis doloremque repellendus suscipit sed nobis, omnis dolore fuga laboriosam reprehenderit saepe temporibus inventore, possimus assumenda ipsum obcaecati ad sunt id!
+                {filterByStatus(data?.[0]?.notes, status)?.note}
               </Typography>
             </Paper>
           </>:""}
@@ -132,7 +151,7 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                Lorem, ipsum dolor sit amet cons dolorem animi? Ab quae a animi doloribus, debitis  corrupti assumenda dicta soluta laboriosam autem, necessitatibus dolorum eum, ducimus fugiat at adipisci quibusdam odio culpa obcaecati iure consequatur tempora eligendi distinctio quis numquam praesentium veritatis? Voluptate sapiente, inventore eveniet aspernatur harum delectus qui quo. Repellat quisquam minus fugit assumenda error nesciunt. Repellat corporis animi quam qui ab delectus deserunt a fugiat quod quae quibusdam natus explicabo necessitatibus eius, et corrupti illo neque ex molestiae voluptate itaque iste dolore ullam. Debitis quisquam harum voluptatum. Nesciunt, consectetur quas. Vero ducimus magnam laborum tempora, ea beatae sed. Id saepe vel voluptas iste. Quaerat, dignissimos. Asperiores mollitia culpa molestiae quasi. Iusto quisquam in voluptatum alias commodi obcaecati at, officiis quis eius ipsam eveniet soluta fuga, autem natus odit provident aut aliquam. Consequuntur ex excepturi, obcaecati doloremque rerum molestias natus animi autem illum maxime hic explicabo numquam voluptate quas suscipit atque commodi, molestiae aspernatur ipsa earum est quisquam vitae? Suscipit nesciunt voluptatem illum veniam, omnis praesentium iste recusandae architecto exercitationem ad temporibus quod quae sunt, sed officia explicabo culpa itaque iusto maxime asperiores hic sint! Nihil, vero! Autem blanditiis doloremque repellendus suscipit sed nobis, omnis dolore fuga laboriosam reprehenderit saepe temporibus inventore, possimus assumenda ipsum obcaecati ad sunt id!
+                {filterByStatus(data?.[0]?.notes, status)?.note}
               </Typography>
             </Paper>
           </>:""}
@@ -232,7 +251,7 @@ function Invoice({}:Props) {
                             <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7}>
-                            <Button variant="contained" fullWidth>Send</Button>
+                            <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("rescheduling", note)}}>Send</Button>
                         </Grid>
                     </Grid>
                 </>:""}
@@ -251,6 +270,7 @@ function Invoice({}:Props) {
                                 multiline
                                 fullWidth
                                 required
+                                onChange={(e)=>{setNote(e.target.value)}}
                             />
                         </Grid>
 
@@ -258,7 +278,7 @@ function Invoice({}:Props) {
                             <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
-                            <Button variant="contained" fullWidth>Send</Button>
+                            <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("refunding", note)}}>Send</Button>
                         </Grid>
                     </Grid>
                 </>:""}
@@ -277,13 +297,14 @@ function Invoice({}:Props) {
                                 multiline
                                 fullWidth
                                 required
+                                onChange={(e)=>{setNote(e.target.value)}}
                             />
                         </Grid>
                         <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                            <Button variant="text" onClick={()=>{setOpen(""); }} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
-                            <Button variant="contained" fullWidth>Send</Button>
+                            <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("cancelling", note)}}>Send</Button>
                         </Grid>
                     </Grid>
                 </>:""}

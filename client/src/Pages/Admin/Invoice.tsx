@@ -30,6 +30,9 @@ import InvoiceAlert from '../../Components/InvoiceAlert';
 
 
 import useReservation from '../../Hooks/useReservation';
+import useEmail from '../../Hooks/useEmail';
+
+import moment from 'moment';
 
 type Props = {
 }
@@ -46,20 +49,39 @@ const style = {
 };
 function Invoice() {
     const navigate = useNavigate();
+    const {sendEmail} = useEmail();
     const [open, setOpen] = React.useState("");
     const {id} = useParams();
     const {data, loading, error, getReservation, updateReservation} = useReservation();
     const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checked in" | "refunded" | "cancelled" | "checked out">("checked out");
     const [note, setNote] = useState<string>("")
 
-    const submit = (status: string, note: string) => {
+    const submit = async (status: string, note: string) => {
       updateReservation({
         reservationId: id||"",
         status: status,
         note: note
       })
+      await sendEmail({
+        email: data?.[0]?.customer?.email,
+        subject: `View Leaf Reservation is ${status}`,
+        content: `
+        <html lang="en">
+          <body>
+            <h1>View Leaf reservation is ${status}</h1>
+            <hr>
+            <p>Reference Number: ${data?.[0]?.reservationId}</p>
+            <p>Scheduled Date: ${ moment(data?.[0]?.schedule).format('DD/MM/YYYY')} - ${data?.[0]?.invoices?.[0]?.shift}</p>
+            <hr>
+            <h4>View your reservation details <a href="${process.env.REACT_APP_URL}/reservation/${data?.[0]?.reservationId}">here</a>.</h4>
+            <h5>Strictly do not share your reference number as it is used to access your reservation details</h5>
+            </body>
+        </html>
+      `
+      })
       navigate(`/admin/invoice/${id}`)
     }
+    
 
     useEffect(()=>{
       if (data?.[0]) {
