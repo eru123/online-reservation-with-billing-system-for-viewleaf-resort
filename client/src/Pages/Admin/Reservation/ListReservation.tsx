@@ -15,7 +15,7 @@ import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import TESTCalendar from '../../../Components/TESTCalendar';
 import { Link } from 'react-router-dom';
-import dayjs, { Dayjs } from 'dayjs';
+import { Dayjs } from 'dayjs';
 import SearchInputReservation from '../../../Components/SearchInputReservation';
 
 import useReservation from '../../../Hooks/useReservation';
@@ -87,7 +87,13 @@ function ListReservation() {
               </Grid>
               <Grid item  md={3} sx={{display:"flex"}}>
                   <Paper variant="elevation" elevation={3}>
-                      <TESTCalendar   />
+                    {filteredData && 
+                      <TESTCalendar
+                        appointments={filteredData}
+                        setSelectedDay={setSelectedDay}
+                        selectedDay={selectedDay}
+                      />
+                    }
                   </Paper>
               </Grid>
           </Grid>

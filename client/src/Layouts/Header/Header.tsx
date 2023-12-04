@@ -7,7 +7,6 @@ import LogoImg from '../../Images/LogoDrop.png'
 
 
 export default function Header() {
-
   return (
     <AppBar position="static" sx={{background:"white",height:"80px",zIndex:"1000",position:"fixed",top:"0"}}>
       <Container maxWidth="xl">
