@@ -47,9 +47,18 @@ const style = {
 function Invoice() {
     const [open, setOpen] = React.useState("");
     const {id} = useParams();
-    const {data, loading, error, getReservation} = useReservation();
-    const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("paid");
+    const {data, loading, error, getReservation, updateReservation} = useReservation();
+    const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checked in" | "refunded" | "cancelled" | "checked out">("checked out");
     
+    const submit = (status: string, note: string) => {
+      updateReservation({
+        reservationId: id||"",
+        status: status,
+        note: note
+      })
+      // window.location.reload();
+    }
+
     useEffect(()=>{
       if (data?.[0]) {
         setStatus(data?.[0].status)
@@ -73,7 +82,7 @@ function Invoice() {
                   <Chip icon={<EventRepeatIcon     />} label="Reschedule Reservation" variant="outlined" onClick={()=>{setOpen("reschedule")}} />
                   <Chip icon={<DoNotDisturbAltIcon />} label="Cancel Reservation" variant="outlined" onClick={()=>{setOpen("cancel")}} />
                 </>:""}
-                {status ==="checkedIn"?<>
+                {status ==="checked in"?<>
                   <Chip icon={<CurrencyExchangeIcon />} label="Get Refund" variant="outlined" onClick={()=>{setOpen("refund")}} />
                 </>:""}
 
@@ -81,38 +90,38 @@ function Invoice() {
 
                 {status === "paid"?
                   <>
-                    <Chip  label="Decline" variant="outlined" onClick={()=>{}} color="primary" />
-                    <Chip  label="Accept" variant="filled" onClick={()=>{}} color="primary" />
+                    <Chip  label="Decline" variant="outlined" onClick={()=>{submit("declined", " ")}} color="primary" />
+                    <Chip  label="Accept" variant="filled" onClick={()=>{submit("approved", " ")}} color="primary" />
                   </>:""    
                 }
 
                 {status === "approved"?
                   <>
-                    <Chip  label="Check In" variant="filled" onClick={()=>{}} color="primary" />
+                    <Chip  label="Check In" variant="filled" onClick={()=>{submit("checked in", " ")}} color="primary" />
                   </>:""    
                 }
                 {status === "refunding"?
                   <>
-                    <Chip  label="Decline" variant="outlined" onClick={()=>{}} color="primary" />
-                    <Chip  label="Accept" variant="filled" onClick={()=>{}} color="primary" />
+                    <Chip  label="Decline" variant="outlined" onClick={()=>{submit("approved", " ")}} color="primary" />
+                    <Chip  label="Accept" variant="filled" onClick={()=>{submit("refunded", " ")}} color="primary" />
                   </>:""    
                 }
                 {status === "rescheduling"?
                   <>
-                    <Chip  label="Decline" variant="outlined" onClick={()=>{}} color="primary" />
-                    <Chip  label="Accept" variant="filled" onClick={()=>{}} color="primary" />
+                    <Chip  label="Decline" variant="outlined" onClick={()=>{submit("approved", " ")}} color="primary" />
+                    <Chip  label="Accept" variant="filled" onClick={()=>{submit("approved", " ")}} color="primary" />
                   </>:""    
                 }
                 {status === "cancelling"?
                   <>
-                    <Chip  label="Decline" variant="outlined" onClick={()=>{}} color="primary" />
-                    <Chip  label="Accept" variant="filled" onClick={()=>{}} color="primary" />
+                    <Chip  label="Decline" variant="outlined" onClick={()=>{submit("declined", " ")}} color="primary" />
+                    <Chip  label="Accept" variant="filled" onClick={()=>{submit("cancelled", " ")}} color="primary" />
                   </>:""    
                 }
-                {status === "checkedIn"?
+                {status === "checked in"?
                   <>
                     <Chip icon={<AddIcon />} label="Add" variant="outlined" component={Link} to={'/admin/reservation/add'} sx={{cursor:"pointer"}} color="primary" />
-                    <Chip  label="Checked Out" variant="filled" onClick={()=>{}} color="primary" />
+                    <Chip  label="Checked Out" variant="filled" onClick={()=>{submit("checked out", " ")}} color="primary" />
                   </>:""    
                 }
             </Box>

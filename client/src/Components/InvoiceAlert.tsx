@@ -4,7 +4,7 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 
 type Props = {
-  status:"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut" 
+  status:"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checked in" | "refunded" | "cancelled" | "checked out" 
   note?:string
 }
 function InvoiceAlert({status,note}:Props) {
@@ -63,10 +63,10 @@ function InvoiceAlert({status,note}:Props) {
         </Paper>
       </>
     :""}
-    {status==="checkedIn"?
+    {status==="checked in"?
       <Alert severity="info" sx={{margin:"2em 0"}}>This reservation is checked in already</Alert>
     :""}
-    {status==="checkedOut"?
+    {status==="checked out"?
       <Alert severity="success" sx={{margin:"2em 0"}}>This Reservation is done</Alert>
     :""}
 
