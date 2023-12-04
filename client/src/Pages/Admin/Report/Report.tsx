@@ -77,6 +77,37 @@ function Report() {
     return totalAccommodation;
   }
   
+  const calculateTotalAmount = (data: any) => {
+    let totalAccommodations = 0;
+    let totalInclusions = 0;
+    let totalGuests = 0;
+  
+    if (data && data.length > 0 && data[0].invoices) {
+      data[0].invoices.forEach((item: any) => {
+        // Calculate accommodations
+        totalAccommodations += item.rate;
+  
+        // Calculate guests
+        totalGuests +=
+          parseFloat(item.guests.adult) * parseFloat(item.guestFee.adult) +
+          parseFloat(item.guests.kids) * parseFloat(item.guestFee.kids) +
+          parseFloat(item.guests.senior) * (parseFloat(item.guestFee.adult) * 0.8) +
+          parseFloat(item.guests.pwd) * (parseFloat(item.guestFee.adult) * 0.8);
+  
+        // Calculate inclusions
+        if (item.inclusions && item.inclusions.length > 0) {
+          item.inclusions.forEach((inclusion: any) => {
+            totalInclusions += inclusion.price * inclusion.quantity;
+          });
+        }
+      });
+    }
+  
+    const totalAmount = totalAccommodations + totalInclusions + totalGuests;
+  
+    return { total: totalAmount, minimum: totalAccommodations };
+  };
+  
   
   // Filter Functions
   const sortBySchedule = (data: any): any => {
@@ -230,7 +261,10 @@ function Report() {
                       </TableRow>
                   </TableHead>
                   <TableBody >
-                    {reports?.map((reservation: any) => (
+                    {reports?.map((reservation: any) => {
+                      const costInfo = calculateTotalAmount([reservation]);
+
+                      return (
                         <TableRow key={reservation.reservationId} sx={{ background: "#D7D7D7" }}>
                           <TableCell>{dayjs(reservation?.schedule).format('MMMM D, YYYY')}</TableCell>
                           <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
@@ -243,9 +277,10 @@ function Report() {
                               color={reservation?.status === 'cancelled' ? "error" : (reservation?.status === "approved" ? "primary" : "info")}
                             />
                           </TableCell>
-                          <TableCell>Amount</TableCell>
+                          <TableCell>{costInfo.total}</TableCell> {/* Display the total amount per reservation */}
                         </TableRow>
-                      ))}
+                      );
+                    })}
                   </TableBody>
               </Table>
           </TableContainer>
