@@ -49,6 +49,7 @@ function LandingPage() {
     shift : "",
   });
   const[open,setOpen]=useState("");
+  const [refNum, setRefNum] = useState("");
   
   const book = () => {
     console.log(bookingSchedule)
@@ -152,8 +153,9 @@ function LandingPage() {
                                         fullWidth
                                         id="refID"
                                         placeholder='Reference ID'
+                                        onChange={(e)=> setRefNum(e.target.value)}
                                     />
-                                    <Button variant="contained" color="primary" href='invoice'>
+                                    <Button variant="contained" color="primary" onClick={() => navigate(`/reservation/${refNum}`)}>
                                         Check
                                     </Button>
                                 </Box>
