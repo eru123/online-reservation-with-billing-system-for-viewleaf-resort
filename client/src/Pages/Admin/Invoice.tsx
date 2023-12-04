@@ -276,7 +276,7 @@ function Invoice() {
                             <Button variant="text" onClick={()=>{setOpen("");}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
-                            <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("cancelled", note)}}>Send</Button>
+                            <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("refunded", note)}}>Send</Button>
                         </Grid>
                     </Grid>
                 </>:""}
