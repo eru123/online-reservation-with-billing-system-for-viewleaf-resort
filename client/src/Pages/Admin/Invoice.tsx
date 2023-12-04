@@ -25,7 +25,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import RateInput from '../../Components/RateInput';
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import { Link, useParams  } from 'react-router-dom';
+import { Link, useParams, useNavigate  } from 'react-router-dom';
 import InvoiceAlert from '../../Components/InvoiceAlert';
 
 
@@ -45,6 +45,7 @@ const style = {
     borderRadius:"8px"
 };
 function Invoice() {
+    const navigate = useNavigate();
     const [open, setOpen] = React.useState("");
     const {id} = useParams();
     const {data, loading, error, getReservation, updateReservation} = useReservation();
@@ -56,12 +57,12 @@ function Invoice() {
         status: status,
         note: note
       })
-      // window.location.reload();
+      navigate(`/admin/invoice/${id}`)
     }
 
     useEffect(()=>{
       if (data?.[0]) {
-        setStatus(data?.[0].status)
+        setStatus(data?.[0]?.status)
       } else {
         getReservation({
           reservationId: id || ""
@@ -126,17 +127,16 @@ function Invoice() {
                 }
             </Box>
 
-
             <InvoiceAlert status={status} note="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut maiores eius porro tempore sit? Quae, eos facere praesentium porro doloribus fugiat quo reprehenderit laborum ab, maiores iusto distinctio modi molestias!"/>
                 
 
             <Box display="flex" sx={{margin:"25px 0"}}>
                 <Box sx={{flexGrow:"1"}}>
-                    <Typography variant="h4" color="primary" >#{data?.[0].reservationId}</Typography>
+                    <Typography variant="h4" color="primary" >#{data?.[0]?.reservationId}</Typography>
                     <Typography variant="h6" color="initial" sx={{opacity:".6"}}>Reference Number</Typography>
                 </Box>
                 <Box >
-                    <Typography textAlign={"end"} variant="h4" color="primary" >{data?.[0].schedule} - {data?.[0]?.invoices?.[0].shift}</Typography>
+                    <Typography textAlign={"end"} variant="h4" color="primary" >{data?.[0]?.schedule} - {data?.[0]?.invoices?.[0]?.shift}</Typography>
                     <Typography textAlign={"end"} variant="h6" color="initial" sx={{opacity:".6"}}>Scheduled Date</Typography>
                 </Box>
             </Box>
@@ -144,15 +144,15 @@ function Invoice() {
             
             <Paper variant="elevation" elevation={3} sx={{borderRadius:"8px",background:"#e3e3e3",padding:"1em",margin:"2em 0" ,display:"flex",alignItems:"center"}}>
                 <Box sx={{flexGrow:"1"}}>
-                    <Typography variant="h5" color="initial" fontWeight={500}>{data?.[0].customer?.name}</Typography>
+                    <Typography variant="h5" color="initial" fontWeight={500}>{data?.[0]?.customer?.name}</Typography>
                     <Box display="flex" gap={"15px"} mt={1}>
                         <Box display="flex" gap="5px">
                             <CallIcon/>
-                            <Typography variant="body1" color="initial">{data?.[0].customer?.phone}</Typography>
+                            <Typography variant="body1" color="initial">{data?.[0]?.customer?.phone}</Typography>
                         </Box>
                         <Box display="flex" gap="5px">
                             <EmailIcon/>
-                            <Typography variant="body1" color="initial">{data?.[0].customer?.email}</Typography>
+                            <Typography variant="body1" color="initial">{data?.[0]?.customer?.email}</Typography>
                         </Box>
                     </Box>
                 </Box>
