@@ -8,8 +8,9 @@ import {
     PayReservation,
     ReservationDocument,
     ReservationStatus,
-    ReservationInvoices,
-    UpdateStatus
+    ReservationInfo,
+    UpdateStatus,
+    PopulatedInvoice
 } from './reservation.types';
 import { InvoiceDocument, InvoicePopulatedDocument } from '../invoice/invoice.types';
 import { Shift } from '../accommodation/accommodation.types';
@@ -48,14 +49,29 @@ export const getReservations: RequestHandler = async (req: QueryRequest<GetReser
     const reservations: ReservationDocument[] = await ReservationModel.find(reservationQuery).exec();
     if (!reservations) throw new NotFound('Reservation');
 
-    const reservationWithInvoices: ReservationInvoices[] = [];
+    const reservationWithInvoices: ReservationInfo[] = [];
     for (let i = 0; i < reservations.length; i++) {
         // Get the invoices of each reservation found
         const invoices = await InvoiceModel.find({ reservation: reservations[i]._id }, { reservation: 0 }).exec();
 
+        // Get accommodation information of each invoice
+        const populatedInvoices: ReservationInfo['invoices'] = [];
+        for (let j = 0; j < invoices.length; j++) {
+            let accommodationId: string;
+            let invoice: PopulatedInvoice;
+            ({ accommodationId, ...invoice } = invoices[j].toJSON());
+
+            invoice.accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
+            populatedInvoices.push(invoice);
+        }
+
+        // Get receipts of reservation
+        const receipts = await receiptModel.find({ reservation: reservations[i]._id }).exec();
+
         reservationWithInvoices.push({
             ...reservations[i].toJSON(),
-            invoices
+            invoices: populatedInvoices,
+            receipts: receipts.map((receipt) => receipt.image)
         });
     }
 

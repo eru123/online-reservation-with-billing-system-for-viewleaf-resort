@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import { Shift } from '../accommodation/accommodation.types';
+import { AccommodationDocument, Shift } from '../accommodation/accommodation.types';
 import { InvoiceDocument } from '../invoice/invoice.types';
 
 export enum ReservationStatus {
@@ -80,14 +80,19 @@ export type UpdateStatus = {
     reservationId: string;
     status: ReservationStatus;
     note: string;
-}
+};
 
 export type PayReservation = {
     reservationId: string;
     receipt: string;
-}
+};
 
-export type ReservationInvoices = {
-    reservation: ReservationDocument,
-    invoices: Omit<InvoiceDocument, 'reservation'>[]
-}
+export type PopulatedInvoice = Omit<InvoiceDocument, 'reservation' | 'accommodationId'> & {
+    accommodation: AccommodationDocument | null;
+};
+
+export type ReservationInfo = {
+    reservation: ReservationDocument;
+    invoices: PopulatedInvoice[];
+    receipts: string[];
+};

@@ -70,7 +70,7 @@ function BookingStatement({additional, form, invoices}:Props) {
               {/* Accommodation */}
               <Box display="flex" sx={{marginBottom:"10px"}}>
                   <div style={{flexGrow:"1"}}>
-                      <Typography variant="h5" fontWeight={500} color="initial">{accommodation?.title}</Typography>
+                      <Typography variant="h5" fontWeight={500} color="initial">{accommodation?.title || accommodation.accommodation.title }</Typography>
                   </div>
                   <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation?.fees?.[parseInt(shift||"0")]?.rate || accommodation?.rate}</Typography>
               </Box>

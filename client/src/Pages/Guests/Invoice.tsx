@@ -315,20 +315,23 @@ function Invoice({}:Props) {
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
                         View Receipt 
                     </Typography>
-                    <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
+                    {/* <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
                         Attached Image for receipt 
-                    </Typography>
+                    </Typography> */}
                     <Grid container spacing={2}>
+                      { data?.[0]?.receipts?.map((receipt:any)=>(
                         <Grid item xs={12} sx={{marginBottom:"25px",overflowY:"scroll",maxHeight:"500px"}}>
-                            <img style={{width:"100%"}} src="https://sp-uploads.s3.amazonaws.com/uploads/services/2452054/20220310214231_622a70c730534_gcash_skypay_paybills_10032022173641.png_blurred.jpeg" alt="" />
-                        </Grid>
+                          <img style={{width:"100%"}} src={receipt} alt="" />
+                      </Grid>
+                      ))}
+                        
 
-                        <Grid item xs={5} marginBottom={"20px"}>
+                        {/* <Grid item xs={5} marginBottom={"20px"}>
                             <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
                             <Button variant="contained" fullWidth>Send</Button>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                 </>:""}
             </Box>
