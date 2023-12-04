@@ -43,7 +43,7 @@ import TestReservation from './Test/TestReservation';
 import SendEmails from './Pages/_Test/sendEmail';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ProtectedRoute } from './Hooks/useAuth';
-
+import PolicyView from './Pages/Guests/Policy';
 
 const theme = createTheme({
   palette: {
@@ -81,6 +81,7 @@ function App() {
             <Route path="/invoice" element={<Invoice />} />
             <Route path="/reservation/:id" element={<Invoice />} />
             <Route path="/payment/:id" element={<Payment />} />
+            <Route path='/policy' element={<PolicyView/>}/>
           </Route>
 
           <Route element={<AppLayout />} >

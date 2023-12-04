@@ -67,7 +67,7 @@ export default function Header() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/policy"
             sx={{
               fontWeight:"500",
               display: { xs: 'none', md: 'flex' },
