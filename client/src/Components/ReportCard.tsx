@@ -13,7 +13,7 @@ type Props = {
 }
 function ReportCard({variant,title,value}:Props) {
     return (
-        <Paper variant="elevation" elevation={3} sx={{width:"100%",maxWidth:"400px",minWidth:"300px",padding:"1em",background:"#D9D9D9"}}>
+        <Paper variant="elevation" elevation={3} sx={{width:"300px",padding:"1em",background:"#D9D9D9"}}>
             <Box display="flex" alignItems={"center"}  gap={"10px"}>
                 <Box display="flex" sx={{background:"white", height:"70px",width:"70px",borderRadius:"12px",justifyContent:"center", alignItems:"center"}}>
 

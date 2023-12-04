@@ -122,12 +122,28 @@ function Report() {
   }, [reservations, dateFilterInput.start, dateFilterInput.end]);
 
   useEffect(() => {
-    if (dateFilterInput.start !== '' && dateFilterInput.end !== '') {
-      const filteredData = filterByDateRange(reports, new Date(dateFilterInput.start), new Date(dateFilterInput.end));
-      setReports(filteredData);
+    if (!reservations) {
+      return; // Exit early if reservations is null
     }
-  }, [dateFilterInput.start, dateFilterInput.end]);
-
+    if (dateFilterInput.start !== '' && dateFilterInput.end !== '') {
+      const startDate = new Date(dateFilterInput.start);
+      const endDate = new Date(dateFilterInput.end);
+  
+      const filteredAndSorted = reservations
+        .filter((reservation: any) => ['checkedOut', 'pending', 'cancelled', 'refunded'].includes(reservation.status))
+        .sort((a: any, b: any) => new Date(b.schedule).getTime() - new Date(a.schedule).getTime());
+  
+      const filteredData = filterByDateRange(filteredAndSorted, startDate, endDate);
+      setReports(filteredData);
+    } else {
+      // If no date range is specified, set the reports directly
+      const filteredAndSorted = reservations
+        .filter((reservation: any) => ['checkedOut', 'pending', 'cancelled', 'refunded'].includes(reservation.status))
+        .sort((a: any, b: any) => new Date(b.schedule).getTime() - new Date(a.schedule).getTime());
+      setReports(filteredAndSorted);
+    }
+  }, [reservations, dateFilterInput.start, dateFilterInput.end]);
+  
   useEffect(() => {
     if (reports) {
       setReportCardValue((prevReportCardValue) => ({
@@ -149,7 +165,7 @@ function Report() {
               <ReportCard variant='revenue' title="Total Sales" value={reportCardValue.TotalSales}/>
           </Box>
           <Box display="flex" m={"45px 0"} gap={"25px"} alignItems={"center"}>
-              <Box display={"flex"} gap={"10px"} sx={{flexGrow:"1"}}>
+              <Box display={"flex"} gap={"10px"} sx={{ flexGrow: "1" }}>
                 <TextField
                   id="fromDate"
                   label=""
@@ -161,15 +177,15 @@ function Report() {
                     // Update state correctly
                     setDateFilterInput((prevState) => ({
                       ...prevState,
-                      start: selectedDate.toISOString().split('T')[0], // Format to 'YYYY-MM-DD'
+                      start: selectedDate.toISOString().split("T")[0], // Format to 'YYYY-MM-DD'
                     }));
                   }}
                 />
                 <TextField
-                  id="fromDate"
+                  id="toDate" 
                   label=""
-                  type='date'
-                  onChange={(e) => handleDateChange(e, 'end')}
+                  type="date"
+                  onChange={(e) => handleDateChange(e, "end")}
                 />
               </Box>
               <ButtonGroup
