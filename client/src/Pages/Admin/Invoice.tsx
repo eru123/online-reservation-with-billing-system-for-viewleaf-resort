@@ -72,6 +72,7 @@ function Invoice() {
             <hr>
             <p>Reference Number: ${data?.[0]?.reservationId}</p>
             <p>Scheduled Date: ${ moment(data?.[0]?.schedule).format('DD/MM/YYYY')} - ${data?.[0]?.invoices?.[0]?.shift}</p>
+            ${note ? `<p>Note: ${note}</p>` : ""}
             <hr>
             <h4>View your reservation details <a href="${process.env.REACT_APP_URL}/reservation/${data?.[0]?.reservationId}">here</a>.</h4>
             <h5>Strictly do not share your reference number as it is used to access your reservation details</h5>

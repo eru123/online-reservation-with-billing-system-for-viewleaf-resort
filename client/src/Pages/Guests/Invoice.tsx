@@ -75,7 +75,7 @@ function Invoice({}:Props) {
 
     useEffect(()=>{
       if (data?.[0]) {
-        setStatus(data?.[0].status)
+        setStatus(data?.[0]?.status)
       } else {
         getReservation({
           reservationId: id || ""
@@ -104,7 +104,7 @@ function Invoice({}:Props) {
           {status==="pending"?
             <Box sx={{position:"relative"}}>
               <Alert severity="warning" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>Please make the payment to finalize your reservation, Thank you!</Alert>
-              <Chip label="Pay now" variant="outlined" onClick={()=>{}} component={Link} to={`/payment/${data?.[0].reservationId}`} color="primary" sx={{position:"absolute",top:"50%",right:"10px",transform:"translateY(-50%)"}}/>   
+              <Chip label="Pay now" variant="outlined" onClick={()=>{}} component={Link} to={`/payment/${data?.[0]?.reservationId}`} color="primary" sx={{position:"absolute",top:"50%",right:"10px",transform:"translateY(-50%)"}}/>   
             </Box>
           :""}
           {status==="paid"?
@@ -124,7 +124,7 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                {filterByStatus(data?.[0]?.notes, status)?.note}
+                {filterByStatus(data?.[0]?.notes, status)?.[0].note}
               </Typography>
             </Paper>
           </>:""}
@@ -133,7 +133,7 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                {filterByStatus(data?.[0]?.notes, status)?.note}
+                {filterByStatus(data?.[0]?.notes, status)?.[0].note}
               </Typography>
             </Paper>
           </>:""}
@@ -142,7 +142,7 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                {filterByStatus(data?.[0]?.notes, status)?.note}
+                {filterByStatus(data?.[0]?.notes, status)?.[0].note}
               </Typography>
             </Paper>
           </>:""}
@@ -151,28 +151,44 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                {filterByStatus(data?.[0]?.notes, status)?.note}
+                {filterByStatus(data?.[0]?.notes, status)?.[0].note}
               </Typography>
             </Paper>
           </>:""}
 
           {status==="refunded"?<>
             <Alert severity="error" sx={{margin:"2em 0 ", zIndex:"23"}}>This reservation is refunded</Alert>
+            {filterByStatus(data?.[0]?.notes, status)?.[0].note && <>
+              <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+                <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+                <Typography variant="body2"  color="initial">
+                  {filterByStatus(data?.[0]?.notes, status)?.[0].note}
+                </Typography>
+              </Paper>
+            </>}
           </>:""}
 
           {status==="cancelled"?<>
             <Alert severity="error" sx={{margin:"2em 0 ", zIndex:"23"}}>This reservation is cancelled</Alert>
+            {filterByStatus(data?.[0]?.notes, status)?.[0].note && <>
+              <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+                <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+                <Typography variant="body2"  color="initial">
+                  {filterByStatus(data?.[0]?.notes, status)?.[0].note}
+                </Typography>
+              </Paper>
+            </>}
           </>:""}
           
           
           {/*Header  */}
           <Box display="flex" sx={{margin:"25px 0"}}>
               <Box sx={{flexGrow:"1"}}>
-                <Typography variant="h4" color="primary" >#{data?.[0].reservationId}</Typography>
+                <Typography variant="h4" color="primary" >#{data?.[0]?.reservationId}</Typography>
                 <Typography variant="h6" color="initial" sx={{opacity:".6"}}>Reference Number</Typography>
               </Box>
               <Box >
-                <Typography textAlign={"end"} variant="h4" color="primary" >{data?.[0].schedule} - {data?.[0]?.invoices?.[0].shift}</Typography>
+                <Typography textAlign={"end"} variant="h4" color="primary" >{data?.[0]?.schedule} - {data?.[0]?.invoices?.[0]?.shift}</Typography>
                 <Typography textAlign={"end"} variant="h6" color="initial" sx={{opacity:".6"}}>Scheduled Date</Typography>
               </Box>
           </Box>
@@ -180,15 +196,15 @@ function Invoice({}:Props) {
           {/* User Details */}
           <Paper variant="elevation" elevation={3} sx={{borderRadius:"8px",background:"#e3e3e3",padding:"1em",margin:"2em 0" ,display:"flex",alignItems:"center"}}>
             <Box sx={{flexGrow:"1"}}>
-              <Typography variant="h5" color="initial" fontWeight={500}>{data?.[0].customer?.name}</Typography>
+              <Typography variant="h5" color="initial" fontWeight={500}>{data?.[0]?.customer?.name}</Typography>
               <Box display="flex" gap={"15px"} mt={1}>
                 <Box display="flex" gap="5px">
                     <CallIcon/>
-                    <Typography variant="body1" color="initial">{data?.[0].customer?.phone}</Typography>
+                    <Typography variant="body1" color="initial">{data?.[0]?.customer?.phone}</Typography>
                 </Box>
                 <Box display="flex" gap="5px">
                     <EmailIcon/>
-                    <Typography variant="body1" color="initial">{data?.[0].customer?.email}</Typography>
+                    <Typography variant="body1" color="initial">{data?.[0]?.customer?.email}</Typography>
                 </Box>
               </Box>
             </Box>
