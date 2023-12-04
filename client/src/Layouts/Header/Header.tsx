@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import LogoImg from '../../Images/LogoDrop.png'
 
-import { useAuth } from '../../Hooks/useAuth';
 
 export default function Header() {
 

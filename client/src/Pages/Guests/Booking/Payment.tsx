@@ -13,6 +13,7 @@ import useReservation from '../../../Hooks/useReservation'
 import useContent from '../../../Hooks/useContent'
 import useFirebase from '../../../Hooks/useFirebase';
 import { Button } from '@mui/material';
+import Alert from '@mui/material/Alert';
 
 function Payment() {
   const {id} = useParams();
@@ -67,7 +68,19 @@ function Payment() {
 
     return {total: total, minimum: accommodations}
   }
+  const createdAtDate = new Date(content?.createdAt);
 
+  // Add 15 minutes to the createdAtDate
+  createdAtDate.setMinutes(createdAtDate.getMinutes() + 15);
+
+  // Format the modified date
+  const formattedDate = createdAtDate.toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  });
   useEffect(()=>{
     getReservation({reservationId:id});
     getContent();
@@ -82,7 +95,14 @@ function Payment() {
         <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
           <Typography variant="h4" color="primary" fontWeight={600}>Payment</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>You can follow the instruction Below</Typography>
-          <Box display="flex" gap={4}>
+          <Alert severity="warning"> Your payment is expecting to be sent by -{' '}
+            <span style={{ fontWeight: '600' }}>
+              {formattedDate}
+            </span>
+            
+          </Alert>
+
+          <Box display="flex" gap={4} mt={2}>
             <Box >
               <Typography variant="subtitle2" color="initial" sx={{opacity:'.6'}}>Total</Typography>
               <Typography variant="h6" color="initial" fontWeight={600}>₱{reservation ? calculateCost(reservation)?.total : ""}</Typography>

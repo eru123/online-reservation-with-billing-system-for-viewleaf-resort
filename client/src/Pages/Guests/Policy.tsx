@@ -1,8 +1,6 @@
 import React,{useEffect}from 'react'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
-
 import useContent from '../../Hooks/useContent'
 function Policy() {
   const {data:content, loading:contentLoading, error:contentError, getContent} = useContent();
