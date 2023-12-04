@@ -1,4 +1,4 @@
-import React, {useEffect}  from 'react'
+import React, {useState, useEffect}  from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
@@ -50,7 +50,8 @@ function Invoice() {
     const {id} = useParams();
     const {data, loading, error, getReservation, updateReservation} = useReservation();
     const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checked in" | "refunded" | "cancelled" | "checked out">("checked out");
-    
+    const [note, setNote] = useState<string>("")
+
     const submit = (status: string, note: string) => {
       updateReservation({
         reservationId: id||"",
@@ -79,9 +80,9 @@ function Invoice() {
             <Box display="flex" gap={"15px"} sx={{flexWrap:"wrap"}} mt={2}>
 
                 {status ==="approved"?<>
-                  <Chip icon={<CurrencyExchangeIcon />} label="Get Refund" variant="outlined" onClick={()=>{setOpen("refund")}} />
-                  <Chip icon={<EventRepeatIcon     />} label="Reschedule Reservation" variant="outlined" onClick={()=>{setOpen("reschedule")}} />
-                  <Chip icon={<DoNotDisturbAltIcon />} label="Cancel Reservation" variant="outlined" onClick={()=>{setOpen("cancel")}} />
+                  <Chip icon={<CurrencyExchangeIcon />} label="Refund" variant="outlined" onClick={()=>{setOpen("refund")}} />
+                  <Chip icon={<EventRepeatIcon     />} label="Reschedule" variant="outlined" onClick={()=>{setOpen("reschedule")}} />
+                  <Chip icon={<DoNotDisturbAltIcon />} label="Cancel" variant="outlined" onClick={()=>{setOpen("cancel")}} />
                 </>:""}
                 {status ==="checked in"?<>
                   <Chip icon={<CurrencyExchangeIcon />} label="Get Refund" variant="outlined" onClick={()=>{setOpen("refund")}} />
@@ -231,7 +232,7 @@ function Invoice() {
                 </>:""}
                 {open ==="refund"?<>
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
-                        Get Refund
+                        Refund
                     </Typography>
                     <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
                         Only the 50% of the payment is refundable
@@ -244,14 +245,15 @@ function Invoice() {
                                 multiline
                                 fullWidth
                                 required
+                                onChange={(e)=>{setNote(e.target.value)}}
                             />
                         </Grid>
 
                         <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                            <Button variant="text" onClick={()=>{setOpen("");}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
-                            <Button variant="contained" fullWidth>Send</Button>
+                            <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("cancelled", note)}}>Send</Button>
                         </Grid>
                     </Grid>
                 </>:""}
@@ -270,13 +272,14 @@ function Invoice() {
                                 multiline
                                 fullWidth
                                 required
+                                onChange={(e)=>{setNote(e.target.value)}}
                             />
                         </Grid>
                         <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                            <Button variant="text" onClick={()=>{setOpen("");}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
-                            <Button variant="contained" fullWidth>Send</Button>
+                            <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("cancelled", note)}}>Send</Button>
                         </Grid>
                     </Grid>
                 </>:""}
