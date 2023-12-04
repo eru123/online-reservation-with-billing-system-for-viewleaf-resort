@@ -77,6 +77,43 @@ function Report() {
     return totalAccommodation;
   }
   
+  const getTotalAmountForAllReservations = (data: any) => {
+    let totalAccommodations = 0;
+    let totalInclusions = 0;
+    let totalGuests = 0;
+  
+    if (data && data.length > 0) {
+      data.forEach((reservation: any) => {
+        if (reservation.invoices && reservation.invoices.length > 0) {
+          reservation.invoices.forEach((item: any) => {
+            // Calculate accommodations
+            totalAccommodations += item.rate;
+  
+            // Calculate guests
+            totalGuests +=
+              parseFloat(item.guests.adult) * parseFloat(item.guestFee.adult) +
+              parseFloat(item.guests.kids) * parseFloat(item.guestFee.kids) +
+              parseFloat(item.guests.senior) * (parseFloat(item.guestFee.adult) * 0.8) +
+              parseFloat(item.guests.pwd) * (parseFloat(item.guestFee.adult) * 0.8);
+  
+            // Calculate inclusions
+            if (item.inclusions && item.inclusions.length > 0) {
+              item.inclusions.forEach((inclusion: any) => {
+                totalInclusions += inclusion.price * inclusion.quantity;
+              });
+            }
+          });
+        }
+      });
+    }
+  
+    const total = totalAccommodations + totalInclusions + totalGuests;
+    return { total, accommodations: totalAccommodations, inclusions: totalInclusions, guests: totalGuests };
+  };
+  
+  
+  
+  
   const calculateTotalAmount = (data: any) => {
     let totalAccommodations = 0;
     let totalInclusions = 0;
@@ -181,9 +218,11 @@ function Report() {
         ...prevReportCardValue,
         TotalGuests: getTotalNumberOfGuests(reports),
         TotalAccommodation: getTotalAccommodation(reports),
+        TotalSales: getTotalAmountForAllReservations(reports).total
       }));
     }
   }, [reports]);
+  
 
   if(loadingReports) return <><div>Loading...</div></>
   return (
@@ -277,7 +316,7 @@ function Report() {
                               color={reservation?.status === 'cancelled' ? "error" : (reservation?.status === "approved" ? "primary" : "info")}
                             />
                           </TableCell>
-                          <TableCell>{costInfo.total}</TableCell> {/* Display the total amount per reservation */}
+                          <TableCell>₱{costInfo.total}</TableCell> {/* Display the total amount per reservation */}
                         </TableRow>
                       );
                     })}
