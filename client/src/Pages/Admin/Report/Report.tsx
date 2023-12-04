@@ -316,7 +316,7 @@ function Report() {
                               color={reservation?.status === 'cancelled' ? "error" : (reservation?.status === "approved" ? "primary" : "info")}
                             />
                           </TableCell>
-                          <TableCell>₱{costInfo.total}</TableCell> {/* Display the total amount per reservation */}
+                          <TableCell>₱{costInfo.total.toLocaleString()}</TableCell> {/* Display the total amount per reservation */}
                         </TableRow>
                       );
                     })}
