@@ -58,7 +58,7 @@ router.patch('/pay', asynchronousHandler(payReservation));
  *     inclusions: [{name: string, quantity: number }] (optional)
  * }]
  */
-router.patch('/', asynchronousHandler(addExtras));
+router.patch('/extras', asynchronousHandler(addExtras));
 
 /**
  * reservationId: string
