@@ -33,6 +33,13 @@ router.post('/', asynchronousHandler(createReservation));
 
 /**
  * reservationId: string
+ * status: string
+ * note: string
+ */
+router.patch('/', asynchronousHandler(updateStatus));
+
+/**
+ * reservationId: string
  * accommodations: [{
  *     accommodationId: string
  *     shift: Shift
