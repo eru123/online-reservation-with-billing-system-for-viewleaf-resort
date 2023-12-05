@@ -3,6 +3,7 @@ import {
     getAccommodations,
     createAccommodation, 
     updateAccommodationDetails, 
+    updateInclusions, 
     updateShiftFees 
 } from './accommodation.controller';
 import { limitUsers } from '../../middlewares/authorize';
@@ -60,5 +61,7 @@ router.post('/shifts', asynchronousHandler(addShift));
  * kidsFee?: number
  */
 router.patch('/shifts', asynchronousHandler(updateShiftFees));
+
+router.patch('/inclusions', asynchronousHandler(updateInclusions));
 
 export default router;

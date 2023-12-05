@@ -1,4 +1,4 @@
-import { id } from '../../utilities/ids';
+import { reservation } from '../../utilities/ids';
 import { ReservationDocument, ReservationStatus } from './reservation.types';
 import { Schema, model } from 'mongoose';
 
@@ -7,7 +7,7 @@ const reservationSchema = new Schema(
         reservationId: {
             type: String,
             unique: true,
-            default: id
+            default: reservation
         },
         customer: {
             type: {

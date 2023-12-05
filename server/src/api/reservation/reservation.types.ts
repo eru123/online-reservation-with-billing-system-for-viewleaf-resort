@@ -96,3 +96,8 @@ export type ReservationInfo = {
     invoices: PopulatedInvoice[];
     receipts: string[];
 };
+
+export type RescheduleReservation = {
+    reservationId: string;
+    schedule: number;
+}

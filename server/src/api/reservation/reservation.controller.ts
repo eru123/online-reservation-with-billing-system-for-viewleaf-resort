@@ -10,7 +10,8 @@ import {
     ReservationStatus,
     ReservationInfo,
     UpdateStatus,
-    PopulatedInvoice
+    PopulatedInvoice,
+    RescheduleReservation
 } from './reservation.types';
 import { InvoiceDocument, InvoicePopulatedDocument } from '../invoice/invoice.types';
 import { Shift } from '../accommodation/accommodation.types';
@@ -250,3 +251,21 @@ export const payReservation: RequestHandler = async (req: BodyRequest<PayReserva
 
     res.sendStatus(204);
 };
+
+export const rescheduleReservation: RequestHandler = async (req: BodyRequest<RescheduleReservation>, res) => {
+    const { reservationId, schedule } = req.body;
+
+    const checker = new CheckData();
+    checker.checkType(reservationId, 'string', 'reservationId');
+    checker.checkType(schedule, 'string', 'schedule');
+
+    if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+    const reservation = await ReservationModel.findOne({ reservationId }).exec();
+    if (!reservation) throw new NotFound('Reservation');
+
+    reservation.schedule = new Date(schedule);
+    await reservation.save();
+
+    res.sendStatus(204);
+}
