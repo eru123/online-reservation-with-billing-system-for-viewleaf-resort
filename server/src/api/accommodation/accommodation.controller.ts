@@ -8,6 +8,7 @@ import {
     GetAccommodations,
     Shift,
     UpdateAccommodation,
+    UpdateInclusions,
     UpdateShiftFees
 } from './accommodation.types';
 import { BodyRequest, QueryRequest, RequestHandler } from 'express';
@@ -68,9 +69,9 @@ export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAcc
         .flat();
 
     // Get all available accommodations
-    let accommodations: AccommodationDocument[] = await AccommodationModel
-        .find({ availability: AccommodationAvailbility.AVAILABLE })
-        .exec();
+    let accommodations: AccommodationDocument[] = await AccommodationModel.find({
+        availability: AccommodationAvailbility.AVAILABLE
+    }).exec();
 
     accommodations = accommodations
         // Filter out accommodations where shift is in invoiceAccommodations
@@ -292,6 +293,42 @@ export const updateShiftFees: RequestHandler = async (req: BodyRequest<UpdateShi
 
         shiftExists.guestFee.kids = kidsFee;
     }
+
+    // Save changes
+    await accommodation.save();
+
+    res.sendStatus(204);
+};
+
+export const updateInclusions: RequestHandler = async (req: BodyRequest<UpdateInclusions>, res) => {
+    const { accommodationId, inclusions } = req.body;
+
+    const checker = new CheckData();
+    checker.checkType(accommodationId, 'string', 'accommodationId');
+    checker.checkArray(inclusions, 0, 'inclusions');
+
+    if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+    for (let i = 0; i < inclusions.length; i++) {
+        const { name, price } = inclusions[i];
+
+        checker.checkType(name, 'string', `inclusions.${i}.name`);
+        checker.checkType(price, 'number', `inclusions.${i}.price`);
+
+        if (checker.size() > 0) continue;
+    }
+
+    if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+    const accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
+    if (!accommodation) throw new NotFound('Accommodation');
+
+    const uniqueInclusions = inclusions.filter(
+        (inclusion, idx, originalInclusions) => 
+            originalInclusions.findIndex((i) => i.name === inclusion.name) === idx
+    );
+
+    accommodation.inclusions = uniqueInclusions.map((inclusion) => ({ ...inclusion, accommodationId }));
 
     // Save changes
     await accommodation.save();

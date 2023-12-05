@@ -94,6 +94,11 @@ export type GetAccommodations = {
     shift?: Shift;
 }
 
+export type UpdateInclusions = {
+    accommodationId: string;
+    inclusions: Omit<Inclusion, 'accommodationId'>[];
+}
+
 /* HELPERS */
 
 export type CombinedInvoiceAccommodation = {
