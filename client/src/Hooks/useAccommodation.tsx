@@ -73,6 +73,14 @@ function useAccommodation() {
     });
   };
 
+  const updateInclusions = (content: any) => {
+    makeRequest({
+      method: 'patch',
+      url: `/inclusions`,
+      data: content,
+    });
+  };
+
   return {
     data,
     loading,
@@ -81,7 +89,8 @@ function useAccommodation() {
     createAccommodation,
     updateAccommodation,
     createShift,
-    updateShift
+    updateShift,
+    updateInclusions
   };
 }
 
