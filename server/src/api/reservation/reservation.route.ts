@@ -1,12 +1,8 @@
-import { 
-  // addExtras, 
-  createReservation, 
-  getReservations,
-  payReservation,
-  updateStatus
-} from "./reservation.controller";
+import { addExtras, createReservation, getReservations, payReservation, rescheduleReservation, updateStatus } from "./reservation.controller";
 import { Router } from "express";
 import asynchronousHandler from "../../middlewares/asynchronousHandler";
+import { limitUsers } from "../../middlewares/authorize";
+import { Role } from "../staff/staff.types";
 
 const router = Router();
 
@@ -37,6 +33,19 @@ router.post('/', asynchronousHandler(createReservation));
 
 /**
  * reservationId: string
+ * status: string
+ * note: string
+ */
+router.patch('/', asynchronousHandler(updateStatus));
+
+/**
+ * reservationId: string
+ * receipt: string
+ */
+router.patch('/pay', asynchronousHandler(payReservation));
+
+/**
+ * reservationId: string
  * accommodations: [{
  *     accommodationId: string
  *     shift: Shift
@@ -49,9 +58,12 @@ router.post('/', asynchronousHandler(createReservation));
  *     inclusions: [{name: string, quantity: number }] (optional)
  * }]
  */
-// router.patch('/', asynchronousHandler(addExtras));
+router.patch('/extras', asynchronousHandler(addExtras));
 
-router.post('/pay', asynchronousHandler(payReservation));
-router.patch('/update', asynchronousHandler(updateStatus))
+/**
+ * reservationId: string
+ * schedule: number
+ */
+router.patch('/reschedule', limitUsers(Role.ADMIN), asynchronousHandler(rescheduleReservation));
 
 export default router;
