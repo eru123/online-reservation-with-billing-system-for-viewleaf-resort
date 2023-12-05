@@ -71,7 +71,7 @@ function Report() {
         Array.isArray(reservation.invoices) &&
         reservation.invoices.length > 0
       ) {
-        totalAccommodation += 1; // Increment by 1 for each reservation with at least one invoice
+        totalAccommodation += reservation.invoices.length;
       }
     }
     return totalAccommodation;
