@@ -36,3 +36,5 @@ export const id = (): string => {
 };
 
 export const password = (): string => stringBuffer(Buffer.concat([randomBytes(10), bufferHex(Date.now())]));
+
+export const reservation = (): string => stringBuffer(randomBytes(8));
