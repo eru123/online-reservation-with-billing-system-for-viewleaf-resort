@@ -19,7 +19,23 @@ function Dashboard() {
   const { data: reservations, loading: reservationLoading, getReservation } = useReservation();
   const [filteredReservations, setFilteredReservations] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-
+  const [reportCardValue,setReportCardValue] = useState(0);
+  function getTotalAccommodation(reservations: any): number {
+    let totalAccommodation = 0;
+  
+    for (const reservation of reservations) {
+      // Check if reservation has invoices and invoices is an array with at least one element
+      if (
+        reservation?.invoices &&
+        Array.isArray(reservation.invoices) &&
+        reservation.invoices.length > 0
+      ) {
+        totalAccommodation += reservation.invoices.length;
+      }
+    }
+    return totalAccommodation;
+  }
+  
   useEffect(() => {
     getReservation();
   }, []);
@@ -35,6 +51,7 @@ function Dashboard() {
         );
       });
       setFilteredReservations(filtered);
+      setReportCardValue(getTotalAccommodation(filtered))
     }
   }, [reservations]);
   
@@ -93,8 +110,8 @@ function Dashboard() {
         </Grid>
         <Grid item md={3}>
           <Box display="flex" flexDirection={"column"} gap={"15px"} >
-            <ReportCard variant='reservation' title={"Today’s Reservation"} value={5} />
-            <ReportCard variant='accommodation' title={"Today’s Accommodation"} value={25} />
+            <ReportCard variant='reservation' title={"Today’s Reservation"} value={filteredReservations?.length} />
+            <ReportCard variant='accommodation' title={"Today’s Accommodation"} value={reportCardValue} />
           </Box>
         </Grid>
       </Grid>

@@ -68,13 +68,13 @@ function LandingPage() {
   if (faqError || contentError) return <p>Error</p>
 
   return (
-      <div>
+      <div id="home">
           <Box position="relative" height="400px" sx={{ backgroundImage: "url('../Images/Resources/Section1BG.jpg')", backgroundSize: "cover",overflow:"hidden"}}>
               <img src={Section1Img} alt="" width={"100%"}  style={{position:"absolute",top:"50%",transform:"translateY(-50%)",minHeight:"1000px"}}/>
               <Box position={"absolute"} height={"100%"} width={"100%"}  top="50%" sx={{transform:("translateY(-50%)"), background:"black",opacity:".56"}}>
                   
               </Box>
-              <Box position="absolute" top="55%" left="50%" sx={{transform:("translate(-50%,-45%)")}}>
+              <Box  position="absolute" top="55%" left="50%" sx={{transform:("translate(-50%,-45%)")}}>
                   <Typography variant="h6" textAlign={"center"} fontWeight={400} color="white">
                       ---- WELCOME TO ----
                   </Typography>
@@ -86,7 +86,7 @@ function LandingPage() {
                   </Typography>
               </Box>
           </Box>
-          <Container maxWidth="lg" sx={{padding:"4em 0"}}>
+          <Container maxWidth="lg" sx={{padding:"4em 0"}} id="about">
             <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
                     <Typography variant="h5" color="primary" style={{marginBottom:"20px"}} fontWeight={600}>About Us</Typography>

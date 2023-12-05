@@ -15,7 +15,7 @@ export default function Header() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/#about"
             sx={{
               fontWeight:"500",
               display: { xs: 'none', md: 'flex' },
@@ -30,7 +30,7 @@ export default function Header() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/#contact"
             sx={{
               fontWeight:"500",
               display: { xs: 'none', md: 'flex' },
@@ -41,7 +41,7 @@ export default function Header() {
           >
             Contact Us
           </Typography>
-          <a href="/">
+          <a href="/#home">
             <Box >
               <img src={LogoImg} alt="" />
             </Box>
@@ -50,7 +50,7 @@ export default function Header() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/#accommodation"
             sx={{
               fontWeight:"500",
               display: { xs: 'none', md: 'flex' },

@@ -163,28 +163,7 @@ function Report() {
   useEffect(()=>{
     getReservation();
   },[])
-  useEffect(() => {
-    // Filter and sort reservations based on the schedule
-    if (reservations) {
-      const filteredAndSorted = reservations
-        .filter((reservation: any) => ['checkedOut', 'pending', 'cancelled', 'refunded'].includes(reservation.status))
-        .sort((a: any, b: any) => new Date(b.schedule).getTime() - new Date(a.schedule).getTime());
-  
-      // Apply date range filtering
-      if (dateFilterInput.start !== '' && dateFilterInput.end !== '') {
-        const startDate = new Date(dateFilterInput.start);
-        const endDate = new Date(dateFilterInput.end);
-        const filteredData = filteredAndSorted.filter((reservation: any) => {
-          const reservationDate = new Date(reservation.schedule);
-          return reservationDate >= startDate && reservationDate <= endDate;
-        });
-        setReports(filteredData);
-      } else {
-        // If no date range is specified, set the reports directly
-        setReports(filteredAndSorted);
-      }
-    }
-  }, [reservations, dateFilterInput.start, dateFilterInput.end]);
+
 
   useEffect(() => {
     if (!reservations) {
@@ -195,7 +174,7 @@ function Report() {
       const endDate = new Date(dateFilterInput.end);
   
       const filteredAndSorted = reservations
-        .filter((reservation: any) => ['checkedOut', 'pending', 'cancelled', 'refunded'].includes(reservation.status))
+        .filter((reservation: any) => ['checkedOut', 'pending'].includes(reservation.status))
         .sort((a: any, b: any) => new Date(b.schedule).getTime() - new Date(a.schedule).getTime());
   
       const filteredData = filterByDateRange(filteredAndSorted, startDate, endDate);
@@ -203,7 +182,7 @@ function Report() {
     } else {
       // If no date range is specified, set the reports directly
       const filteredAndSorted = reservations
-        .filter((reservation: any) => ['checkedOut', 'pending', 'cancelled', 'refunded'].includes(reservation.status))
+        .filter((reservation: any) => ['checkedOut', 'pending'].includes(reservation.status))
         .sort((a: any, b: any) => new Date(b.schedule).getTime() - new Date(a.schedule).getTime());
       setReports(filteredAndSorted);
     }

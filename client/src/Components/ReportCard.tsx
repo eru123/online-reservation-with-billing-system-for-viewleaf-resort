@@ -26,8 +26,8 @@ function ReportCard({variant,title,value}:Props) {
                     <Typography variant="h4" color="primary" marginTop={"-8px"} fontWeight={600}>
                       {variant ==="revenue"?
                       "₱":""}
-                      {value.toLocaleString()}
-                      </Typography>
+                      {value?.toLocaleString()}
+                    </Typography>
                 </Box>
             </Box>
         </Paper>
