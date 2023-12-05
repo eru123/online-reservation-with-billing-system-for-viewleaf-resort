@@ -34,7 +34,7 @@ import useContent from '../Hooks/useContent'
 import useFAQ from '../Hooks/useFAQ'
 import useAccommodation from '../Hooks/useAccommodation'
 import dayjs from 'dayjs'
-
+import QuestionImg from "../Images/question.png"
 
 function LandingPage() {
   // Set utilities
@@ -164,7 +164,7 @@ function LandingPage() {
                     </Paper>
                 </Grid>
             </Grid>
-            <div style={{margin:"4em 0"}}>
+            <div style={{margin:"4em 0"}} id='accommodation'>
               <Typography variant="h5" color="primary" style={{marginBottom:"15px"}} align='center' fontWeight={600}>Gallery</Typography>
               {Array.isArray(accommodations) && !(accommodations.length <=0)?<>
                 <ImageList sx={{ width: "100%"}} cols={3} >
@@ -178,7 +178,12 @@ function LandingPage() {
                     </ImageListItem>
                   ))}
                 </ImageList>
-              </>:""}
+              </>:<>
+                <Box display="flex" flexDirection={"column"} gap={"25px"} width={"100%"}  sx={{opacity:".5"}} height={"400px"}  alignItems={"center"} justifyContent={"center"}>
+                  <img src={QuestionImg} alt="" />
+                  <Typography variant="subtitle2" color="initial" >There's no images</Typography>
+                </Box>
+              </>}
             </div>
 
             <div style={{margin:"4em 0"}}>
@@ -190,8 +195,9 @@ function LandingPage() {
                     ))}
                   </Box>
                 </>:<>
-                  <Box display="flex" width={"100%"} height={"400px"}>
-                    <Typography variant="h6" color="initial">Currently there's no accommodation registered</Typography>
+                  <Box display="flex" flexDirection={"column"} gap={"25px"} width={"100%"}  sx={{opacity:".5"}} height={"400px"}  alignItems={"center"} justifyContent={"center"}>
+                    <img src={QuestionImg} alt="" />
+                    <Typography variant="subtitle2" color="initial" >Currently there's no accommodation registered</Typography>
                   </Box>
                 </>}
                 
@@ -205,7 +211,7 @@ function LandingPage() {
             </div>
             </>:""}
           </Container>
-          <div style={{position:"relative",overflow:"hidden"}}>
+          <div style={{position:"relative",overflow:"hidden"}} id='contact'>
               <img src={Section2Img} style={{position:"absolute", top:"50%",minHeight:"100%",transform:"translateY(-50%)",width:"100%",zIndex:"-25", }} alt="" />
               <div style={{position:"absolute",width:"100%",height:"100%",zIndex:"-24", background:"black",opacity:".89",}}>
                   
