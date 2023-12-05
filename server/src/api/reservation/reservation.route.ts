@@ -40,6 +40,12 @@ router.patch('/', asynchronousHandler(updateStatus));
 
 /**
  * reservationId: string
+ * receipt: string
+ */
+router.patch('/pay', asynchronousHandler(payReservation));
+
+/**
+ * reservationId: string
  * accommodations: [{
  *     accommodationId: string
  *     shift: Shift
