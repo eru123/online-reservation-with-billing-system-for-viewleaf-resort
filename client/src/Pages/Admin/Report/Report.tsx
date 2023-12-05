@@ -24,7 +24,6 @@ function Report() {
     TotalAccommodation:0,
     TotalSales:0
   })
-
   const [dateFilterButton,setDateFilterButton] = useState("sortAToZ") // sortAToZ or sortZtoA
   const [dateFilterInput,setDateFilterInput] = useState({
     start:"",
@@ -110,8 +109,6 @@ function Report() {
     const total = totalAccommodations + totalInclusions + totalGuests;
     return { total, accommodations: totalAccommodations, inclusions: totalInclusions, guests: totalGuests };
   };
-  
-  
   
   
   const calculateTotalAmount = (data: any) => {

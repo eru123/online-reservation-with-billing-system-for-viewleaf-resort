@@ -71,11 +71,11 @@ function ListReservation() {
                                   <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })}</TableCell>
                                   <TableCell></TableCell>
                                   <TableCell></TableCell>
-                                  <TableCell>
-                                  <Chip 
-                                    label={reservation.status} 
-                                    color={reservation.status === 'cancelled' ? "error" : (reservation.status === "approved" ? "success" : "info")}
-                                  />
+                                  <TableCell align='center'>
+                                    <Chip 
+                                      label={reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)} 
+                                      color={reservation.status === 'cancelled' ? "error" : (reservation.status === "approved" ? "success" : "info")}
+                                    />
                                   </TableCell>
                                 </TableRow>
                               ))}
