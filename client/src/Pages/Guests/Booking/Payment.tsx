@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useState,useEffect} from 'react'
 import Typography from '@mui/material/Typography'
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -14,8 +14,11 @@ import useContent from '../../../Hooks/useContent'
 import useFirebase from '../../../Hooks/useFirebase';
 import { Button } from '@mui/material';
 import Alert from '@mui/material/Alert';
+import { connect } from 'http2';
+import dayjs from 'dayjs';
 
 function Payment() {
+  const [estimatedTimeToPay,setEstimatedTimeToPay] = useState("");
   const {id} = useParams();
   const navigate = useNavigate();
   const {
@@ -68,23 +71,19 @@ function Payment() {
 
     return {total: total, minimum: accommodations}
   }
-  const createdAtDate = new Date(content?.createdAt);
-
-  // Add 15 minutes to the createdAtDate
-  createdAtDate.setMinutes(createdAtDate.getMinutes() + 15);
-
-  // Format the modified date
-  const formattedDate = createdAtDate.toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  });
+  
   useEffect(()=>{
     getReservation({reservationId:id});
     getContent();
   }, [])
+  useEffect(() => {
+    if (reservation) {
+      const estimatedTimeToPay = dayjs(reservation.createdAt)
+        .add(15, 'minute')
+        .format('MMM D, YYYY ( h:mm A )');
+      setEstimatedTimeToPay(estimatedTimeToPay);
+    }
+  }, [reservation]);
 
   if (reservationLoading || contentLoading) {
     return <div>Loading...</div>
@@ -95,11 +94,10 @@ function Payment() {
         <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
           <Typography variant="h4" color="primary" fontWeight={600}>Payment</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>You can follow the instruction Below</Typography>
-          <Alert severity="warning"> Your payment is expecting to be sent by -{' '}
+          <Alert severity="warning"> Your payment is expecting to be sent by - {' '}
             <span style={{ fontWeight: '600' }}>
-              {formattedDate}
+              {estimatedTimeToPay}
             </span>
-            
           </Alert>
 
           <Box display="flex" gap={4} mt={2}>

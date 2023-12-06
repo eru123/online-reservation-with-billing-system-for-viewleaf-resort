@@ -107,10 +107,18 @@ function Booking() {
         accommodations: prevForm.accommodations.filter((item: any) => item.accommodationId !== accommodationData.accommodationId),
       }));
     } else {
-      // If the accommodation with the same accommodationId doesn't exist, add it with the shift property
       setForm((prevForm: { accommodations: any }) => ({
         ...prevForm,
-        accommodations: [...(prevForm.accommodations || []), modifiedAccommodationData],
+        accommodations: [
+          ...(prevForm.accommodations || []),
+          {
+            ...modifiedAccommodationData,
+            inclusions: modifiedAccommodationData.inclusions.map((inclusion: any) => ({
+              ...inclusion,
+              quantity: 0,
+            })),
+          },
+        ],
       }));
     }
   };
@@ -210,6 +218,38 @@ function Booking() {
       }
     })
   }
+
+  function checkGuestsForAllAccommodations(data: any) {
+    // Check if 'data' is defined and 'accommodations' array exists
+    if (data && data.accommodations && data.accommodations.length > 0) {
+      // Iterate through each accommodation
+      for (const accommodation of data.accommodations) {
+        // Check if the accommodation has at least one guest
+        if (
+          accommodation.guests &&
+          (accommodation.guests.adult > 0 ||
+            accommodation.guests.kids > 0 ||
+            accommodation.guests.senior > 0 ||
+            accommodation.guests.pwd > 0)
+        ) {
+          // Accommodation has at least one guest, continue checking the next one
+          continue;
+        } else {
+          // Accommodation does not have at least one guest, return false
+          return false;
+        }
+      }
+  
+      // All accommodations have at least one guest, return true
+      return true;
+    }
+  
+    // 'data' is not valid or 'accommodations' array is empty, return false
+    return false;
+    alert("All Accommodations should have at least one guest.")
+  }
+
+
 
   function generateOTP(){
     const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -334,7 +374,16 @@ function Booking() {
                         Finish
                     </Button>
                   :
-                    <Button variant="contained" color="primary" onClick={()=> {if(active<4){setActive(active+1)}}}>
+                    <Button variant="contained" color="primary" 
+                      onClick={()=> {
+                        if (active<4) {
+                          if (checkGuestsForAllAccommodations(form)){
+                            setActive(active+1)
+                          } else{
+                            alert("All accommodations should have at least one guest")
+                          }
+                        }
+                      }}>
                         Next
                     </Button>
                   }

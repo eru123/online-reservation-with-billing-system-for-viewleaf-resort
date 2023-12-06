@@ -108,7 +108,7 @@ function LandingPage() {
                         slotProps={{ 
                           textField: { fullWidth: true ,required:true} ,
                         }}
-                        minDate={dayjs().add(3, 'day')}
+                        minDate={dayjs().add(1, 'day')}
                         onChange={(newDate) => setBookingSchedule({ ...bookingSchedule, date: newDate })}
                       />
                     </LocalizationProvider>
@@ -149,7 +149,19 @@ function LandingPage() {
                   </Grid>
                 </Grid>
               </form>
-              <form onSubmit={()=>{navigate(`/reservation/${refNum}`)}}>
+              <form onSubmit={(e) => {
+                  e.preventDefault();
+                  let cleanedRefNum = refNum;
+
+                  // Check if the first character is #
+                  if (refNum.charAt(0) === '#') {
+                    // Remove the # from the refNum
+                    cleanedRefNum = refNum.substring(1);
+                  }
+
+                  // Navigate to the cleaned reference number
+                  navigate(`/reservation/${cleanedRefNum}`);
+                }}>
                 <Grid container spacing={2} mt={2}>
                   <Grid item xs={12} display={"flex"} alignItems={"center"} gap={"10px"}>
                     <hr style={{flexGrow:"1"}}/>
