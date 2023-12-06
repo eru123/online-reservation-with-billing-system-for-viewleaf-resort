@@ -36,6 +36,7 @@ import useAccommodation from '../Hooks/useAccommodation'
 import dayjs from 'dayjs'
 import QuestionImg from "../Images/question.png"
 
+
 function LandingPage() {
   // Set utilities
   const navigate = useNavigate();
@@ -88,81 +89,91 @@ function LandingPage() {
           </Box>
           <Container maxWidth="lg" sx={{padding:"4em 0"}} id="about">
             <Grid container spacing={3}>
-                <Grid item xs={12} md={8}>
-                    <Typography variant="h5" color="primary" style={{marginBottom:"20px"}} fontWeight={600}>About Us</Typography>
-                    <Typography variant="body1" color="initial" textAlign={"justify"}lineHeight={"1.9em"} onClick={()=>{console.log(contents.about)}}>
-                      {contents?.about}
-                    </Typography>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <Paper variant="elevation" elevation={3} style={{padding:"1em",width:"100%"}}>
-                        <Typography variant="h6" color="primary" style={{marginBottom:"20px"}}>Book Now</Typography>
-                        <Grid container spacing={2}>
-                            <Grid item md={7} xs={12}>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker 
-                                      slotProps={{ 
-                                        textField: { fullWidth: true } 
-                                      }}
-                                      onChange={(newDate) => setBookingSchedule({ ...bookingSchedule, date: newDate })}
-                                    />
-                                </LocalizationProvider>
-                            </Grid>
-                            <Grid item md={5} xs={12}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">shift</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={bookingSchedule.shift}
-                                        label="Shift"
-                                        onChange={(e) => setBookingSchedule({ ...bookingSchedule, shift: e.target.value })}
-                                    >
-                                        <MenuItem value={"0"}>Day Shift</MenuItem>
-                                        <MenuItem value={"1"}>Night Shift</MenuItem>
-                                        <MenuItem value={"2"}>Whole Shift</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid xs={12}>
-                              <Typography variant="body1" color="primary" textAlign={"center"} mt={2}>
-                                {bookingSchedule.shift === "0"?<>
-                                  Day Shift is from {timestampToTime(contents?.shift.day.start)} to {timestampToTime(contents?.shift.day.end)}
-                                </> :""}
-                                {bookingSchedule.shift === "1"?<>
-                                  Night Shift is from {timestampToTime(contents?.shift.night.start)} to {timestampToTime(contents?.shift.night.end)}
-                                </> :""}
-                                {bookingSchedule.shift === "2"?<>
-                                  Whole Day Shift is from {timestampToTime(contents?.shift.whole.start)} to {timestampToTime(contents?.shift.whole.end)}
-                                </> :""}
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Button variant="contained" color="primary" fullWidth onClick={() => book()}>
-                                  Book Now
-                                </Button>
-                            </Grid>
-                            <Grid item xs={12} display={"flex"} alignItems={"center"} gap={"10px"}>
-                                <hr style={{flexGrow:"1"}}/>
-                                <Typography  variant="subtitle1" color="initial">Have Reservation?</Typography>
-                                <hr style={{flexGrow:"1"}}/>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Box display="flex" gap={"15px"}>
-                                    <TextField
-                                        fullWidth
-                                        id="refID"
-                                        placeholder='Reference ID'
-                                        onChange={(e)=> setRefNum(e.target.value)}
-                                    />
-                                    <Button variant="contained" color="primary" onClick={() => navigate(`/reservation/${refNum}`)}>
-                                        Check
-                                    </Button>
-                                </Box>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
+              <Grid item xs={12} md={8}>
+                <Typography variant="h5" color="primary" style={{marginBottom:"20px"}} fontWeight={600}>About Us</Typography>
+                <Typography variant="body1" color="initial" textAlign={"justify"}lineHeight={"1.9em"} onClick={()=>{console.log(contents.about)}}>
+                  {contents?.about}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <Paper variant="elevation" elevation={3} style={{padding:"1em",width:"100%"}}>
+                  <Typography variant="h6" color="primary" style={{marginBottom:"20px"}}>Book Now</Typography>
+                  <form onSubmit={book}>
+                    <Grid container spacing={2}>
+                      <Grid item md={7} xs={12}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs} >
+                              <DatePicker 
+                                slotProps={{ 
+                                  textField: { fullWidth: true ,required:true} ,
+                                
+                                }}
+                                
+                                
+                                onChange={(newDate) => setBookingSchedule({ ...bookingSchedule, date: newDate })}
+                              />
+                          </LocalizationProvider>
+                      </Grid>
+                      <Grid item md={5} xs={12}>
+                        <FormControl fullWidth required>
+                          <InputLabel id="demo-simple-select-label">shift</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={bookingSchedule.shift}
+                            label="Shift"
+                            onChange={(e) => setBookingSchedule({ ...bookingSchedule, shift: e.target.value })}
+                          >
+                            <MenuItem value={"0"}>Day Shift</MenuItem>
+                            <MenuItem value={"1"}>Night Shift</MenuItem>
+                            <MenuItem value={"2"}>Whole Shift</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid xs={12}>
+                        <Typography variant="body1" color="primary" textAlign={"center"} mt={2}>
+                          {bookingSchedule.shift === "0"?<>
+                            Day Shift is from {timestampToTime(contents?.shift.day.start)} to {timestampToTime(contents?.shift.day.end)}
+                          </> :""}
+                          {bookingSchedule.shift === "1"?<>
+                            Night Shift is from {timestampToTime(contents?.shift.night.start)} to {timestampToTime(contents?.shift.night.end)}
+                          </> :""}
+                          {bookingSchedule.shift === "2"?<>
+                            Whole Day Shift is from {timestampToTime(contents?.shift.whole.start)} to {timestampToTime(contents?.shift.whole.end)}
+                          </> :""}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button variant="contained" color="primary" fullWidth type='submit' >
+                          Book Now
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </form>
+                  <form onSubmit={()=>{navigate(`/reservation/${refNum}`)}}>
+                    <Grid container spacing={2} mt={2}>
+                      <Grid item xs={12} display={"flex"} alignItems={"center"} gap={"10px"}>
+                        <hr style={{flexGrow:"1"}}/>
+                        <Typography  variant="subtitle1" color="initial">Have Reservation?</Typography>
+                        <hr style={{flexGrow:"1"}}/>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Box display="flex" gap={"15px"}>
+                          <TextField
+                            required
+                            fullWidth
+                            id="refID"
+                            placeholder='Reference ID'
+                            onChange={(e)=> setRefNum(e.target.value)}
+                          />
+                          <Button variant="contained" color="primary" type='submit'>
+                            Check
+                          </Button>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </form>
+                </Paper>
+              </Grid>
             </Grid>
             <div style={{margin:"4em 0"}} id='accommodation'>
               <Typography variant="h5" color="primary" style={{marginBottom:"15px"}} align='center' fontWeight={600}>Gallery</Typography>
