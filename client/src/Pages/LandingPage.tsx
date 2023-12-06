@@ -62,7 +62,9 @@ function LandingPage() {
   useEffect(()=>{
     getFAQ();
     getContent();
-    getAccommodation();
+    getAccommodation({
+      all:true
+    });
   }, [])
 
   if (faqLoading || contentLoading || accommodationLoading) return <p>Loading...</p>
