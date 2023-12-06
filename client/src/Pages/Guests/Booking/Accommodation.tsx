@@ -57,8 +57,11 @@ function Accommodation({
 
   useEffect(()=>{
     console.log(date)
+    console.log(parseInt(date||"", 10))
     getAccommodation({
-      schedule: new Date(parseInt(date||"", 10)),
+      // schedule: new Date(parseInt(date||"", 10)),
+      // schedule: 1701793000000,
+      schedule: parseInt(date||"", 10),
       shift: shift==="1"? "day": shift==="2"? "night": "whole day"
     })
   }, [])

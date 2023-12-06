@@ -21,7 +21,7 @@ interface AccommodationData {
 
 interface GetAccommodationData {
   accommodationId?: string | null;
-  schedule?: any | null;
+  schedule?: number;
   shift?: string | null;
   all?: boolean | null
 }

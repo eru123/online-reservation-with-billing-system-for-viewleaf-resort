@@ -22,6 +22,7 @@ function useRequest(): RequestHook {
   const [error, setError] = useState<Error | null>(null);
 
   const makeRequest = async (config: RequestConfig) => {
+    console.log(config)
     setLoading(true);
     try {
       const response = await axios(config);
