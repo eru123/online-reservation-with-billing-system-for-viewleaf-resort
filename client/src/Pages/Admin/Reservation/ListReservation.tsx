@@ -65,7 +65,7 @@ function ListReservation() {
                           {filteredData?.length <= 0 ? <>"No reservation"</> : (
                             <>
                               {filteredData?.map((reservation: any) => (
-                                <TableRow key={reservation.reservationId} sx={{ background: "white" }} component={Link} to="/admin/reservation/view">
+                                <TableRow key={reservation.reservationId} sx={{ background: "white" }} component={Link} to={`/admin/invoice/${reservation.reservationId}`} >
                                   <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
                                   <TableCell>{reservation.customer?.name || "Unknown"}</TableCell>
                                   <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })}</TableCell>
