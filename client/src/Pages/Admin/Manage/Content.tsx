@@ -46,7 +46,12 @@ function Content() {
     })
 
     const [about, setAbout] = useState("");
-
+    const [contactForm,setContactForm] = useState({
+      phone:0,
+      email:"",
+      address:""
+    })
+    
     const [selectedFaq, setSelectedFaq] = useState<any>(null);
 
     const clearForm = () => {
@@ -59,6 +64,11 @@ function Content() {
         answer: '',
       })
       setAbout("")
+      setContactForm({
+        phone:0,
+        email:"",
+        address:""
+      })
     }
 
     const handleCreateFAQ: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -127,11 +137,37 @@ function Content() {
       // Clear Form
       clearForm()
     }
+    const handleEditContact: React.FormEventHandler<HTMLFormElement> = (e) => {
+      e.preventDefault()
+      
+      // Edit About
+      updateContent({
+        phone: contactForm.phone,
+        email: contactForm.email,
+        address: contactForm.address
+      })
+
+      // Refresh data
+      getContent();
+
+      // Clear Form
+      setOpen("")
+    }
 
     useEffect(() => {
       getFAQ();
       getContent();
     }, [])
+    useEffect(() => {
+      if(contents){
+        setAbout(contents.about)
+        setContactForm({
+          phone: contents.phone,
+          email:contents.email,
+          address: contents.address
+        })
+      }
+    }, [contents])
 
     if (faqLoading || contentLoading) return <p>Loading...</p>
     if (faqError || contentError) return <p>Error</p>
@@ -213,6 +249,45 @@ function Content() {
                       </Box>
                     :""}
                 </Paper>
+                <Paper variant="elevation" elevation={3} >
+                  <Box display="flex" alignItems={"center"}>
+                      <Box flexGrow={"1"} onClick={()=>handleAccordionOpen("contact")} sx={{cursor:"pointer",padding:"1em"}} >
+                          <Typography variant="h6" color="initial">Contacts (Phone Number, Email, Address)</Typography>
+                      </Box>
+                      <IconButton aria-label="" onClick={()=>{setOpen("editContact")}}>
+                          <EditIcon/>
+                      </IconButton>
+                      <IconButton
+                          aria-label=""
+                          onClick={() => handleAccordionOpen("about")}
+                          sx={{
+                              transform: `rotate(${accordionOpen === "about" ? "90deg" : "0"})`,
+                          }}
+                          >
+                          <NavigateNextIcon />
+                      </IconButton>
+                  </Box>
+
+                  {accordionOpen === "contact"?
+                      <Box sx={{padding:"0 1em 1em"}}>
+                          <hr style={{marginBottom:"1em"}}/>
+                          <Box display="flex" gap={1} flexDirection={"column"}>
+                            <Box >
+                              <Typography variant="subtitle1" color="initial" textAlign={"justify"}>Phone Number</Typography>
+                              <Typography variant="body2" color="initial" textAlign={"justify"}>{contents?.phone}</Typography>
+                            </Box>
+                            <Box >
+                              <Typography variant="subtitle1" color="initial" textAlign={"justify"}>Email</Typography>
+                              <Typography variant="body2" color="initial" textAlign={"justify"}>{contents?.email}</Typography>
+                            </Box>
+                            <Box >
+                              <Typography variant="subtitle1" color="initial" textAlign={"justify"}>Address</Typography>
+                              <Typography variant="body2" color="initial" textAlign={"justify"}>{contents?.address}</Typography>
+                            </Box>
+                          </Box>
+                      </Box>
+                  :""}
+                </Paper>
             </Box>
             <Modal
                 keepMounted
@@ -257,7 +332,7 @@ function Content() {
                                   
                               </Grid>
                               <Grid item xs={5}>
-                                  <Button variant="text" fullWidth onClick={()=>{setOpen("")}}>
+                                  <Button variant="text" sx={{color:"black"}} fullWidth onClick={()=>{setOpen("")}}>
                                       back
                                   </Button>
                               </Grid>
@@ -303,7 +378,7 @@ function Content() {
                                   
                               </Grid>
                               <Grid item xs={5}>
-                                  <Button variant="text" fullWidth onClick={()=>{setOpen("")}}>
+                                  <Button variant="text" sx={{color:"black"}} fullWidth onClick={()=>{setOpen("")}}>
                                       back
                                   </Button>
                               </Grid>
@@ -328,7 +403,7 @@ function Content() {
                                 
                             </Grid>
                             <Grid item xs={5}>
-                                <Button variant="text" fullWidth onClick={()=>{setOpen("")}}>
+                                <Button variant="text" sx={{color:"black"}} fullWidth onClick={()=>{setOpen("")}}>
                                     back
                                 </Button>
                             </Grid>
@@ -360,6 +435,68 @@ function Content() {
                                   multiline
                                   defaultValue={contents?.about}
                                   onChange={(e) => setAbout(e.target.value)}
+                                />
+                              </Grid>
+                              <Grid item xs={12} padding={"1em 0"}>
+
+                              </Grid>
+                              <Grid item xs={5}>
+                                <Button variant="text" sx={{color:"black"}} fullWidth onClick={()=>{setOpen("")}}>
+                                  back
+                                </Button>
+                              </Grid>
+                              <Grid item xs={7}>
+                                  <Button variant="contained" color='primary' fullWidth type='submit'>
+                                    Confirm
+                                  </Button>
+                              </Grid>
+                          </Grid>
+                        </form>
+                    </>:""}
+                    {open === "editContact"?<>
+                        <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
+                            Edit Contact
+                        </Typography>
+                        <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
+                            Update resort contacts
+                        </Typography>
+                        <form onSubmit={handleEditContact}>
+                          <Grid container spacing={2}>
+                              <Grid item xs={12}>
+                                <TextField
+                                  id="phone"
+                                  label="Phone Number"
+                                  type='number'
+                                  fullWidth
+                                  defaultValue={contents?.phone}
+                                  onChange={(e) => {
+                                    setContactForm({...contactForm,phone:parseInt(e.target.value)})
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item xs={12}>
+                                <TextField
+                                  id="email"
+                                  label="Email"
+                                  type='email'
+                                  fullWidth
+                                  defaultValue={contents?.email}
+                                  onChange={(e) => {
+                                    setContactForm({...contactForm,email:e.target.value})
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item xs={12}>
+                                <TextField
+                                  id="address"
+                                  label="Address"
+                                  type='text'
+                                  fullWidth
+                                  multiline
+                                  defaultValue={contents?.address}
+                                  onChange={(e) => {
+                                    setContactForm({...contactForm,address:e.target.value})
+                                  }}
                                 />
                               </Grid>
                               <Grid item xs={12} padding={"1em 0"}>
