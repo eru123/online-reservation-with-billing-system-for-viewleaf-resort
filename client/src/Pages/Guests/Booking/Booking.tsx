@@ -323,8 +323,7 @@ function Booking() {
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
       {active === 1?<>
-          <Typography variant="h4" color="primary" fontWeight={600}>Selected Accommodation</Typography>
-          <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
+          
           <Accommodation 
             date={date||""} 
             shift={shift||""}
@@ -374,18 +373,30 @@ function Booking() {
                         Finish
                     </Button>
                   :
-                    <Button variant="contained" color="primary" 
-                      onClick={()=> {
-                        if (active<4) {
-                          if (checkGuestsForAllAccommodations(form)){
-                            setActive(active+1)
-                          } else{
-                            alert("All accommodations should have at least one guest")
-                          }
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      if (active >= 4) {
+                        return; // Exit if active is already 4 or greater
+                      }
+                  
+                      const hasValidGuests = checkGuestsForAllAccommodations(form);
+                      const hasAccommodations = form.accommodations?.length > 0;
+                  
+                      if (hasValidGuests && hasAccommodations) {
+                        setActive((prevActive) => prevActive + 1);
+                      } else {
+                        if (!hasAccommodations) {
+                          alert("Must have at least 1 Accommodation");
+                        } else {
+                          alert("All accommodations should have at least one guest");
                         }
-                      }}>
-                        Next
-                    </Button>
+                      }
+                    }}
+                  >
+                    Next
+                  </Button>
                   }
               </div>
           </Container> 
