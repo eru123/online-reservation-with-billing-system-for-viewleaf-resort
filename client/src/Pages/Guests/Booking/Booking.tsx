@@ -107,10 +107,18 @@ function Booking() {
         accommodations: prevForm.accommodations.filter((item: any) => item.accommodationId !== accommodationData.accommodationId),
       }));
     } else {
-      // If the accommodation with the same accommodationId doesn't exist, add it with the shift property
       setForm((prevForm: { accommodations: any }) => ({
         ...prevForm,
-        accommodations: [...(prevForm.accommodations || []), modifiedAccommodationData],
+        accommodations: [
+          ...(prevForm.accommodations || []),
+          {
+            ...modifiedAccommodationData,
+            inclusions: modifiedAccommodationData.inclusions.map((inclusion: any) => ({
+              ...inclusion,
+              quantity: 0,
+            })),
+          },
+        ],
       }));
     }
   };
@@ -256,28 +264,28 @@ function Booking() {
   useEffect(() => {
     updateSchedule(date, shift)
     calculateCost(form,parseInt(shift||"0"))
-    if (reservationData) {
-      console.log(reservationData);
-      sendEmail({
-        ...form,
-        email: form.email,
-        subject: "View Leaf Reservation",
-        content: `
-        <html lang="en">
-          <body>
-            <h1>Your view Leaf reservation is waiting for payment</h1>
-            <hr>
-            <p>Reference Number: ${reservationData.reservationId}</p>
-            <p>Scheduled Date: ${moment(new Date(form.schedule)).format('DD/MM/YYYY')} - ${form.shift==="1"? "day": form.shift==="2"? "night": "whole day"}</p>
-            <hr>
-            <h4>View your reservation details <a href="${process.env.REACT_APP_URL}/reservation/${reservationData.reservationId}">here</a>.</h4>
-            <h5>Strictly do not share your reference number as it is used to access your reservation details</h5>
-            </body>
-        </html>
-      `
-      });
-      navigate(`/payment/${reservationData.reservationId}`);
-    }
+    // if (reservationData) {
+    //   console.log(reservationData);
+    //   sendEmail({
+    //     ...form,
+    //     email: form.email,
+    //     subject: "View Leaf Reservation",
+    //     content: `
+    //     <html lang="en">
+    //       <body>
+    //         <h1>Your view Leaf reservation is waiting for payment</h1>
+    //         <hr>
+    //         <p>Reference Number: ${reservationData.reservationId}</p>
+    //         <p>Scheduled Date: ${moment(new Date(form.schedule)).format('DD/MM/YYYY')} - ${form.shift==="1"? "day": form.shift==="2"? "night": "whole day"}</p>
+    //         <hr>
+    //         <h4>View your reservation details <a href="${process.env.REACT_APP_URL}/reservation/${reservationData.reservationId}">here</a>.</h4>
+    //         <h5>Strictly do not share your reference number as it is used to access your reservation details</h5>
+    //         </body>
+    //     </html>
+    //   `
+    //   });
+    //   navigate(`/payment/${reservationData.reservationId}`);
+    // }
   }, [form])
 
   return (

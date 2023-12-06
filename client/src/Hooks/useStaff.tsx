@@ -3,8 +3,10 @@ import useRequest from './useRequest';
 
 interface Staff {
   staffId?: number;
-  username: string;
-  email: string;
+  username?: string;
+  email?: string;
+  contact?: string;
+  password?: string;
 }
 
 function useStaff() {
