@@ -96,17 +96,20 @@ function Accommodation({
 
     {/* List of Selected */}
     <Box display="flex" flexDirection={"column"} gap={"25px"} >
-      {form.accommodations?.map((accommodation: any) => (
-        <AccommodationCard 
-          accommodation={accommodation}
-          variant="selected" 
-          openModal={setOpen}
-          selectAccommodation={selectAccommodation}
-          addInclusion={addInclusion}
-          editGuests={editGuests}
-        />
-      ))}
-      
+      {form.accommodations?.length > 0? <>
+          <Typography variant="h4" color="primary" fontWeight={600}>Selected Accommodation</Typography>
+          <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
+          {form.accommodations?.map((accommodation: any) => (
+          <AccommodationCard 
+            accommodation={accommodation}
+            variant="selected" 
+            openModal={setOpen}
+            selectAccommodation={selectAccommodation}
+            addInclusion={addInclusion}
+            editGuests={editGuests}
+          />
+        ))}
+      </>:""}
     </Box>
 
     {/*  List of Suggested Accommodation */}
