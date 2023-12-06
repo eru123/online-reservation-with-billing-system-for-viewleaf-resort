@@ -1,4 +1,4 @@
-import { createStaff, getStaffs, login, logout } from "./staff.controller";
+import { createStaff, getStaffs, login, logout, updateStaff } from "./staff.controller";
 import { limitUsers } from "../../middlewares/authorize";
 import { Role } from "./staff.types";
 import { Router } from "express";
@@ -11,7 +11,15 @@ router.post('/login', asynchronousHandler(login));
 
 router.use(authenticate);
 
-router.get('/', limitUsers(Role.ADMIN), getStaffs);
+router.get('/', limitUsers(Role.ADMIN), asynchronousHandler(getStaffs));
+
+/**
+ * username: string
+ * email: string
+ * contact: string
+ * password: string (optional)
+ */
+router.patch('/', asynchronousHandler(updateStaff));
 
 router.post('/logout', asynchronousHandler(logout));
 
