@@ -1,7 +1,7 @@
 import {
     addShift, 
-    getAccommodations,
     createAccommodation, 
+    getAccommodations, 
     updateAccommodationDetails, 
     updateInclusions, 
     updateShiftFees 
@@ -13,8 +13,6 @@ import asynchronousHandler from '../../middlewares/asynchronousHandler';
 import authenticate from '../../middlewares/authenticate';
 
 const router = Router();
-
-
 
 router.get('/', asynchronousHandler(getAccommodations));
 

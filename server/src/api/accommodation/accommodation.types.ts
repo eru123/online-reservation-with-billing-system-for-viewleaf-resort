@@ -94,6 +94,7 @@ export type GetAccommodations = {
     accommodationId?: string;
     schedule?: number;
     shift?: Shift;
+    all?: boolean;
 }
 
 export type UpdateInclusions = {
