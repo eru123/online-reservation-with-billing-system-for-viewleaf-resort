@@ -19,7 +19,7 @@ import NavItem from './NavItem';
 import {useAuth} from '../../../Hooks/useAuth';
 
 function App() {
-  const {logout} = useAuth();
+  const {logout, User} = useAuth();
       const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
       const open = Boolean(anchorEl);
       const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -70,9 +70,9 @@ function App() {
           <Box display="flex" sx={{padding:"1em"}} >
             <Box sx={{flexGrow:"1"}}></Box>
             <Box display="flex" alignItems={"center"} gap={"5px"} sx={{cursor:"pointer"}} onClick={handleClick}>
-              <Typography variant="subtitle1" color="initial">Remy Sharp</Typography>
+              <Typography variant="subtitle1" color="initial">{User().username}</Typography>
               <Avatar
-                  alt="Remy Sharp"
+                  alt={User().username}
                   src="/static/images/avatar/1.jpg"
                 />
             </Box>
