@@ -35,7 +35,6 @@ function App() {
             <a href="/admin" style={{margin:"40px auto",width:"60%"}}>
               <img width={"100%"} src={logoDrop} alt="" />
             </a>
-
             <NavItem  title="Dashboard" link="/admin" icon={<SpaceDashboardIcon/>} type={"title"} />
 
             <Typography variant="h6"  color="initial" sx={{
@@ -47,20 +46,27 @@ function App() {
             <NavItem  title="List of Reservation" link="/admin/reservation/list" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}}/>} type={"subTitle"}/>
             <NavItem  title="Requests" link="/admin/reservation/requests" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}}/>} type={"subTitle"}/>
 
-            <Typography variant="h6"  color="initial" sx={{
-              padding:".5em 1em",
-              color:"#5C5C5C",
-            }}> 
-              <Box display="flex" gap={"10px"} alignItems={"center"} ><ModeIcon/> Manage</Box>
-            </Typography>
-            <NavItem  title="Accommodation" link="/admin/manage/accommodations" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
-            <NavItem  title="Content" link="/admin/manage/content" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
-            <NavItem  title="Payment Instruction" link="/admin/manage/paymentInstruction" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
-            <NavItem  title="Policy" link="/admin/manage/policy" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
+            
 
-            <NavItem  title="Reports" link="/admin/report" icon={<AssessmentIcon/>} type={"title"} />
+            {User().role==="admin"?<>
+              <Typography variant="h6"  color="initial" sx={{
+                  padding:".5em 1em",
+                  color:"#5C5C5C",
+                }}> 
+                <Box display="flex" gap={"10px"} alignItems={"center"} ><ModeIcon/> Manage</Box>
+              </Typography>
+              <NavItem  title="Accommodation" link="/admin/manage/accommodations" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
+              <NavItem  title="Content" link="/admin/manage/content" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
+              <NavItem  title="Payment Instruction" link="/admin/manage/paymentInstruction" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
+              <NavItem  title="Policy" link="/admin/manage/policy" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
+              
+              <NavItem  title="Reports" link="/admin/report" icon={<AssessmentIcon/>} type={"title"} />
+              
+              <NavItem  title="Staff" link="/admin/staff" icon={<PersonIcon/>} type={"title"} />
+            </>:""}
+            
 
-            <NavItem  title="Staff" link="/admin/staff" icon={<PersonIcon/>} type={"title"} />
+
 
             <NavItem  title="Notification" link="/admin/notifications" icon={<NotificationsIcon/>} type={"title"} />
 
@@ -87,7 +93,8 @@ function App() {
             onClose={handleClose}
             TransitionComponent={Fade}
           >
-            <MenuItem component={Link} to={'/admin/profile'} >Profile</MenuItem>
+            {User().role==="admin"?"":<MenuItem component={Link} to={'/profile'} >Profile</MenuItem>}
+            
             <MenuItem onClick={logout}>Logout</MenuItem>
           </Menu>
           <div style={{padding:"4em 1em 1em 0"}}>
