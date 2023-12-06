@@ -108,7 +108,7 @@ function LandingPage() {
                         slotProps={{ 
                           textField: { fullWidth: true ,required:true} ,
                         }}
-                        minDate={dayjs()}
+                        minDate={dayjs().add(3, 'day')}
                         onChange={(newDate) => setBookingSchedule({ ...bookingSchedule, date: newDate })}
                       />
                     </LocalizationProvider>
