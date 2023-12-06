@@ -55,6 +55,9 @@ function Accommodation({
 
   const {data:accommodations, getAccommodation} = useAccommodation();
 
+
+  
+
   useEffect(()=>{
     getAccommodation({
       schedule: parseInt(date||"", 10),
