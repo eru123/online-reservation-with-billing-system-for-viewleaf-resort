@@ -33,13 +33,13 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
     };
 
     if (schedule) {
-        checker.checkType(schedule, 'number', 'schedule');
+        checker.checkType(schedule, 'string', 'schedule');
         if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
         // Get all reservations the given schedule's 00:00:00 to 23:59:59 time includes the reservation's schedule
         reservationQuery.schedule = {
-            $gte: new Date(schedule as number).setHours(0, 0, 0, 0),
-            $lte: new Date(schedule as number).setHours(23, 59, 59, 999)
+            $gte: new Date(Number(schedule)).setHours(0, 0, 0, 0),
+            $lte: new Date(Number(schedule)).setHours(23, 59, 59, 999)
         };
     }
 
@@ -92,7 +92,7 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
 export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAccommodations>, res) => {
     const { accommodationId, schedule, shift, all } = req.query;
     const checker = new CheckData();
-
+ 
     let accommodations: AccommodationDocument[];
 
     if (Boolean(all) === true) {
