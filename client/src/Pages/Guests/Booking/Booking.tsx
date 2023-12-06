@@ -219,6 +219,38 @@ function Booking() {
     })
   }
 
+  function checkGuestsForAllAccommodations(data: any) {
+    // Check if 'data' is defined and 'accommodations' array exists
+    if (data && data.accommodations && data.accommodations.length > 0) {
+      // Iterate through each accommodation
+      for (const accommodation of data.accommodations) {
+        // Check if the accommodation has at least one guest
+        if (
+          accommodation.guests &&
+          (accommodation.guests.adult > 0 ||
+            accommodation.guests.kids > 0 ||
+            accommodation.guests.senior > 0 ||
+            accommodation.guests.pwd > 0)
+        ) {
+          // Accommodation has at least one guest, continue checking the next one
+          continue;
+        } else {
+          // Accommodation does not have at least one guest, return false
+          return false;
+        }
+      }
+  
+      // All accommodations have at least one guest, return true
+      return true;
+    }
+  
+    // 'data' is not valid or 'accommodations' array is empty, return false
+    return false;
+    alert("All Accommodations should have at least one guest.")
+  }
+
+
+
   function generateOTP(){
     const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let otp = '';
@@ -264,28 +296,28 @@ function Booking() {
   useEffect(() => {
     updateSchedule(date, shift)
     calculateCost(form,parseInt(shift||"0"))
-    // if (reservationData) {
-    //   console.log(reservationData);
-    //   sendEmail({
-    //     ...form,
-    //     email: form.email,
-    //     subject: "View Leaf Reservation",
-    //     content: `
-    //     <html lang="en">
-    //       <body>
-    //         <h1>Your view Leaf reservation is waiting for payment</h1>
-    //         <hr>
-    //         <p>Reference Number: ${reservationData.reservationId}</p>
-    //         <p>Scheduled Date: ${moment(new Date(form.schedule)).format('DD/MM/YYYY')} - ${form.shift==="1"? "day": form.shift==="2"? "night": "whole day"}</p>
-    //         <hr>
-    //         <h4>View your reservation details <a href="${process.env.REACT_APP_URL}/reservation/${reservationData.reservationId}">here</a>.</h4>
-    //         <h5>Strictly do not share your reference number as it is used to access your reservation details</h5>
-    //         </body>
-    //     </html>
-    //   `
-    //   });
-    //   navigate(`/payment/${reservationData.reservationId}`);
-    // }
+    if (reservationData) {
+      console.log(reservationData);
+      sendEmail({
+        ...form,
+        email: form.email,
+        subject: "View Leaf Reservation",
+        content: `
+        <html lang="en">
+          <body>
+            <h1>Your view Leaf reservation is waiting for payment</h1>
+            <hr>
+            <p>Reference Number: ${reservationData.reservationId}</p>
+            <p>Scheduled Date: ${moment(new Date(form.schedule)).format('DD/MM/YYYY')} - ${form.shift==="1"? "day": form.shift==="2"? "night": "whole day"}</p>
+            <hr>
+            <h4>View your reservation details <a href="${process.env.REACT_APP_URL}/reservation/${reservationData.reservationId}">here</a>.</h4>
+            <h5>Strictly do not share your reference number as it is used to access your reservation details</h5>
+            </body>
+        </html>
+      `
+      });
+      navigate(`/payment/${reservationData.reservationId}`);
+    }
   }, [form])
 
   return (
@@ -342,7 +374,16 @@ function Booking() {
                         Finish
                     </Button>
                   :
-                    <Button variant="contained" color="primary" onClick={()=> {if(active<4){setActive(active+1)}}}>
+                    <Button variant="contained" color="primary" 
+                      onClick={()=> {
+                        if (active<4) {
+                          if (checkGuestsForAllAccommodations(form)){
+                            setActive(active+1)
+                          } else{
+                            alert("All accommodations should have at least one guest")
+                          }
+                        }
+                      }}>
                         Next
                     </Button>
                   }
