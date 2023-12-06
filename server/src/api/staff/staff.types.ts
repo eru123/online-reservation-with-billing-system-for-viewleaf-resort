@@ -1,3 +1,5 @@
+import { Document } from "mongoose";
+
 export enum Role {
     ADMIN = 'admin',
     STAFF = 'staff',
@@ -19,6 +21,8 @@ export interface StaffDocument extends Staff, Document {
     updatedAt: Date;
 }
 
+/* REQUESTS */
+
 export type CreateStaff = {
     username: string;
     email: string;
@@ -26,4 +30,11 @@ export type CreateStaff = {
 
 export type GetStaff = {
     staffId?: string;
+}
+
+export type UpdateStaff = {
+    username: string;
+    email: string;
+    contact: string;
+    password?: string;
 }
