@@ -16,8 +16,10 @@ import MenuItem from '@mui/material/MenuItem';
 import Fade from '@mui/material/Fade';
 import { Link } from 'react-router-dom'
 import NavItem from './NavItem';
+import {useAuth} from '../../../Hooks/useAuth';
 
 function App() {
+  const {logout} = useAuth();
       const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
       const open = Boolean(anchorEl);
       const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -86,7 +88,7 @@ function App() {
             TransitionComponent={Fade}
           >
             <MenuItem component={Link} to={'/admin/profile'} >Profile</MenuItem>
-            <MenuItem >Logout</MenuItem>
+            <MenuItem onClick={logout}>Logout</MenuItem>
           </Menu>
           <div style={{padding:"4em 1em 1em 0"}}>
             <Container maxWidth="lg">
