@@ -14,20 +14,19 @@ function SearchInputReservation({ data, setFilteredData }: Props) {
     const filteredData = data.filter((reservation: any) => {
       // Convert statuses to lowercase for case-insensitive matching
       const status = reservation.status.toLowerCase();
-      const search = searchTerm.toLowerCase();
-
+      const search = searchTerm;
+  
       // Check if reservation ID, customer name, or status includes the search term
       return (
-        reservation.reservationId.includes(search) ||
-        reservation.customer.name.toLowerCase().includes(search) ||
+        String(reservation.reservationId).includes(search) ||
+        reservation.customer.name.toLowerCase().includes(search.toLocaleLowerCase()) ||
         status.includes(search)
       );
     });
-
+  
     setFilteredData(filteredData);
-    console.log("----------------------------------------------")
-    console.log(filteredData)
   };
+  
 
   useEffect(()=>{
     setFilteredData(data)
