@@ -14,6 +14,12 @@ import authenticate from '../../middlewares/authenticate';
 
 const router = Router();
 
+/**
+ * accommodationId: string (optional)
+ * schedule: number (optional)
+ * shift: string (optional)
+ * all: boolean (optional)
+ */
 router.get('/', asynchronousHandler(getAccommodations));
 
 router.use(authenticate, limitUsers(Role.ADMIN));
