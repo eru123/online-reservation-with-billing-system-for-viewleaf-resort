@@ -16,7 +16,7 @@ const router = Router();
 
 /**
  * accommodationId: string (optional)
- * description: string (optional)
+ * schedule: number (optional)
  * shift: string (optional)
  * all: boolean (optional)
  */
