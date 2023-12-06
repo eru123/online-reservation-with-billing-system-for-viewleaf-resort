@@ -13,10 +13,18 @@ import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import {useNavigate} from 'react-router-dom';
 
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 import Accommodation from '../../Guests/Booking/Accommodation';
 import useEmail from '../../../Hooks/useEmail'
 import useReservation from '../../../Hooks/useReservation'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs'
 
 interface ReservationForm {
   name?: string;
@@ -46,6 +54,10 @@ interface CustomerData {
 }
 
 function CreateResrvation() {
+  const [bookingSchedule, setBookingSchedule] = useState<any>({
+    date : "",
+    shift : "",
+  });
   const navigate = useNavigate()
   const [open, setOpen] = React.useState("");
   const {sendEmail, sendReservation} = useEmail();
@@ -239,10 +251,10 @@ function CreateResrvation() {
     return <>
         <Container maxWidth="lg">
             {step===1?<>
-                <Box display="flex" alignItems={"center"} sx={{marginTop:"50px",marginBottom:"2em"}}>
+                <Box display="flex"  alignItems={"center"} sx={{marginTop:"50px",marginBottom:"2em"}}>
                     <div style={{flexGrow:'1'}}>
-                        <Typography variant="h4" fontWeight={600} color="primary">Select Accommodation</Typography>
-                        <Typography variant="h6" fontWeight={400} color="initial" >You can choose multiple accommodation</Typography>
+                      <Typography variant="h4" fontWeight={600} color="primary">Select Accommodation</Typography>
+                      <Typography variant="h6" fontWeight={400} color="initial" >You can choose multiple accommodation</Typography>
                     </div>
                     <Box display="flex" gap={"10px"}>
                         <Button variant="text" color="primary">
@@ -252,6 +264,31 @@ function CreateResrvation() {
                             Next
                         </Button>
                     </Box>
+                </Box>
+                <Box display={"flex"} justifyContent={"start"} gap={2}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} >
+                    <DatePicker 
+                      slotProps={{ 
+                        textField: {required:true} ,
+                      }}
+                      minDate={dayjs()}
+                      onChange={(newDate) => setBookingSchedule({ ...bookingSchedule, date: newDate })}
+                    />
+                  </LocalizationProvider>
+                  <FormControl sx={{width:"200px"}} required>
+                    <InputLabel id="demo-simple-select-label">shift</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={bookingSchedule.shift}
+                      label="Shift"
+                      onChange={(e) => setBookingSchedule({ ...bookingSchedule, shift: e.target.value })}
+                    >
+                      <MenuItem value={"0"}>Day Shift</MenuItem>
+                      <MenuItem value={"1"}>Night Shift</MenuItem>
+                      <MenuItem value={"2"}>Whole Shift</MenuItem>
+                    </Select>
+                    </FormControl>
                 </Box>
                 {/* <Accommodation date={date||""} shift={shift||""} selectedAccommodations={selectedAccommodations} setSelectedAccommodations={setSelectedAccommodations}/> */}
             </>:""}
