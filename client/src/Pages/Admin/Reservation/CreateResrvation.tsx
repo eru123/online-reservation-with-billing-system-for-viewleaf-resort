@@ -11,16 +11,230 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
-
+import {useNavigate} from 'react-router-dom';
 
 
 import Accommodation from '../../Guests/Booking/Accommodation';
+import useEmail from '../../../Hooks/useEmail'
+import useReservation from '../../../Hooks/useReservation'
 
+interface ReservationForm {
+  name?: string;
+  email?: string;
+  phone?: string;
+  schedule?: number;
+  shift?: string;
+  accommodations?: {
+    accommodationId: string;
+    guests: {
+      adult: number;
+      children: number;
+      senior: number;
+      pwd: number;
+    };
+    inclusions: {
+      name: string;
+      quantity: number;
+    }[];
+  }[];
+}
+
+interface CustomerData {
+  name?: string;
+  email?: string;
+  phone?: string;
+}
 
 function CreateResrvation() {
+  const navigate = useNavigate()
+  const [open, setOpen] = React.useState("");
+  const {sendEmail, sendReservation} = useEmail();
+  const {data: reservationData, createReservation} = useReservation();
     const [step,setStep] = useState(1);
-
     const [selectedAccommodations, setSelectedAccommodations] = useState<any>([]);
+    const [form, setForm] = useState<any>({});
+    const [billing, setBilling] = useState<any>({
+      total: 0,
+      guests: 0,
+      inclusions: 0,
+      accommodations: 0
+    })
+
+  const [date, setDate] = useState("")
+  const [shift, setShift] = useState("")
+
+    
+  const updateSchedule = (date: any, shift: any) => {
+    setForm((prevForm: any) => ({
+      ...prevForm,
+      schedule: new Date(parseInt(date||"", 10)),
+      shift: shift==="1"? "day": shift==="2"? "night": "whole day"
+    }));
+  }
+
+  const updateCustomer = (data: CustomerData) => {
+    setForm((prevForm: any) => ({
+      ...prevForm,
+      ...(data.name && { name: data.name }),
+      ...(data.email && { email: data.email }),
+      ...(data.phone && { phone: data.phone }),
+      schedule: new Date(parseInt(date||"", 10)).getTime(),
+      shift: shift==="1"? "day": shift==="2"? "night": "whole day"
+    }));
+  };
+
+  const selectAccommodation = (accommodationData: any) => {
+    // Add shift property to the accommodationData
+    const modifiedAccommodationData = { ...accommodationData, shift: shift==="1"? "day": shift==="2"? "night": "whole day" };
+  
+    if (form?.accommodations?.some((item: any) => item.accommodationId === accommodationData.accommodationId)) {
+      // If the accommodation with the same accommodationId exists, remove it
+      setForm((prevForm: { accommodations: any }) => ({
+        ...prevForm,
+        accommodations: prevForm.accommodations.filter((item: any) => item.accommodationId !== accommodationData.accommodationId),
+      }));
+    } else {
+      setForm((prevForm: { accommodations: any }) => ({
+        ...prevForm,
+        accommodations: [
+          ...(prevForm.accommodations || []),
+          {
+            ...modifiedAccommodationData,
+            inclusions: modifiedAccommodationData.inclusions.map((inclusion: any) => ({
+              ...inclusion,
+              quantity: 0,
+            })),
+          },
+        ],
+      }));
+    }
+  };
+  
+
+  const editGuests = (accommodationId: string, guests: { adult?: number; children?: number; senior?: number; pwd?: number }) => {
+    setForm((prevForm: { accommodations: any }) => ({
+      ...prevForm,
+      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string, guests?: any }) =>
+        accommodation.accommodationId === accommodationId
+          ? { ...accommodation, guests: { ...(accommodation.guests || {}), ...guests } }
+          : accommodation
+      ),
+    }));
+  };
+
+  const addInclusion = (accommodationId: string, inclusion: any) => {
+    setForm((prevForm: { accommodations: any }) => ({
+      ...prevForm,
+      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any }) => {
+        if (accommodation.accommodationId === accommodationId) {
+          // Check if the inclusion already exists in the inclusions array
+          const existingInclusion = accommodation.inclusions.find((existing: any) => existing.name === inclusion.name);
+  
+          // If it exists, update the quantity
+          if (existingInclusion) {
+            return {
+              ...accommodation,
+              inclusions: accommodation.inclusions.map((existing: any) =>
+                existing.name === inclusion.name
+                  ? { ...existing, quantity: inclusion.quantity }
+                  : existing
+              ),
+            };
+          } else {
+            // If it doesn't exist, add it with the given quantity
+            return {
+              ...accommodation,
+              inclusions: [...(accommodation.inclusions || []), { ...inclusion, quantity: inclusion.quantity }],
+            };
+          }
+        } else {
+          return accommodation;
+        }
+      }),
+    }));
+  };
+
+  const calculateCost = (data: any, shift: number) => {
+    let accommodations = 0;
+    let inclusions = 0;
+    let guests = 0;
+    let total = 0;
+
+    data.accommodations?.map((accommodation: any) => {
+      accommodations += parseInt(accommodation.fees[shift].rate)
+      if (accommodation.inclusions) {
+        accommodation.inclusions?.map((inclusion: any) => {
+          if (inclusion.quantity) {
+            
+            inclusions += (inclusion.quantity * inclusion.price)
+          }
+        })
+      }
+      if (accommodation.guests) {
+        if (accommodation.guests.adult) {
+          guests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[shift].guestFee.adult)
+        }
+        if(accommodation.guests.children) {
+          guests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[shift].guestFee.kids)
+        }
+        if(accommodation.guests.senior) {
+          guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[shift].guestFee.adult) * 0.8)
+        }
+        if(accommodation.guests.pwd) {
+          guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[shift].guestFee.adult) * 0.8)
+        }
+      }
+    })
+
+    total = accommodations + inclusions + guests
+
+    setBilling({
+      total: total,
+      guests: guests,
+      inclusions: inclusions,
+      accommodations: accommodations
+    })
+
+    setForm({
+      ...data,
+      costs: {
+        total: total,
+        guests: guests,
+        inclusions: inclusions,
+        accommodations: accommodations
+      }
+    })
+  }
+
+  function checkGuestsForAllAccommodations(data: any) {
+    // Check if 'data' is defined and 'accommodations' array exists
+    if (data && data.accommodations && data.accommodations.length > 0) {
+      // Iterate through each accommodation
+      for (const accommodation of data.accommodations) {
+        // Check if the accommodation has at least one guest
+        if (
+          accommodation.guests &&
+          (accommodation.guests.adult > 0 ||
+            accommodation.guests.kids > 0 ||
+            accommodation.guests.senior > 0 ||
+            accommodation.guests.pwd > 0)
+        ) {
+          // Accommodation has at least one guest, continue checking the next one
+          continue;
+        } else {
+          // Accommodation does not have at least one guest, return false
+          return false;
+        }
+      }
+  
+      // All accommodations have at least one guest, return true
+      return true;
+    }
+  
+    // 'data' is not valid or 'accommodations' array is empty, return false
+    return false;
+    alert("All Accommodations should have at least one guest.")
+  }
 
     return <>
         <Container maxWidth="lg">
