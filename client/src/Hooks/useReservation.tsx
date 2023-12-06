@@ -58,7 +58,7 @@ function useReservation() {
 
   const payReservation = (content: PayReservation) => {
     makeRequest({
-      method: 'post',
+      method: 'patch',
       url: '/reservations/pay',
       data: content,
     });
@@ -67,7 +67,7 @@ function useReservation() {
   const updateReservation = (content: UpdateReservation) => {
     makeRequest({
       method: 'patch',
-      url: '/reservations/update',
+      url: '/reservations',
       data: content,
     });
   };
