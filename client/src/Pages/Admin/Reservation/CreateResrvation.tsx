@@ -102,7 +102,7 @@ function CreateResrvation() {
 
   const selectAccommodation = (accommodationData: any) => {
     // Add shift property to the accommodationData
-    const modifiedAccommodationData = { ...accommodationData, shift: shift==="1"? "day": shift==="2"? "night": "whole day" };
+    const modifiedAccommodationData = { ...accommodationData, shift: shift==="0"? "day": shift==="1"? "night": "whole day" };
   
     if (form?.accommodations?.some((item: any) => item.accommodationId === accommodationData.accommodationId)) {
       // If the accommodation with the same accommodationId exists, remove it
