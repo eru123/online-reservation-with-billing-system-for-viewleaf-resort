@@ -19,8 +19,9 @@ import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
-
+import ReplayIcon from '@mui/icons-material/Replay';
 import moment from 'moment';
+
 
 
 interface CustomerData {
@@ -50,6 +51,7 @@ function Booking() {
   const [otpCode, setOtpCode] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [form, setForm] = useState<any>({});
+  const[disabledButton,setDisabledButton] = useState(true)
   const [billing, setBilling] = useState<any>({
     total: 0,
     guests: 0,
@@ -64,7 +66,6 @@ function Booking() {
       shift: shift==="0"? "day": shift==="1"? "night": "whole day"
     }));
   }
-
   const updateCustomer = (data: CustomerData) => {
     setForm((prevForm: any) => ({
       ...prevForm,
@@ -297,6 +298,7 @@ function Booking() {
       navigate(`/payment/${reservationData.reservationId}`);
     }
   }, [form])
+  
 
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
@@ -342,23 +344,24 @@ function Booking() {
                   <Button variant="text" onClick={()=> {if(active>1){setActive(active-1)}}}>
                       back
                   </Button>
-                  {active===3?
-                    <Button variant="contained" color="primary" 
-                    onClick={()=> {
-                      sendVerification()
-                      setOpen("verify")
-                    }}>
-                        Finish
+                  {active===3 ?
+                    <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      console.log(form);
+                      sendVerification();
+                      setOpen("verify");
+                    }}
+                      disabled={!form.name || !form.email || !form.phone}
+                    >
+                      Finish
                     </Button>
                   :
                   <Button
                     variant="contained"
                     color="primary"
                     onClick={() => {
-                      if (active >= 4) {
-                        return; // Exit if active is already 4 or greater
-                      }
-                  
                       const hasValidGuests = checkGuestsForAllAccommodations(form);
                       const hasAccommodations = form.accommodations?.length > 0;
                   
@@ -371,6 +374,8 @@ function Booking() {
                           alert("All accommodations should have at least one guest");
                         }
                       }
+
+                      
                     }}
                   >
                     Next
@@ -386,34 +391,37 @@ function Booking() {
           aria-labelledby="keep-mounted-modal-title"
           aria-describedby="keep-mounted-modal-description"
         >
-            <Box sx={style}>
-                {open === "verify"?<>
-                <form onSubmit={verifyOTP}>
-                    <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={600} color={"primary"} component="h2">
-                        Email verification
-                    </Typography>
-                    <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
-                        We sent you a 6 digit code, please check your email and enter the code to complete the verification and reservation
-                    </Typography>
-                    <Grid container spacing={2} sx={{marginTop:"35px"}}>
-                      <Grid item  xs={8}>
-                        <TextField
-                          id="OTP"
-                          label="OTP"
-                          required
-                          fullWidth
-                          onChange={(e)=>setVerificationCode(e.target.value)}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <Button variant="contained" color="primary" fullWidth sx={{height:"100%",background:"#414141"}} type="submit">
-                          Verify
-                        </Button>
-                      </Grid>
-                    </Grid>
-                </form>
-                </>:""}
-            </Box>
+          <Box sx={style}>
+            {open === "verify"?<>
+              <form onSubmit={verifyOTP}>
+                <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={600} color={"primary"} component="h2">
+                  Email verification
+                </Typography>
+                <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
+                  We sent you a 6 digit code, please check your email and enter the code to complete the verification and reservation
+                </Typography>
+                <Grid container spacing={2} sx={{marginTop:"35px"}}>
+                  <Grid item  xs={8}>
+                    <TextField
+                      id="OTP"
+                      label="OTP"
+                      required
+                      fullWidth
+                      onChange={(e)=>setVerificationCode(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={4} display={"flex"}>
+                    <Button variant="contained" color="primary" fullWidth sx={{height:"100%",background:"#414141"}} type="submit">
+                      Verify
+                    </Button>
+                  </Grid>
+                  <Grid item xs={8} display={"flex"} justifyContent={"center"}>
+                    <Button startIcon={<ReplayIcon/>} variant="text" sx={{color:"#626262"}}>Resend</Button>
+                  </Grid>
+                </Grid>
+              </form>
+            </>:""}
+          </Box>
         </Modal>
     </Container>
   )
