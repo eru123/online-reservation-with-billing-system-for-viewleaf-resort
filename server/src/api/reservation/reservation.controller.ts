@@ -203,13 +203,7 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
         //     reservation.status = ReservationStatus.CANCELLED;
         //     reservation.save();
         // }
-        setTimeout(() => {
-          // if (reservation.status === ReservationStatus.PENDING) {
-          //     reservation.status = ReservationStatus.CANCELLED;
-          //     reservation.save();
-          // }
-              ReservationModel.findOneAndUpdate({_id: reservation._id, status: ReservationStatus.PENDING}, {$set:{status: ReservationStatus.CANCELLED}}).exec();
-          }, 1000 * 60 * reservationTimeLimitInMinutes);
+        ReservationModel.findOneAndUpdate({_id: reservation._id, status: ReservationStatus.PENDING}, {$set:{status: ReservationStatus.CANCELLED}}).exec();
     }, 1000 * 60 * reservationTimeLimitInMinutes);
 
     res.status(201).json({ reservationId: reservation.reservationId });

@@ -31,7 +31,7 @@ function Payment() {
   } = useReservation();
   const {data: content, loading: contentLoading, error: contentError, getContent} = useContent();
   const {downloadURL, uploading, uploadFile } = useFirebase();
-
+  const [policyAgree,setPolicyAgree] = useState(false);
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     payReservation({
@@ -55,7 +55,6 @@ function Payment() {
 
     data[0].invoices.map((item: any)=>{
       accommodations += item.rate
-
       guests += 
         parseFloat(item.guests.adult) * parseFloat(item.guestFee.adult) +
         parseFloat(item.guests.kids) * parseFloat(item.guestFee.kids) +
@@ -120,7 +119,10 @@ function Payment() {
             />
           </div>
           <div style={{display:"flex",alignItems:"center"}}>
-            <FormControlLabel control={<Checkbox defaultChecked />} label="I agree with ViewLeaf's" />
+            <FormControlLabel
+              control={<Checkbox checked={policyAgree} onChange={() => setPolicyAgree(!policyAgree)} />}
+              label="I agree with ViewLeaf's"
+            />
             <Typography variant="body1" component={"a"} fontWeight={500} color="initial" marginLeft={"-12px"}>Policies</Typography>
           </div>
           <div style={{display:"flex",alignItems:"center",justifyContent:"center",margin:"2em 0"}}>
