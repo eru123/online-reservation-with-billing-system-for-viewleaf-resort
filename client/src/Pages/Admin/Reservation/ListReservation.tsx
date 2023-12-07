@@ -33,6 +33,18 @@ function ListReservation() {
     getReservation()
   },[])
 
+  useEffect(() => {
+    if (filteredData) {
+      setFilteredData(filteredData.slice().sort((a:any, b:any) => {
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+      
+        // Sort in descending order (recent to oldest)
+        return dateB.getTime() - dateA.getTime();
+      }));
+    }
+  }, [filteredData]);
+
   if (reservationLoading)return <div>loading</div>
   return <>
       <div>
