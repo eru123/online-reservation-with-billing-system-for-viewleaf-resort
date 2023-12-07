@@ -71,7 +71,7 @@ function BookingStatement({additional, form, invoices}:Props) {
               <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation?.fees?.[parseInt(shift||"0")]?.rate || accommodation?.rate}</Typography>
           </Box>
           {/* Inclussions */}
-          {accommodation?.inclusions?.length <= 0?<>
+          {accommodation?.inclusions?.length > 0?<>
             <Box >
               <Typography variant="h6" fontWeight={600} color="initial" sx={{opacity:".6"}}>Inclusions</Typography>
               {accommodation?.inclusions?.map((inclusion:any)=>(

@@ -160,7 +160,7 @@ function PaymentInstruction() {
                             
                         </Grid>
                         <Grid item xs={5}>
-                          <Button variant="text" fullWidth onClick={()=>{setOpen("")}}>
+                          <Button variant="text" fullWidth sx={{color:"black"}} onClick={()=>{setOpen("")}}>
                             back
                           </Button>
                         </Grid>
