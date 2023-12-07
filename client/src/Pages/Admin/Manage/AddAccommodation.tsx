@@ -120,7 +120,7 @@ function AddAccommodation() {
             >
               <MenuItem value={"room"}>Room</MenuItem>
               <MenuItem value={"cottage"}>Cottage</MenuItem>
-              <MenuItem value={"Resort"}>Resort</MenuItem>
+              <MenuItem value={"resort"}>Resort</MenuItem>
             </Select>
           </FormControl>
         </Grid>
