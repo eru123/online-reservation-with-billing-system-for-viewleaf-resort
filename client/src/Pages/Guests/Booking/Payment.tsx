@@ -123,7 +123,7 @@ function Payment() {
               control={<Checkbox checked={policyAgree} onChange={() => setPolicyAgree(!policyAgree)} />}
               label="I agree with ViewLeaf's"
             />
-            <Typography variant="body1" component={"a"} fontWeight={500} color="initial" marginLeft={"-12px"}>Policies</Typography>
+            <Typography variant="body1" component={"a"} href='/policy' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Policies</Typography>
           </div>
           <div style={{display:"flex",alignItems:"center",justifyContent:"center",margin:"2em 0"}}>
             <img width={"50%"} src={downloadURL} alt="" />
@@ -134,7 +134,7 @@ function Payment() {
                 <Chip label="Upload Payment Receipt " variant="outlined" onClick={()=>{}}/>
               </label>
               {/* <Chip label="Send" variant="filled" color='primary' sx={{color:"white"}} onClick={()=>{}}/> */}
-              <Button variant="contained" color="primary" type="submit">
+              <Button variant="contained" color="primary" type="submit" disabled={policyAgree && downloadURL ?false:true}>
                 Pay Now
               </Button>
           </div>
