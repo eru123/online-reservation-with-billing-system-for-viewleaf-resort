@@ -22,26 +22,6 @@ import Box from '@mui/material/Box'
 
 import moment from 'moment';
 
-interface ReservationForm {
-  name?: string;
-  email?: string;
-  phone?: string;
-  schedule?: number;
-  shift?: string;
-  accommodations?: {
-    accommodationId: string;
-    guests: {
-      adult: number;
-      children: number;
-      senior: number;
-      pwd: number;
-    };
-    inclusions: {
-      name: string;
-      quantity: number;
-    }[];
-  }[];
-}
 
 interface CustomerData {
   name?: string;
@@ -245,11 +225,9 @@ function Booking() {
     }
   
     // 'data' is not valid or 'accommodations' array is empty, return false
-    return false;
     alert("All Accommodations should have at least one guest.")
+    return false;
   }
-
-
 
   function generateOTP(){
     const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
