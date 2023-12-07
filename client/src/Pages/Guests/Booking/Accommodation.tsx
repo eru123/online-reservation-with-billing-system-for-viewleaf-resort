@@ -61,7 +61,7 @@ function Accommodation({
   useEffect(()=>{
     getAccommodation({
       schedule: parseInt(date||"", 10),
-      shift: shift==="1"? "day": shift==="2"? "night": "whole day"
+      shift: shift==="0"? "day": shift==="1"? "night": "whole day"
     })
   }, [])
 
