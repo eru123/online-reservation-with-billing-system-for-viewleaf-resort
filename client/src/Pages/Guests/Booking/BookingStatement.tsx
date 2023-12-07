@@ -48,51 +48,49 @@ function BookingStatement({additional, form, invoices}:Props) {
   return <>
     <Timeline
       sx={{
-          [`& .${timelineItemClasses.root}:before`]: {
-          flex: 0,
-          padding: 0,
-          },
+        [`& .${timelineItemClasses.root}:before`]: {
+        flex: 0,
+        padding: 0,
+        },
       }}
     >
     {(form?.accommodations || form)?.map((accommodation:any)=>(<div>
       {/* One Accommodation */}
       <TimelineItem>
-
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-              <Typography variant="body2" color="initial">{accommodation?.type?.toUpperCase() || ""}</Typography>
-
-              {/* Accommodation */}
-              <Box display="flex" sx={{marginBottom:"10px"}}>
-                  <div style={{flexGrow:"1"}}>
-                      <Typography variant="h5" fontWeight={500} color="initial">{accommodation?.title || accommodation.accommodation.title }</Typography>
-                  </div>
-                  <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation?.fees?.[parseInt(shift||"0")]?.rate || accommodation?.rate}</Typography>
-              </Box>
-
-              {/* Inclussions */}
-              <Box >
-                <Typography variant="h6" fontWeight={600} color="initial" sx={{opacity:".6"}}>Inclusions</Typography>
-                {accommodation?.inclusions?.map((inclusion:any)=>(
-                  <>{ inclusion?.quantity > 0 ?
-                    <Box display="flex" >
-                      <div style={{flexGrow:"1"}}>
-                          <Typography variant="subtitle1" fontWeight={500}  color="initial">{inclusion?.name}</Typography>
-                          <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}> {inclusion?.quantity} x {inclusion?.price} </Typography>
-                      </div> 
-                      <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{inclusion?.quantity * inclusion?.price}</Typography>
-                  </Box> : <></> }</>
-                ))}
-              </Box>
-
-              {/* Entrance Fee */}
-              <Box sx={{marginTop:"15px"}}>
-                <Typography variant="h6" fontWeight={600} color="initial" sx={{opacity:".6"}}>Entrance Fee</Typography>
-
-                
+        <TimelineSeparator>
+          <TimelineDot />
+          <TimelineConnector />
+        </TimelineSeparator>
+        <TimelineContent>
+          <Typography variant="body2" color="initial">{accommodation?.type?.toUpperCase() || ""}</Typography>
+          {/* Accommodation */}
+          <Box display="flex" sx={{marginBottom:"10px"}}>
+              <div style={{flexGrow:"1"}}>
+                  <Typography variant="h5" fontWeight={500} color="initial">{accommodation?.title || accommodation.accommodation.title }</Typography>
+              </div>
+              <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation?.fees?.[parseInt(shift||"0")]?.rate || accommodation?.rate}</Typography>
+          </Box>
+          {/* Inclussions */}
+          {accommodation?.inclusions?.length <= 0?<>
+            <Box >
+              <Typography variant="h6" fontWeight={600} color="initial" sx={{opacity:".6"}}>Inclusions</Typography>
+              {accommodation?.inclusions?.map((inclusion:any)=>(
+                <>{ inclusion?.quantity > 0 ?
+                  <Box display="flex" >
+                    <div style={{flexGrow:"1"}}>
+                      <Typography variant="subtitle1" fontWeight={500}  color="initial">{inclusion?.name}</Typography>
+                      <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}> {inclusion?.quantity} x {inclusion?.price} </Typography>
+                    </div> 
+                    <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{inclusion?.quantity * inclusion?.price}</Typography>
+                </Box> : <></> }</>
+              ))}
+            </Box>
+          </>:""}
+          
+          {/* Entrance Fee */}
+          {(accommodation?.guests?.adult || accommodation?.guests?.children || accommodation?.guests?.senior || accommodation?.guests?.pwd)?<>
+            <Box sx={{marginTop:"15px"}}>
+              <Typography variant="h6" fontWeight={600} color="initial" sx={{opacity:".6"}}>Entrance Fee</Typography>
               {accommodation?.guests?.adult ?
                 <Box display="flex" >
                     <div style={{flexGrow:"1"}}>
@@ -102,7 +100,6 @@ function BookingStatement({additional, form, invoices}:Props) {
                     <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.adult * accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult} </Typography>
                 </Box>
               :<></>}
-
               {accommodation?.guests?.children ? 
                 <Box display="flex" >
                     <div style={{flexGrow:"1"}}>
@@ -112,17 +109,15 @@ function BookingStatement({additional, form, invoices}:Props) {
                     <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.children * accommodation.fees[parseInt(shift||"0")].guestFee.kids}</Typography>
                 </Box>
               :<></>}
-
               {accommodation?.guests?.senior ? 
                 <Box display="flex" >
-                    <div style={{flexGrow:"1"}}>
-                      <Typography variant="subtitle1" fontWeight={500}  color="initial">Senior</Typography>
-                      <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}>  {accommodation.guests.senior} x {(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult) * .8} </Typography>
-                    </div> 
-                    <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.adult * ((accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult) * .8)} </Typography>
+                  <div style={{flexGrow:"1"}}>
+                    <Typography variant="subtitle1" fontWeight={500}  color="initial">Senior</Typography>
+                    <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}>  {accommodation.guests.senior} x {(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult) * .8} </Typography>
+                  </div> 
+                  <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.adult * ((accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult) * .8)} </Typography>
                 </Box>
               :<></>}
-
               {accommodation?.guests?.pwd ? 
                 <Box display="flex" >
                     <div style={{flexGrow:"1"}}>
@@ -132,11 +127,10 @@ function BookingStatement({additional, form, invoices}:Props) {
                     <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.adult * ((accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult) * .8)} </Typography>
                 </Box>
               :<></>}
-                
-                
-              </Box>
-              
-          </TimelineContent>
+            </Box>
+          </>:""}
+          
+        </TimelineContent>
       </TimelineItem>
     </div>))}
     </Timeline>
