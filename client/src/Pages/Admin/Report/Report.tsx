@@ -174,7 +174,7 @@ function Report() {
       const endDate = new Date(dateFilterInput.end);
   
       const filteredAndSorted = reservations
-        .filter((reservation: any) => ['checkedOut', 'pending'].includes(reservation.status))
+        .filter((reservation: any) => ['checkedOut','checked out'].includes(reservation.status))
         .sort((a: any, b: any) => new Date(b.schedule).getTime() - new Date(a.schedule).getTime());
   
       const filteredData = filterByDateRange(filteredAndSorted, startDate, endDate);
@@ -182,7 +182,7 @@ function Report() {
     } else {
       // If no date range is specified, set the reports directly
       const filteredAndSorted = reservations
-        .filter((reservation: any) => ['checkedOut', 'pending'].includes(reservation.status))
+        .filter((reservation: any) => ['checkedOut','checked out'].includes(reservation.status))
         .sort((a: any, b: any) => new Date(b.schedule).getTime() - new Date(a.schedule).getTime());
       setReports(filteredAndSorted);
     }
