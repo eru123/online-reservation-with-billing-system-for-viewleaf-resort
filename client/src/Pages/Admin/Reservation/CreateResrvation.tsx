@@ -324,8 +324,8 @@ function CreateResrvation() {
                         textField: {required:true} ,
                       }}
                       minDate={dayjs()}
-                      onChange={(newDate) => {
-                        setBookingSchedule({ ...bookingSchedule, date: newDate });
+                      onChange={(newDate:any) => {
+                        setBookingSchedule({ ...bookingSchedule, date: new Date(newDate).getTime() });
 
                       }}
                     />
@@ -351,7 +351,7 @@ function CreateResrvation() {
                 
 
                 {bookingSchedule?.date && bookingSchedule?.shift?<>
-                    <Accommodation 
+                  <Accommodation 
                     date={bookingSchedule.date||""} 
                     shift={bookingSchedule.shift||""}
                     form={form}

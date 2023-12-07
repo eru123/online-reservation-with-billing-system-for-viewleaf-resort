@@ -56,12 +56,16 @@ function Accommodation({
   const {data:accommodations, getAccommodation} = useAccommodation();
 
   useEffect(()=>{
-    console.log(date, shift)
-    getAccommodation({
-      schedule: parseInt(date||"", 10),
-      shift: shift==="0"? "day": shift==="1"? "night": "whole day"
-    })
-  }, [])
+    
+    if (date && shift) {
+      console.log(date, shift)
+      getAccommodation({
+        schedule: parseInt(date||"", 10),
+        shift: shift==="0"? "day": shift==="1"? "night": "whole day"
+      })
+    }
+    
+  }, [date, shift])
 
   return <>
     {/* <Box display="flex"  my={"20px"} gap={"10px"}>  
