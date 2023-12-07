@@ -40,22 +40,10 @@ function Report() {
 
   function getTotalNumberOfGuests(reservations: any) {
     let totalGuests = 0;
-
     for (const reservation of reservations) {
       // Check if reservation has invoices and invoices is an array with at least one element
-      if (
-        reservation.invoices &&
-        Array.isArray(reservation.invoices) &&
-        reservation.invoices.length > 0
-      ) {
-        // Access the first invoice
-        const firstInvoice = reservation.invoices[0];
-
-        // Check if the first invoice has guests
-        if (firstInvoice.guests) {
-          const { adults = 0, senior = 0, pwd = 0, kids = 0 } = firstInvoice.guests;
-          totalGuests += adults + senior + pwd + kids;
-        }
+      for(const invoices of reservation.invoices){
+        totalGuests += invoices.guests.pwd +invoices.guests.kids + invoices.guests.adult + invoices.guests.senior
       }
     }
     return totalGuests;
