@@ -35,6 +35,6 @@ export type GetStaff = {
 export type UpdateStaff = {
     username: string;
     email: string;
-    contact: string;
+    contact?: string;
     password?: string;
 }

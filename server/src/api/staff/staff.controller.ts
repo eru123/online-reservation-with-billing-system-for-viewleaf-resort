@@ -53,9 +53,15 @@ export const updateStaff: RequestHandler = async (req: BodyRequest<UpdateStaff>,
     const checker = new CheckData();
     checker.checkType(username, 'string', 'username');
     checker.checkType(email, 'string', 'email');
-    checker.checkType(contact, 'string', 'contact');
 
     if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+    if (contact) {
+        checker.checkType(contact, 'string', 'contact');
+        if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+        req.staff.contact = contact;
+    }
 
     if (password) {
         checker.checkType(password, 'string', 'password');
