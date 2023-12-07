@@ -97,7 +97,7 @@ function Dashboard() {
               </TableHead>
               <TableBody>
                 {filteredReservations.map((reservation: any) => (
-                  <TableRow key={reservation.reservationId} sx={{ background: "#D7D7D7" }} component={Link} to="/admin/reservation/view">
+                  <TableRow key={reservation.reservationId} sx={{ background: "#D7D7D7" }} component={Link}  to={`/admin/invoice/${reservation.reservationId}`}>
                     <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
                     <TableCell>{reservation.customer.name}</TableCell>
                     <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })}</TableCell>
