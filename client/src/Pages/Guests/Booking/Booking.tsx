@@ -308,7 +308,7 @@ function Booking() {
             <h1>Your view Leaf reservation is waiting for payment</h1>
             <hr>
             <p>Reference Number: ${reservationData.reservationId}</p>
-            <p>Scheduled Date: ${moment(new Date(form.schedule)).format('DD/MM/YYYY')} - ${form.shift==="1"? "day": form.shift==="2"? "night": "whole day"}</p>
+            <p>Scheduled Date: ${moment(new Date(form.schedule)).format('DD/MM/YYYY')}} - ${form.shift}</p>
             <hr>
             <h4>View your reservation details <a href="${process.env.REACT_APP_URL}/reservation/${reservationData.reservationId}">here</a>.</h4>
             <h5>Strictly do not share your reference number as it is used to access your reservation details</h5>
