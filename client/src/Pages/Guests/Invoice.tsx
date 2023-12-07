@@ -30,6 +30,7 @@ import Button from '@mui/material/Button'
 import { Link, useParams, useNavigate } from 'react-router-dom';
 
 import useReservation from '../../Hooks/useReservation';
+import moment from 'moment';
 
 type Props = {
 }
@@ -124,7 +125,7 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                {filterByStatus(data?.[0]?.notes, status)?.[0].note}
+                {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
               </Typography>
             </Paper>
           </>:""}
@@ -133,7 +134,7 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                {filterByStatus(data?.[0]?.notes, status)?.[0].note}
+                {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
               </Typography>
             </Paper>
           </>:""}
@@ -142,7 +143,7 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                {filterByStatus(data?.[0]?.notes, status)?.[0].note}
+                {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
               </Typography>
             </Paper>
           </>:""}
@@ -151,18 +152,18 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                {filterByStatus(data?.[0]?.notes, status)?.[0].note}
+                {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
               </Typography>
             </Paper>
           </>:""}
 
           {status==="refunded"?<>
             <Alert severity="error" sx={{margin:"2em 0 ", zIndex:"23"}}>This reservation is refunded</Alert>
-            {filterByStatus(data?.[0]?.notes, status)?.[0].note && <>
+            {filterByStatus(data?.[0]?.notes, status)?.[0]?.note && <>
               <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
                 <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
                 <Typography variant="body2"  color="initial">
-                  {filterByStatus(data?.[0]?.notes, status)?.[0].note}
+                  {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
                 </Typography>
               </Paper>
             </>}
@@ -170,11 +171,11 @@ function Invoice({}:Props) {
 
           {status==="cancelled"?<>
             <Alert severity="error" sx={{margin:"2em 0 ", zIndex:"23"}}>This reservation is cancelled</Alert>
-            {filterByStatus(data?.[0]?.notes, status)?.[0].note && <>
+            {filterByStatus(data?.[0]?.notes, status)?.[0]?.note && <>
               <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
                 <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
                 <Typography variant="body2"  color="initial">
-                  {filterByStatus(data?.[0]?.notes, status)?.[0].note}
+                  {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
                 </Typography>
               </Paper>
             </>}
@@ -188,7 +189,7 @@ function Invoice({}:Props) {
                 <Typography variant="h6" color="initial" sx={{opacity:".6"}}>Reference Number</Typography>
               </Box>
               <Box >
-                <Typography textAlign={"end"} variant="h4" color="primary" >{data?.[0]?.schedule} - {data?.[0]?.invoices?.[0]?.shift}</Typography>
+                <Typography textAlign={"end"} variant="h4" color="primary" >{ moment(new Date(data?.[0]?.schedule)).format('DD/MM/YYYY')} - {data?.[0]?.invoices?.[0]?.shift}</Typography>
                 <Typography textAlign={"end"} variant="h6" color="initial" sx={{opacity:".6"}}>Scheduled Date</Typography>
               </Box>
           </Box>
