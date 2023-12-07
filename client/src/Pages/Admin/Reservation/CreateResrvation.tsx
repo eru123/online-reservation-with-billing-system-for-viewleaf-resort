@@ -59,7 +59,7 @@ interface CustomerData {
 
 function CreateResrvation() {
   const [bookingSchedule, setBookingSchedule] = useState<any>({
-    date : "123412341",
+    date : new Date().getTime(),
     shift : "0",
   });
   const navigate = useNavigate()
@@ -348,16 +348,21 @@ function CreateResrvation() {
                     </FormControl>
                 </Box>
                 {/* <Accommodation date={date||""} shift={shift||""} selectedAccommodations={selectedAccommodations} setSelectedAccommodations={setSelectedAccommodations}/> */}
-                <Accommodation 
-                  date={bookingSchedule.date||""} 
-                  shift={bookingSchedule.shift||""}
-                  form={form}
-                  updateSchedule={updateSchedule}
-                  updateCustomer={updateCustomer}
-                  selectAccommodation={selectAccommodation}
-                  editGuests={editGuests}
-                  addInclusion={addInclusion}
-                />
+                
+
+                {bookingSchedule?.date && bookingSchedule?.shift?<>
+                    <Accommodation 
+                    date={bookingSchedule.date||""} 
+                    shift={bookingSchedule.shift||""}
+                    form={form}
+                    updateSchedule={updateSchedule}
+                    updateCustomer={updateCustomer}
+                    selectAccommodation={selectAccommodation}
+                    editGuests={editGuests}
+                    addInclusion={addInclusion}
+                  />
+                </> : <></>}
+
             </>:""}
             {step===2?<>
                 <Box display="flex" alignItems={"center"} sx={{marginTop:"50px",marginBottom:"2em"}}>

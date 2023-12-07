@@ -55,10 +55,8 @@ function Accommodation({
 
   const {data:accommodations, getAccommodation} = useAccommodation();
 
-
-  
-
   useEffect(()=>{
+    console.log(date, shift)
     getAccommodation({
       schedule: parseInt(date||"", 10),
       shift: shift==="0"? "day": shift==="1"? "night": "whole day"
