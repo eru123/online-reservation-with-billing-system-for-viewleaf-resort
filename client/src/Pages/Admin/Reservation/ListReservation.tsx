@@ -86,7 +86,9 @@ function ListReservation() {
                                   <TableCell align='center'>
                                     <Chip 
                                       label={reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)} 
-                                      color={reservation.status === 'cancelled' ? "error" : (reservation.status === "approved" ? "success" : "info")}
+                                      color={
+                                        reservation.status === 'cancelled' || reservation.status === 'declined' || reservation.status === 'refunded'   ? "error" : (reservation.status === "checked out" ? "success" : "info")
+                                      }
                                     />
                                   </TableCell>
                                 </TableRow>

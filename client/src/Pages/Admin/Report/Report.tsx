@@ -288,7 +288,7 @@ function Report() {
                           <TableCell>
                             <Chip
                               label={reservation?.status}
-                              color={reservation?.status === 'cancelled' ? "error" : (reservation?.status === "approved" ? "primary" : "info")}
+                              color={reservation.status === 'cancelled' || reservation.status === 'declined' || reservation.status === 'refunded'   ? "error" : (reservation.status === "checked out" ? "success" : "info")}
                             />
                           </TableCell>
                           <TableCell>₱{costInfo.total.toLocaleString()}</TableCell> {/* Display the total amount per reservation */}
