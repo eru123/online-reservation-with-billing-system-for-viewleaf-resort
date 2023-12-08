@@ -8,6 +8,7 @@ import dayjs, { Dayjs } from 'dayjs';
 
 import useAccommodation from '../../../Hooks/useAccommodation'
 
+
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -42,16 +43,6 @@ function Accommodation({
   addInclusion
 }:Props) {
   const [open, setOpen] = React.useState("");
-
-  const [calendarValue, setCalendarValue] = React.useState<Dayjs | null>(dayjs());
-  // const [shift, setShift] = React.useState('');
-
-  const [kidsEntranceFee,setKidsEntranceFee]= useState(0);
-  const [adultEntranceFee,setAdultEntranceFee]= useState(0);
-  const [senioerPwdEntranceFee ,setSenioerPwdEntranceFee]= useState(0);
-
-  const [dayshift, setDayShift] = useState(false);
-  const [nightShift, setNightShift] = useState(false);
 
   const {data:accommodations, getAccommodation} = useAccommodation();
 
@@ -99,8 +90,10 @@ function Accommodation({
     {/* List of Selected */}
     <Box display="flex" flexDirection={"column"} gap={"25px"} >
       {form.accommodations?.length > 0? <>
+          <Box >
           <Typography variant="h4" color="primary" fontWeight={600}>Selected Accommodation</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
+          </Box>
           {form.accommodations?.map((accommodation: any) => (
           <AccommodationCard 
             accommodation={accommodation}

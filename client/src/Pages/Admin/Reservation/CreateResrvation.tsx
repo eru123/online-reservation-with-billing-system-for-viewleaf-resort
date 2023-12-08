@@ -3,12 +3,6 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineDot from '@mui/lab/TimelineDot';
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import {useNavigate} from 'react-router-dom';
@@ -294,10 +288,10 @@ function CreateResrvation() {
         <Container maxWidth="lg">
             {step===1?<>
                 <Box display="flex"  alignItems={"center"} sx={{marginTop:"50px",marginBottom:"2em"}}>
-                    <div style={{flexGrow:'1'}}>
+                    <Box sx={{flexGrow:'1'}}>
                       <Typography variant="h4" fontWeight={600} color="primary">Select Accommodation</Typography>
                       <Typography variant="h6" fontWeight={400} color="initial" >You can choose multiple accommodation</Typography>
-                    </div>
+                    </Box>
                     <Box display="flex" gap={"10px"}>
                         <Button variant="text" color="primary">
                             Back
@@ -315,7 +309,7 @@ function CreateResrvation() {
                         </Button>
                     </Box>
                 </Box>
-                <Box display={"flex"} justifyContent={"start"} gap={2}>
+                <Box display={"flex"} justifyContent={"start"} gap={2} mb={5}>
                   <LocalizationProvider dateAdapter={AdapterDayjs} >
                     <DatePicker 
                       slotProps={{ 
