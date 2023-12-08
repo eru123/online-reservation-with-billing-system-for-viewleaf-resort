@@ -76,8 +76,6 @@ function CreateResrvation() {
       accommodations: 0
     })
 
-  const [date, setDate] = useState<any>("123412341")
-  const [shift, setShift] = useState("0")
 
   const {data:accommodations, getAccommodation} = useAccommodation();
     
@@ -95,14 +93,14 @@ function CreateResrvation() {
       ...(data.name && { name: data.name }),
       ...(data.email && { email: data.email }),
       ...(data.phone && { phone: data.phone }),
-      schedule: new Date(parseInt(date||"", 10)).getTime(),
-      shift: shift==="0"? "day": shift==="1"? "night": "whole day"
+      schedule: new Date(parseInt(bookingSchedule.date||"", 10)).getTime(),
+      shift: bookingSchedule.shift==="0"? "day": bookingSchedule.shift==="1"? "night": "whole day"
     }));
   };
 
   const selectAccommodation = (accommodationData: any) => {
     // Add shift property to the accommodationData
-    const modifiedAccommodationData = { ...accommodationData, shift: shift==="0"? "day": shift==="1"? "night": "whole day" };
+    const modifiedAccommodationData = { ...accommodationData, shift: bookingSchedule.shift==="0"? "day": bookingSchedule.shift==="1"? "night": "whole day" };
   
     if (form?.accommodations?.some((item: any) => item.accommodationId === accommodationData.accommodationId)) {
       // If the accommodation with the same accommodationId exists, remove it
@@ -259,8 +257,8 @@ function CreateResrvation() {
   }
 
   useEffect(() => {
-    updateSchedule(date, shift)
-    calculateCost(form,parseInt(shift||"0"))
+    updateSchedule(bookingSchedule.date, bookingSchedule.shift)
+    calculateCost(form,parseInt(bookingSchedule.shift||"0"))
 
     if (reservationData) {
       
@@ -326,7 +324,6 @@ function CreateResrvation() {
                       minDate={dayjs()}
                       onChange={(newDate:any) => {
                         setBookingSchedule({ ...bookingSchedule, date: new Date(newDate).getTime() });
-
                       }}
                     />
                   </LocalizationProvider>
