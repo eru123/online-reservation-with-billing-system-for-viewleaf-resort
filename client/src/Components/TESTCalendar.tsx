@@ -25,9 +25,9 @@ function AppointmentDay(props: PickersDayProps<Dayjs> & { highlightedDaysMap?: H
 }
 
 type Props = {
-  appointments?: any[];
-  setSelectedDay?: React.Dispatch<React.SetStateAction<Dayjs | null | undefined>>;
-  selectedDay?: Dayjs | null;
+  appointments: any[];
+  setSelectedDay:React.Dispatch<React.SetStateAction<dayjs.Dayjs | null | undefined>>;
+  selectedDay: any;
 };
 
 function TESTCalendar({ appointments, setSelectedDay, selectedDay }: Props) {
@@ -35,11 +35,10 @@ function TESTCalendar({ appointments, setSelectedDay, selectedDay }: Props) {
   const [highlightedDaysMap, setHighlightedDaysMap] = useState<HighlightedDaysMap>({});
   const initialValue = dayjs();
 
-  const schedules = appointments?.map((item) => item.schedule) || [];
-
   const formatDateToMonthYear = (date: string) => {
     return dayjs(date).format('MMMM-YYYY');
   };
+  const schedules = appointments?.map((item) => item.schedule) || [];
 
   const formatSchedulesToHighlightedDaysMap = (schedules: string[]) => {
     const highlightedDaysMap: HighlightedDaysMap = {};
@@ -59,7 +58,7 @@ function TESTCalendar({ appointments, setSelectedDay, selectedDay }: Props) {
 
   useEffect(() => {
     setHighlightedDaysMap(formatSchedulesToHighlightedDaysMap(schedules));
-  }, [schedules]);
+  }, [appointments]);
 
   const handleMonthChange = (date: Dayjs) => {
     const monthYearKey = date.format('MMMM-YYYY');

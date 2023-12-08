@@ -132,7 +132,7 @@ function Accommodation() {
                         </Grid>
                         <Grid item xs={12} sm={7}>
                             <Paper variant="elevation" elevation={3} sx={{borderRadius:"8px",border:"1px solid #A4A4A4"}}>
-                                <TESTCalendar/>
+                                {/* <TESTCalendar/> */}
                             </Paper>
                         </Grid>
                         <Grid item xs={5}>
@@ -179,7 +179,7 @@ function Accommodation() {
                         </Grid>
                         <Grid item xs={12} sm={7}>
                             <Paper variant="elevation" elevation={3} sx={{borderRadius:"8px",border:"1px solid #A4A4A4"}}>
-                                <TESTCalendar/>
+                                {/* <TESTCalendar/> */}
                             </Paper>
                         </Grid>
                         <Grid item xs={5}>
