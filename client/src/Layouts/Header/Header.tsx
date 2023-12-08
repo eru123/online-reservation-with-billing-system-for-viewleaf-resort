@@ -8,12 +8,9 @@ import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { Link } from 'react-router-dom';
 
 type Anchor = 'top' | 'right' | 'bottom' | 'right';
@@ -160,7 +157,6 @@ export default function Header() {
                 </Typography>
               </ListItemButton>
             </ListItem>
-            
           </List>
         </Box>
       </Drawer>

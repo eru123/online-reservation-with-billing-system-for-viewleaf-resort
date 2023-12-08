@@ -58,7 +58,7 @@ function Dashboard() {
   if (reservationLoading) return <>loading</>;
 
   return (
-    <div>
+    <Box >
       <Typography variant="h4" fontWeight={600} color="primary">
         Dashboard
       </Typography>
@@ -66,7 +66,7 @@ function Dashboard() {
         Here are the list of reservation for today
       </Typography>
       <Grid container spacing={2}>
-        <Grid item md={9}>
+        <Grid item lg={9} sm={12} mb={4}>
           <Box display="flex" gap={"15px"}>
             <Box sx={{ flexGrow: "1" }}>
               <Box sx={{ display: 'flex', alignItems: 'center', background: "white", width: "300px", padding: "0 0 0 .5em", border: "1px solid #B5B5B5", borderRadius: "8px" }}>
@@ -108,14 +108,14 @@ function Dashboard() {
             </Table>
           </TableContainer>
         </Grid>
-        <Grid item md={3}>
-          <Box display="flex" flexDirection={"column"} gap={"15px"} >
+        <Grid item lg={3} sm={12}>
+          <Box  sx={{display:"flex", flexDirection:{md:"column",sm:"row"}, gap:"15px"}} >
             <ReportCard variant='reservation' title={"Today’s Reservation"} value={filteredReservations?.length} />
             <ReportCard variant='accommodation' title={"Today’s Accommodation"} value={reportCardValue} />
           </Box>
         </Grid>
       </Grid>
-    </div>
+    </Box>
   )
 }
 
