@@ -2,7 +2,7 @@ import React from 'react'
 import Alert from '@mui/material/Alert';
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
-
+import Rating from '@mui/material/Rating';
 type Props = {
   status:"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checked in" | "refunded" | "cancelled" | "checked out" 
   note?:string
@@ -67,10 +67,19 @@ function InvoiceAlert({status,note}:Props) {
       <Alert severity="info" sx={{margin:"2em 0"}}>This reservation is checked in already</Alert>
     :""}
     {status==="checked out"?
-      <Alert severity="success" sx={{margin:"2em 0"}}>This Reservation is done</Alert>
+      <>
+        <Alert severity="success" sx={{margin:"2em 0"}}>This Reservation is done</Alert>
+        <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+          <Typography variant="subtitle1" fontWeight={600} color="initial">Rating</Typography>
+          {/* Insert in the value how plenty of star */}
+          <Rating name="read-only" value={3} readOnly />
+          <Typography variant="subtitle1" mt={2} fontWeight={600} color="initial">Feedback</Typography>
+          <Typography variant="body2"  color="initial">
+            Insert Here the Feedback
+          </Typography>
+        </Paper>
+      </>
     :""}
-
-
     {status==="refunded"?
       <Alert severity="error" sx={{margin:"2em 0"}}>This reservation is refunded </Alert>
     :""}

@@ -30,6 +30,8 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 
 import useReservation from '../../Hooks/useReservation';
 import moment from 'moment';
+import Rating from '@mui/material/Rating';
+
 
 type Props = {
 }
@@ -50,7 +52,7 @@ function Invoice({}:Props) {
     // approved,pending, checkedOut, canceled, refunded
     const {id} = useParams();
     const {data, loading, error, getReservation, updateReservation} = useReservation();
-    const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("pending");
+    const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checked out">("pending");
     const [note, setNote] = useState<string>("")
 
     const submit = async (status: string, note: string) => {
@@ -79,6 +81,9 @@ function Invoice({}:Props) {
         })
       }
     }, [data])
+    useEffect(()=>{
+      console.log(error)
+    },[error])
 
     if (loading) {
       return <div>Loading...</div>;
@@ -93,7 +98,7 @@ function Invoice({}:Props) {
               <Chip icon={<DoNotDisturbAltIcon />} label="Cancel Reservation" variant="outlined" onClick={()=>{setOpen("cancel")}} />
             </>:""}
             <Box sx={{flexGrow:"1"}} ></Box>
-            {status === "checkedOut"?
+            {status === "checked out"?
               <Chip icon={<StarIcon />} label="Rate our Service" variant="filled" onClick={()=>{setOpen("rate")}} color="primary" />:""    
             }
           </Box>
@@ -113,8 +118,19 @@ function Invoice({}:Props) {
           {status==="checkedIn"?
             <Alert severity="warning" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>Your reservation has been already been checked in</Alert>
           :""}
-          {status==="checkedOut"?
+          {status==="checked out"?
+          <>
             <Alert severity="success" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>This reservation is done, We are happy to serve you!</Alert>
+            <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+              <Typography variant="subtitle1" fontWeight={600} color="initial">Rating</Typography>
+              {/* Insert in the value how plenty of star */}
+              <Rating name="read-only" value={3} readOnly />
+              <Typography variant="subtitle1" mt={2} fontWeight={600} color="initial">Feedback</Typography>
+              <Typography variant="body2"  color="initial">
+                Insert Here the Feedback
+              </Typography>
+            </Paper>
+          </>
           :""}
           {status==="declined"?<>
             <Alert severity="error" sx={{margin:"2em 0 0", zIndex:"23"}}>This reservation is declined, We are sorry!</Alert>
