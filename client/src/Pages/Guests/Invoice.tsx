@@ -86,21 +86,30 @@ function Invoice({}:Props) {
       rating: 0,
       feedback:""
     });
+
     useEffect(()=>{
-      if (data?.[0]) {
+
+      if (data) {
         setStatus(data?.[0]?.status)
-      } else {
+      } 
+      else {
         getReservation({
           reservationId: id || ""
         })
       }
+
     }, [data])
-    useEffect(()=>{
-      console.log(error)
-    },[error])
+
+    // useEffect(()=>{
+    //   console.log(error)
+    // },[error])
 
     if (loading) {
       return <div>Loading...</div>;
+    }
+
+    if (error || data?.length === 0) {
+      return <div>This reservation does not exist</div>
     }
 
     return<>
