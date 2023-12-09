@@ -34,6 +34,7 @@ import moment from 'moment';
 import Rating from '@mui/material/Rating';
 
 
+
 type Props = {
 }
 const style = {
@@ -109,7 +110,9 @@ function Invoice({}:Props) {
     }
 
     if (error || data?.length === 0) {
-      return <div>This reservation does not exist</div>
+      return <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
+        <div style={{display:"flex",justifyContent:"center",color:"red"}}>This reservation does not exist</div>
+      </Container>
     }
 
     return<>
