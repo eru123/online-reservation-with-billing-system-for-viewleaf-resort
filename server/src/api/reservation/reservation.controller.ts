@@ -223,8 +223,134 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
     res.status(201).json({ reservationId: reservation.reservationId });
 };
 
-export const addExtras: RequestHandler = async (_req: BodyRequest<AddExtras>, _res) => {
+export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res) => {
+    const { reservationId, accommodations } = req.body;
 
+    const checker = new CheckData();
+    checker.checkType(reservationId, 'string', 'reservationId');
+    checker.checkArray(accommodations, 1, 'accommodations');
+    if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+    for (let i = 0; i < accommodations.length; i++) {
+        const { accommodationId, shift, guests, inclusions, total, minimum } = accommodations[i];
+
+        checker.checkType(accommodationId, 'string', `accommodations.${i}.accommodationId`);
+        checker.checkType(shift, 'string', 'shift');
+        checker.checkType(total, 'number', `accommodations.${i}.total`);
+        checker.checkType(minimum, 'number', `accommodations.${i}.minimum`);
+        if (checker.size() > 0) continue;
+
+        if (guests) {
+            checker.checkType(guests, 'object', 'guests');
+            if (checker.size() > 0) continue;
+
+            const { adult = 0, kids = 0, senior = 0, pwd = 0 } = guests;
+
+            checker.checkType(adult, 'number', `accommodations.${i}.guests.adult`);
+            checker.checkType(kids, 'number', `accommodations.${i}.guests.kids`);
+            checker.checkType(senior, 'number', `accommodations.${i}.guests.senior`);
+            checker.checkType(pwd, 'number', `accommodations.${i}.guests.pwd`);
+            if (checker.size() > 0) continue;
+        }
+
+        if (inclusions) {
+            checker.checkArray(inclusions, 1, `accommodations.${i}.inclusions`);
+            if (checker.size() > 0) continue;
+
+            for (let j = 0; j < inclusions.length; j++) {
+                const { name, quantity } = inclusions[j];
+
+                checker.checkType(name, 'string', `accommodations.${i}.inclusions.${j}.name`);
+                checker.checkType(quantity, 'number', `accommodations.${i}.inclusions.${j}.quantity`);
+            }
+        }
+    }
+
+    if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+    const reservation = await ReservationModel.findOne({ reservationId }).exec();
+    if (!reservation) throw new NotFound('Reservation');
+
+    const invoices = await InvoiceModel.find({ reservation: reservation._id }).exec();
+
+    for (const accommodation of accommodations) {
+        const { accommodationId, shift, guests, inclusions, total, minimum } = accommodation;
+
+        const accommodationInvoices = invoices.filter((invoice) => invoice.accommodationId === accommodationId);
+
+        // Check if accommodation already reserved
+        if (accommodationInvoices.length > 0) {
+            const existingAccommodation = accommodationInvoices.find((invoice) => invoice.shift === shift);
+
+            if (existingAccommodation) {
+                // Update guests
+                if (guests) {
+                    const { adult = 0, kids = 0, senior = 0, pwd = 0 } = guests;
+
+                    existingAccommodation.guests.adult += adult;
+                    existingAccommodation.guests.kids += kids;
+                    existingAccommodation.guests.senior += senior;
+                    existingAccommodation.guests.pwd += pwd;
+                }
+                
+                // Update inclusions
+                if (inclusions) {
+                    for (let j = 0; j < inclusions.length; j++) {
+                        const { name, quantity } = inclusions[j];
+
+                        const existingInclusion = existingAccommodation.inclusions.find((inclusion) => inclusion.name === name);
+                        if (existingInclusion) {
+                            existingInclusion.quantity += quantity;
+                        }
+                    }
+                }
+
+                existingAccommodation.total += total;
+                existingAccommodation.minimum += minimum;
+            }
+            else {
+                // New accommodation shift
+                const accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
+                if (!accommodation) throw new NotFound('Accommodation');
+
+                const fees = accommodation.fees.find((fee) => fee.shift === shift);
+                if (!fees) throw new NotFound('Fees');
+
+                await InvoiceModel.create({
+                    reservation: reservation._id,
+                    accommodationId,
+                    shift,
+                    rate: fees.rate,
+                    guestFee: fees.guestFee,
+                    inclusions,
+                    guests,
+                    total,
+                    minimum
+                });
+            }
+        } else {
+            // New accommodation
+            const accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
+            if (!accommodation) throw new NotFound('Accommodation');
+
+            const fees = accommodation.fees.find((fee) => fee.shift === shift);
+            if (!fees) throw new NotFound('Fees');
+
+            await InvoiceModel.create({
+                reservation: reservation._id,
+                accommodationId,
+                shift,
+                rate: fees.rate,
+                guestFee: fees.guestFee,
+                inclusions,
+                guests,
+                total,
+                minimum
+            });
+        }
+    }
+
+    res.sendStatus(204);
 };
 
 export const updateStatus: RequestHandler = async (req: BodyRequest<UpdateStatus>, res) => {
