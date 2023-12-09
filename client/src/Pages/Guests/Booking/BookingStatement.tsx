@@ -18,7 +18,7 @@ type Props = {
 function BookingStatement({additional, form, invoices}:Props) {
   const {date, shift} = useParams();
 
-  console.log(form)
+  // console.log(form)
 
   const calculateCost = (data: any) =>{
     let inclusions = 0

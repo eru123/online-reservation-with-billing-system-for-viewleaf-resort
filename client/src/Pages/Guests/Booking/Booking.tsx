@@ -52,6 +52,7 @@ function Booking() {
   const [verificationCode, setVerificationCode] = useState("");
   const [form, setForm] = useState<any>({});
   const[disabledButton,setDisabledButton] = useState(true)
+  const [proxyAccommodation, setProxyAccommodation] = useState<any>([]);
   const [billing, setBilling] = useState<any>({
     total: 0,
     guests: 0,
@@ -62,7 +63,7 @@ function Booking() {
   const updateSchedule = (date: any, shift: any) => {
     setForm((prevForm: any) => ({
       ...prevForm,
-      schedule: new Date(parseInt(date||"", 10)),
+      schedule: parseInt(date||""),
       shift: shift==="0"? "day": shift==="1"? "night": "whole day"
     }));
   }
@@ -147,6 +148,87 @@ function Booking() {
     }));
   };
 
+  // const addCosts =  (accommodationId: string, total: any, minimum: any) => {
+  //   setForm((prevForm: { accommodations: any }) => ({
+  //     ...prevForm,
+  //     accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any }) => {
+  //       if (accommodation.accommodationId === accommodationId) {
+  //         // console.log(accommodationId, total, minimum)
+  //         return {
+  //           ...accommodation,
+  //           total: total,
+  //           minimum: minimum
+  //         };
+  //       } else {
+  //         return accommodation;
+  //       }
+  //     }),
+  //   }));
+  // }
+
+  const calculateCosts = () => {
+    let totalAll = 0
+    let minimumAll = 0
+    let inclusionsAll = 0
+    let guestsAll = 0
+
+    setForm((prevForm: { accommodations: any }) => ({
+      ...prevForm,
+      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any; fees: any; guests: any; }) => {
+        let total = 0
+        let minimum = 0
+        let inclusions = 0
+        let guests = 0
+
+        minimum += parseInt(accommodation.fees[parseInt(shift||"0")].rate)
+        minimumAll += parseInt(accommodation.fees[parseInt(shift||"0")].rate)
+
+          if (accommodation.inclusions) {
+            accommodation.inclusions?.map((inclusion: any) => {
+              if (inclusion.quantity) {
+                inclusions += (inclusion.quantity * inclusion.price)
+                inclusionsAll += (inclusion.quantity * inclusion.price)
+              }
+            })
+          }
+
+          if (accommodation.guests) {
+            if (accommodation.guests.adult) {
+              guests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.adult)
+              guestsAll += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.adult)
+            }
+            if(accommodation.guests.children) {
+              guests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.kids)
+              guestsAll += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.kids)
+            }
+            if(accommodation.guests.senior) {
+              guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.adult) * 0.8)
+              guestsAll += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.adult) * 0.8)
+            }
+            if(accommodation.guests.pwd) {
+              guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.adult) * 0.8)
+              guestsAll += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.adult) * 0.8)
+            }
+    
+            total = minimum +  inclusions + guests
+            
+          }
+
+        return {
+          ...accommodation,
+          total: total,
+          minimum: minimum
+        }
+      }),
+      costs: {
+          total: minimumAll +  inclusionsAll + guestsAll,
+          guests: guestsAll,
+          inclusions: inclusionsAll,
+          accommodations: minimumAll
+      },
+    }));
+  }
+
   const calculateCost = (data: any, shift: number) => {
     let accommodations = 0;
     let inclusions = 0;
@@ -154,28 +236,40 @@ function Booking() {
     let total = 0;
 
     data.accommodations?.map((accommodation: any) => {
+      let accommodationTotal = 0
+      let accommodationMinimum = parseInt(accommodation.fees[shift].rate)
+      let accommodationGuests = 0
+      let accommodationInclusions = 0
+
       accommodations += parseInt(accommodation.fees[shift].rate)
       if (accommodation.inclusions) {
         accommodation.inclusions?.map((inclusion: any) => {
           if (inclusion.quantity) {
-            
             inclusions += (inclusion.quantity * inclusion.price)
+            accommodationInclusions += (inclusion.quantity * inclusion.price)
           }
         })
       }
       if (accommodation.guests) {
         if (accommodation.guests.adult) {
           guests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[shift].guestFee.adult)
+          accommodationGuests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[shift].guestFee.adult)
         }
         if(accommodation.guests.children) {
           guests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[shift].guestFee.kids)
+          accommodationGuests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[shift].guestFee.kids)
         }
         if(accommodation.guests.senior) {
           guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[shift].guestFee.adult) * 0.8)
+          accommodationGuests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[shift].guestFee.adult) * 0.8)
         }
         if(accommodation.guests.pwd) {
           guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[shift].guestFee.adult) * 0.8)
+          accommodationGuests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[shift].guestFee.adult) * 0.8)
         }
+
+        accommodationTotal = accommodationInclusions +  accommodationGuests + accommodationMinimum
+        // addCosts(accommodation.accommodationId, accommodationTotal, accommodationMinimum)
       }
     })
 
@@ -262,11 +356,9 @@ function Booking() {
   
     if (otpCode === verificationCode) {
       alert("OTP Verified!");
-  
+
       // Wait for createReservation to complete before logging reservationData
       await createReservation(form);
-
-      
 
     } else {
       alert("Invalid OTP");
@@ -283,9 +375,11 @@ function Booking() {
 
   useEffect(() => {
     updateSchedule(date, shift)
-    calculateCost(form,parseInt(shift||"0"))
+    calculateCosts();
+    // console.log(form);
     if (reservationData) {
-      console.log(reservationData);
+      // console.log(reservationData);
+      console.log(form)
       sendEmail({
         ...form,
         email: form.email,
@@ -358,7 +452,6 @@ function Booking() {
                     variant="contained"
                     color="primary"
                     onClick={() => {
-                      console.log(form);
                       sendVerification();
                       setOpen("verify");
                     }}
