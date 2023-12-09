@@ -27,7 +27,8 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { Link, useParams, useNavigate  } from 'react-router-dom';
 import InvoiceAlert from '../../Components/InvoiceAlert';
-
+import Alert from '@mui/material/Alert';
+import Rating from '@mui/material/Rating';
 
 import useReservation from '../../Hooks/useReservation';
 import useEmail from '../../Hooks/useEmail';
@@ -151,8 +152,83 @@ function Invoice() {
                 }
             </Box>
 
-            <InvoiceAlert status={status} note="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut maiores eius porro tempore sit? Quae, eos facere praesentium porro doloribus fugiat quo reprehenderit laborum ab, maiores iusto distinctio modi molestias!"/>
-                
+            {status==="pending"?
+              <Alert severity="info" sx={{margin:"2em 0"}}>This reservation haven't upload any payment!</Alert>
+            :""}
+            {status==="paid"?
+              <Alert severity="warning" sx={{margin:"2em 0"}}>This reservation is waiting for approval of reservation</Alert>
+            :""}
+            {status==="approved"?
+              <Alert severity="info" sx={{margin:"2em 0"}}>This reservation is approved, waiting to checked in</Alert>
+            :""}
+            {status==="declined"?
+              <>
+                <Alert severity="error" sx={{margin:"2em 0 0", zIndex:"23"}}>This reservation request is declined</Alert>
+                <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+                  <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+                  <Typography variant="body2"  color="initial">
+                    {note}
+                  </Typography>
+                </Paper>
+              </>
+            :""}
+
+            {status==="refunding"?
+              <>
+                <Alert severity="warning" sx={{margin:"2em 0 0", zIndex:"23"}}>Requests for Refund!</Alert>
+                <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+                  <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+                  <Typography variant="body2"  color="initial">
+                    {note}
+                  </Typography>
+                </Paper>
+              </>
+            :""}
+            {status==="rescheduling"?
+              <>
+                <Alert severity="warning" sx={{margin:"2em 0 0", zIndex:"23"}}>Requests for reschedule!</Alert>
+                <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+                  <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+                  <Typography variant="body2"  color="initial">
+                    {note}
+                  </Typography>
+                </Paper>
+              </>
+            :""}
+            {status==="cancelling"?
+              <>
+                <Alert severity="warning" sx={{margin:"2em 0 0", zIndex:"23"}}>Requests to cancel!</Alert>
+                <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+                  <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+                  <Typography variant="body2"  color="initial">
+                    {note}
+                  </Typography>
+                </Paper>
+              </>
+            :""}
+            {status==="checked in"?
+              <Alert severity="info" sx={{margin:"2em 0"}}>This reservation is checked in already</Alert>
+            :""}
+            {status==="checked out"?
+              <>
+                <Alert severity="success" sx={{margin:"2em 0"}}>This Reservation is done</Alert>
+                <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+                  <Typography variant="subtitle1" fontWeight={600} color="initial">Rating</Typography>
+                  {/* Insert in the value how plenty of star */}
+                  <Rating name="read-only" value={3} readOnly />
+                  <Typography variant="subtitle1" mt={2} fontWeight={600} color="initial">Feedback</Typography>
+                  <Typography variant="body2"  color="initial">
+                    Insert Here the Feedback
+                  </Typography>
+                </Paper>
+              </>
+            :""}
+            {status==="refunded"?
+              <Alert severity="error" sx={{margin:"2em 0"}}>This reservation is refunded </Alert>
+            :""}
+            {status==="cancelled"?
+              <Alert severity="error" sx={{margin:"2em 0"}}>This reservation is canceled </Alert>
+            :""}
 
             <Box display="flex" sx={{margin:"25px 0"}}>
                 <Box sx={{flexGrow:"1"}}>

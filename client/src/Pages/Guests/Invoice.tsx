@@ -121,6 +121,9 @@ function Invoice({}:Props) {
           {status==="checked out"?
           <>
             <Alert severity="success" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>This reservation is done, We are happy to serve you!</Alert>
+            
+            
+            
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Rating</Typography>
               {/* Insert in the value how plenty of star */}
