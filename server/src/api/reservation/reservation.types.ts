@@ -57,6 +57,8 @@ type ReserveAccommodation = {
         name: string;
         quantity: number;
     }[];
+    total: number;
+    minimum: number;
 };
 
 export type CreateReservation = {

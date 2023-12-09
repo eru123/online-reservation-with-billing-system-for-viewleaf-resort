@@ -35,7 +35,9 @@ export interface Invoice {
         kids: number;
         senior: number;
         pwd: number;
-    }
+    },
+    total: number;
+    minimum: number;
 }
 
 export interface InvoiceDocument extends Invoice, Document {

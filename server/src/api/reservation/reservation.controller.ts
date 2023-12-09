@@ -105,11 +105,13 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
     if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
     for (let i = 0; i < accommodations.length; i++) {
-        const { accommodationId, shift, guests, inclusions = [] } = accommodations[i];
+        const { accommodationId, shift, guests, inclusions = [], total, minimum } = accommodations[i];
 
         checker.checkType(accommodationId, 'string', `accommodations.${i}.accommodationId`);
         checker.checkType(shift, 'string', `accommodations.${i}.shift`);
         checker.checkType(guests, 'object', `accommodations.${i}.guests`);
+        checker.checkType(total, 'number', `accommodations.${i}.total`);
+        checker.checkType(minimum, 'number', `accommodations.${i}.minimum`);
         if (checker.size() > 0) continue;
 
         const { adult = 0, kids = 0, senior = 0, pwd = 0 } = guests;
@@ -148,7 +150,7 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
         const accommodation = accommodations.find(({ accommodationId: id }) => id === accommodationId);
         if (!accommodation) continue;
 
-        const { shift, guests, inclusions } = accommodation;
+        const { shift, guests, inclusions, total, minimum } = accommodation;
 
         let shiftQuery = { $in: [shift, Shift.WHOLE] };
         if (shift === Shift.WHOLE) shiftQuery = { $in: [Shift.WHOLE, Shift.DAY, Shift.NIGHT] };
@@ -201,7 +203,9 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
                     if (!foundInclusion) return { ...inclusion, quantity: 0 };
                     return { ...inclusion, quantity: foundInclusion.quantity };
                 }),
-                guests
+                guests,
+                total,
+                minimum
             })
         );
     }
@@ -219,7 +223,9 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
     res.status(201).json({ reservationId: reservation.reservationId });
 };
 
-export const addExtras: RequestHandler = async (_req: BodyRequest<AddExtras>, _res) => {};
+export const addExtras: RequestHandler = async (_req: BodyRequest<AddExtras>, _res) => {
+
+};
 
 export const updateStatus: RequestHandler = async (req: BodyRequest<UpdateStatus>, res) => {
     const { reservationId, status, note } = req.body;
