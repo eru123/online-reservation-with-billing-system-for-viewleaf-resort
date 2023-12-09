@@ -49,7 +49,7 @@ function Accommodation() {
         {/* List of Selected */}
         
         <Box display="flex"  my={"20px"} gap={"10px"}>  
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                     disabled
                     label="Date Schedule"   
@@ -72,7 +72,7 @@ function Accommodation() {
                 <MenuItem value={"Night Shift"}>Night Shift</MenuItem>
                 <MenuItem value={"Whole Shift"}>Whole Shift</MenuItem>
                 </Select>
-            </FormControl>
+            </FormControl> */}
         </Box>   
         <Box display="flex" flexDirection={"column"} gap={"25px"} >
             {/* If the accommodation is already book and wants additional */}
@@ -87,10 +87,6 @@ function Accommodation() {
         <Box display="flex" flexDirection={"column"} gap={"25px"} >
             <AccommodationCard variant="view" openModal={setOpen}/>
         </Box>
-        
-
-
-
 
         <Modal
             keepMounted
