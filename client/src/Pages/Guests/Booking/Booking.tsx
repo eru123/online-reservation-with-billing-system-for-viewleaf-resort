@@ -15,6 +15,8 @@ import TextField from '@mui/material/TextField'
 
 import useEmail from '../../../Hooks/useEmail'
 import useReservation from '../../../Hooks/useReservation'
+import useContent from '../../../Hooks/useContent';
+
 import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid'
@@ -59,6 +61,7 @@ function Booking() {
     inclusions: 0,
     accommodations: 0
   })
+  const {data:content, loading:contentLoading, error:contentError, getContent} = useContent();
 
   const updateSchedule = (date: any, shift: any) => {
     setForm((prevForm: any) => ({
@@ -171,6 +174,7 @@ function Booking() {
     let minimumAll = 0
     let inclusionsAll = 0
     let guestsAll = 0
+    
 
     setForm((prevForm: { accommodations: any }) => ({
       ...prevForm,
@@ -401,6 +405,10 @@ function Booking() {
       navigate(`/payment/${reservationData.reservationId}`);
     }
   }, [form])
+
+  if (contentLoading) {
+    return <div>Loading...</div>;
+  }
   
 
   return (

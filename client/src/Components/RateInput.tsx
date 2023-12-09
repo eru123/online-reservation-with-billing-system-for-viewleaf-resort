@@ -3,16 +3,16 @@ import StarIcon from '@mui/icons-material/Star';
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 type Props = {
-  setRate : React.Dispatch<React.SetStateAction<{rating: string;feedback: string;}>>
+  setRate : React.Dispatch<React.SetStateAction<{rating: number;feedback: string;}>>
   rate : {
-    rating: string;
+    rating: number;
     feedback: string;
   }
 }
 function RateInput({setRate,rate}:Props) {
   const [value,setValue] = useState(1)
   useEffect(()=>{
-    setRate({...rate,rating: `${value}`})
+    setRate({...rate, rating: value})
   },[value])
   return (
     <Box display="flex" gap={"5px"}>

@@ -29,6 +29,7 @@ import Button from '@mui/material/Button'
 import { Link, useParams, useNavigate } from 'react-router-dom';
 
 import useReservation from '../../Hooks/useReservation';
+import useFeedback from '../../Hooks/useFeedback';
 import moment from 'moment';
 import Rating from '@mui/material/Rating';
 
@@ -54,6 +55,19 @@ function Invoice({}:Props) {
     const {data, loading, error, getReservation, updateReservation} = useReservation();
     const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checked out">("pending");
     const [note, setNote] = useState<string>("")
+    const { createFeedback } = useFeedback();
+    const [rating, setRating] = useState<number>(5);
+    const [review, setReview] = useState<string>("");
+
+    const submitFeedback = (e: React.FormEvent) => {
+      e.preventDefault();
+      createFeedback({
+        reservationId: id||"",
+        rating: ratingForm.rating,
+        review: ratingForm.feedback
+      });
+      window.location.reload();
+    }
 
     const submit = async (status: string, note: string) => {
       updateReservation({
@@ -69,7 +83,7 @@ function Invoice({}:Props) {
     };
     
     const [ratingForm, setRatingForm] = useState({
-      rating:"",
+      rating: 0,
       feedback:""
     });
     useEffect(()=>{
@@ -99,8 +113,12 @@ function Invoice({}:Props) {
             </>:""}
             <Box sx={{flexGrow:"1"}} ></Box>
             {status === "checked out"?
-              <Chip icon={<StarIcon />} label="Rate our Service" variant="filled" onClick={()=>{setOpen("rate")}} color="primary" />:""    
-            }
+              <>
+                {data?.[0]?.feedbacks?.length > 0 ? <></> : 
+                  <Chip icon={<StarIcon />} label="Rate our Service" variant="filled" onClick={()=>{setOpen("rate")}} color="primary" />
+                }
+              </>
+            :<></> }
           </Box>
 
           {status==="pending"?
@@ -120,19 +138,23 @@ function Invoice({}:Props) {
           :""}
           {status==="checked out"?
           <>
+
+          {data?.[0]?.feedbacks?.length > 0 ? <>
             <Alert severity="success" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>This reservation is done, We are happy to serve you!</Alert>
-            
-            
             
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Rating</Typography>
               {/* Insert in the value how plenty of star */}
-              <Rating name="read-only" value={3} readOnly />
+              <Rating name="read-only" value={data?.[0]?.feedbacks?.[0]?.rating} readOnly />
               <Typography variant="subtitle1" mt={2} fontWeight={600} color="initial">Feedback</Typography>
               <Typography variant="body2"  color="initial">
-                Insert Here the Feedback
+              {data?.[0]?.feedbacks?.[0]?.review}
               </Typography>
             </Paper>
+          </> : <></>}
+
+
+            
           </>
           :""}
           {status==="declined"?<>
@@ -341,7 +363,7 @@ function Invoice({}:Props) {
                     </Grid>
                 </>:""}
                 {open ==="rate"?<>
-                  <form>
+                  <form onSubmit={submitFeedback}>
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
                       Set Schedule
                     </Typography>
@@ -361,7 +383,7 @@ function Invoice({}:Props) {
                             <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
-                          <Button variant="contained" fullWidth onClick={()=>{console.log(ratingForm)}}>Send</Button>
+                          <Button variant="contained" fullWidth type='submit'>Send</Button>
                         </Grid>
                     </Grid>
                   </form>
