@@ -1,8 +1,8 @@
-import { Document } from "mongoose";
+import { Document } from 'mongoose';
 
 export enum Role {
     ADMIN = 'admin',
-    STAFF = 'staff',
+    STAFF = 'staff'
 }
 
 export interface Staff {
@@ -26,15 +26,15 @@ export interface StaffDocument extends Staff, Document {
 export type CreateStaff = {
     username: string;
     email: string;
-}
+};
 
 export type GetStaff = {
     staffId?: string;
-}
+};
 
 export type UpdateStaff = {
     username: string;
     email: string;
     contact?: string;
     password?: string;
-}
+};
