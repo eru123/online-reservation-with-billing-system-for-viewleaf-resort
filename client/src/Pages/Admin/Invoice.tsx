@@ -29,6 +29,7 @@ import { Link, useParams, useNavigate  } from 'react-router-dom';
 import InvoiceAlert from '../../Components/InvoiceAlert';
 import Alert from '@mui/material/Alert';
 import Rating from '@mui/material/Rating';
+import dayjs from 'dayjs';
 
 import useReservation from '../../Hooks/useReservation';
 import useEmail from '../../Hooks/useEmail';
@@ -53,9 +54,10 @@ function Invoice() {
     const {sendEmail} = useEmail();
     const [open, setOpen] = React.useState("");
     const {id} = useParams();
-    const {data, loading, error, getReservation, updateReservation} = useReservation();
+    const {data, loading, error, getReservation, updateReservation, rescheduleReservation} = useReservation();
     const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checked in" | "refunded" | "cancelled" | "checked out">("checked out");
     const [note, setNote] = useState<string>("")
+    const [schedule, setSchedule] = useState<string>("")
 
     const submit = async (status: string, note: string) => {
       updateReservation({
@@ -83,7 +85,32 @@ function Invoice() {
       })
       navigate(`/admin/invoice/${id}`)
     }
-    
+
+    const rescheduleFunction = async () => {
+      console.log(schedule)
+      rescheduleReservation({
+        reservationId: id||"",
+        schedule: schedule,
+      })
+      await sendEmail({
+        email: data?.[0]?.customer?.email,
+        subject: `View Leaf Reservation is ${status}`,
+        content: `
+        <html lang="en">
+          <body>
+            <h1>View Leaf reservation is rescheduled</h1>
+            <hr>
+            <p>Reference Number: ${data?.[0]?.reservationId}</p>
+            <p>Scheduled Date: schedule - ${data?.[0]?.invoices?.[0]?.shift}</p>
+            <hr>
+            <h4>View your reservation details <a href="${process.env.REACT_APP_URL}/reservation/${data?.[0]?.reservationId}">here</a>.</h4>
+            <h5>Strictly do not share your reference number as it is used to access your reservation details</h5>
+            </body>
+        </html>
+      `
+      })
+      navigate(`/admin/invoice/${id}`)
+    }
 
     useEffect(()=>{
       if (data) {
@@ -302,40 +329,52 @@ function Invoice() {
                     <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
                         Input your desired date to be moved on
                     </Typography>
-                    <Grid container spacing={2}>
-                        <Grid item md={8} xs={12}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoContainer components={['DatePicker']}>
-                                    <DatePicker slotProps={{ textField: { fullWidth: true } }} label="Basic date picker" />
-                                </DemoContainer>
-                            </LocalizationProvider>
-                        </Grid>
-                        <Grid item md={4} xs={12} marginTop={"8px"}>
-                            <TextField
-                                id="reason"
-                                label=" Reason"
-                                multiline
-                                fullWidth
-                                required
-                            />
-                        </Grid>
-                        <Grid item xs={12} sx={{marginBottom:"25px"}}>
-                            <TextField
-                                id="reason"
-                                label=" Reason"
-                                multiline
-                                fullWidth
-                                required
-                            />
-                        </Grid>
+                      <Grid container spacing={2}>
+                          <Grid item xs={12} sx={{marginBottom:"25px"}}>
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                  <DemoContainer components={['DatePicker']}>
+                                      <DatePicker 
+                                        slotProps={{ textField: { fullWidth: true } }} 
+                                        label="Date" 
+                                        onChange={(newDate: string | number | Date | null) => setSchedule(dayjs(newDate).format('YYYY-MM-DD'))}
+                                      />
+                                  </DemoContainer>
+                              </LocalizationProvider>
+                          </Grid>
+                          {/* <Grid item md={4} xs={12} marginTop={"8px"}>
+                              <TextField
+                                  id="reason"
+                                  label=" Reason"
+                                  multiline
+                                  fullWidth
+                                  required  
+                              />  
+                          </Grid> */}
+                          {/* <Grid item xs={12} sx={{marginBottom:"25px"}}>
+                              <TextField
+                                  id="reason"
+                                  label=" Reason"
+                                  multiline
+                                  fullWidth
+                                  required
+                              />
+                          </Grid> */}
 
-                        <Grid item xs={5}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
-                        </Grid>
-                        <Grid item xs={7}>
-                            <Button variant="contained" fullWidth>Send</Button>
-                        </Grid>
-                    </Grid>
+                          <Grid item xs={5}>
+                              <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                          </Grid>
+                          <Grid item xs={7}>
+                              <Button 
+                              variant="contained" 
+                              fullWidth 
+                              onClick={()=>{
+                                setOpen(""); 
+                                rescheduleFunction();
+                              }}>
+                                  Send
+                              </Button>
+                          </Grid>
+                      </Grid>
                 </>:""}
                 {open ==="refund"?<>
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">

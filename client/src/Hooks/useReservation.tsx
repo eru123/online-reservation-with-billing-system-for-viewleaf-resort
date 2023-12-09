@@ -37,6 +37,11 @@ interface UpdateReservation{
   note: string;
 }
 
+interface RescheduleReservation{
+  reservationId: string;
+  schedule: string;
+}
+
 function useReservation() {
   const { data, loading, error, makeRequest } = useRequest();
 
@@ -72,6 +77,14 @@ function useReservation() {
     });
   };
 
+  const rescheduleReservation = (content: RescheduleReservation) => {
+    makeRequest({
+      method: 'patch',
+      url: '/reservations/reschedule',
+      data: content,
+    });
+  };
+
   return {
     data,
     loading,
@@ -79,7 +92,8 @@ function useReservation() {
     getReservation,
     createReservation,
     payReservation,
-    updateReservation
+    updateReservation,
+    rescheduleReservation
   };
 }
 
