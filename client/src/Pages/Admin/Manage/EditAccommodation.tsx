@@ -73,12 +73,36 @@ function EditAccommodation() {
     console.log( url)
   }
 
+  function parseNumber(value:any) {
+    const parsedValue = parseFloat(value);
+  
+    // Check if the parsed value is a number
+    if (!isNaN(parsedValue)) {
+      return parsedValue;
+    } else {
+      // If the value couldn't be parsed, return 0 or handle it as needed
+      return 0;
+    }
+  }
+
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(form)
     updateAccommodation({...form, inclusions})
     updateInclusions({accommodationId: accommodation[0].accommodationId, inclusions})
-    // updateShift({accommodationId: accommodation[0].accommodationId, form.fees})
+    // updateShift({
+    //   accommodationId: accommodation[0].accommodationId, 
+    //   fees: form.fees
+    // })
+    for (let i = 0; i < form.fees.length; i++) {
+      updateShift({
+        accommodationId: accommodation[0].accommodationId, 
+        shift: form.fees[i].shift,
+        rate: parseNumber(form.fees[i].rate),
+        adultFee: parseNumber(form.fees[i].adultFee),
+        kidsFee: parseNumber(form.fees[i].kidsFee),
+      })
+    }
     navigate('/admin/manage/accommodations')
   }
 
@@ -115,7 +139,24 @@ function EditAccommodation() {
         description: accommodation[0].description,
         pax: accommodation[0].pax,
         image: accommodation[0].image,
-        fees: accommodation[0].fees
+        fees: [{
+          shift: 'day',
+          rate: accommodation[0].fees[0].rate,
+          adultFee: accommodation[0].fees[0].guestFee.adult,
+          kidsFee: accommodation[0].fees[0].guestFee.kids
+        },
+        {
+          shift: 'night',
+          rate: accommodation[0].fees[1].rate,
+          adultFee: accommodation[0].fees[1].guestFee.adult,
+          kidsFee: accommodation[0].fees[1].guestFee.kids
+        },
+        {
+          shift: 'whole day',
+          rate: accommodation[0].fees[2].rate,
+          adultFee: accommodation[0].fees[2].guestFee.adult,
+          kidsFee: accommodation[0].fees[2].guestFee.kids
+        }]
       })
       setInclusions(accommodation[0].inclusions)
       console.log(form)
