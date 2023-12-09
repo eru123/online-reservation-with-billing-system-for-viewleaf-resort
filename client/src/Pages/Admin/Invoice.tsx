@@ -316,7 +316,7 @@ function Invoice() {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Typography variant="subtitle2" color="initial">Ratings</Typography>
-                            <RateInput/>
+                            {/* <RateInput/> */}
                         </Grid>
                         <Grid item xs={12} marginBottom={"20px"}>
                             <Typography variant="subtitle2" sx={{marginBottom:"10px"}} color="initial">Feedback</Typography>

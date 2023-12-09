@@ -17,7 +17,6 @@ import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import StarIcon from '@mui/icons-material/Star';
-import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -63,17 +62,14 @@ function Invoice({}:Props) {
       navigate(`/reservation/${id}`)
     }
     
-    interface DataItem {
-      status: string;
-      note: string;
-      _id: string;
-    }
-    
     const filterByStatus = (data: any, status: string) => {
       return data.filter((item: any) => item.status === status);
     };
     
-
+    const [ratingForm, setRatingForm] = useState({
+      rating:"",
+      feedback:""
+    });
     useEffect(()=>{
       if (data?.[0]) {
         setStatus(data?.[0]?.status)
@@ -326,28 +322,30 @@ function Invoice({}:Props) {
                     </Grid>
                 </>:""}
                 {open ==="rate"?<>
+                  <form>
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
-                        Set Schedule
+                      Set Schedule
                     </Typography>
                     <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
-                        Specify the date you want to stay with us
+                      Specify the date you want to stay with us
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography variant="subtitle2" color="initial">Ratings</Typography>
-                            <RateInput/>
+                          <Typography variant="subtitle2" color="initial">Ratings</Typography>
+                          <RateInput setRate={setRatingForm} rate={ratingForm}/>
                         </Grid>
                         <Grid item xs={12} marginBottom={"20px"}>
-                            <Typography variant="subtitle2" sx={{marginBottom:"10px"}} color="initial">Feedback</Typography>
-                            <TextField id="feedback" fullWidth multiline/>
+                          <Typography variant="subtitle2" sx={{marginBottom:"10px"}} color="initial">Feedback</Typography>
+                          <TextField id="feedback" fullWidth multiline value={ratingForm.feedback} onChange={(e)=>{setRatingForm({...ratingForm,feedback:e.target.value})}}/>
                         </Grid>
                         <Grid item xs={5} marginBottom={"20px"}>
                             <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
-                            <Button variant="contained" fullWidth>Send</Button>
+                          <Button variant="contained" fullWidth onClick={()=>{console.log(ratingForm)}}>Send</Button>
                         </Grid>
                     </Grid>
+                  </form>
                 </>:""}
                 {open ==="viewReceipt"?<>
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
