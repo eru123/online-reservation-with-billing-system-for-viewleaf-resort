@@ -19,12 +19,12 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-
-import {useNavigate} from 'react-router-dom'
+import {useParams, useNavigate} from 'react-router-dom'
 import useAccommodation from '../../../Hooks/useAccommodation'
 import useFirebase from '../../../Hooks/useFirebase'
 
-function AddAccommodation() {
+
+function EditAccommodation() {
   const navigate = useNavigate();
   const { uploadFile, downloadURL } = useFirebase();
   const { createAccommodation } = useAccommodation();
@@ -105,8 +105,7 @@ function AddAccommodation() {
   return <>
     <div>
       <form onSubmit={submit}>
-      <Typography variant="h4" fontWeight={600} color="primary">Add Accommodation</Typography>
-      <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>Fill up information to add accommodation</Typography>
+      <Typography variant="h4" fontWeight={600} color="primary">Edit Accommodation</Typography>
       <Grid container spacing={2}>
         <Grid item md={3} xs={12}>
           <FormControl fullWidth required>
@@ -438,4 +437,4 @@ function AddAccommodation() {
   </>
 }
 
-export default AddAccommodation
+export default EditAccommodation
