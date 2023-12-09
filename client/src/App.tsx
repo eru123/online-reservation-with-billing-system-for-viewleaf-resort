@@ -33,6 +33,7 @@ import Notifications from './Pages/Admin/Notifications/Notifications';
 import Profile from './Pages/Admin/Profile/Profile';
 
 // Test
+import TestFeedback from './Test/TestFeedback';
 import TestFAQ from './Test/TestFAQ';
 import TestContent from './Test/TestContent';
 import TestShift from './Test/TestShift';
@@ -118,6 +119,7 @@ function App() {
           <Route path="/testlogout" element={<TestLogout/>} />
           <Route path="/testaccommodation" element={<TestAccommodation/>} />
           <Route path="/testreservation" element={<TestReservation/>} />
+          <Route path="/testfeedback" element={<TestFeedback/>} />
           
       </Routes>
     </ThemeProvider>

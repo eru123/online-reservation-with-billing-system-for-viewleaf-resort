@@ -31,7 +31,7 @@ function EditAccommodation() {
   const { updateAccommodation, updateInclusions, updateShift } = useAccommodation();
   const [inclusions, setInclusions] = useState<any>([]);
   const {data: accommodation, loading: accommodationLoading, error: accommodationError, getAccommodation} = useAccommodation();
-
+  
   const [inclusionForm, setInclusionForm] = useState({
     name: '',
     price: 0
@@ -90,10 +90,6 @@ function EditAccommodation() {
     console.log(form)
     updateAccommodation({...form, inclusions})
     updateInclusions({accommodationId: accommodation[0].accommodationId, inclusions})
-    // updateShift({
-    //   accommodationId: accommodation[0].accommodationId, 
-    //   fees: form.fees
-    // })
     for (let i = 0; i < form.fees.length; i++) {
       updateShift({
         accommodationId: accommodation[0].accommodationId, 
