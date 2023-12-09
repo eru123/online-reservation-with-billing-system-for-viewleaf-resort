@@ -338,9 +338,7 @@ function CreateResrvation() {
                     </Select>
                     </FormControl>
                 </Box>
-                {/* <Accommodation date={date||""} shift={shift||""} selectedAccommodations={selectedAccommodations} setSelectedAccommodations={setSelectedAccommodations}/> */}
                 
-
                 {bookingSchedule?.date && bookingSchedule?.shift?<>
                   <Accommodation 
                     date={bookingSchedule.date||""} 
