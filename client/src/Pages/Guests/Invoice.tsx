@@ -100,10 +100,6 @@ function Invoice({}:Props) {
 
     }, [data])
 
-    // useEffect(()=>{
-    //   console.log(error)
-    // },[error])
-
     if (loading) {
       return <div>Loading...</div>;
     }
