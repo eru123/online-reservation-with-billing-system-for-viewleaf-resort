@@ -282,7 +282,7 @@ export const rescheduleReservation: RequestHandler = async (req: BodyRequest<Res
     res.sendStatus(204);
 };
 
-export const addFeedbcak: RequestHandler = async (req: BodyRequest<CreateFeedback>, res) => {
+export const addFeedback: RequestHandler = async (req: BodyRequest<CreateFeedback>, res) => {
     const { reservationId, rating, review } = req.body;
 
     const checker = new CheckData();

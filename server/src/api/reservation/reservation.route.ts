@@ -1,4 +1,4 @@
-import { addExtras, addFeedbcak, createReservation, getReservations, payReservation, rescheduleReservation, updateStatus } from "./reservation.controller";
+import { addExtras, addFeedback, createReservation, getReservations, payReservation, rescheduleReservation, updateStatus } from "./reservation.controller";
 import { Router } from "express";
 import asynchronousHandler from "../../middlewares/asynchronousHandler";
 import { limitUsers } from "../../middlewares/authorize";
@@ -36,7 +36,7 @@ router.post('/', asynchronousHandler(createReservation));
  * rating: number
  * review: string (optional)
  */
-router.post('/feedbacks', asynchronousHandler(addFeedbcak));
+router.post('/feedbacks', asynchronousHandler(addFeedback));
 
 /**
  * reservationId: string
