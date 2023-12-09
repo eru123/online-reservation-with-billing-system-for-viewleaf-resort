@@ -101,7 +101,7 @@ function Invoice() {
             <h1>View Leaf reservation is rescheduled</h1>
             <hr>
             <p>Reference Number: ${data?.[0]?.reservationId}</p>
-            <p>Scheduled Date: schedule - ${data?.[0]?.invoices?.[0]?.shift}</p>
+            <p>Scheduled Date: ${schedule} - ${data?.[0]?.invoices?.[0]?.shift}</p>
             <hr>
             <h4>View your reservation details <a href="${process.env.REACT_APP_URL}/reservation/${data?.[0]?.reservationId}">here</a>.</h4>
             <h5>Strictly do not share your reference number as it is used to access your reservation details</h5>
