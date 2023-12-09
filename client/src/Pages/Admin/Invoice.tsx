@@ -87,11 +87,11 @@ function Invoice() {
     }
 
     const rescheduleFunction = async () => {
-      console.log(schedule)
       rescheduleReservation({
         reservationId: id||"",
         schedule: schedule,
       })
+      submit("approved", " "); 
       await sendEmail({
         email: data?.[0]?.customer?.email,
         subject: `View Leaf Reservation is ${status}`,
@@ -111,6 +111,10 @@ function Invoice() {
       })
       navigate(`/admin/invoice/${id}`)
     }
+
+    const filterByStatus = (data: any, status: string) => {
+      return data.filter((item: any) => item.status === status);
+    };
 
     useEffect(()=>{
       if (data) {
@@ -167,7 +171,7 @@ function Invoice() {
                 {status === "rescheduling"?
                   <>
                     <Chip  label="Decline" variant="outlined" onClick={()=>{submit("approved", " ")}} color="primary" />
-                    <Chip  label="Accept" variant="filled" onClick={()=>{submit("approved", " ")}} color="primary" />
+                    <Chip  label="Accept" variant="filled" onClick={()=>{setOpen("reschedule")}} color="primary" />
                   </>:""    
                 }
                 {status === "cancelling"?
@@ -197,7 +201,7 @@ function Invoice() {
               <>
                 <Alert severity="error" sx={{margin:"2em 0 0", zIndex:"23"}}>This reservation request is declined</Alert>
                 <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
-                  <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+                  <Typography variant="subtitle1" fontWeight={600} color="initial">{filterByStatus(data?.[0]?.notes, status)?.[0]?.note}</Typography>
                   <Typography variant="body2"  color="initial">
                     {note}
                   </Typography>
@@ -209,7 +213,7 @@ function Invoice() {
               <>
                 <Alert severity="warning" sx={{margin:"2em 0 0", zIndex:"23"}}>Requests for Refund!</Alert>
                 <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
-                  <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+                  <Typography variant="subtitle1" fontWeight={600} color="initial">{filterByStatus(data?.[0]?.notes, status)?.[0]?.note}</Typography>
                   <Typography variant="body2"  color="initial">
                     {note}
                   </Typography>
@@ -220,7 +224,7 @@ function Invoice() {
               <>
                 <Alert severity="warning" sx={{margin:"2em 0 0", zIndex:"23"}}>Requests for reschedule!</Alert>
                 <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
-                  <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+                  <Typography variant="subtitle1" fontWeight={600} color="initial">{filterByStatus(data?.[0]?.notes, status)?.[0]?.note}</Typography>
                   <Typography variant="body2"  color="initial">
                     {note}
                   </Typography>
@@ -231,7 +235,7 @@ function Invoice() {
               <>
                 <Alert severity="warning" sx={{margin:"2em 0 0", zIndex:"23"}}>Requests to cancel!</Alert>
                 <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
-                  <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+                  <Typography variant="subtitle1" fontWeight={600} color="initial">{filterByStatus(data?.[0]?.notes, status)?.[0]?.note}</Typography>
                   <Typography variant="body2"  color="initial">
                     {note}
                   </Typography>

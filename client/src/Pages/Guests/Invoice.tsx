@@ -33,7 +33,7 @@ import useFeedback from '../../Hooks/useFeedback';
 import moment from 'moment';
 import Rating from '@mui/material/Rating';
 
-
+import dayjs from 'dayjs';
 
 type Props = {
 }
@@ -56,9 +56,20 @@ function Invoice({}:Props) {
     const {data, loading, error, getReservation, updateReservation} = useReservation();
     const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checked out">("pending");
     const [note, setNote] = useState<string>("")
+    const [schedule, setSchedule] = useState<string>("")
     const { createFeedback } = useFeedback();
     const [rating, setRating] = useState<number>(5);
     const [review, setReview] = useState<string>("");
+
+
+    const submitReschedule = () => {
+      updateReservation({
+        reservationId: id||"",
+        status: 'rescheduling',
+        note: `This reservation wants to reschedule at ${schedule} with a reason of ${note}`
+      })
+      navigate(`/reservation/${id}`)
+    }
 
     const submitFeedback = (e: React.FormEvent) => {
       e.preventDefault();
@@ -283,21 +294,16 @@ function Invoice({}:Props) {
                         Input your desired date to be moved on
                     </Typography>
                     <Grid container spacing={2}>
-                        <Grid item md={8} xs={12}>
+                        <Grid item xs={12} sx={{marginBottom:"25px"}}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoContainer components={['DatePicker']}>
-                                    <DatePicker slotProps={{ textField: { fullWidth: true } }} label="Basic date picker" />
+                                    <DatePicker 
+                                      slotProps={{ textField: { fullWidth: true } }} 
+                                      label="Schedule"
+                                      onChange={(newDate: string | number | Date | null) => setSchedule(dayjs(newDate).format('YYYY-MM-DD'))}
+                                    />
                                 </DemoContainer>
                             </LocalizationProvider>
-                        </Grid>
-                        <Grid item md={4} xs={12} marginTop={"8px"}>
-                            <TextField
-                                id="reason"
-                                label=" Reason"
-                                multiline
-                                fullWidth
-                                required
-                            />
                         </Grid>
                         <Grid item xs={12} sx={{marginBottom:"25px"}}>
                             <TextField
@@ -306,14 +312,23 @@ function Invoice({}:Props) {
                                 multiline
                                 fullWidth
                                 required
+                                onChange={(e)=>{setNote(e.target.value)}}
                             />
                         </Grid>
-
                         <Grid item xs={5}>
                             <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7}>
-                            <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("rescheduling", note)}}>Send</Button>
+                            <Button 
+                            variant="contained" 
+                            fullWidth 
+                            onClick={()=>{
+                              setOpen(""); 
+                              // submit("rescheduling", note);
+                              submitReschedule();
+                            }}>
+                              Send
+                            </Button>
                         </Grid>
                     </Grid>
                 </>:""}
