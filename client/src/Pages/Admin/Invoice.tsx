@@ -182,7 +182,7 @@ function Invoice() {
                 }
                 {status === "checked in"?
                   <>
-                    <Chip icon={<AddIcon />} label="Add" variant="outlined" component={Link} to={'/admin/reservation/add'} sx={{cursor:"pointer"}} color="primary" />
+                    <Chip icon={<AddIcon />} label="Add" variant="outlined" component={Link} to={`/admin/reservation/add/${id}`} sx={{cursor:"pointer"}} color="primary" />
                     <Chip  label="Checked Out" variant="filled" onClick={()=>{submit("checked out", " ")}} color="primary" />
                   </>:""    
                 }

@@ -77,6 +77,14 @@ function useReservation() {
     });
   };
 
+  const extrasReservation = (content: UpdateReservation) => {
+    makeRequest({
+      method: 'patch',
+      url: '/reservations/extras',
+      data: content,
+    });
+  };
+
   const rescheduleReservation = (content: RescheduleReservation) => {
     makeRequest({
       method: 'patch',

@@ -91,7 +91,7 @@ function App() {
               <Route path="/admin" element={<Dashboard/>}/>
               <Route path="/admin/reservation/list" element={<ListReservation/>}/>
               <Route path="/admin/reservation/create" element={<CreateResrvation/>}/>
-              <Route path="/admin/reservation/add" element={<Additional/>}/>
+              <Route path="/admin/reservation/add/:id" element={<Additional/>}/>
               <Route path="/admin/reservation/requests" element={<Requests/>}/>
               <Route path="/admin/invoice/:id" element={<InvoiceManage/>}/>
               <Route path="/admin/report" element={<Report/>}/>
