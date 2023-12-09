@@ -149,7 +149,25 @@ function Report() {
   };
 
   const exportToCSV = (data: any) => {
-    const csvData = Papa.unparse(data);
+    // Flatten nested objects
+    const flattenedData = data.map((item: any) => {
+      const flatItem: any = {};
+      Object.keys(item).forEach((key) => {
+        if (typeof item[key] === 'object') {
+          // If the value is an object, flatten it
+          Object.keys(item[key]).forEach((nestedKey) => {
+            flatItem[`${key}_${nestedKey}`] = item[key][nestedKey];
+          });
+        } else {
+          flatItem[key] = item[key];
+        }
+      });
+      return flatItem;
+    });
+
+    const csvData = Papa.unparse(flattenedData, {
+      header: true,
+    });
 
     // Create a Blob
     const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
