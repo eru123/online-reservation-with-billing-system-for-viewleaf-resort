@@ -5,7 +5,7 @@ export interface ContentDocument extends Document {
   address: string,
   policy: string,
   payment: string,
-  promo: string,
+  promo: Number,
   shift: Shift,
 }
 

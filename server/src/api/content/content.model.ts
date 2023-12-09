@@ -34,9 +34,9 @@ const ContentSchema = new Schema<ContentDocument>(
       default: 'Default Payment Value', // Set your default value here
     },
     promo: {
-      type: String,
+      type: Number,
       required: true,
-      default: 'Default Promo Value', // Set your default value here
+      default: 0, // Set your default value here
     },
     shift: {
       type: {
