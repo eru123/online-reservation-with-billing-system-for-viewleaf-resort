@@ -21,6 +21,7 @@ import ReservationModel from './reservation.model';
 import receiptModel from '../receipt/receipt.model';
 import feedbackModel from '../feedback/feedback.model';
 import { CreateFeedback } from '../feedback/feedback.types';
+import { Document } from 'mongoose';
 
 const openReservationStatuses = [
     ReservationStatus.CANCELLED,
@@ -273,6 +274,7 @@ export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res
 
     const invoices = await InvoiceModel.find({ reservation: reservation._id }).exec();
 
+    const changes: Promise<Document>[] = [];
     for (const accommodation of accommodations) {
         const { accommodationId, shift, guests, inclusions, total, minimum } = accommodation;
 
@@ -292,13 +294,15 @@ export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res
                     existingAccommodation.guests.senior += senior;
                     existingAccommodation.guests.pwd += pwd;
                 }
-                
+
                 // Update inclusions
                 if (inclusions) {
                     for (let j = 0; j < inclusions.length; j++) {
                         const { name, quantity } = inclusions[j];
 
-                        const existingInclusion = existingAccommodation.inclusions.find((inclusion) => inclusion.name === name);
+                        const existingInclusion = existingAccommodation.inclusions.find(
+                            (inclusion) => inclusion.name === name
+                        );
                         if (existingInclusion) {
                             existingInclusion.quantity += quantity;
                         }
@@ -307,8 +311,9 @@ export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res
 
                 existingAccommodation.total += total;
                 existingAccommodation.minimum += minimum;
-            }
-            else {
+
+                changes.push(existingAccommodation.save());
+            } else {
                 // New accommodation shift
                 const accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
                 if (!accommodation) throw new NotFound('Accommodation');
@@ -316,17 +321,19 @@ export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res
                 const fees = accommodation.fees.find((fee) => fee.shift === shift);
                 if (!fees) throw new NotFound('Fees');
 
-                await InvoiceModel.create({
-                    reservation: reservation._id,
-                    accommodationId,
-                    shift,
-                    rate: fees.rate,
-                    guestFee: fees.guestFee,
-                    inclusions,
-                    guests,
-                    total,
-                    minimum
-                });
+                changes.push(
+                    InvoiceModel.create({
+                        reservation: reservation._id,
+                        accommodationId,
+                        shift,
+                        rate: fees.rate,
+                        guestFee: fees.guestFee,
+                        inclusions,
+                        guests,
+                        total,
+                        minimum
+                    })
+                );
             }
         } else {
             // New accommodation
@@ -336,19 +343,23 @@ export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res
             const fees = accommodation.fees.find((fee) => fee.shift === shift);
             if (!fees) throw new NotFound('Fees');
 
-            await InvoiceModel.create({
-                reservation: reservation._id,
-                accommodationId,
-                shift,
-                rate: fees.rate,
-                guestFee: fees.guestFee,
-                inclusions,
-                guests,
-                total,
-                minimum
-            });
+            changes.push(
+                InvoiceModel.create({
+                    reservation: reservation._id,
+                    accommodationId,
+                    shift,
+                    rate: fees.rate,
+                    guestFee: fees.guestFee,
+                    inclusions,
+                    guests,
+                    total,
+                    minimum
+                })
+            );
         }
     }
+
+    await Promise.all(changes);
 
     res.sendStatus(204);
 };
