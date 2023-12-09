@@ -103,7 +103,6 @@ function Booking() {
       }));
     }
   };
-  
 
   const editGuests = (accommodationId: string, guests: { adult?: number; children?: number; senior?: number; pwd?: number }) => {
     setForm((prevForm: { accommodations: any }) => ({
@@ -196,7 +195,9 @@ function Booking() {
         guests: guests,
         inclusions: inclusions,
         accommodations: accommodations
-      }
+      },
+      total: total,
+      minimum: accommodations
     })
   }
 
@@ -270,6 +271,14 @@ function Booking() {
     } else {
       alert("Invalid OTP");
     }
+  }
+
+  const resendCode = () => {
+    sendEmail({
+      email: form.email,
+      subject: "View Leaf: Email Verification",
+      content: `Your One Time Password (OTP) is: ${otpCode}`,
+    })
   }
 
   useEffect(() => {
@@ -416,7 +425,7 @@ function Booking() {
                     </Button>
                   </Grid>
                   <Grid item xs={8} display={"flex"} justifyContent={"center"}>
-                    <Button startIcon={<ReplayIcon/>} variant="text" sx={{color:"#626262"}}>Resend</Button>
+                    <Button startIcon={<ReplayIcon/>} variant="text" sx={{color:"#626262"}} onClick={resendCode}>Resend</Button>
                   </Grid>
                 </Grid>
               </form>
