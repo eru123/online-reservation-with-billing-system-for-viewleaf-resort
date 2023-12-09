@@ -77,7 +77,7 @@ function useAccommodation() {
   const updateInclusions = (content: any) => {
     makeRequest({
       method: 'patch',
-      url: `/inclusions`,
+      url: `/accommodations/inclusions`,
       data: content,
     });
   };
