@@ -10,7 +10,7 @@ import InputBase from '@mui/material/InputBase';
 import Button from '@mui/material/Button';
 import QuantitySelector from './QuantitySelector';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 type Props={
   variant: "selected"|"view"|"manage"|"additional" | "display"
@@ -32,6 +32,7 @@ function AccommodationCard({
 
   const {date, shift} = useParams();
   const [selectedShift,setSelectedShift] = useState("Day Shift");
+  const navigate = useNavigate();
 
   return <>
       <div>
@@ -103,7 +104,7 @@ function AccommodationCard({
                                       </Button>
                                   :""}
                                   {(variant==="manage")?
-                                      <Button variant="contained" color="primary" onClick={()=>{openModal("editAccommodation")}}>    
+                                      <Button variant="contained" color="primary" onClick={()=>{navigate(`/admin/manage/accommodation/edit/${accommodation.accommodationId}`)}}>    
                                           Edit
                                       </Button>
                                   :""}
