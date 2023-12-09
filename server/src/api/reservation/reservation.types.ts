@@ -1,6 +1,7 @@
 import { Document } from 'mongoose';
 import { AccommodationDocument, Shift } from '../accommodation/accommodation.types';
 import { InvoiceDocument } from '../invoice/invoice.types';
+import { Feedback } from '../feedback/feedback.types';
 
 export enum ReservationStatus {
     CANCELLING = 'cancelling',
@@ -95,6 +96,7 @@ export type ReservationInfo = {
     reservation: ReservationDocument;
     invoices: PopulatedInvoice[];
     receipts: string[];
+    feedbacks: Omit<Feedback, 'reservation'>[];
 };
 
 export type RescheduleReservation = {

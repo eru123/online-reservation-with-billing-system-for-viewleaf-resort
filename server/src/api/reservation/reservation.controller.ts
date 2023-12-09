@@ -19,6 +19,8 @@ import AccommodationModel from '../accommodation/accommodation.model';
 import InvoiceModel from '../invoice/invoice.model';
 import ReservationModel from './reservation.model';
 import receiptModel from '../receipt/receipt.model';
+import feedbackModel from '../feedback/feedback.model';
+import { CreateFeedback } from '../feedback/feedback.types';
 
 const openReservationStatuses = [
     ReservationStatus.CANCELLED,
@@ -50,31 +52,40 @@ export const getReservations: RequestHandler = async (req: QueryRequest<GetReser
     const reservations: ReservationDocument[] = await ReservationModel.find(reservationQuery).exec();
     if (!reservations) throw new NotFound('Reservation');
 
-    const reservationWithInvoices: ReservationInfo[] = [];
-    for (let i = 0; i < reservations.length; i++) {
-        // Get the invoices of each reservation found
-        const invoices = await InvoiceModel.find({ reservation: reservations[i]._id }, { reservation: 0 }).exec();
+    const reservationWithInvoices: ReservationInfo[] = await Promise.all(
+        reservations.map(async (reservation) => {
+            // Get the invoices of each reservation found
+            const invoices = await InvoiceModel.find({ reservation: reservation._id }, { reservation: 0 }).exec();
 
-        // Get accommodation information of each invoice
-        const populatedInvoices: ReservationInfo['invoices'] = [];
-        for (let j = 0; j < invoices.length; j++) {
-            let accommodationId: string;
-            let invoice: PopulatedInvoice;
-            ({ accommodationId, ...invoice } = invoices[j].toJSON());
+            const populatedInvoices: ReservationInfo['invoices'] = await Promise.all(
+                invoices.map(async (invoice) => {
+                    let accommodationId: string;
+                    let restInvoice: PopulatedInvoice;
 
-            invoice.accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
-            populatedInvoices.push(invoice);
-        }
+                    ({ accommodationId, ...restInvoice } = invoice.toJSON());
+                    const accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
+                    restInvoice.accommodation = accommodation;
+                    return restInvoice;
+                })
+            );
 
-        // Get receipts of reservation
-        const receipts = await receiptModel.find({ reservation: reservations[i]._id }).exec();
+            // Get receipts of reservation
+            const receipts = await receiptModel.find({ reservation: reservation._id }).exec();
 
-        reservationWithInvoices.push({
-            ...reservations[i].toJSON(),
-            invoices: populatedInvoices,
-            receipts: receipts.map((receipt) => receipt.image)
-        });
-    }
+            // Get feedbacks of reservation
+            const feedbacks = await feedbackModel.find({ reservation: reservation._id }).exec();
+
+            return {
+                ...reservation.toJSON(),
+                invoices: populatedInvoices,
+                receipts: receipts.map((receipt) => receipt.image),
+                feedbacks: feedbacks.map((feedback) => {
+                    const { reservation, ...rest } = feedback.toJSON();
+                    return rest;
+                })
+            };
+        })
+    );
 
     res.json(reservationWithInvoices);
 };
@@ -269,4 +280,30 @@ export const rescheduleReservation: RequestHandler = async (req: BodyRequest<Res
     await reservation.save();
 
     res.sendStatus(204);
-}
+};
+
+export const addFeedbcak: RequestHandler = async (req: BodyRequest<CreateFeedback>, res) => {
+    const { reservationId, rating, review } = req.body;
+
+    const checker = new CheckData();
+    checker.checkType(rating, 'number', 'rating');
+    checker.checkType(reservationId, 'string', 'reservationId');
+
+    if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+    if (review) {
+        checker.checkType(review, 'string', 'review');
+        if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+    }
+
+    const reservation = await ReservationModel.findOne({ reservationId }).exec();
+    if (!reservation) throw new NotFound('Reservation');
+
+    await feedbackModel.create({
+        reservation: reservation._id,
+        rating,
+        review
+    });
+
+    res.sendStatus(201);
+};
