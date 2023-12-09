@@ -50,7 +50,7 @@ function ListReservation() {
       <Typography variant="h4" fontWeight={600} color="primary">Reservation Lists</Typography>
       <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>Here are all the list of reservation</Typography>
       <Grid container spacing={2} alignItems={"start"}>
-          <Grid item  md={9}>
+          <Grid item  md={9} xs={12}>
               <Box display="flex"  gap={"15px"}>
                   <Box sx={{flexGrow:"1"}}>
                     <SearchInputReservation data={reservations} setFilteredData={setFilteredData}/>
@@ -59,7 +59,7 @@ function ListReservation() {
                       Add Reservation
                   </Button>
               </Box>
-              <TableContainer sx={{marginTop:"25px"}}>
+              <TableContainer sx={{marginTop:"25px",marginBottom:"30px"}} >
                   <Table aria-label="simple table">
                       <TableHead>
                           <TableRow>
