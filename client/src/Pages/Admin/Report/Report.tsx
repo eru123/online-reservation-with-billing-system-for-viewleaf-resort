@@ -14,6 +14,9 @@ import useReservation from '../../../Hooks/useReservation';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
+import Papa from 'papaparse';
+
+
 function Report() {
   const {data:reservations,loading:loadingReports,error,getReservation} = useReservation();
   const [reports, setReports] = useState([]);
@@ -145,6 +148,26 @@ function Report() {
     return filteredData;
   };
 
+  const exportToCSV = (data: any) => {
+    const csvData = Papa.unparse(data);
+
+    // Create a Blob
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+
+    // Create a link to trigger the download
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'data.csv';
+
+    // Append the link to the body
+    document.body.appendChild(link);
+
+    // Trigger the click event on the link
+    link.click();
+
+    // Remove the link from the body
+    document.body.removeChild(link);
+  }
   
   useEffect(()=>{
     getReservation();
@@ -225,7 +248,7 @@ function Report() {
                   variant="contained"
                   aria-label="Disabled elevation buttons"
               >
-                <Button>Backup</Button>
+                <Button onClick={()=>{exportToCSV(reports)}}>Backup</Button>
                 <Button>Restore</Button>
               </ButtonGroup>
           </Box>
