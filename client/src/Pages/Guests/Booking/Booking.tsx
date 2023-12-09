@@ -218,85 +218,32 @@ function Booking() {
             
           }
 
+        // return {
+        //   ...accommodation,
+        //   total: total ,
+        //   minimum: minimum
+        // }
+
         return {
           ...accommodation,
-          total: total,
-          minimum: minimum
+          total: content?.promo === 0 ? total : total * (content?.promo / 100) ,
+          minimum: content?.promo === 0 ? minimum : minimum * (content?.promo / 100)
         }
+
       }),
+      // costs: {
+      //     total: minimumAll +  inclusionsAll + guestsAll ,
+      //     guests: guestsAll ,
+      //     inclusions: inclusionsAll,
+      //     accommodations: minimumAll
+      // },
       costs: {
-          total: minimumAll +  inclusionsAll + guestsAll,
-          guests: guestsAll,
-          inclusions: inclusionsAll,
-          accommodations: minimumAll
+        total: content?.promo === 0 ? (minimumAll +  inclusionsAll + guestsAll) : (minimumAll +  inclusionsAll + guestsAll) * (content?.promo / 100) ,
+        guests: content?.promo === 0 ? guestsAll : guestsAll * (content?.promo / 100) ,
+        inclusions: content?.promo === 0 ? inclusionsAll : inclusionsAll * (content?.promo / 100),
+        accommodations: content?.promo === 0 ? minimumAll : minimumAll * (content?.promo / 100)
       },
     }));
-  }
-
-  const calculateCost = (data: any, shift: number) => {
-    let accommodations = 0;
-    let inclusions = 0;
-    let guests = 0;
-    let total = 0;
-
-    data.accommodations?.map((accommodation: any) => {
-      let accommodationTotal = 0
-      let accommodationMinimum = parseInt(accommodation.fees[shift].rate)
-      let accommodationGuests = 0
-      let accommodationInclusions = 0
-
-      accommodations += parseInt(accommodation.fees[shift].rate)
-      if (accommodation.inclusions) {
-        accommodation.inclusions?.map((inclusion: any) => {
-          if (inclusion.quantity) {
-            inclusions += (inclusion.quantity * inclusion.price)
-            accommodationInclusions += (inclusion.quantity * inclusion.price)
-          }
-        })
-      }
-      if (accommodation.guests) {
-        if (accommodation.guests.adult) {
-          guests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[shift].guestFee.adult)
-          accommodationGuests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[shift].guestFee.adult)
-        }
-        if(accommodation.guests.children) {
-          guests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[shift].guestFee.kids)
-          accommodationGuests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[shift].guestFee.kids)
-        }
-        if(accommodation.guests.senior) {
-          guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[shift].guestFee.adult) * 0.8)
-          accommodationGuests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[shift].guestFee.adult) * 0.8)
-        }
-        if(accommodation.guests.pwd) {
-          guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[shift].guestFee.adult) * 0.8)
-          accommodationGuests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[shift].guestFee.adult) * 0.8)
-        }
-
-        accommodationTotal = accommodationInclusions +  accommodationGuests + accommodationMinimum
-        // addCosts(accommodation.accommodationId, accommodationTotal, accommodationMinimum)
-      }
-    })
-
-    total = accommodations + inclusions + guests
-
-    setBilling({
-      total: total,
-      guests: guests,
-      inclusions: inclusions,
-      accommodations: accommodations
-    })
-
-    setForm({
-      ...data,
-      costs: {
-        total: total,
-        guests: guests,
-        inclusions: inclusions,
-        accommodations: accommodations
-      },
-      total: total,
-      minimum: accommodations
-    })
   }
 
   function checkGuestsForAllAccommodations(data: any) {
@@ -377,10 +324,28 @@ function Booking() {
     })
   }
 
+  
+
+  useEffect(()=>{
+    getContent();
+    console.log("Test");
+  }, [])
+
   useEffect(() => {
     updateSchedule(date, shift)
     calculateCosts();
     // console.log(form);
+
+    // if (content?.length===0){
+    //   getContent();
+    // }
+
+    if (!content || content.length === 0){
+      getContent();
+    }
+   
+    // getContent();
+
     if (reservationData) {
       // console.log(reservationData);
       console.log(form)
@@ -404,11 +369,11 @@ function Booking() {
       });
       navigate(`/payment/${reservationData.reservationId}`);
     }
-  }, [form])
+  }, [form, content])
 
-  if (contentLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (contentLoading) {
+  //   return <div>Loading...</div>;
+  // }
   
 
   return (
@@ -448,8 +413,8 @@ function Booking() {
 
           <Container maxWidth="lg"sx={{display:"flex",alignItems:"center",marginTop:"1em"}}>
               <div style={{flexGrow:"1"}}>
-                  <Typography variant="h6" color="initial">TOTAL : ₱{billing?.total}</Typography>
-                  <Typography variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of ₱{billing?.accommodations}  </Typography>
+                  <Typography variant="h6" color="initial">TOTAL : {content?.promo === 0 ? `₱${form?.costs?.total}` : ` from ₱${form?.costs?.total} to  ₱${form?.costs?.total * (content?.promo / 100)} `} </Typography>
+                  <Typography variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of {content?.promo === 0 ? `₱${form?.costs?.accommodations}` : ` from ₱${form?.costs?.accommodations} to  ₱${form?.costs?.accommodations * (content?.promo / 100)} `}  </Typography>
               </div>
               <div style={{display:"flex",gap:"10px"}}>
                   <Button variant="text" onClick={()=> {if(active>1){setActive(active-1)}}}>

@@ -215,7 +215,6 @@ function Invoice() {
               <Alert severity="info" sx={{margin:"2em 0"}}>This reservation is checked in already</Alert>
             :""}
             {status==="checked out"?
-            
               <>
                  {data?.[0]?.feedbacks?.length > 0 ? <>
                   <Alert severity="success" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>This reservation is done.</Alert>
