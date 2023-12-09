@@ -232,7 +232,7 @@ export const addShift: RequestHandler = async (req: BodyRequest<AddShift>, res) 
 };
 
 export const updateAccommodationDetails: RequestHandler = async (req: BodyRequest<UpdateAccommodation>, res) => {
-    const { accommodationId, description, pax, image, type, availability } = req.body;
+    const { accommodationId, title, description, pax, image, type, availability } = req.body;
 
     const checker = new CheckData();
     checker.checkType(accommodationId, 'string', 'accommodationId');
@@ -241,6 +241,13 @@ export const updateAccommodationDetails: RequestHandler = async (req: BodyReques
 
     const accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
     if (!accommodation) throw new NotFound('Accommodation');
+
+    if (title) {
+      checker.checkType(title, 'string', 'title');
+      if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+      accommodation.title = title;
+  }
 
     if (description) {
         checker.checkType(description, 'string', 'description');

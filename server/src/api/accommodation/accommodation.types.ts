@@ -39,6 +39,7 @@ export interface Fee {
 
 export interface Accommodation {
     accommodationId: string;
+    title: string;
     description: string;
     pax: string;
     image: string;
@@ -83,6 +84,7 @@ export type CreateAccommodation = {
 
 export type UpdateAccommodation = {
     accommodationId: string;
+    title?: string;
     description?: string;
     pax?: string;
     image?: string;
