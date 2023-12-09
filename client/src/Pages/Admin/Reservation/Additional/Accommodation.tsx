@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import AccommodationCard from '../../../../Components/AccommodationCard';
@@ -18,6 +18,7 @@ import TESTCalendar from '../../../../Components/TESTCalendar';
 import Checkbox from '@mui/material/Checkbox';
 import QuantitySelector from '../../../../Components/QuantitySelector';
 
+import useAccommodation from '../../../../Hooks/useAccommodation';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -30,7 +31,16 @@ const style = {
     p: 4,
     borderRadius:"8px"
 };
-function Accommodation() {
+
+type Props = {
+  form?: any;
+  selectAccommodation?: any;
+  editGuests?: any;
+  addInclusion?: any;
+
+}
+
+function Accommodation({form, selectAccommodation, editGuests, addInclusion}:Props) {
 
     const [open, setOpen] = React.useState("");
 
@@ -44,6 +54,18 @@ function Accommodation() {
     const [dayshift, setDayShift] = useState(false);
     const [nightShift, setNightShift] = useState(false);
 
+    const {data: accommodations, loading: accommodationLoading, getAccommodation} = useAccommodation();
+
+
+    useEffect(()=>{
+
+      getAccommodation({
+        // schedule: parseInt(form.schedule||"", 10),
+        // schedule: new Date(form.schedule).getTime(),
+        schedule: form.schedule,
+        shift: form.shift
+      })
+    }, [form])
 
     return <>
         {/* List of Selected */}
@@ -76,16 +98,37 @@ function Accommodation() {
         </Box>   
         <Box display="flex" flexDirection={"column"} gap={"25px"} >
             {/* If the accommodation is already book and wants additional */}
-            <AccommodationCard variant="additional" openModal={setOpen}/>
+            {/* <AccommodationCard variant="additional" openModal={setOpen}/> */}
             {/* If the accommodation just added to be the additional */}
-            <AccommodationCard variant="selected" openModal={setOpen}/>
+            {/* <AccommodationCard variant="selected" openModal={setOpen}/> */}
+
+        {form.accommodations?.length > 0? <>
+          {form.accommodations?.map((accommodation: any) => (
+            <AccommodationCard 
+              accommodation={accommodation}
+              variant="additional" 
+              openModal={setOpen}
+              selectAccommodation={selectAccommodation}
+              addInclusion={addInclusion}
+              editGuests={editGuests}
+            />
+          ))}
+      </>:""}
         </Box>
 
          {/*  List of Suggested Accommodation */}
         <Typography variant="h4" color="primary" mt={"3em"} fontWeight={600}>Suggested Accommodation</Typography>
         <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>List of all available accommodation</Typography>
         <Box display="flex" flexDirection={"column"} gap={"25px"} >
-            <AccommodationCard variant="view" openModal={setOpen}/>
+            {/* <AccommodationCard variant="view" openModal={setOpen}/> */}
+            {accommodations?.map((accommodation: any) => (
+              <AccommodationCard 
+                accommodation={accommodation} 
+                variant="view" 
+                openModal={setOpen}
+                selectAccommodation={selectAccommodation}
+              />
+            ))}
         </Box>
 
         <Modal

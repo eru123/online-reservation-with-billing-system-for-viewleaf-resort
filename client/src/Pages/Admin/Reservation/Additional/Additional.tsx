@@ -48,6 +48,8 @@ type Invoice = {
   }>;
 };
 
+
+
 function Additional() {
   const {id} = useParams();
   const [step,setStep] = useState(1);
@@ -164,6 +166,7 @@ function Additional() {
 
       setForm((prevForm: { accommodations: any }) => ({
         ...prevForm,
+        schedule: new Date(reservation[0].schedule).getTime(),
         reservationId: reservation[0].reservationId,
         shift: reservation[0].invoices[0].shift,
         // accommodations: reservation[0].invoices,
@@ -201,7 +204,12 @@ function Additional() {
                         </Button>
                     </Box>
                 </Box>
-                <Accommodation/>
+                <Accommodation
+                  form={form}
+                  selectAccommodation={selectAccommodation}
+                  editGuests={editGuests}
+                  addInclusion={addInclusion}
+                />
             </>:""}
             {step===2?<>
                 <Box display="flex" alignItems={"center"} sx={{marginTop:"50px",marginBottom:"2em"}}>
