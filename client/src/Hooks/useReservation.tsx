@@ -22,6 +22,24 @@ interface ReservationData {
   }[]
 }
 
+interface ReservationExtras{
+  reservationId: string,
+  accommodations: {
+    accommodationId: string;
+    shift: string;
+    guests: {
+      adult: number;
+      children: number;
+      senior: number;
+      pwd: number;
+    },
+    inclusions: {
+        name: string;
+        quantity: number;
+    }[]
+  }[]
+}
+
 interface GetReservation{
   reservationId?: string | undefined;
 }
@@ -77,7 +95,7 @@ function useReservation() {
     });
   };
 
-  const extrasReservation = (content: UpdateReservation) => {
+  const extrasReservation = (content: ReservationExtras) => {
     makeRequest({
       method: 'patch',
       url: '/reservations/extras',
@@ -101,7 +119,8 @@ function useReservation() {
     createReservation,
     payReservation,
     updateReservation,
-    rescheduleReservation
+    rescheduleReservation,
+    extrasReservation
   };
 }
 
