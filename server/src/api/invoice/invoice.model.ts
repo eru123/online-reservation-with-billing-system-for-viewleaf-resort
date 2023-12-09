@@ -74,6 +74,14 @@ const invoiceSchema = new Schema(
                 type: Number,
                 default: 0
             }
+        },
+        total: {
+            type: Number,
+            required: true
+        },
+        minimum: {
+            type: Number,
+            required: true
         }
     },
     {
