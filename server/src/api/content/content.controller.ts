@@ -14,7 +14,7 @@ export const initializeContent = async () => {
         address: 'Default Address Value',
         policy: 'Default Policy Value',
         payment: 'Default Payment Value',
-        promo: 'Default Promo Value',
+        promo: 0,
         shift: {
           day: {
             start: new Date(),
