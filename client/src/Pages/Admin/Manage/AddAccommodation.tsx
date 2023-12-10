@@ -428,7 +428,7 @@ function AddAccommodation() {
         </TableContainer>
       </Paper>
       <Box display="flex">
-        <FormControlLabel sx={{flexGrow:"1"}} control={<Checkbox defaultChecked />} label="Make it this active?" />
+        {/* <FormControlLabel sx={{flexGrow:"1"}} control={<Checkbox defaultChecked />} label="Make it this active?" /> */}
         <Button variant="contained" color="primary" type='submit'>
           Create
         </Button>
