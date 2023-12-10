@@ -35,7 +35,7 @@ function AccommodationCard({
   const navigate = useNavigate();
 
   return <>
-      <div>
+      <div style={accommodation?.availability === "unavailable"?{opacity:".5"}:{opacity:"1"}}>
           <div style={{paddingBottom:"10px",backgroundColor:"#DADADA", borderTopLeftRadius:"8px",borderTopRightRadius:"8px"}}>
               <Paper variant="elevation" elevation={3} sx={{borderRadius:"10px",overflow:"hidden"}}>
                   <Grid container spacing={0}>
@@ -44,7 +44,7 @@ function AccommodationCard({
                       </Grid>
                       <Grid item md={6} xs={9} sx={{padding:"1em"}}>
                           <Box >
-                            {accommodation?.availability === "unavailable" && "Unavailable"}
+                  
                               <Typography variant="subtitle2" color="initial" fontWeight={500} textTransform={"uppercase"}>{accommodation?.type}</Typography>
                               <Typography variant="h5" color="Primary" fontWeight={600} >{accommodation?.title}</Typography>
                               <Typography sx={{minHeight:"100px"}} variant="body2" color="initial"  textAlign={"justify"}>{accommodation?.description}</Typography>
