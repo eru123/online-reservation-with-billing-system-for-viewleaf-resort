@@ -33,7 +33,12 @@ function AccommodationCard({
   const {date, shift} = useParams();
   const [selectedShift,setSelectedShift] = useState("Day Shift");
   const navigate = useNavigate();
-
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Use smooth scrolling behavior
+    });
+  };
   return <>
       <div style={accommodation?.availability === "unavailable"?{opacity:".5"}:{opacity:"1"}}>
           <div style={{paddingBottom:"10px",backgroundColor:"#DADADA", borderTopLeftRadius:"8px",borderTopRightRadius:"8px"}}>
@@ -99,7 +104,7 @@ function AccommodationCard({
                                       :""
                                   }
                                   {(variant==="view")?
-                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation)}}>    
+                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation);scrollToTop()}}>    
                                           Book
                                       </Button>
                                   :""}
