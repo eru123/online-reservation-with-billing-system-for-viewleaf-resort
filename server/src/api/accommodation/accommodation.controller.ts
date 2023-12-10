@@ -57,18 +57,16 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
         .map(({ accommodationId, shift }) => {
             const shifts = [{ accommodationId, shift }];
 
-            if (shift == Shift.WHOLE)
-                shifts.push({ accommodationId, shift: Shift.DAY }, { accommodationId, shift: Shift.NIGHT });
-            else shifts.push({ accommodationId, shift: Shift.WHOLE });
+            // if (shift == Shift.WHOLE)
+            //     shifts.push({ accommodationId, shift: Shift.DAY }, { accommodationId, shift: Shift.NIGHT });
+            // else shifts.push({ accommodationId, shift: Shift.WHOLE });
 
             return shifts;
         })
         .flat();
 
     // Get all available accommodations
-    let accommodations: AccommodationDocument[] = await AccommodationModel.find({
-        availability: AccommodationAvailbility.AVAILABLE
-    }).exec();
+    let accommodations: AccommodationDocument[] = await AccommodationModel.find().exec();
 
     accommodations = accommodations
         // Filter out accommodations where shift is in invoiceAccommodations
