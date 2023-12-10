@@ -46,7 +46,7 @@ import SendEmails from './Pages/_Test/sendEmail';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ProtectedRoute } from './Hooks/useAuth';
 import PolicyView from './Pages/Guests/Policy';
-
+import Error from './Pages/Error';
 const theme = createTheme({
   palette: {
     primary: {
@@ -73,9 +73,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Routes>
-        {/* <Route path="/*" element={<Error/>} /> */}
           <Route path="/login" element={<Login/>} />
-
+          <Route path="/*" element={<Error/>} />
           <Route element={<Base />} >
             <Route path="/" element={<LandingPage/>} />
             <Route path="/booking" element={<Booking/>} />
