@@ -56,16 +56,14 @@ function Accommodation({form, selectAccommodation, editGuests, addInclusion}:Pro
 
     const {data: accommodations, loading: accommodationLoading, getAccommodation} = useAccommodation();
 
-
     useEffect(()=>{
-
       getAccommodation({
         // schedule: parseInt(form.schedule||"", 10),
         // schedule: new Date(form.schedule).getTime(),
         schedule: form.schedule,
         shift: form.shift
       })
-    }, [form])
+    }, [])
 
     return <>
         {/* List of Selected */}

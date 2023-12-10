@@ -16,6 +16,7 @@ import Accommodation from './Accommodation';
 
 import { useParams } from 'react-router-dom';
 import useReservation from '../../../../Hooks/useReservation';
+import useContent from '../../../../Hooks/useContent';
 
 type Accommodation = {
   title: string;
@@ -54,16 +55,29 @@ function Additional() {
   const {id} = useParams();
   const [step,setStep] = useState(1);
   const {data: reservation, loading, error, getReservation, updateReservation, rescheduleReservation, extrasReservation} = useReservation();
+  const {data:content, loading:contentLoading, error:contentError, getContent} = useContent();
+
   const [form, setForm] = useState<any>({
-    shift: "0",
+    shift: "day",
     schedule: new Date()
   });
 
-  // const extractAccommodations = () => {
-  //   if (reservation) {
-  //     return reservation[0].accommodations
-  //   }
-  // }
+  const submit = () => {
+    extrasReservation(form);
+  }
+
+  const getShiftIndex = (shift: string) => {
+    switch(shift){
+      case 'day':
+        return 0;
+      case 'night':
+        return 1;
+      case 'whole day':
+        return 2;
+      default:
+        return 0;
+    }
+  }
 
   const updateSchedule = (date: any, shift: any) => {
     setForm((prevForm: any) => ({
@@ -143,48 +157,113 @@ function Additional() {
     }));
   };
 
-  const extractAccommodations = (data: Invoice[]): Accommodation[] => {
-    const accommodations: Accommodation[] = [];
-  
-    data.forEach((invoice) => {
-      if (invoice.invoices && invoice.invoices.length > 0) {
-        invoice.invoices.forEach((inv) => {
-          if (inv.accommodation) {
-            accommodations.push(inv.accommodation);
+  const calculateCosts = () => {
+    let totalAll = 0
+    let minimumAll = 0
+    let inclusionsAll = 0
+    let guestsAll = 0
+    
+
+    setForm((prevForm: { accommodations: any }) => ({
+      ...prevForm,
+      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any; fees: any; guests: any; }) => {
+        let total = 0
+        let minimum = 0
+        let inclusions = 0
+        let guests = 0
+
+        minimum += parseInt(accommodation.fees[getShiftIndex(form.shift)].rate)
+        minimumAll += parseInt(accommodation.fees[getShiftIndex(form.shift)].rate)
+
+          if (accommodation.inclusions) {
+            accommodation.inclusions?.map((inclusion: any) => {
+              if (inclusion.quantity) {
+                inclusions += (inclusion.quantity * inclusion.price)
+                inclusionsAll += (inclusion.quantity * inclusion.price)
+              }
+            })
           }
-        });
-      }
-    });
-  
-    console.log(accommodations);
-    return accommodations;
-  };
+
+          if (accommodation.guests) {
+            if (accommodation.guests.adult) {
+              guests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult)
+              guestsAll += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult)
+            }
+            if(accommodation.guests.children) {
+              guests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.kids)
+              guestsAll += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.kids)
+            }
+            if(accommodation.guests.senior) {
+              guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult) * 0.8)
+              guestsAll += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult) * 0.8)
+            }
+            if(accommodation.guests.pwd) {
+              guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult) * 0.8)
+              guestsAll += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult) * 0.8)
+            }
+    
+            total = minimum +  inclusions + guests
+            
+          }
+
+        // return {
+        //   ...accommodation,
+        //   total: total ,
+        //   minimum: minimum
+        // }
+
+        return {
+          ...accommodation,
+          total: content?.promo === 0 ? total : total * (content?.promo / 100) ,
+          minimum: content?.promo === 0 ? minimum : minimum * (content?.promo / 100)
+        }
+
+      }),
+      // costs: {
+      //     total: minimumAll +  inclusionsAll + guestsAll ,
+      //     guests: guestsAll ,
+      //     inclusions: inclusionsAll,
+      //     accommodations: minimumAll
+      // },
+      costs: {
+        total: content?.promo === 0 ? (minimumAll +  inclusionsAll + guestsAll) : (minimumAll +  inclusionsAll + guestsAll) * (content?.promo / 100) ,
+        guests: content?.promo === 0 ? guestsAll : guestsAll * (content?.promo / 100) ,
+        inclusions: content?.promo === 0 ? inclusionsAll : inclusionsAll * (content?.promo / 100),
+        accommodations: content?.promo === 0 ? minimumAll : minimumAll * (content?.promo / 100)
+      },
+    }));
+  }
 
   useEffect(()=>{
 
-    if (reservation) {
+    calculateCosts()
 
+    if (!content || content.length === 0){
+      getContent();
+      console.log(form)
+    }
+   
+    if (!reservation || reservation.length === 0) {
+      getReservation({
+        reservationId: id
+      })
+      
+    }
+
+    if (reservation && form?.accommodations?.length ===0) {
       setForm((prevForm: { accommodations: any }) => ({
         ...prevForm,
         schedule: new Date(reservation[0].schedule).getTime(),
         reservationId: reservation[0].reservationId,
         shift: reservation[0].invoices[0].shift,
         // accommodations: reservation[0].invoices,
-        accommodations: reservation[0].invoices.map((invoice: any) => (
-          invoice.accommodation
-        )),
+        accommodations: reservation[0].invoices.map((invoice: any) => ({...invoice.accommodation,
+          shift: reservation[0].invoices[0].shift
+        })),
       }));
-
-    } 
-    else {
-      getReservation({
-        reservationId: id
-      })
     }
 
-    console.log(form)
-
-  }, [reservation])
+  }, [form, content])
 
     return (
         
@@ -196,11 +275,16 @@ function Additional() {
                         <Typography variant="h6" fontWeight={400} color="initial" >You can choose multiple accommodation</Typography>
                     </div>
                     <Box display="flex" gap={"10px"}>
-                        <Button variant="text" color="primary">
+                        {/* <Button variant="text" color="primary">
                             Back
-                        </Button>
-                        <Button variant="contained" color="primary" onClick={()=>{setStep(2)}}>
-                            Next
+                        </Button> */}
+                        <Button 
+                          variant="contained" 
+                          color="primary" 
+                          // onClick={()=>{setStep(2)}}
+                          onClick={submit}
+                        >
+                            Confirm
                         </Button>
                     </Box>
                 </Box>
@@ -221,7 +305,12 @@ function Additional() {
                         <Button variant="text" color="primary" onClick={()=>{setStep(1)}}>
                             Back
                         </Button>
-                        <Button variant="contained" color="primary" href='/admin/reservation/view'>
+                        <Button 
+                          variant="contained" 
+                          color="primary" 
+                          // href='/admin/reservation/view'
+                          onClick={submit}
+                        >
                             Set as Paid
                         </Button>
                     </Box>
