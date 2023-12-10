@@ -66,8 +66,10 @@ function ListReservation() {
                               <TableCell>Reference No.</TableCell>
                               <TableCell >Name</TableCell>
                               <TableCell >Date</TableCell>
-                              <TableCell >Check In </TableCell>
-                              <TableCell >Check Out </TableCell>
+                              {/* <TableCell >Check In </TableCell>
+                              <TableCell >Check Out </TableCell> */}
+                              {/* <TableCell></TableCell>
+                                <TableCell></TableCell> */}
                               <TableCell >Status </TableCell>
                           </TableRow>
                       </TableHead>
@@ -80,9 +82,10 @@ function ListReservation() {
                                 <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
                                 <TableCell>{reservation.customer?.name || "Unknown"}</TableCell>
                                 <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })}</TableCell>
-                                <TableCell></TableCell>
-                                <TableCell></TableCell>
-                                <TableCell align='center'>
+                                {/* <TableCell></TableCell>
+                                <TableCell></TableCell> */}
+                                {/* <TableCell align='center'> */}
+                                <TableCell>
                                   <Chip 
                                     label={reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)} 
                                     color={
@@ -103,9 +106,10 @@ function ListReservation() {
                                 <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
                                 <TableCell>{reservation.customer?.name || "Unknown"}</TableCell>
                                 <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })}</TableCell>
-                                <TableCell></TableCell>
-                                <TableCell></TableCell>
-                                <TableCell align='center'>
+                                {/* <TableCell></TableCell>
+                                <TableCell></TableCell> */}
+                                {/* <TableCell align='center'> */}
+                                <TableCell>
                                   <Chip 
                                     label={reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)} 
                                     color={
