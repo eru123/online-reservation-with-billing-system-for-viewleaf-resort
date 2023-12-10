@@ -91,7 +91,11 @@ function Invoice() {
         reservationId: id||"",
         schedule: schedule,
       })
-      submit("approved", " "); 
+      updateReservation({
+        reservationId: id||"",
+        status: "approved",
+        note: " "
+      })
       await sendEmail({
         email: data?.[0]?.customer?.email,
         subject: `View Leaf Reservation is ${status}`,
