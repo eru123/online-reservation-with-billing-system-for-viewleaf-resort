@@ -202,7 +202,7 @@ function Invoice({}:Props) {
           {status==="rescheduling"?<>
             <Alert severity="warning" sx={{margin:"2em 0 0", zIndex:"23"}}>This reservation requested to be reschedule</Alert>
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
-              <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+              <Typography variant="subtitle1" color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
                 {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
               </Typography>
@@ -312,7 +312,7 @@ function Invoice({}:Props) {
                             />
                         </Grid>
                         <Grid item xs={5}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                            <Button variant="text" sx={{color:"black"}}  onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7}>
                             <Button 
