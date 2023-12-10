@@ -2,24 +2,12 @@ import React, { useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import AccommodationCard from '../../../Components/AccommodationCard'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs, { Dayjs } from 'dayjs';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Paper from '@mui/material/Paper'
-import Modal from '@mui/material/Modal';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import TESTCalendar from '../../../Components/TESTCalendar';
-import Checkbox from '@mui/material/Checkbox';
 
-import QuantitySelector from '../../../Components/QuantitySelector';
+import dayjs, { Dayjs } from 'dayjs';
+
 
 import useAccommodation from '../../../Hooks/useAccommodation'
+
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -56,25 +44,19 @@ function Accommodation({
 }:Props) {
   const [open, setOpen] = React.useState("");
 
-  const [calendarValue, setCalendarValue] = React.useState<Dayjs | null>(dayjs());
-  // const [shift, setShift] = React.useState('');
-
-  const [kidsEntranceFee,setKidsEntranceFee]= useState(0);
-  const [adultEntranceFee,setAdultEntranceFee]= useState(0);
-  const [senioerPwdEntranceFee ,setSenioerPwdEntranceFee]= useState(0);
-
-  const [dayshift, setDayShift] = useState(false);
-  const [nightShift, setNightShift] = useState(false);
-
   const {data:accommodations, getAccommodation} = useAccommodation();
 
   useEffect(()=>{
-    console.log(date)
-    getAccommodation({
-      schedule: new Date(parseInt(date||"", 10)),
-      shift: shift==="1"? "day": shift==="2"? "night": "whole day"
-    })
-  }, [])
+    
+    if (date && shift) {
+      console.log(date, shift)
+      getAccommodation({
+        schedule: parseInt(date||"", 10),
+        shift: shift==="0"? "day": shift==="1"? "night": "whole day"
+      })
+    }
+    
+  }, [date, shift])
 
   return <>
     {/* <Box display="flex"  my={"20px"} gap={"10px"}>  
@@ -107,17 +89,22 @@ function Accommodation({
 
     {/* List of Selected */}
     <Box display="flex" flexDirection={"column"} gap={"25px"} >
-      {form.accommodations?.map((accommodation: any) => (
-        <AccommodationCard 
-          accommodation={accommodation}
-          variant="selected" 
-          openModal={setOpen}
-          selectAccommodation={selectAccommodation}
-          addInclusion={addInclusion}
-          editGuests={editGuests}
-        />
-      ))}
-      
+      {form.accommodations?.length > 0? <>
+          <Box >
+          <Typography variant="h4" color="primary" fontWeight={600}>Selected Accommodation</Typography>
+          <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
+          </Box>
+          {form.accommodations?.map((accommodation: any) => (
+          <AccommodationCard 
+            accommodation={accommodation}
+            variant="selected" 
+            openModal={setOpen}
+            selectAccommodation={selectAccommodation}
+            addInclusion={addInclusion}
+            editGuests={editGuests}
+          />
+        ))}
+      </>:""}
     </Box>
 
     {/*  List of Suggested Accommodation */}

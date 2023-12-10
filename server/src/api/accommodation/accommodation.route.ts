@@ -1,8 +1,9 @@
 import {
     addShift, 
-    getAccommodations,
     createAccommodation, 
+    getAccommodations, 
     updateAccommodationDetails, 
+    updateInclusions, 
     updateShiftFees 
 } from './accommodation.controller';
 import { limitUsers } from '../../middlewares/authorize';
@@ -13,8 +14,12 @@ import authenticate from '../../middlewares/authenticate';
 
 const router = Router();
 
-
-
+/**
+ * accommodationId: string (optional)
+ * schedule: number (optional)
+ * shift: string (optional)
+ * all: boolean (optional)
+ */
 router.get('/', asynchronousHandler(getAccommodations));
 
 router.use(authenticate, limitUsers(Role.ADMIN));
@@ -60,5 +65,7 @@ router.post('/shifts', asynchronousHandler(addShift));
  * kidsFee?: number
  */
 router.patch('/shifts', asynchronousHandler(updateShiftFees));
+
+router.patch('/inclusions', asynchronousHandler(updateInclusions));
 
 export default router;

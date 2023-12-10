@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
@@ -19,23 +19,26 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-
-import {useNavigate} from 'react-router-dom'
+import {useParams, useNavigate} from 'react-router-dom'
 import useAccommodation from '../../../Hooks/useAccommodation'
 import useFirebase from '../../../Hooks/useFirebase'
 
-function AddAccommodation() {
+
+function EditAccommodation() {
+  const {id} = useParams();
   const navigate = useNavigate();
   const { uploadFile, downloadURL } = useFirebase();
-  const { createAccommodation } = useAccommodation();
+  const { updateAccommodation, updateInclusions, updateShift } = useAccommodation();
   const [inclusions, setInclusions] = useState<any>([]);
-
+  const {data: accommodation, loading: accommodationLoading, error: accommodationError, getAccommodation} = useAccommodation();
+  
   const [inclusionForm, setInclusionForm] = useState({
     name: '',
     price: 0
   })
 
   const [form, setForm] = useState({
+    accommodationId: '',
     type: '',
     title: '',
     description: '',
@@ -58,7 +61,8 @@ function AddAccommodation() {
       rate: 0,
       adultFee: 0,
       kidsFee: 0
-    }]
+    }],
+    availability: "available"
   })
 
   async function uploadImage(file: File) {
@@ -70,10 +74,32 @@ function AddAccommodation() {
     console.log( url)
   }
 
+  function parseNumber(value:any) {
+    const parsedValue = parseFloat(value);
+  
+    // Check if the parsed value is a number
+    if (!isNaN(parsedValue)) {
+      return parsedValue;
+    } else {
+      // If the value couldn't be parsed, return 0 or handle it as needed
+      return 0;
+    }
+  }
+
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(form)
-    createAccommodation({...form, inclusions})
+    updateAccommodation({...form, inclusions})
+    updateInclusions({accommodationId: accommodation[0].accommodationId, inclusions})
+    for (let i = 0; i < form.fees.length; i++) {
+      updateShift({
+        accommodationId: accommodation[0].accommodationId, 
+        shift: form.fees[i].shift,
+        rate: parseNumber(form.fees[i].rate),
+        adultFee: parseNumber(form.fees[i].adultFee),
+        kidsFee: parseNumber(form.fees[i].kidsFee),
+      })
+    }
     navigate('/admin/manage/accommodations')
   }
 
@@ -101,12 +127,53 @@ function AddAccommodation() {
     console.log(inclusions)
   };
 
+  useEffect(() => {
+    if (accommodation) {
+      setForm({
+        accommodationId: accommodation[0].accommodationId,
+        type: accommodation[0].type,
+        title: accommodation[0].title,
+        description: accommodation[0].description,
+        pax: accommodation[0].pax,
+        image: accommodation[0].image,
+        fees: [{
+          shift: 'day',
+          rate: accommodation[0].fees[0].rate,
+          adultFee: accommodation[0].fees[0].guestFee.adult,
+          kidsFee: accommodation[0].fees[0].guestFee.kids
+        },
+        {
+          shift: 'night',
+          rate: accommodation[0].fees[1].rate,
+          adultFee: accommodation[0].fees[1].guestFee.adult,
+          kidsFee: accommodation[0].fees[1].guestFee.kids
+        },
+        {
+          shift: 'whole day',
+          rate: accommodation[0].fees[2].rate,
+          adultFee: accommodation[0].fees[2].guestFee.adult,
+          kidsFee: accommodation[0].fees[2].guestFee.kids
+        }],
+        availability: accommodation[0].availability
+      })
+      setInclusions(accommodation[0].inclusions)
+      console.log(form)
+    }
+    else{
+      getAccommodation({
+        accommodationId: id
+      })
+    }
+  }, [accommodation])
+
+  if (accommodationLoading) {
+    return <div>Loading...</div>;
+  }
 
   return <>
     <div>
       <form onSubmit={submit}>
-      <Typography variant="h4" fontWeight={600} color="primary">Add Accommodation</Typography>
-      <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>Fill up information to add accommodation</Typography>
+      <Typography variant="h4" fontWeight={600} color="primary">Edit Accommodation</Typography>
       <Grid container spacing={2}>
         <Grid item md={3} xs={12}>
           <FormControl fullWidth required>
@@ -114,7 +181,7 @@ function AddAccommodation() {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={form.type}
+              defaultValue={accommodation?.[0]?.type}
               label="Type"
               onChange={(e) => setForm({ ...form, type: e.target.value })}
             >
@@ -133,7 +200,7 @@ function AddAccommodation() {
             label="Number of Pax"
             required
             fullWidth
-            value={form.pax}
+            defaultValue={accommodation?.[0]?.pax}
             onChange={(e) => setForm({ ...form, pax: e.target.value })}
           />
         </Grid>
@@ -143,7 +210,7 @@ function AddAccommodation() {
             label="Title"
             required
             fullWidth
-            value={form.title}
+            defaultValue={accommodation?.[0]?.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
           />
         </Grid>
@@ -155,14 +222,14 @@ function AddAccommodation() {
             fullWidth
             multiline
             maxRows={5}
-            value={form.description}
+            defaultValue={accommodation?.[0]?.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
           />
         </Grid>
         <Grid item md={3} xs={12}>
           <TextField
             id="image"
-            required
+            // required
             fullWidth
             type='file'
             onChange={(e:any)=>{uploadImage(e.target.files[0])}}
@@ -175,6 +242,7 @@ function AddAccommodation() {
             required
             fullWidth
             type='number'
+            defaultValue={accommodation?.[0]?.fees?.[0]?.rate}
             onChange={(e) => {
               setForm((prevForm) => ({
                 ...prevForm,
@@ -196,6 +264,7 @@ function AddAccommodation() {
             required
             fullWidth
             type='number'
+            defaultValue={accommodation?.[0]?.fees?.[1]?.rate}
             onChange={(e) => {
               setForm((prevForm) => ({
                 ...prevForm,
@@ -218,6 +287,7 @@ function AddAccommodation() {
             required
             fullWidth
             type='number'
+            defaultValue={accommodation?.[0]?.fees?.[2]?.rate}
             onChange={(e) => {
               setForm((prevForm) => ({
                 ...prevForm,
@@ -291,6 +361,7 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    defaultValue={accommodation?.[0]?.fees?.[0]?.guestFee?.kids}
                     onChange={(e) => {
                       setForm((prevForm) => ({
                         ...prevForm,
@@ -310,6 +381,7 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    defaultValue={accommodation?.[0]?.fees?.[1]?.guestFee?.kids}
                     onChange={(e) => {
                       setForm((prevForm) => ({
                         ...prevForm,
@@ -330,6 +402,7 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    defaultValue={accommodation?.[0]?.fees?.[2]?.guestFee?.kids}
                     onChange={(e) => {
                       setForm((prevForm) => ({
                         ...prevForm,
@@ -354,6 +427,7 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    defaultValue={accommodation?.[0]?.fees?.[0]?.guestFee?.adult}
                     onChange={(e) => {
                       setForm((prevForm) => ({
                         ...prevForm,
@@ -373,6 +447,7 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    defaultValue={accommodation?.[0]?.fees?.[1]?.guestFee?.adult}
                     onChange={(e) => {
                       setForm((prevForm) => ({
                         ...prevForm,
@@ -393,6 +468,7 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    defaultValue={accommodation?.[0]?.fees?.[2]?.guestFee?.adult}
                     onChange={(e) => {
                       setForm((prevForm) => ({
                         ...prevForm,
@@ -414,13 +490,13 @@ function AddAccommodation() {
                   <Typography variant="subtitle2" fontSize={"10px"} color="initial">20% Off</Typography>
                 </TableCell>
                 <TableCell align='center'>
-                  {form.fees[0].adultFee * 0.8}
+                  {form.fees[0].adultFee !== 0 ? form.fees[0].adultFee * 0.8 : (accommodation?.[0]?.fees?.[0]?.guestFee?.adult * 0.8)}
                 </TableCell>
                 <TableCell align='center'>
-                  {form.fees[1].adultFee * 0.8}
+                  {form.fees[1].adultFee !== 0 ? form.fees[1].adultFee * 0.8 : (accommodation?.[0]?.fees?.[1]?.guestFee?.adult * 0.8)}
                 </TableCell>
                 <TableCell align='center'>
-                  {form.fees[2].adultFee * 0.8}
+                  {form.fees[2].adultFee !== 0 ? form.fees[2].adultFee * 0.8 : (accommodation?.[0]?.fees?.[2]?.guestFee?.adult * 0.8)}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -428,7 +504,14 @@ function AddAccommodation() {
         </TableContainer>
       </Paper>
       <Box display="flex">
-        {/* <FormControlLabel sx={{flexGrow:"1"}} control={<Checkbox defaultChecked />} label="Make it this active?" /> */}
+        <FormControlLabel 
+          sx={{flexGrow:"1"}} 
+          control={
+          <Checkbox 
+            defaultChecked = {form?.availability === "available"}
+            onChange={(e) => setForm({...form, availability: e.target.checked ? "available" : "unavailable"})}/>} 
+            label="Set as available" 
+          />
         <Button variant="contained" color="primary" type='submit'>
           Create
         </Button>
@@ -438,4 +521,4 @@ function AddAccommodation() {
   </>
 }
 
-export default AddAccommodation
+export default EditAccommodation

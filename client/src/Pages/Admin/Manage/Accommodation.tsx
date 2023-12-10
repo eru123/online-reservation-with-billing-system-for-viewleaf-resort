@@ -66,7 +66,9 @@ function Accommodation() {
   }
 
   useEffect(() => {
-    getAccommodation();
+    getAccommodation({
+      all:true
+    });
     getShift();
     // setShiftForm(shifts)
   }, []);

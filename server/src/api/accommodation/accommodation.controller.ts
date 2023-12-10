@@ -8,6 +8,7 @@ import {
     GetAccommodations,
     Shift,
     UpdateAccommodation,
+    UpdateInclusions,
     UpdateShiftFees
 } from './accommodation.types';
 import { BodyRequest, QueryRequest, RequestHandler } from 'express';
@@ -19,10 +20,7 @@ import AccommodationModel from './accommodation.model';
 import InvoiceModel from '../invoice/invoice.model';
 import ReservationModel from '../reservation/reservation.model';
 
-export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAccommodations>, res) => {
-    const { accommodationId, schedule, shift } = req.query;
-    const checker = new CheckData();
-
+const getAvailableAccommodations = async (checker: CheckData, schedule: unknown): Promise<AccommodationDocument[]> => {
     const reservationQuery: Record<string, unknown> = {
         status: {
             $nin: [
@@ -40,8 +38,8 @@ export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAcc
 
         // Get all reservations the given schedule's 00:00:00 to 23:59:59 time includes the reservation's schedule
         reservationQuery.schedule = {
-            $gte: new Date(schedule).setHours(0, 0, 0, 0),
-            $lte: new Date(schedule).setHours(23, 59, 59, 999)
+            $gte: new Date(Number(schedule)).setHours(0, 0, 0, 0),
+            $lte: new Date(Number(schedule)).setHours(23, 59, 59, 999)
         };
     }
 
@@ -68,9 +66,9 @@ export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAcc
         .flat();
 
     // Get all available accommodations
-    let accommodations: AccommodationDocument[] = await AccommodationModel
-        .find({ availability: AccommodationAvailbility.AVAILABLE })
-        .exec();
+    let accommodations: AccommodationDocument[] = await AccommodationModel.find({
+        availability: AccommodationAvailbility.AVAILABLE
+    }).exec();
 
     accommodations = accommodations
         // Filter out accommodations where shift is in invoiceAccommodations
@@ -87,6 +85,22 @@ export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAcc
         })
         // Filter out all accommodations where fees are empty
         .filter(({ fees }) => fees.length > 0);
+
+    return accommodations;
+}
+
+export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAccommodations>, res) => {
+    const { accommodationId, schedule, shift, all } = req.query;
+    const checker = new CheckData();
+ 
+    let accommodations: AccommodationDocument[];
+
+    if (Boolean(all) === true) {
+        accommodations = await AccommodationModel.find().exec();
+    }
+    else {
+        accommodations = await getAvailableAccommodations(checker, schedule); 
+    }
 
     if (shift) {
         checker.checkType(shift, 'string', 'shift');
@@ -218,7 +232,7 @@ export const addShift: RequestHandler = async (req: BodyRequest<AddShift>, res) 
 };
 
 export const updateAccommodationDetails: RequestHandler = async (req: BodyRequest<UpdateAccommodation>, res) => {
-    const { accommodationId, description, pax, image, type, availability } = req.body;
+    const { accommodationId, title, description, pax, image, type, availability } = req.body;
 
     const checker = new CheckData();
     checker.checkType(accommodationId, 'string', 'accommodationId');
@@ -227,6 +241,13 @@ export const updateAccommodationDetails: RequestHandler = async (req: BodyReques
 
     const accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
     if (!accommodation) throw new NotFound('Accommodation');
+
+    if (title) {
+      checker.checkType(title, 'string', 'title');
+      if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+      accommodation.title = title;
+  }
 
     if (description) {
         checker.checkType(description, 'string', 'description');
@@ -306,6 +327,42 @@ export const updateShiftFees: RequestHandler = async (req: BodyRequest<UpdateShi
 
         shiftExists.guestFee.kids = kidsFee;
     }
+
+    // Save changes
+    await accommodation.save();
+
+    res.sendStatus(204);
+};
+
+export const updateInclusions: RequestHandler = async (req: BodyRequest<UpdateInclusions>, res) => {
+    const { accommodationId, inclusions } = req.body;
+
+    const checker = new CheckData();
+    checker.checkType(accommodationId, 'string', 'accommodationId');
+    checker.checkArray(inclusions, 0, 'inclusions');
+
+    if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+    for (let i = 0; i < inclusions.length; i++) {
+        const { name, price } = inclusions[i];
+
+        checker.checkType(name, 'string', `inclusions.${i}.name`);
+        checker.checkType(price, 'number', `inclusions.${i}.price`);
+
+        if (checker.size() > 0) continue;
+    }
+
+    if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+    const accommodation = await AccommodationModel.findOne({ accommodationId }).exec();
+    if (!accommodation) throw new NotFound('Accommodation');
+
+    const uniqueInclusions = inclusions.filter(
+        (inclusion, idx, originalInclusions) => 
+            originalInclusions.findIndex((i) => i.name === inclusion.name) === idx
+    );
+
+    accommodation.inclusions = uniqueInclusions.map((inclusion) => ({ ...inclusion, accommodationId }));
 
     // Save changes
     await accommodation.save();

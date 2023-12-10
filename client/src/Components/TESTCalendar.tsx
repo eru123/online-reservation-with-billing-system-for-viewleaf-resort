@@ -1,71 +1,92 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import Badge from '@mui/material/Badge';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-
-
+import { PickersDay, PickersDayProps, DateCalendar } from '@mui/x-date-pickers';
 import TurnedInIcon from '@mui/icons-material/TurnedIn';
 
-function ServerDay(props: PickersDayProps<Dayjs> & { highlightedDays?: number[], currentMonth: number }) {
-  const { highlightedDays = [], day, outsideCurrentMonth, currentMonth, ...other } = props;
-  const isCurrentMonth = day.month() === currentMonth;
-  const isSelected = isCurrentMonth && highlightedDays.indexOf(day.date()) >= 0;
+interface HighlightedDaysMap {
+  [key: string]: number[]; // Key is a combination of month and year, e.g., "January-2022"
+}
+
+function AppointmentDay(props: PickersDayProps<Dayjs> & { highlightedDaysMap?: HighlightedDaysMap }) {
+  const { highlightedDaysMap = {}, day, ...other } = props;
+  const monthYearKey = day.format('MMMM-YYYY');
+
+  const highlightedDays = highlightedDaysMap[monthYearKey] || [];
+  const isSelected = highlightedDays.includes(day.date());
 
   return (
-    <Badge
-      key={props.day.toString()}
-      overlap="circular"
-      badgeContent={isSelected ? <TurnedInIcon sx={{ fill: "#E24B5B" }} /> : undefined}
-    >
-      <PickersDay {...other} outsideCurrentMonth={outsideCurrentMonth} day={day} />
+    <Badge overlap="circular" badgeContent={isSelected ? <TurnedInIcon sx={{ fill: '#E24B5B' }} /> : undefined}>
+      <PickersDay key={day.toString()} {...other} day={day} />
     </Badge>
   );
 }
 
-function TESTCalendar() {
+type Props = {
+  appointments: any[];
+  setSelectedDay:React.Dispatch<React.SetStateAction<dayjs.Dayjs | null | undefined>>;
+  selectedDay: any;
+};
+
+function TESTCalendar({ appointments, setSelectedDay, selectedDay }: Props) {
   // selected day
-  const [value, setValue] = React.useState<Dayjs | null>();
+  const [highlightedDaysMap, setHighlightedDaysMap] = useState<HighlightedDaysMap>({});
+  const initialValue = dayjs();
 
+  const formatDateToMonthYear = (date: string) => {
+    return dayjs(date).format('MMMM-YYYY');
+  };
+  const schedules = appointments?.map((item) => item.schedule) || [];
 
-  const [activeMonth, setActiveMonth] = useState();
-  const [highlightedDays,setHighlightedDays] = useState([1, 23, 2, 15]); // Define your highlighted days
+  const formatSchedulesToHighlightedDaysMap = (schedules: string[]) => {
+    const highlightedDaysMap: HighlightedDaysMap = {};
 
+    schedules.forEach((schedule) => {
+      const key = formatDateToMonthYear(schedule);
+      if (!highlightedDaysMap[key]) {
+        highlightedDaysMap[key] = [];
+      }
 
+      const dayOfMonth = dayjs(schedule).date();
+      highlightedDaysMap[key].push(dayOfMonth);
+    });
 
-  const initialValue = dayjs('2023-11-02'); // Set your desired date here
-  const currentMonth = initialValue.month();
-
-
-  const handleMonthChange = (date: Dayjs) => {
-    const year = date.year();
-    const setActiveMonth = date.month();
-
-    setHighlightedDays([2,3,4,5,6])
+    return highlightedDaysMap;
   };
 
+  useEffect(() => {
+    setHighlightedDaysMap(formatSchedulesToHighlightedDaysMap(schedules));
+  }, [appointments]);
 
+  const handleMonthChange = (date: Dayjs) => {
+    const monthYearKey = date.format('MMMM-YYYY');
 
-return (
+    if (!highlightedDaysMap[monthYearKey]) {
+      setHighlightedDaysMap((prevMap) => ({
+        ...prevMap,
+        [monthYearKey]: [],
+      }));
+    }
+  };
+
+  return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DateCalendar
-            defaultValue={initialValue}
-            onMonthChange={(value)=>{handleMonthChange(value)}}
-            showDaysOutsideCurrentMonth 
-            slots={{
-            day: (dayProps) => <ServerDay {...dayProps} currentMonth={currentMonth} highlightedDays={highlightedDays} />
-            }}
-
-            value={value} onChange={(newValue) => {
-
-            setValue(newValue);
-            alert(newValue)
-            }}
-        />
-        </LocalizationProvider>
-    );
+      <DateCalendar
+        onMonthChange={(value) => {
+          handleMonthChange(value);
+        }}
+        slots={{
+          day: (dayProps) => <AppointmentDay {...dayProps} highlightedDaysMap={highlightedDaysMap} />,
+        }}
+        value={selectedDay || initialValue}
+        onChange={(newValue) => {
+          setSelectedDay?.(newValue); // Optional chaining here
+        }}
+      />
+    </LocalizationProvider>
+  );
 }
 
-export default TESTCalendar
+export default TESTCalendar;

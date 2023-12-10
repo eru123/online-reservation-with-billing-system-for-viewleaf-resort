@@ -24,11 +24,17 @@ function Requests() {
       const filtered = reservations.filter(
         (reservation:any) => ['paid', 'rescheduling', 'cancelling', 'refunding'].includes(reservation.status)
       );
-      setFilteredReservations(filtered);
-      console.log(filtered)
+  
+      // Sort the filtered reservations based on updatedAt in descending order
+      const sortedReservations = filtered.sort(
+        (a:any, b:any) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      );
+  
+      setFilteredReservations(sortedReservations);
+      console.log(sortedReservations);
     }
-    
   }, [reservations]);
+  
 
   if (reservationLoading) return <>loading</>;
 

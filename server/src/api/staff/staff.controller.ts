@@ -2,7 +2,7 @@ import { BodyRequest, QueryRequest, RequestHandler } from 'express';
 import { CheckData } from '../../utilities/checkData';
 import { compareSync } from 'bcrypt';
 import { cookieOptions, signAccess, signRefresh } from '../../utilities/cookies';
-import { CreateStaff, GetStaff, Role } from './staff.types';
+import { CreateStaff, GetStaff, Role, UpdateStaff } from './staff.types';
 import { Login } from '../auth/auth.types';
 import { password } from '../../utilities/ids';
 import { Unauthorized, UnprocessableEntity } from '../../utilities/errors';
@@ -43,6 +43,40 @@ export const createStaff: RequestHandler = async (req: BodyRequest<CreateStaff>,
     });
 
     res.status(201).json(credentials);
+}
+
+export const updateStaff: RequestHandler = async (req: BodyRequest<UpdateStaff>, res) => {
+    if (!req.staff) throw new Unauthorized();
+
+    const { username, email, contact, password } = req.body;
+
+    const checker = new CheckData();
+    checker.checkType(username, 'string', 'username');
+    checker.checkType(email, 'string', 'email');
+
+    if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+    if (contact) {
+        checker.checkType(contact, 'string', 'contact');
+        if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+        req.staff.contact = contact;
+    }
+
+    if (password) {
+        checker.checkType(password, 'string', 'password');
+        if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+
+        req.staff.credentials.password = password;
+    }
+
+    req.staff.username = username;
+    req.staff.credentials.email = email;
+    req.staff.contact = contact;
+
+    await req.staff.save();
+
+    res.sendStatus(204);
 }
 
 export const login: RequestHandler = async (req: BodyRequest<Login>, res) => {

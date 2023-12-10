@@ -13,7 +13,7 @@ type Props = {
 }
 function ReportCard({variant,title,value}:Props) {
     return (
-        <Paper variant="elevation" elevation={3} sx={{width:"100%",maxWidth:"400px",minWidth:"300px",padding:"1em",background:"#D9D9D9"}}>
+        <Paper variant="elevation" elevation={3} sx={{minWidth:"300px",padding:"1em",background:"#D9D9D9"}}>
             <Box display="flex" alignItems={"center"}  gap={"10px"}>
                 <Box display="flex" sx={{background:"white", height:"70px",width:"70px",borderRadius:"12px",justifyContent:"center", alignItems:"center"}}>
 
@@ -23,7 +23,11 @@ function ReportCard({variant,title,value}:Props) {
                 </Box>
                 <Box>
                     <Typography variant="subtitle1" color="#5A5A5A" fontWeight={500}>{title}</Typography>
-                    <Typography variant="h4" color="primary" marginTop={"-8px"} fontWeight={600}>{value}</Typography>
+                    <Typography variant="h4" color="primary" marginTop={"-8px"} fontWeight={600}>
+                      {variant ==="revenue"?
+                      "₱":""}
+                      {value?.toLocaleString()}
+                    </Typography>
                 </Box>
             </Box>
         </Paper>

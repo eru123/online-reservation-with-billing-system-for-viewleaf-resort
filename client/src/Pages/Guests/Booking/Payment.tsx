@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useState,useEffect} from 'react'
 import Typography from '@mui/material/Typography'
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -13,8 +13,12 @@ import useReservation from '../../../Hooks/useReservation'
 import useContent from '../../../Hooks/useContent'
 import useFirebase from '../../../Hooks/useFirebase';
 import { Button } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import { connect } from 'http2';
+import dayjs from 'dayjs';
 
 function Payment() {
+  const [estimatedTimeToPay,setEstimatedTimeToPay] = useState("");
   const {id} = useParams();
   const navigate = useNavigate();
   const {
@@ -27,7 +31,7 @@ function Payment() {
   } = useReservation();
   const {data: content, loading: contentLoading, error: contentError, getContent} = useContent();
   const {downloadURL, uploading, uploadFile } = useFirebase();
-
+  const [policyAgree,setPolicyAgree] = useState(false);
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     payReservation({
@@ -51,7 +55,6 @@ function Payment() {
 
     data[0].invoices.map((item: any)=>{
       accommodations += item.rate
-
       guests += 
         parseFloat(item.guests.adult) * parseFloat(item.guestFee.adult) +
         parseFloat(item.guests.kids) * parseFloat(item.guestFee.kids) +
@@ -67,11 +70,20 @@ function Payment() {
 
     return {total: total, minimum: accommodations}
   }
-
+  
   useEffect(()=>{
     getReservation({reservationId:id});
     getContent();
   }, [])
+  useEffect(() => {
+    if (reservation) {
+      const estimatedTimeToPay = dayjs(reservation[0].createdAt)
+        .add(15, 'minute')
+        .format('MMM D, YYYY ( h:mm A )');
+      setEstimatedTimeToPay(estimatedTimeToPay);
+    }
+    
+  }, [reservation]);
 
   if (reservationLoading || contentLoading) {
     return <div>Loading...</div>
@@ -82,7 +94,13 @@ function Payment() {
         <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
           <Typography variant="h4" color="primary" fontWeight={600}>Payment</Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>You can follow the instruction Below</Typography>
-          <Box display="flex" gap={4}>
+          <Alert severity="warning"> Your payment is expecting to be sent by - {' '}
+            <span style={{ fontWeight: '600' }}>
+              {estimatedTimeToPay}
+            </span>
+          </Alert>
+
+          <Box display="flex" gap={4} mt={2}>
             <Box >
               <Typography variant="subtitle2" color="initial" sx={{opacity:'.6'}}>Total</Typography>
               <Typography variant="h6" color="initial" fontWeight={600}>₱{reservation ? calculateCost(reservation)?.total : ""}</Typography>
@@ -101,8 +119,11 @@ function Payment() {
             />
           </div>
           <div style={{display:"flex",alignItems:"center"}}>
-            <FormControlLabel control={<Checkbox defaultChecked />} label="I agree with ViewLeaf's" />
-            <Typography variant="body1" component={"a"} fontWeight={500} color="initial" marginLeft={"-12px"}>Policies</Typography>
+            <FormControlLabel
+              control={<Checkbox checked={policyAgree} onChange={() => setPolicyAgree(!policyAgree)} />}
+              label="I agree with ViewLeaf's"
+            />
+            <Typography variant="body1" component={"a"} href='/policy' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Policies</Typography>
           </div>
           <div style={{display:"flex",alignItems:"center",justifyContent:"center",margin:"2em 0"}}>
             <img width={"50%"} src={downloadURL} alt="" />
@@ -113,7 +134,7 @@ function Payment() {
                 <Chip label="Upload Payment Receipt " variant="outlined" onClick={()=>{}}/>
               </label>
               {/* <Chip label="Send" variant="filled" color='primary' sx={{color:"white"}} onClick={()=>{}}/> */}
-              <Button variant="contained" color="primary" type="submit">
+              <Button variant="contained" color="primary" type="submit" disabled={policyAgree && downloadURL ?false:true}>
                 Pay Now
               </Button>
           </div>

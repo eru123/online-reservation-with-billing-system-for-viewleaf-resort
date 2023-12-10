@@ -8,6 +8,7 @@ interface AuthContextState {
   logout: () => void;
   register: (data: RegisterData) => void;
   isAuth: (id: any) => boolean;
+  User: () => any;
 }
 
 interface RegisterData {
@@ -26,6 +27,7 @@ export const AuthContext = createContext<AuthContextState>({
   logout: () => {},
   register: () => {},
   isAuth: () => false,
+  User: () => {}
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -76,7 +78,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = async () => {
     await axios.post(`/staffs/logout`)
     localStorage.clear();
-    navigate("/");
+    navigate("/login");
   };
 
   const isAuth = (id:any) => {
@@ -89,6 +91,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return true;
 	};
 
+  const User = () => {
+    return localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '') : '';
+  }
+
   useEffect(() => {
     // Check if user is already logged in on first mount
     // const loggedInUser = localStorage.getItem("user");
@@ -98,7 +104,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, isAuth }}>
+    <AuthContext.Provider value={{ user, login, logout, register, User, isAuth }}>
       {children}
     </AuthContext.Provider>
   );

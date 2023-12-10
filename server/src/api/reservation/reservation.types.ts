@@ -1,6 +1,7 @@
 import { Document } from 'mongoose';
-import { Shift } from '../accommodation/accommodation.types';
+import { AccommodationDocument, Shift } from '../accommodation/accommodation.types';
 import { InvoiceDocument } from '../invoice/invoice.types';
+import { Feedback } from '../feedback/feedback.types';
 
 export enum ReservationStatus {
     CANCELLING = 'cancelling',
@@ -43,7 +44,7 @@ export interface ReservationDocument extends Reservation, Document {
 
 /* REQUESTS */
 
-type ReserveAccommodation = {
+export type ReserveAccommodation = {
     accommodationId: string;
     shift: Shift;
     guests: {
@@ -56,6 +57,8 @@ type ReserveAccommodation = {
         name: string;
         quantity: number;
     }[];
+    total: number;
+    minimum: number;
 };
 
 export type CreateReservation = {
@@ -80,14 +83,25 @@ export type UpdateStatus = {
     reservationId: string;
     status: ReservationStatus;
     note: string;
-}
+};
 
 export type PayReservation = {
     reservationId: string;
     receipt: string;
-}
+};
 
-export type ReservationInvoices = {
-    reservation: ReservationDocument,
-    invoices: Omit<InvoiceDocument, 'reservation'>[]
+export type PopulatedInvoice = Omit<InvoiceDocument, 'reservation' | 'accommodationId'> & {
+    accommodation: AccommodationDocument | null;
+};
+
+export type ReservationInfo = {
+    reservation: ReservationDocument;
+    invoices: PopulatedInvoice[];
+    receipts: string[];
+    feedbacks: Omit<Feedback, 'reservation'>[];
+};
+
+export type RescheduleReservation = {
+    reservationId: string;
+    schedule: number;
 }

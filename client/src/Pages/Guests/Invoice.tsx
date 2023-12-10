@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box'
@@ -17,7 +17,6 @@ import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import StarIcon from '@mui/icons-material/Star';
-import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -27,9 +26,14 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import RateInput from '../../Components/RateInput';
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 
 import useReservation from '../../Hooks/useReservation';
+import useFeedback from '../../Hooks/useFeedback';
+import moment from 'moment';
+import Rating from '@mui/material/Rating';
+
+import dayjs from 'dayjs';
 
 type Props = {
 }
@@ -45,27 +49,77 @@ const style = {
     borderRadius:"8px"
 };
 function Invoice({}:Props) {
+    const navigate = useNavigate();
     const [open, setOpen] = React.useState("");
     // approved,pending, checkedOut, canceled, refunded
     const {id} = useParams();
-    const {data, loading, error, getReservation} = useReservation();
-    const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checkedOut">("pending");
-    
+    const {data, loading, error, getReservation, updateReservation} = useReservation();
+    const [status, setStatus] = React.useState<"pending" | "paid" | "approved" | "declined" | "refunding" | "rescheduling" | "cancelling" | "checkedIn" | "refunded" | "cancelled" | "checked out">("pending");
+    const [note, setNote] = useState<string>("")
+    const [schedule, setSchedule] = useState<string>("")
+    const { createFeedback } = useFeedback();
+    const [rating, setRating] = useState<number>(5);
+    const [review, setReview] = useState<string>("");
 
+
+    const submitReschedule = () => {
+      updateReservation({
+        reservationId: id||"",
+        status: 'rescheduling',
+        note: `This reservation wants to reschedule at ${schedule} with a reason of ${note}`
+      })
+      navigate(`/reservation/${id}`)
+    }
+
+    const submitFeedback = (e: React.FormEvent) => {
+      e.preventDefault();
+      createFeedback({
+        reservationId: id||"",
+        rating: ratingForm.rating,
+        review: ratingForm.feedback
+      });
+      window.location.reload();
+    }
+
+    const submit = async (status: string, note: string) => {
+      updateReservation({
+        reservationId: id||"",
+        status: status,
+        note: note
+      })
+      navigate(`/reservation/${id}`)
+    }
     
+    const filterByStatus = (data: any, status: string) => {
+      return data.filter((item: any) => item.status === status);
+    };
+    
+    const [ratingForm, setRatingForm] = useState({
+      rating: 0,
+      feedback:""
+    });
 
     useEffect(()=>{
-      if (data?.[0]) {
-        setStatus(data?.[0].status)
-      } else {
+
+      if (data) {
+        setStatus(data?.[0]?.status)
+      } 
+      else {
         getReservation({
           reservationId: id || ""
         })
       }
+
     }, [data])
 
     if (loading) {
       return <div>Loading...</div>;
+    }
+
+    if (error || data?.length === 0) {
+      return <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
+        <div style={{display:"flex",justifyContent:"center",color:"red"}}>This reservation does not exist</div>
+      </Container>
     }
 
     return<>
@@ -77,15 +131,19 @@ function Invoice({}:Props) {
               <Chip icon={<DoNotDisturbAltIcon />} label="Cancel Reservation" variant="outlined" onClick={()=>{setOpen("cancel")}} />
             </>:""}
             <Box sx={{flexGrow:"1"}} ></Box>
-            {status === "checkedOut"?
-              <Chip icon={<StarIcon />} label="Rate our Service" variant="filled" onClick={()=>{setOpen("rate")}} color="primary" />:""    
-            }
+            {status === "checked out"?
+              <>
+                {data?.[0]?.feedbacks?.length > 0 ? <></> : 
+                  <Chip icon={<StarIcon />} label="Rate our Service" variant="filled" onClick={()=>{setOpen("rate")}} color="primary" />
+                }
+              </>
+            :<></> }
           </Box>
 
           {status==="pending"?
             <Box sx={{position:"relative"}}>
               <Alert severity="warning" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>Please make the payment to finalize your reservation, Thank you!</Alert>
-              <Chip label="Pay now" variant="outlined" onClick={()=>{}} component={Link} to={"/payment/:id"} color="primary" sx={{position:"absolute",top:"50%",right:"10px",transform:"translateY(-50%)"}}/>   
+              <Chip label="Pay now" variant="outlined" onClick={()=>{}} component={Link} to={`/payment/${data?.[0]?.reservationId}`} color="primary" sx={{position:"absolute",top:"50%",right:"10px",transform:"translateY(-50%)"}}/>   
             </Box>
           :""}
           {status==="paid"?
@@ -97,15 +155,29 @@ function Invoice({}:Props) {
           {status==="checkedIn"?
             <Alert severity="warning" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>Your reservation has been already been checked in</Alert>
           :""}
-          {status==="checkedOut"?
-            <Alert severity="success" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>This reservation is done, We are happy to serve you!</Alert>
+          {status==="checked out"?
+          <>
+            {data?.[0]?.feedbacks?.length > 0 ? <>
+              <Alert severity="success" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>This reservation is done, We are happy to serve you!</Alert>
+              
+              <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+                <Typography variant="subtitle1" fontWeight={600} color="initial">Rating</Typography>
+                {/* Insert in the value how plenty of star */}
+                <Rating name="read-only" value={data?.[0]?.feedbacks?.[0]?.rating} readOnly />
+                <Typography variant="subtitle1" mt={2} fontWeight={600} color="initial">Feedback</Typography>
+                <Typography variant="body2"  color="initial">
+                {data?.[0]?.feedbacks?.[0]?.review}
+                </Typography>
+              </Paper>
+            </> : <></>}
+          </>
           :""}
           {status==="declined"?<>
             <Alert severity="error" sx={{margin:"2em 0 0", zIndex:"23"}}>This reservation is declined, We are sorry!</Alert>
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                Lorem, ipsum dolor sit amet cons dolorem animi? Ab quae a animi doloribus, debitis  corrupti assumenda dicta soluta laboriosam autem, necessitatibus dolorum eum, ducimus fugiat at adipisci quibusdam odio culpa obcaecati iure consequatur tempora eligendi distinctio quis numquam praesentium veritatis? Voluptate sapiente, inventore eveniet aspernatur harum delectus qui quo. Repellat quisquam minus fugit assumenda error nesciunt. Repellat corporis animi quam qui ab delectus deserunt a fugiat quod quae quibusdam natus explicabo necessitatibus eius, et corrupti illo neque ex molestiae voluptate itaque iste dolore ullam. Debitis quisquam harum voluptatum. Nesciunt, consectetur quas. Vero ducimus magnam laborum tempora, ea beatae sed. Id saepe vel voluptas iste. Quaerat, dignissimos. Asperiores mollitia culpa molestiae quasi. Iusto quisquam in voluptatum alias commodi obcaecati at, officiis quis eius ipsam eveniet soluta fuga, autem natus odit provident aut aliquam. Consequuntur ex excepturi, obcaecati doloremque rerum molestias natus animi autem illum maxime hic explicabo numquam voluptate quas suscipit atque commodi, molestiae aspernatur ipsa earum est quisquam vitae? Suscipit nesciunt voluptatem illum veniam, omnis praesentium iste recusandae architecto exercitationem ad temporibus quod quae sunt, sed officia explicabo culpa itaque iusto maxime asperiores hic sint! Nihil, vero! Autem blanditiis doloremque repellendus suscipit sed nobis, omnis dolore fuga laboriosam reprehenderit saepe temporibus inventore, possimus assumenda ipsum obcaecati ad sunt id!
+                {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
               </Typography>
             </Paper>
           </>:""}
@@ -114,7 +186,7 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                Lorem, ipsum dolor sit amet cons dolorem animi? Ab quae a animi doloribus, debitis  corrupti assumenda dicta soluta laboriosam autem, necessitatibus dolorum eum, ducimus fugiat at adipisci quibusdam odio culpa obcaecati iure consequatur tempora eligendi distinctio quis numquam praesentium veritatis? Voluptate sapiente, inventore eveniet aspernatur harum delectus qui quo. Repellat quisquam minus fugit assumenda error nesciunt. Repellat corporis animi quam qui ab delectus deserunt a fugiat quod quae quibusdam natus explicabo necessitatibus eius, et corrupti illo neque ex molestiae voluptate itaque iste dolore ullam. Debitis quisquam harum voluptatum. Nesciunt, consectetur quas. Vero ducimus magnam laborum tempora, ea beatae sed. Id saepe vel voluptas iste. Quaerat, dignissimos. Asperiores mollitia culpa molestiae quasi. Iusto quisquam in voluptatum alias commodi obcaecati at, officiis quis eius ipsam eveniet soluta fuga, autem natus odit provident aut aliquam. Consequuntur ex excepturi, obcaecati doloremque rerum molestias natus animi autem illum maxime hic explicabo numquam voluptate quas suscipit atque commodi, molestiae aspernatur ipsa earum est quisquam vitae? Suscipit nesciunt voluptatem illum veniam, omnis praesentium iste recusandae architecto exercitationem ad temporibus quod quae sunt, sed officia explicabo culpa itaque iusto maxime asperiores hic sint! Nihil, vero! Autem blanditiis doloremque repellendus suscipit sed nobis, omnis dolore fuga laboriosam reprehenderit saepe temporibus inventore, possimus assumenda ipsum obcaecati ad sunt id!
+                {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
               </Typography>
             </Paper>
           </>:""}
@@ -123,37 +195,53 @@ function Invoice({}:Props) {
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
               <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                Lorem, ipsum dolor sit amet cons dolorem animi? Ab quae a animi doloribus, debitis  corrupti assumenda dicta soluta laboriosam autem, necessitatibus dolorum eum, ducimus fugiat at adipisci quibusdam odio culpa obcaecati iure consequatur tempora eligendi distinctio quis numquam praesentium veritatis? Voluptate sapiente, inventore eveniet aspernatur harum delectus qui quo. Repellat quisquam minus fugit assumenda error nesciunt. Repellat corporis animi quam qui ab delectus deserunt a fugiat quod quae quibusdam natus explicabo necessitatibus eius, et corrupti illo neque ex molestiae voluptate itaque iste dolore ullam. Debitis quisquam harum voluptatum. Nesciunt, consectetur quas. Vero ducimus magnam laborum tempora, ea beatae sed. Id saepe vel voluptas iste. Quaerat, dignissimos. Asperiores mollitia culpa molestiae quasi. Iusto quisquam in voluptatum alias commodi obcaecati at, officiis quis eius ipsam eveniet soluta fuga, autem natus odit provident aut aliquam. Consequuntur ex excepturi, obcaecati doloremque rerum molestias natus animi autem illum maxime hic explicabo numquam voluptate quas suscipit atque commodi, molestiae aspernatur ipsa earum est quisquam vitae? Suscipit nesciunt voluptatem illum veniam, omnis praesentium iste recusandae architecto exercitationem ad temporibus quod quae sunt, sed officia explicabo culpa itaque iusto maxime asperiores hic sint! Nihil, vero! Autem blanditiis doloremque repellendus suscipit sed nobis, omnis dolore fuga laboriosam reprehenderit saepe temporibus inventore, possimus assumenda ipsum obcaecati ad sunt id!
+                {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
               </Typography>
             </Paper>
           </>:""}
           {status==="rescheduling"?<>
             <Alert severity="warning" sx={{margin:"2em 0 0", zIndex:"23"}}>This reservation requested to be reschedule</Alert>
             <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
-              <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+              <Typography variant="subtitle1" color="initial">Note</Typography>
               <Typography variant="body2"  color="initial">
-                Lorem, ipsum dolor sit amet cons dolorem animi? Ab quae a animi doloribus, debitis  corrupti assumenda dicta soluta laboriosam autem, necessitatibus dolorum eum, ducimus fugiat at adipisci quibusdam odio culpa obcaecati iure consequatur tempora eligendi distinctio quis numquam praesentium veritatis? Voluptate sapiente, inventore eveniet aspernatur harum delectus qui quo. Repellat quisquam minus fugit assumenda error nesciunt. Repellat corporis animi quam qui ab delectus deserunt a fugiat quod quae quibusdam natus explicabo necessitatibus eius, et corrupti illo neque ex molestiae voluptate itaque iste dolore ullam. Debitis quisquam harum voluptatum. Nesciunt, consectetur quas. Vero ducimus magnam laborum tempora, ea beatae sed. Id saepe vel voluptas iste. Quaerat, dignissimos. Asperiores mollitia culpa molestiae quasi. Iusto quisquam in voluptatum alias commodi obcaecati at, officiis quis eius ipsam eveniet soluta fuga, autem natus odit provident aut aliquam. Consequuntur ex excepturi, obcaecati doloremque rerum molestias natus animi autem illum maxime hic explicabo numquam voluptate quas suscipit atque commodi, molestiae aspernatur ipsa earum est quisquam vitae? Suscipit nesciunt voluptatem illum veniam, omnis praesentium iste recusandae architecto exercitationem ad temporibus quod quae sunt, sed officia explicabo culpa itaque iusto maxime asperiores hic sint! Nihil, vero! Autem blanditiis doloremque repellendus suscipit sed nobis, omnis dolore fuga laboriosam reprehenderit saepe temporibus inventore, possimus assumenda ipsum obcaecati ad sunt id!
+                {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
               </Typography>
             </Paper>
           </>:""}
 
           {status==="refunded"?<>
             <Alert severity="error" sx={{margin:"2em 0 ", zIndex:"23"}}>This reservation is refunded</Alert>
+            {filterByStatus(data?.[0]?.notes, status)?.[0]?.note && <>
+              <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+                <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+                <Typography variant="body2"  color="initial">
+                  {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
+                </Typography>
+              </Paper>
+            </>}
           </>:""}
 
           {status==="cancelled"?<>
             <Alert severity="error" sx={{margin:"2em 0 ", zIndex:"23"}}>This reservation is cancelled</Alert>
+            {filterByStatus(data?.[0]?.notes, status)?.[0]?.note && <>
+              <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+                <Typography variant="subtitle1" fontWeight={600} color="initial">Note</Typography>
+                <Typography variant="body2"  color="initial">
+                  {filterByStatus(data?.[0]?.notes, status)?.[0]?.note}
+                </Typography>
+              </Paper>
+            </>}
           </>:""}
           
           
           {/*Header  */}
           <Box display="flex" sx={{margin:"25px 0"}}>
               <Box sx={{flexGrow:"1"}}>
-                <Typography variant="h4" color="primary" >#{data?.[0].reservationId}</Typography>
+                <Typography variant="h4" color="primary" >#{data?.[0]?.reservationId}</Typography>
                 <Typography variant="h6" color="initial" sx={{opacity:".6"}}>Reference Number</Typography>
               </Box>
               <Box >
-                <Typography textAlign={"end"} variant="h4" color="primary" >{data?.[0].schedule} - {data?.[0]?.invoices?.[0].shift}</Typography>
+                <Typography textAlign={"end"} variant="h4" color="primary" >{ moment(new Date(data?.[0]?.schedule)).format('DD/MM/YYYY')} - {data?.[0]?.invoices?.[0]?.shift}</Typography>
                 <Typography textAlign={"end"} variant="h6" color="initial" sx={{opacity:".6"}}>Scheduled Date</Typography>
               </Box>
           </Box>
@@ -161,15 +249,15 @@ function Invoice({}:Props) {
           {/* User Details */}
           <Paper variant="elevation" elevation={3} sx={{borderRadius:"8px",background:"#e3e3e3",padding:"1em",margin:"2em 0" ,display:"flex",alignItems:"center"}}>
             <Box sx={{flexGrow:"1"}}>
-              <Typography variant="h5" color="initial" fontWeight={500}>{data?.[0].customer?.name}</Typography>
+              <Typography variant="h5" color="initial" fontWeight={500}>{data?.[0]?.customer?.name}</Typography>
               <Box display="flex" gap={"15px"} mt={1}>
                 <Box display="flex" gap="5px">
                     <CallIcon/>
-                    <Typography variant="body1" color="initial">{data?.[0].customer?.phone}</Typography>
+                    <Typography variant="body1" color="initial">{data?.[0]?.customer?.phone}</Typography>
                 </Box>
                 <Box display="flex" gap="5px">
                     <EmailIcon/>
-                    <Typography variant="body1" color="initial">{data?.[0].customer?.email}</Typography>
+                    <Typography variant="body1" color="initial">{data?.[0]?.customer?.email}</Typography>
                 </Box>
               </Box>
             </Box>
@@ -202,21 +290,16 @@ function Invoice({}:Props) {
                         Input your desired date to be moved on
                     </Typography>
                     <Grid container spacing={2}>
-                        <Grid item md={8} xs={12}>
+                        <Grid item xs={12} sx={{marginBottom:"25px"}}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoContainer components={['DatePicker']}>
-                                    <DatePicker slotProps={{ textField: { fullWidth: true } }} label="Basic date picker" />
+                                    <DatePicker 
+                                      slotProps={{ textField: { fullWidth: true } }} 
+                                      label="Schedule"
+                                      onChange={(newDate: string | number | Date | null) => setSchedule(dayjs(newDate).format('YYYY-MM-DD'))}
+                                    />
                                 </DemoContainer>
                             </LocalizationProvider>
-                        </Grid>
-                        <Grid item md={4} xs={12} marginTop={"8px"}>
-                            <TextField
-                                id="reason"
-                                label=" Reason"
-                                multiline
-                                fullWidth
-                                required
-                            />
                         </Grid>
                         <Grid item xs={12} sx={{marginBottom:"25px"}}>
                             <TextField
@@ -225,14 +308,23 @@ function Invoice({}:Props) {
                                 multiline
                                 fullWidth
                                 required
+                                onChange={(e)=>{setNote(e.target.value)}}
                             />
                         </Grid>
-
                         <Grid item xs={5}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                            <Button variant="text" sx={{color:"black"}}  onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7}>
-                            <Button variant="contained" fullWidth>Send</Button>
+                            <Button 
+                            variant="contained" 
+                            fullWidth 
+                            onClick={()=>{
+                              setOpen(""); 
+                              // submit("rescheduling", note);
+                              submitReschedule();
+                            }}>
+                              Send
+                            </Button>
                         </Grid>
                     </Grid>
                 </>:""}
@@ -251,14 +343,15 @@ function Invoice({}:Props) {
                                 multiline
                                 fullWidth
                                 required
+                                onChange={(e)=>{setNote(e.target.value)}}
                             />
                         </Grid>
 
                         <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                            <Button variant="text" sx={{color:"black"}} onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
-                            <Button variant="contained" fullWidth>Send</Button>
+                            <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("refunding", note)}}>Send</Button>
                         </Grid>
                     </Grid>
                 </>:""}
@@ -277,39 +370,42 @@ function Invoice({}:Props) {
                                 multiline
                                 fullWidth
                                 required
+                                onChange={(e)=>{setNote(e.target.value)}}
                             />
                         </Grid>
                         <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                            <Button variant="text" sx={{color:"black"}} onClick={()=>{setOpen(""); }} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
-                            <Button variant="contained" fullWidth>Send</Button>
+                            <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("cancelling", note)}}>Send</Button>
                         </Grid>
                     </Grid>
                 </>:""}
                 {open ==="rate"?<>
+                  <form onSubmit={submitFeedback}>
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
-                        Set Schedule
+                      Set Schedule
                     </Typography>
                     <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
-                        Specify the date you want to stay with us
+                      Specify the date you want to stay with us
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography variant="subtitle2" color="initial">Ratings</Typography>
-                            <RateInput/>
+                          <Typography variant="subtitle2" color="initial">Ratings</Typography>
+                          <RateInput setRate={setRatingForm} rate={ratingForm}/>
                         </Grid>
                         <Grid item xs={12} marginBottom={"20px"}>
-                            <Typography variant="subtitle2" sx={{marginBottom:"10px"}} color="initial">Feedback</Typography>
-                            <TextField id="feedback" fullWidth multiline/>
+                          <Typography variant="subtitle2" sx={{marginBottom:"10px"}} color="initial">Feedback</Typography>
+                          <TextField id="feedback" fullWidth multiline value={ratingForm.feedback} onChange={(e)=>{setRatingForm({...ratingForm,feedback:e.target.value})}}/>
                         </Grid>
                         <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                            <Button variant="text" sx={{color:"black"}} onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
-                            <Button variant="contained" fullWidth>Send</Button>
+                          <Button variant="contained" fullWidth type='submit'>Send</Button>
                         </Grid>
                     </Grid>
+                  </form>
                 </>:""}
                 {open ==="viewReceipt"?<>
                     <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
@@ -319,16 +415,18 @@ function Invoice({}:Props) {
                         Attached Image for receipt 
                     </Typography>
                     <Grid container spacing={2}>
+                      { data?.[0]?.receipts?.map((receipt:any)=>(
                         <Grid item xs={12} sx={{marginBottom:"25px",overflowY:"scroll",maxHeight:"500px"}}>
-                            <img style={{width:"100%"}} src="https://sp-uploads.s3.amazonaws.com/uploads/services/2452054/20220310214231_622a70c730534_gcash_skypay_paybills_10032022173641.png_blurred.jpeg" alt="" />
-                        </Grid>
+                          <img style={{width:"100%"}} src={receipt} alt="" />
+                      </Grid>
+                      ))}
 
-                        <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
-                        </Grid>
-                        <Grid item xs={7} marginBottom={"20px"}>
+                      <Grid item xs={5} marginBottom={"20px"}>
+                          <Button variant="text"  sx={{color:"black"}} onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                      </Grid>
+                        {/* <Grid item xs={7} marginBottom={"20px"}>
                             <Button variant="contained" fullWidth>Send</Button>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                 </>:""}
             </Box>

@@ -39,6 +39,7 @@ export interface Fee {
 
 export interface Accommodation {
     accommodationId: string;
+    title: string;
     description: string;
     pax: string;
     image: string;
@@ -83,6 +84,7 @@ export type CreateAccommodation = {
 
 export type UpdateAccommodation = {
     accommodationId: string;
+    title?: string;
     description?: string;
     pax?: string;
     image?: string;
@@ -94,6 +96,12 @@ export type GetAccommodations = {
     accommodationId?: string;
     schedule?: number;
     shift?: Shift;
+    all?: boolean;
+}
+
+export type UpdateInclusions = {
+    accommodationId: string;
+    inclusions: Omit<Inclusion, 'accommodationId'>[];
 }
 
 /* HELPERS */

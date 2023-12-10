@@ -21,8 +21,9 @@ interface AccommodationData {
 
 interface GetAccommodationData {
   accommodationId?: string | null;
-  schedule?: any | null;
+  schedule?: number;
   shift?: string | null;
+  all?: boolean | null
 }
 
 interface ShiftData {
@@ -73,6 +74,14 @@ function useAccommodation() {
     });
   };
 
+  const updateInclusions = (content: any) => {
+    makeRequest({
+      method: 'patch',
+      url: `/accommodations/inclusions`,
+      data: content,
+    });
+  };
+
   return {
     data,
     loading,
@@ -81,7 +90,8 @@ function useAccommodation() {
     createAccommodation,
     updateAccommodation,
     createShift,
-    updateShift
+    updateShift,
+    updateInclusions
   };
 }
 

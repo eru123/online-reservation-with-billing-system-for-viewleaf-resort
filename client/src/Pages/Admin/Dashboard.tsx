@@ -14,12 +14,29 @@ import TableCell from '@mui/material/TableCell';
 import { Chip } from '@mui/material';
 import { Link } from 'react-router-dom';
 import useReservation from '../../Hooks/useReservation';
+import dayjs from 'dayjs';
 
 function Dashboard() {
   const { data: reservations, loading: reservationLoading, getReservation } = useReservation();
   const [filteredReservations, setFilteredReservations] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-
+  const [reportCardValue,setReportCardValue] = useState(0);
+  function getTotalAccommodation(reservations: any): number {
+    let totalAccommodation = 0;
+  
+    for (const reservation of reservations) {
+      // Check if reservation has invoices and invoices is an array with at least one element
+      if (
+        reservation?.invoices &&
+        Array.isArray(reservation.invoices) &&
+        reservation.invoices.length > 0
+      ) {
+        totalAccommodation += reservation.invoices.length;
+      }
+    }
+    return totalAccommodation;
+  }
+  
   useEffect(() => {
     getReservation();
   }, []);
@@ -27,21 +44,24 @@ function Dashboard() {
   useEffect(() => {
     // Filter reservations based on specific statuses and today's date
     if (reservations) {
-      const currentDate = new Date().toISOString().split('T')[0]; // Get today's date
+      const currentDate = dayjs().format('YYYY-MM-DD'); // Get today's date
       const filtered = reservations.filter((reservation:any) => {
-        const scheduleDate = new Date(reservation.schedule).toISOString().split('T')[0];
+        const scheduleDate = dayjs(reservation.schedule).format('YYYY-MM-DD');
+        console.log(currentDate + " - - " + scheduleDate);
+
         return (
-          ['approved', 'rescheduling'].includes(reservation.status) && scheduleDate === currentDate 
+          ['approved', 'rescheduling','checked in', 'checked out'].includes(reservation.status) && scheduleDate === currentDate 
         );
       });
       setFilteredReservations(filtered);
+      setReportCardValue(getTotalAccommodation(filtered));
     }
   }, [reservations]);
   
   if (reservationLoading) return <>loading</>;
 
   return (
-    <div>
+    <Box >
       <Typography variant="h4" fontWeight={600} color="primary">
         Dashboard
       </Typography>
@@ -49,7 +69,7 @@ function Dashboard() {
         Here are the list of reservation for today
       </Typography>
       <Grid container spacing={2}>
-        <Grid item md={9}>
+        <Grid item lg={9} sm={12} mb={4}>
           <Box display="flex" gap={"15px"}>
             <Box sx={{ flexGrow: "1" }}>
               <Box sx={{ display: 'flex', alignItems: 'center', background: "white", width: "300px", padding: "0 0 0 .5em", border: "1px solid #B5B5B5", borderRadius: "8px" }}>
@@ -74,31 +94,39 @@ function Dashboard() {
                 <TableRow>
                   <TableCell>Reference No.</TableCell>
                   <TableCell>Name</TableCell>
-                  <TableCell>Check In </TableCell>
-                  <TableCell>Status </TableCell>
+                  <TableCell>Date </TableCell>
+                  <TableCell align='center'>Status </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {filteredReservations.map((reservation: any) => (
-                  <TableRow key={reservation.reservationId} sx={{ background: "#D7D7D7" }} component={Link} to="/admin/reservation/view">
+                  <TableRow key={reservation.reservationId} sx={{ background: "#D7D7D7" }} component={Link}  to={`/admin/invoice/${reservation.reservationId}`}>
                     <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
                     <TableCell>{reservation.customer.name}</TableCell>
                     <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })}</TableCell>
-                    <TableCell><Chip label={reservation.status} color="primary" /></TableCell>
+                    <TableCell align='center'>
+                      <Chip 
+                        label={reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)} 
+                        color={
+                          reservation.status === 'cancelled' || reservation.status === 'declined' || reservation.status === 'refunded'   ? "error" : (reservation.status === "checked out" ? "success" : "info")
+                        }
+                      />
+                      
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
         </Grid>
-        <Grid item md={3}>
-          <Box display="flex" flexDirection={"column"} gap={"15px"} >
-            <ReportCard variant='reservation' title={"Today’s Reservation"} value={5} />
-            <ReportCard variant='accommodation' title={"Today’s Accommodation"} value={25} />
+        <Grid item lg={3} sm={12}>
+          <Box  sx={{display:"flex", flexDirection:{md:"column",sm:"row"}, gap:"15px"}} >
+            <ReportCard variant='reservation' title={"Today’s Reservation"} value={filteredReservations?.length} />
+            <ReportCard variant='accommodation' title={"Today’s Accommodation"} value={reportCardValue} />
           </Box>
         </Grid>
       </Grid>
-    </div>
+    </Box>
   )
 }
 

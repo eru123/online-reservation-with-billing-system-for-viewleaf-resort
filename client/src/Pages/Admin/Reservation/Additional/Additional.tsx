@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box';
 import AccommodationCard from '../../../../Components/AccommodationCard';
@@ -14,8 +14,251 @@ import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import Accommodation from './Accommodation';
 
+import { useParams, useNavigate } from 'react-router-dom';
+import useReservation from '../../../../Hooks/useReservation';
+import useContent from '../../../../Hooks/useContent';
+
+type Accommodation = {
+  title: string;
+  description: string;
+  pax: string;
+  image: string;
+  fees: Array<{
+    shift: string;
+    rate: string;
+    guestFee: {
+      adult: number;
+      kids: number;
+    };
+  }>;
+  type: string;
+  availability: string;
+  inclusions: Array<{
+    accommodationId: string;
+    name: string;
+    price: number;
+  }>;
+  accommodationId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type Invoice = {
+  invoices: Array<{
+    accommodation: Accommodation;
+  }>;
+};
+
+
+
 function Additional() {
-    const [step,setStep] = useState(1);
+  const {id} = useParams();
+  const navigate = useNavigate();
+  const [step,setStep] = useState(1);
+  const {data: reservation, loading, error, getReservation, updateReservation, rescheduleReservation, extrasReservation} = useReservation();
+  const {data:content, loading:contentLoading, error:contentError, getContent} = useContent();
+
+  const [form, setForm] = useState<any>({
+    shift: "day",
+    schedule: new Date()
+  });
+
+  const submit = () => {
+    extrasReservation(form);
+    alert("Submitted!")
+    navigate(`/admin/invoice/${id}`)
+  }
+
+  const getShiftIndex = (shift: string) => {
+    switch(shift){
+      case 'day':
+        return 0;
+      case 'night':
+        return 1;
+      case 'whole day':
+        return 2;
+      default:
+        return 0;
+    }
+  }
+
+  const updateSchedule = (date: any, shift: any) => {
+    setForm((prevForm: any) => ({
+      ...prevForm,
+      schedule: parseInt(date||""),
+      shift: shift==="0"? "day": shift==="1"? "night": "whole day"
+    }));
+  }
+
+  const selectAccommodation = (accommodationData: any) => {
+    // Add shift property to the accommodationData
+    const modifiedAccommodationData = { ...accommodationData, shift: form.shift==="0"? "day": form.shift==="1"? "night": "whole day" };
+  
+    if (form?.accommodations?.some((item: any) => item.accommodationId === accommodationData.accommodationId)) {
+      // If the accommodation with the same accommodationId exists, remove it
+      setForm((prevForm: { accommodations: any }) => ({
+        ...prevForm,
+        accommodations: prevForm.accommodations.filter((item: any) => item.accommodationId !== accommodationData.accommodationId),
+      }));
+    } else {
+      setForm((prevForm: { accommodations: any }) => ({
+        ...prevForm,
+        accommodations: [
+          ...(prevForm.accommodations || []),
+          {
+            ...modifiedAccommodationData,
+            inclusions: modifiedAccommodationData.inclusions.map((inclusion: any) => ({
+              ...inclusion,
+              quantity: 0,
+            })),
+          },
+        ],
+      }));
+    }
+  };
+
+  const editGuests = (accommodationId: string, guests: { adult?: number; children?: number; senior?: number; pwd?: number }) => {
+    setForm((prevForm: { accommodations: any }) => ({
+      ...prevForm,
+      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string, guests?: any }) =>
+        accommodation.accommodationId === accommodationId
+          ? { ...accommodation, guests: { ...(accommodation.guests || {}), ...guests } }
+          : accommodation
+      ),
+    }));
+  };
+
+  const addInclusion = (accommodationId: string, inclusion: any) => {
+    setForm((prevForm: { accommodations: any }) => ({
+      ...prevForm,
+      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any }) => {
+        if (accommodation.accommodationId === accommodationId) {
+          // Check if the inclusion already exists in the inclusions array
+          const existingInclusion = accommodation.inclusions.find((existing: any) => existing.name === inclusion.name);
+  
+          // If it exists, update the quantity
+          if (existingInclusion) {
+            return {
+              ...accommodation,
+              inclusions: accommodation.inclusions.map((existing: any) =>
+                existing.name === inclusion.name
+                  ? { ...existing, quantity: inclusion.quantity }
+                  : existing
+              ),
+            };
+          } else {
+            // If it doesn't exist, add it with the given quantity
+            return {
+              ...accommodation,
+              inclusions: [...(accommodation.inclusions || []), { ...inclusion, quantity: inclusion.quantity }],
+            };
+          }
+        } else {
+          return accommodation;
+        }
+      }),
+    }));
+  };
+
+  const calculateCosts = () => {
+    let totalAll = 0
+    let minimumAll = 0
+    let inclusionsAll = 0
+    let guestsAll = 0
+    
+    setForm((prevForm: { accommodations: any }) => ({
+      ...prevForm,
+      accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any; fees: any; guests: any; }) => {
+        let total = 0
+        let minimum = 0
+        let inclusions = 0
+        let guests = 0
+
+        minimum += parseInt(accommodation.fees[getShiftIndex(form.shift)].rate)
+        minimumAll += parseInt(accommodation.fees[getShiftIndex(form.shift)].rate)
+
+          if (accommodation.inclusions) {
+            accommodation.inclusions?.map((inclusion: any) => {
+              if (inclusion.quantity) {
+                inclusions += (inclusion.quantity * inclusion.price)
+                inclusionsAll += (inclusion.quantity * inclusion.price)
+              }
+            })
+          }
+
+          if (accommodation.guests) {
+            if (accommodation.guests.adult) {
+              guests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult)
+              guestsAll += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult)
+            }
+            if(accommodation.guests.children) {
+              guests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.kids)
+              guestsAll += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.kids)
+            }
+            if(accommodation.guests.senior) {
+              guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult) * 0.8)
+              guestsAll += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult) * 0.8)
+            }
+            if(accommodation.guests.pwd) {
+              guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult) * 0.8)
+              guestsAll += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult) * 0.8)
+            }
+    
+            total = minimum +  inclusions + guests
+            
+          }
+
+        return {
+          ...accommodation,
+          total: content?.promo === 0 ? total : total * ((100 - content?.promo) / 100) ,
+          minimum: content?.promo === 0 ? minimum : minimum * ((100 - content?.promo) / 100)
+        }
+
+      }),
+      costs: {
+        total: content?.promo === 0 ? (minimumAll +  inclusionsAll + guestsAll) : (minimumAll +  inclusionsAll + guestsAll) * ((100 - content?.promo) / 100) ,
+        guests: content?.promo === 0 ? guestsAll : guestsAll * ((100 - content?.promo) / 100) ,
+        inclusions: content?.promo === 0 ? inclusionsAll : inclusionsAll * ((100 - content?.promo) / 100),
+        accommodations: content?.promo === 0 ? minimumAll : minimumAll * ((100 - content?.promo) / 100)
+      },
+    }));
+  }
+
+  useEffect(()=>{
+
+    calculateCosts()
+
+    if (!content){
+      getContent();
+    }
+   
+    if (!reservation) {
+      getReservation({
+        reservationId: id
+      })
+    }
+
+    if (reservation && form?.accommodations?.length ===0) {
+      setForm((prevForm: { accommodations: any }) => ({
+        ...prevForm,
+        schedule: new Date(reservation[0].schedule).getTime(),
+        reservationId: reservation[0].reservationId,
+        shift: reservation[0].invoices[0].shift,
+        accommodations: reservation[0].invoices.map((invoice: any) => ({
+          ...invoice.accommodation,
+          shift: reservation[0].invoices[0].shift,
+          inclusions: invoice.accommodation.inclusions.map((inclusion: any) => ({
+            ...inclusion,
+            quantity: 0, // Set the quantity to 0 for each inclusion
+          })),
+        })),
+      }));
+    }
+
+    console.log(form)
+
+  }, [form])
+
     return (
         
         <Container maxWidth="lg">
@@ -26,15 +269,25 @@ function Additional() {
                         <Typography variant="h6" fontWeight={400} color="initial" >You can choose multiple accommodation</Typography>
                     </div>
                     <Box display="flex" gap={"10px"}>
-                        <Button variant="text" color="primary">
+                        {/* <Button variant="text" color="primary">
                             Back
-                        </Button>
-                        <Button variant="contained" color="primary" onClick={()=>{setStep(2)}}>
-                            Next
+                        </Button> */}
+                        <Button 
+                          variant="contained" 
+                          color="primary" 
+                          // onClick={()=>{setStep(2)}}
+                          onClick={submit}
+                        >
+                            Confirm
                         </Button>
                     </Box>
                 </Box>
-                <Accommodation/>
+                <Accommodation
+                  form={form}
+                  selectAccommodation={selectAccommodation}
+                  editGuests={editGuests}
+                  addInclusion={addInclusion}
+                />
             </>:""}
             {step===2?<>
                 <Box display="flex" alignItems={"center"} sx={{marginTop:"50px",marginBottom:"2em"}}>
@@ -46,7 +299,12 @@ function Additional() {
                         <Button variant="text" color="primary" onClick={()=>{setStep(1)}}>
                             Back
                         </Button>
-                        <Button variant="contained" color="primary" href='/admin/reservation/view'>
+                        <Button 
+                          variant="contained" 
+                          color="primary" 
+                          // href='/admin/reservation/view'
+                          onClick={submit}
+                        >
                             Set as Paid
                         </Button>
                     </Box>

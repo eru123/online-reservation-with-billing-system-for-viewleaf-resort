@@ -22,6 +22,7 @@ function useRequest(): RequestHook {
   const [error, setError] = useState<Error | null>(null);
 
   const makeRequest = async (config: RequestConfig) => {
+    console.log(config)
     setLoading(true);
     try {
       const response = await axios(config);
@@ -30,7 +31,11 @@ function useRequest(): RequestHook {
     } catch (error: any) {
       setError(error);
       console.error('Error making request:', error);
-      alert(error)
+      if (error?.response?.data?.errors?.[0]?.message) {
+        alert(error?.response?.data?.errors?.[0]?.message);
+      } else {
+        alert(error?.response?.data?.message);
+      }
     } finally {
       setLoading(false);
     }

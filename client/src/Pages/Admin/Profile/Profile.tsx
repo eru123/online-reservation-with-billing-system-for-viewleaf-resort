@@ -6,6 +6,8 @@ import Chip from '@mui/material/Chip';
 import Modal from '@mui/material/Modal';
 import { Grid,Button, TextField, IconButton } from '@mui/material'
 
+import { useAuth } from '../../../Hooks/useAuth';
+
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -22,35 +24,34 @@ const style = {
 
 
 function Profile() {
+    const{User} = useAuth();
     const [open, setOpen] = useState("");
     return <>
       <Box display={"flex"} flexWrap={"wrap"}>
           <Box width={"300px"} >
               <Box position={"sticky"} sx={{display:"flex",flexDirection:"column",gap:"2em", alignItems:"center"}} top={"10px"} >
                   <Avatar
-                      alt="Remy Sharp"
+                      alt={User().username}
                       src="/static/images/avatar/1.jpg"
                       sx={{ width: 150, height: 150}}
                   />
-                  <Chip label="Change Photo" variant="outlined" onClick={()=>{setOpen("changePhoto")}} />
+                  {/* <Chip label="Change Photo" variant="outlined" onClick={()=>{setOpen("changePhoto")}} /> */}
               </Box>
           </Box>
           <Box flexGrow={"1"} minHeight={"100vh"} paddingTop={"20px"}>
               <Typography variant="h4" fontWeight={600} color="primary" mb={"15px"}>My Profile</Typography>
               <Box display={"flex"} mb={"10px"}>
-                  <Typography variant="h5" fontWeight={600} color="initial" sx={{flexGrow:"1"}}>Details</Typography>
-                  <Chip label="Edit details" variant="outlined" onClick={()=>{setOpen("editDetails")}} />
+                <Typography variant="h5" fontWeight={600} color="initial" sx={{flexGrow:"1"}}>Details</Typography>
+                {/* <Chip label="Edit details" variant="outlined" onClick={()=>{setOpen("editDetails")}} /> */}
               </Box>
-              <Typography variant="h6" color="initial">Mich Rolen Morales</Typography>
+              <Typography variant="h6" color="initial">{User().username}</Typography>
               <Typography variant="subtitle2" color="#656565"  mb={"8px"}>FULL NAME</Typography>
-              <Typography variant="h6" color="initial">0923-232-1231</Typography>
-              <Typography variant="subtitle2" color="#656565"  mb={"8px"}>CONTACT NUMBER</Typography>
-              <Typography variant="h6" color="initial">michmorales@gmail.com</Typography>
+              <Typography variant="h6" color="initial">{User().email}</Typography>
               <Typography variant="subtitle2" color="#656565"  mb={"8px"}>EMAIL</Typography>
-              <Box display={"flex"} mb={"15px"} mt={"10px"}>
+              {/* <Box display={"flex"} mb={"15px"} mt={"10px"}>
                   <Typography variant="h5" fontWeight={600} color="initial" sx={{flexGrow:"1"}}>Password</Typography>
-              </Box>
-              <Chip label="Change Password" variant="outlined" onClick={()=>{setOpen("editPassword")}} />
+              </Box> */}
+              {/* <Chip label="Change Password" variant="outlined" onClick={()=>{setOpen("editPassword")}} /> */}
           </Box>
       </Box>
       <Modal
