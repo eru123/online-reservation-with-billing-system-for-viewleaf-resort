@@ -1,5 +1,5 @@
 import {
-    // AccommodationAvailbility,
+    AccommodationAvailbility,
     AccommodationDocument,
     AccommodationShift,
     AccommodationType,
@@ -66,7 +66,11 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
         .flat();
 
     // Get all available accommodations
-    let accommodations: AccommodationDocument[] = await AccommodationModel.find().exec();
+    // let accommodations: AccommodationDocument[] = await AccommodationModel.find().exec();
+
+    let accommodations: AccommodationDocument[] = await AccommodationModel.find({
+        availability: AccommodationAvailbility.AVAILABLE
+    }).exec();
 
     const hasReservedWholeResort = accommodations.some((accommodation) =>
         invoiceAccommodations.some(
@@ -126,7 +130,7 @@ export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAcc
         checker.checkType(accommodationId, 'string', 'accommodationId');
         if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
-        
+
         // Get the accommodation with the given accommodationId
         accommodations = accommodations.filter((accommodation) => accommodation.accommodationId === accommodationId);
     }
