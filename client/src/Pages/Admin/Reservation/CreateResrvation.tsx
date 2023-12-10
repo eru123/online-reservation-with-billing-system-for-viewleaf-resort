@@ -182,13 +182,11 @@ function CreateResrvation() {
         let guests = 0
 
         minimum += parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].rate)
-        minimumAll += parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].rate)
-
+        
           if (accommodation.inclusions) {
             accommodation.inclusions?.map((inclusion: any) => {
               if (inclusion.quantity) {
                 inclusions += (inclusion.quantity * inclusion.price)
-                inclusionsAll += (inclusion.quantity * inclusion.price)
               }
             })
           }
@@ -196,24 +194,21 @@ function CreateResrvation() {
           if (accommodation.guests) {
             if (accommodation.guests.adult) {
               guests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.adult)
-              guestsAll += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.adult)
             }
             if(accommodation.guests.children) {
               guests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.kids)
-              guestsAll += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.kids)
             }
             if(accommodation.guests.senior) {
               guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.adult) * 0.8)
-              guestsAll += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.adult) * 0.8)
             }
             if(accommodation.guests.pwd) {
               guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.adult) * 0.8)
-              guestsAll += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.adult) * 0.8)
             }
-    
             total = minimum +  inclusions + guests
-            
           }
+
+          minimumAll += minimum
+          totalAll += total
 
         return {
           ...accommodation,
@@ -223,10 +218,12 @@ function CreateResrvation() {
 
       }),
       costs: {
-        total: content?.promo === 0 ? (minimumAll +  inclusionsAll + guestsAll) : (minimumAll +  inclusionsAll + guestsAll) * ((100 - content?.promo) / 100) ,
-        guests: content?.promo === 0 ? guestsAll : guestsAll * ((100 - content?.promo) / 100) ,
-        inclusions: content?.promo === 0 ? inclusionsAll : inclusionsAll * ((100 - content?.promo) / 100),
-        accommodations: content?.promo === 0 ? minimumAll : minimumAll * ((100 - content?.promo) / 100)
+        // total: content?.promo === 0 ? (totalAll/2) : (totalAll/2) * ((100 - content?.promo) / 100) ,
+        // guests: content?.promo === 0 ? guestsAll : guestsAll * ((100 - content?.promo) / 100) ,
+        // inclusions: content?.promo === 0 ? inclusionsAll : inclusionsAll * ((100 - content?.promo) / 100),
+        // accommodations: content?.promo === 0 ? (minimumAll/2) : (minimumAll/2) * ((100 - content?.promo) / 100)
+        total: (totalAll/2),
+        accommodations: (minimumAll/2)
       },
     }));
   }
@@ -269,6 +266,8 @@ function CreateResrvation() {
   useEffect(() => {
     updateSchedule(bookingSchedule.date, bookingSchedule.shift)
     calculateCosts()
+
+    console.log(form)
 
     if (!content || content.length === 0){
       getContent();
@@ -394,10 +393,12 @@ function CreateResrvation() {
                   form={form}
                 />
                 <Box sx={{padding:"0 32px"}}>
-                    {/* <Typography variant="subtitle1" textAlign="end" color="initial" fontWeight={600} sx={{opacity:".6"}}>TOTAL</Typography>
-                    <Typography variant="h5" textAlign="end" color="initial" fontWeight={600}>₱300</Typography> */}
+                    <Typography variant="subtitle1" textAlign="end" color="initial" fontWeight={600} sx={{opacity:".6"}}>TOTAL</Typography>
+                    <Typography variant="h5" textAlign="end" color="initial" fontWeight={600}>₱ {form?.costs?.total}</Typography> 
+
                     <Typography variant="h6" color="initial">TOTAL : {content?.promo === 0 ? `₱${form?.costs?.total}` : ` from ₱${form?.costs?.total} to  ₱${form?.costs?.total * ((100 - content?.promo) / 100)} `} </Typography>
                     <Typography variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of {content?.promo === 0 ? `₱${form?.costs?.accommodations}` : ` from ₱${form?.costs?.accommodations} to  ₱${form?.costs?.accommodations * ((100 - content?.promo) / 100)} `}  </Typography>
+                
                 </Box>
                 
             </>:""}
