@@ -161,7 +161,8 @@ function EditAccommodation() {
     }
     else{
       getAccommodation({
-        accommodationId: id
+        accommodationId: id,
+        all: true
       })
     }
   }, [accommodation])

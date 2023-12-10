@@ -126,6 +126,7 @@ export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAcc
         checker.checkType(accommodationId, 'string', 'accommodationId');
         if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
+        
         // Get the accommodation with the given accommodationId
         accommodations = accommodations.filter((accommodation) => accommodation.accommodationId === accommodationId);
     }
