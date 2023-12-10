@@ -47,7 +47,7 @@ function Booking() {
   const navigate = useNavigate()
   const [open, setOpen] = React.useState("");
   const {sendEmail, sendReservation} = useEmail();
-  const {data: reservationData, createReservation} = useReservation();
+  const {data: reservationData, error: reservationError, createReservation} = useReservation();
   const [active,setActive] =  useState(1);
   const {date, shift} = useParams();
   const [otpCode, setOtpCode] = useState("");
@@ -363,6 +363,11 @@ function Booking() {
       });
       navigate(`/payment/${reservationData.reservationId}`);
     }
+
+    if (reservationError) {
+      navigate("/");
+    } 
+    
   }, [form, content])
 
   // if (contentLoading) {
