@@ -1,12 +1,12 @@
 import {
-    AccommodationAvailbility,
+    // AccommodationAvailbility,
     AccommodationDocument,
     AccommodationShift,
     AddShift,
     CreateAccommodation,
     Fee,
     GetAccommodations,
-    Shift,
+    // Shift,
     UpdateAccommodation,
     UpdateInclusions,
     UpdateShiftFees
@@ -68,21 +68,21 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
     // Get all available accommodations
     let accommodations: AccommodationDocument[] = await AccommodationModel.find().exec();
 
-    accommodations = accommodations
-        // Filter out accommodations where shift is in invoiceAccommodations
-        .map((accommodation) => {
-            accommodation.fees = accommodation.fees.filter(
-                (fee) =>
-                    !invoiceAccommodations.some(
-                        ({ accommodationId, shift }) =>
-                            accommodationId === accommodation.accommodationId && shift === fee.shift
-                    )
-            );
+    // accommodations = accommodations
+    //     // Filter out accommodations where shift is in invoiceAccommodations
+    //     .map((accommodation) => {
+    //         accommodation.fees = accommodation.fees.filter(
+    //             (fee) =>
+    //                 !invoiceAccommodations.some(
+    //                     ({ accommodationId, shift }) =>
+    //                         accommodationId === accommodation.accommodationId && shift === fee.shift
+    //                 )
+    //         );
 
-            return accommodation;
-        })
-        // Filter out all accommodations where fees are empty
-        .filter(({ fees }) => fees.length > 0);
+    //         return accommodation;
+    //     })
+    //     // Filter out all accommodations where fees are empty
+    //     .filter(({ fees }) => fees.length > 0);
 
     return accommodations;
 }
