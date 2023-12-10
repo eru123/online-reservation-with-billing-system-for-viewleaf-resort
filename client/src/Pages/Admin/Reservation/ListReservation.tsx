@@ -81,7 +81,7 @@ function ListReservation() {
                               <TableRow key={reservation.reservationId} sx={{ background: "white" }} component={Link} to={`/admin/invoice/${reservation.reservationId}`} >
                                 <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
                                 <TableCell>{reservation.customer?.name || "Unknown"}</TableCell>
-                                <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })}</TableCell>
+                                <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })} - {reservation?.invoices[0].shift}</TableCell>
                                 {/* <TableCell></TableCell>
                                 <TableCell></TableCell> */}
                                 {/* <TableCell align='center'> */}
@@ -105,7 +105,7 @@ function ListReservation() {
                               <TableRow key={reservation.reservationId} sx={{ background: "white" }} component={Link} to={`/admin/invoice/${reservation.reservationId}`} >
                                 <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
                                 <TableCell>{reservation.customer?.name || "Unknown"}</TableCell>
-                                <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })}</TableCell>
+                                <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })} - {reservation.invoices[0].shift}</TableCell>
                                 {/* <TableCell></TableCell>
                                 <TableCell></TableCell> */}
                                 {/* <TableCell align='center'> */}
