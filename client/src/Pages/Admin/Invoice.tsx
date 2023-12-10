@@ -176,7 +176,7 @@ function Invoice() {
                 }
                 {status === "cancelling"?
                   <>
-                    <Chip  label="Decline" variant="outlined" onClick={()=>{submit("declined", " ")}} color="primary" />
+                    <Chip  label="Decline" variant="outlined" onClick={()=>{submit("approved", " ")}} color="primary" />
                     <Chip  label="Accept" variant="filled" onClick={()=>{submit("cancelled", " ")}} color="primary" />
                   </>:""    
                 }
