@@ -217,6 +217,7 @@ function Booking() {
             total = minimum +  inclusions + guests
             
           }
+          totalAll += total
 
         // return {
         //   ...accommodation,
@@ -231,17 +232,10 @@ function Booking() {
         }
 
       }),
-      // costs: {
-      //     total: minimumAll +  inclusionsAll + guestsAll ,
-      //     guests: guestsAll ,
-      //     inclusions: inclusionsAll,
-      //     accommodations: minimumAll
-      // },
+      
       costs: {
-        total: content?.promo === 0 ? (minimumAll +  inclusionsAll + guestsAll) : (minimumAll +  inclusionsAll + guestsAll) * ((100 - content?.promo) / 100) ,
-        guests: content?.promo === 0 ? guestsAll : guestsAll * ((100 - content?.promo) / 100) ,
-        inclusions: content?.promo === 0 ? inclusionsAll : inclusionsAll * ((100 - content?.promo) / 100),
-        accommodations: content?.promo === 0 ? minimumAll : minimumAll * ((100 - content?.promo) / 100)
+        total: (totalAll/2),
+        accommodations: (minimumAll/2)
       },
     }));
   }
