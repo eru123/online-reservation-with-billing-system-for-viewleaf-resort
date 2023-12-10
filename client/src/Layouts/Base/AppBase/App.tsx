@@ -72,7 +72,7 @@ function App() {
 
 
 
-          <NavItem  title="Notification" link="/admin/notifications" icon={<NotificationsIcon/>} type={"title"} />
+          {/* <NavItem  title="Notification" link="/admin/notifications" icon={<NotificationsIcon/>} type={"title"} /> */}
 
         </div>
       </AppBar>
