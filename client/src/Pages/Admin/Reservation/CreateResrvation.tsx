@@ -217,16 +217,16 @@ function CreateResrvation() {
 
         return {
           ...accommodation,
-          total: content?.promo === 0 ? total : total * (content?.promo / 100) ,
-          minimum: content?.promo === 0 ? minimum : minimum * (content?.promo / 100)
+          total: content?.promo === 0 ? total : total * ((100 - content?.promo) / 100) ,
+          minimum: content?.promo === 0 ? minimum : minimum * ((100 - content?.promo) / 100)
         }
 
       }),
       costs: {
-        total: content?.promo === 0 ? (minimumAll +  inclusionsAll + guestsAll) : (minimumAll +  inclusionsAll + guestsAll) * (content?.promo / 100) ,
-        guests: content?.promo === 0 ? guestsAll : guestsAll * (content?.promo / 100) ,
-        inclusions: content?.promo === 0 ? inclusionsAll : inclusionsAll * (content?.promo / 100),
-        accommodations: content?.promo === 0 ? minimumAll : minimumAll * (content?.promo / 100)
+        total: content?.promo === 0 ? (minimumAll +  inclusionsAll + guestsAll) : (minimumAll +  inclusionsAll + guestsAll) * ((100 - content?.promo) / 100) ,
+        guests: content?.promo === 0 ? guestsAll : guestsAll * ((100 - content?.promo) / 100) ,
+        inclusions: content?.promo === 0 ? inclusionsAll : inclusionsAll * ((100 - content?.promo) / 100),
+        accommodations: content?.promo === 0 ? minimumAll : minimumAll * ((100 - content?.promo) / 100)
       },
     }));
   }
@@ -396,8 +396,8 @@ function CreateResrvation() {
                 <Box sx={{padding:"0 32px"}}>
                     {/* <Typography variant="subtitle1" textAlign="end" color="initial" fontWeight={600} sx={{opacity:".6"}}>TOTAL</Typography>
                     <Typography variant="h5" textAlign="end" color="initial" fontWeight={600}>₱300</Typography> */}
-                    <Typography variant="h6" color="initial">TOTAL : {content?.promo === 0 ? `₱${form?.costs?.total}` : ` from ₱${form?.costs?.total} to  ₱${form?.costs?.total * (content?.promo / 100)} `} </Typography>
-                    <Typography variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of {content?.promo === 0 ? `₱${form?.costs?.accommodations}` : ` from ₱${form?.costs?.accommodations} to  ₱${form?.costs?.accommodations * (content?.promo / 100)} `}  </Typography>
+                    <Typography variant="h6" color="initial">TOTAL : {content?.promo === 0 ? `₱${form?.costs?.total}` : ` from ₱${form?.costs?.total} to  ₱${form?.costs?.total * ((100 - content?.promo) / 100)} `} </Typography>
+                    <Typography variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of {content?.promo === 0 ? `₱${form?.costs?.accommodations}` : ` from ₱${form?.costs?.accommodations} to  ₱${form?.costs?.accommodations * ((100 - content?.promo) / 100)} `}  </Typography>
                 </Box>
                 
             </>:""}

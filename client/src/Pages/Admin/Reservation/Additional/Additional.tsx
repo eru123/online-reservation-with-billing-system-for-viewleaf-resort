@@ -210,16 +210,16 @@ function Additional() {
 
         return {
           ...accommodation,
-          total: content?.promo === 0 ? total : total * (content?.promo / 100) ,
-          minimum: content?.promo === 0 ? minimum : minimum * (content?.promo / 100)
+          total: content?.promo === 0 ? total : total * ((100 - content?.promo) / 100) ,
+          minimum: content?.promo === 0 ? minimum : minimum * ((100 - content?.promo) / 100)
         }
 
       }),
       costs: {
-        total: content?.promo === 0 ? (minimumAll +  inclusionsAll + guestsAll) : (minimumAll +  inclusionsAll + guestsAll) * (content?.promo / 100) ,
-        guests: content?.promo === 0 ? guestsAll : guestsAll * (content?.promo / 100) ,
-        inclusions: content?.promo === 0 ? inclusionsAll : inclusionsAll * (content?.promo / 100),
-        accommodations: content?.promo === 0 ? minimumAll : minimumAll * (content?.promo / 100)
+        total: content?.promo === 0 ? (minimumAll +  inclusionsAll + guestsAll) : (minimumAll +  inclusionsAll + guestsAll) * ((100 - content?.promo) / 100) ,
+        guests: content?.promo === 0 ? guestsAll : guestsAll * ((100 - content?.promo) / 100) ,
+        inclusions: content?.promo === 0 ? inclusionsAll : inclusionsAll * ((100 - content?.promo) / 100),
+        accommodations: content?.promo === 0 ? minimumAll : minimumAll * ((100 - content?.promo) / 100)
       },
     }));
   }

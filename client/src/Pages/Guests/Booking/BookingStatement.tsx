@@ -21,28 +21,16 @@ function BookingStatement({additional, form, invoices}:Props) {
   // console.log(form)
 
   const calculateCost = (data: any) =>{
-    let inclusions = 0
-    let guests = 0
-    let accommodations = 0
+    let minimum = 0
     let total = 0
 
     data[0].invoices.map((item: any)=>{
-      accommodations += item.rate
-
-      guests += 
-        parseFloat(item.guests.adult) * parseFloat(item.guestFee.adult) +
-        parseFloat(item.guests.kids) * parseFloat(item.guestFee.kids) +
-        parseFloat(item.guests.senior) * (parseFloat(item.guestFee.adult) * 0.8) +
-        parseFloat(item.guests.pwd) * (parseFloat(item.guestFee.adult) * 0.8)
-
-      item.inclusions.map((inclusion: any)=>{
-        inclusions += inclusion.price * inclusion.quantity
-      })
+      minimum += item.minimum
+      total += item.total
     })
     
-    total = accommodations + inclusions + guests
 
-    return {total: total, minimum: accommodations}
+    return {total: total, minimum: minimum}
   }
 
   return <>
