@@ -148,44 +148,49 @@ function Report() {
     return filteredData;
   };
 
+  const flattenObject = (obj: any, parentKey = ''): any => {
+    return Object.keys(obj).reduce((acc: any, key: string) => {
+      const newKey = parentKey ? `${parentKey}_${key}` : key;
+  
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        const nestedObj = flattenObject(obj[key], newKey);
+        acc = { ...acc, ...nestedObj };
+      } else {
+        acc[newKey] = obj[key];
+      }
+  
+      return acc;
+    }, {});
+  };
+  
   const exportToCSV = (data: any) => {
     // Flatten nested objects
     const flattenedData = data.map((item: any) => {
-      const flatItem: any = {};
-      Object.keys(item).forEach((key) => {
-        if (typeof item[key] === 'object') {
-          // If the value is an object, flatten it
-          Object.keys(item[key]).forEach((nestedKey) => {
-            flatItem[`${key}_${nestedKey}`] = item[key][nestedKey];
-          });
-        } else {
-          flatItem[key] = item[key];
-        }
-      });
-      return flatItem;
+      return flattenObject(item);
     });
-
+  
     const csvData = Papa.unparse(flattenedData, {
       header: true,
     });
-
+  
     // Create a Blob
     const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-
+  
     // Create a link to trigger the download
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
     link.download = 'data.csv';
-
+  
     // Append the link to the body
     document.body.appendChild(link);
-
+  
     // Trigger the click event on the link
     link.click();
-
+  
     // Remove the link from the body
     document.body.removeChild(link);
-  }
+  };
+  
   
   useEffect(()=>{
     getReservation();

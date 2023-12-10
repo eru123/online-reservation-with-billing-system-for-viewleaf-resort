@@ -60,7 +60,7 @@ function Accommodation({form, selectAccommodation, editGuests, addInclusion}:Pro
       getAccommodation({
         // schedule: parseInt(form.schedule||"", 10),
         // schedule: new Date(form.schedule).getTime(),
-        schedule: form.schedule,
+        schedule: new Date(form.schedule).getTime(),
         shift: form.shift
       })
     }, [])

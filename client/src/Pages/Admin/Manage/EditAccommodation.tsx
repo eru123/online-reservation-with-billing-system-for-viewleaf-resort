@@ -62,7 +62,7 @@ function EditAccommodation() {
       adultFee: 0,
       kidsFee: 0
     }],
-    availability: "available"
+    availability: ""
   })
 
   async function uploadImage(file: File) {
@@ -161,7 +161,8 @@ function EditAccommodation() {
     }
     else{
       getAccommodation({
-        accommodationId: id
+        accommodationId: id,
+        all: true
       })
     }
   }, [accommodation])
@@ -504,14 +505,17 @@ function EditAccommodation() {
         </TableContainer>
       </Paper>
       <Box display="flex">
-        <FormControlLabel 
-          sx={{flexGrow:"1"}} 
-          control={
-          <Checkbox 
-            defaultChecked = {form?.availability === "available"}
-            onChange={(e) => setForm({...form, availability: e.target.checked ? "available" : "unavailable"})}/>} 
-            label="Set as available" 
+        {form?.availability &&
+          <FormControlLabel 
+            sx={{flexGrow:"1"}} 
+            control={
+            <Checkbox 
+              defaultChecked = {form?.availability == "available" ? true : false}
+              onChange={(e) => setForm({...form, availability: e.target.checked ? "available" : "unavailable"})}/>} 
+              label="Set as available" 
           />
+        }
+        
         <Button variant="contained" color="primary" type='submit'>
           Create
         </Button>

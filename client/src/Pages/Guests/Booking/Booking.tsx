@@ -426,7 +426,7 @@ function Booking() {
                       sendVerification();
                       setOpen("verify");
                     }}
-                      disabled={!form.name || !form.email || !form.phone}
+                      disabled={!form.name || !form.email || !form.phone || !/^09\d{9}$/.test(form.phone) ||  !/@.*\..*/.test(form.email)}
                     >
                       Finish
                     </Button>
