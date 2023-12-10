@@ -2,6 +2,7 @@ import {
     // AccommodationAvailbility,
     AccommodationDocument,
     AccommodationShift,
+    AccommodationType,
     AddShift,
     CreateAccommodation,
     Fee,
@@ -57,19 +58,28 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
         .map(({ accommodationId, shift }) => {
             const shifts = [{ accommodationId, shift }];
 
-            // if (shift == Shift.WHOLE)
-            //     shifts.push({ accommodationId, shift: Shift.DAY }, { accommodationId, shift: Shift.NIGHT });
-            // else shifts.push({ accommodationId, shift: Shift.WHOLE });
-            if (shift != Shift.WHOLE) {
-                shifts.push({ accommodationId, shift: Shift.WHOLE });
-            }
-
+            if (shift == Shift.WHOLE)
+                shifts.push({ accommodationId, shift: Shift.DAY }, { accommodationId, shift: Shift.NIGHT });
+            else shifts.push({ accommodationId, shift: Shift.WHOLE });
             return shifts;
         })
         .flat();
 
     // Get all available accommodations
     let accommodations: AccommodationDocument[] = await AccommodationModel.find().exec();
+
+    const hasReservedWholeResort = accommodations.some((accommodation) =>
+        invoiceAccommodations.some(
+            ({ accommodationId, shift }) =>
+                accommodationId === accommodation.accommodationId &&
+                accommodation.type === AccommodationType.RESORT &&
+                shift === Shift.WHOLE
+        )
+    );
+
+    if (hasReservedWholeResort) {
+        return [];
+    }
 
     accommodations = accommodations
         // Filter out accommodations where shift is in invoiceAccommodations
@@ -88,19 +98,18 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
         .filter(({ fees }) => fees.length > 0);
 
     return accommodations;
-}
+};
 
 export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAccommodations>, res) => {
     const { accommodationId, schedule, shift, all } = req.query;
     const checker = new CheckData();
- 
+
     let accommodations: AccommodationDocument[];
 
     if (Boolean(all) === true) {
         accommodations = await AccommodationModel.find().exec();
-    }
-    else {
-        accommodations = await getAvailableAccommodations(checker, schedule); 
+    } else {
+        accommodations = await getAvailableAccommodations(checker, schedule);
     }
 
     if (shift) {
@@ -338,8 +347,7 @@ export const updateInclusions: RequestHandler = async (req: BodyRequest<UpdateIn
     if (!accommodation) throw new NotFound('Accommodation');
 
     const uniqueInclusions = inclusions.filter(
-        (inclusion, idx, originalInclusions) => 
-            originalInclusions.findIndex((i) => i.name === inclusion.name) === idx
+        (inclusion, idx, originalInclusions) => originalInclusions.findIndex((i) => i.name === inclusion.name) === idx
     );
 
     accommodation.inclusions = uniqueInclusions.map((inclusion) => ({ ...inclusion, accommodationId }));
