@@ -66,9 +66,7 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
         .flat();
 
     // Get all available accommodations
-    let accommodations: AccommodationDocument[] = await AccommodationModel.find({
-        availability: AccommodationAvailbility.AVAILABLE
-    }).exec();
+    let accommodations: AccommodationDocument[] = await AccommodationModel.find().exec();
 
     accommodations = accommodations
         // Filter out accommodations where shift is in invoiceAccommodations
