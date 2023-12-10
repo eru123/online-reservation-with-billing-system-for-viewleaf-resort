@@ -14,6 +14,7 @@ import TableCell from '@mui/material/TableCell';
 import { Chip } from '@mui/material';
 import { Link } from 'react-router-dom';
 import useReservation from '../../Hooks/useReservation';
+import dayjs from 'dayjs';
 
 function Dashboard() {
   const { data: reservations, loading: reservationLoading, getReservation } = useReservation();
@@ -43,15 +44,17 @@ function Dashboard() {
   useEffect(() => {
     // Filter reservations based on specific statuses and today's date
     if (reservations) {
-      const currentDate = new Date().toISOString().split('T')[0]; // Get today's date
+      const currentDate = dayjs().format('YYYY-MM-DD'); // Get today's date
       const filtered = reservations.filter((reservation:any) => {
-        const scheduleDate = new Date(reservation.schedule).toISOString().split('T')[0];
+        const scheduleDate = dayjs(reservation.schedule).format('YYYY-MM-DD');
+        console.log(currentDate + " - - " + scheduleDate);
+
         return (
           ['approved', 'rescheduling'].includes(reservation.status) && scheduleDate === currentDate 
         );
       });
       setFilteredReservations(filtered);
-      setReportCardValue(getTotalAccommodation(filtered))
+      setReportCardValue(getTotalAccommodation(filtered));
     }
   }, [reservations]);
   
@@ -91,8 +94,8 @@ function Dashboard() {
                 <TableRow>
                   <TableCell>Reference No.</TableCell>
                   <TableCell>Name</TableCell>
-                  <TableCell>Check In </TableCell>
-                  <TableCell>Status </TableCell>
+                  <TableCell>Date </TableCell>
+                  <TableCell align='center'>Status </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
