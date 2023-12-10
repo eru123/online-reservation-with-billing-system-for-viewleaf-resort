@@ -184,8 +184,8 @@ function Booking() {
         let inclusions = 0
         let guests = 0
 
-        minimum += parseInt(accommodation.fees[parseInt(shift||"0")].rate)
-        minimumAll += parseInt(accommodation.fees[parseInt(shift||"0")].rate)
+        minimum += parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.rate)
+        minimumAll += parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.rate)
 
           if (accommodation.inclusions) {
             accommodation.inclusions?.map((inclusion: any) => {
@@ -198,20 +198,20 @@ function Booking() {
 
           if (accommodation.guests) {
             if (accommodation.guests.adult) {
-              guests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.adult)
-              guestsAll += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.adult)
+              guests += parseInt(accommodation.guests.adult) * parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee.adult)
+              guestsAll += parseInt(accommodation.guests.adult) * parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee.adult)
             }
             if(accommodation.guests.children) {
-              guests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.kids)
-              guestsAll += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.kids)
+              guests += parseInt(accommodation.guests.children) * parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee.kids)
+              guestsAll += parseInt(accommodation.guests.children) * parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee.kids)
             }
             if(accommodation.guests.senior) {
-              guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.adult) * 0.8)
-              guestsAll += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.adult) * 0.8)
+              guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee.adult) * 0.8)
+              guestsAll += parseInt(accommodation.guests.senior) * (parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee.adult) * 0.8)
             }
             if(accommodation.guests.pwd) {
-              guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.adult) * 0.8)
-              guestsAll += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[parseInt(shift||"0")].guestFee.adult) * 0.8)
+              guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee.adult) * 0.8)
+              guestsAll += parseInt(accommodation.guests.pwd) * (parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee.adult) * 0.8)
             }
     
             total = minimum +  inclusions + guests
@@ -369,9 +369,9 @@ function Booking() {
 
   }, [form, content])
 
-  // if (contentLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  if (contentLoading) {
+    return <div>Loading...</div>;
+  }
   
 
   return (
