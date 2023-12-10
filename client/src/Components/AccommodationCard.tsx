@@ -78,13 +78,13 @@ function AccommodationCard({
                                   {variant === "additional"?"": <>
                                     <Typography variant="h4" color="Primary" fontWeight={700} >₱
                                       {selectedShift ==="Day Shift"?<>
-                                        {accommodation?.fees[0].rate}
+                                        {accommodation?.fees?.[0]?.rate}
                                       </>:""}
                                       {selectedShift ==="Night Shift"?<>
-                                        {accommodation?.fees[1].rate}
+                                        {accommodation?.fees?.[1]?.rate}
                                       </>:""}
                                       {selectedShift ==="Whole Day"?<>
-                                        {accommodation?.fees[2].rate}
+                                        {accommodation?.fees?.[2]?.rate}
                                       </>:""}
                                     </Typography>
                                     <Typography variant="subtitle2" color="inital" >for {accommodation?.pax} pax</Typography>
@@ -129,7 +129,7 @@ function AccommodationCard({
                       pricePerItem={inclusion.price}
                       inclusion={inclusion}
                       type="inclusion"
-                      setValue={(newValue) => addInclusion(accommodation.accommodationId, { ...inclusion, quantity: newValue })}
+                      setValue={(newValue) => addInclusion(accommodation?.accommodationId, { ...inclusion, quantity: newValue })}
                     />
                   ))}
                   </div>
@@ -140,29 +140,29 @@ function AccommodationCard({
                       <QuantitySelector 
                         name={"Kids"} 
                         value={accommodation?.guests?.children ? accommodation?.guests?.children : 0} 
-                        pricePerItem={accommodation?.fees[parseInt(shift||"0")].guestFee.kids} 
-                        setValue={(value) => editGuests(accommodation.accommodationId, { children: value })}
+                        pricePerItem={accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.kids} 
+                        setValue={(value) => editGuests(accommodation?.accommodationId, { children: value })}
                         type="guest"
                       />
                       <QuantitySelector 
                         name={"Adult"} 
                         value={ accommodation?.guests?.adult ? accommodation?.guests?.adult : 0} 
-                        pricePerItem={accommodation?.fees[parseInt(shift||"0")].guestFee.adult} 
-                        setValue={(value) => editGuests(accommodation.accommodationId, { adult: value })}
+                        pricePerItem={accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult} 
+                        setValue={(value) => editGuests(accommodation?.accommodationId, { adult: value })}
                         type="guest"
                       />
                       <QuantitySelector 
                         name={"Senior"} 
                         value={ accommodation?.guests?.senior ? accommodation?.guests?.senior : 0} 
-                        pricePerItem={accommodation?.fees[parseInt(shift||"0")].guestFee.adult * 0.8} 
-                        setValue={(value) => editGuests(accommodation.accommodationId, { senior: value })}
+                        pricePerItem={accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult * 0.8} 
+                        setValue={(value) => editGuests(accommodation?.accommodationId, { senior: value })}
                         type="guest"
                       />
                       <QuantitySelector 
                         name={"PWD"} 
                         value={ accommodation?.guests?.pwd ? accommodation?.guests?.pwd : 0} 
-                        pricePerItem={accommodation?.fees[parseInt(shift||"0")].guestFee.adult * 0.8} 
-                        setValue={(value) => editGuests(accommodation.accommodationId, { pwd: value })}
+                        pricePerItem={accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult * 0.8} 
+                        setValue={(value) => editGuests(accommodation?.accommodationId, { pwd: value })}
                         type="guest"
                       />
                   </div>

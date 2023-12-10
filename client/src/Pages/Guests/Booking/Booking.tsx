@@ -319,8 +319,6 @@ function Booking() {
     })
   }
 
-  
-
   useEffect(()=>{
     getContent();
     console.log("Test");
