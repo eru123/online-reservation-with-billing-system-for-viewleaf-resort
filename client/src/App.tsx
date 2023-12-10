@@ -87,7 +87,7 @@ function App() {
           </Route>
 
           <Route element={<AppLayout />} >
-            {/* <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]}/>}> */}
+            <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]}/>}>
               <Route path="/admin" element={<Dashboard/>}/>
               <Route path="/admin/reservation/list" element={<ListReservation/>}/>
               <Route path="/admin/reservation/create" element={<CreateResrvation/>}/>
@@ -97,7 +97,7 @@ function App() {
               <Route path="/admin/report" element={<Report/>}/>
               <Route path="/admin/notifications" element={<Notifications/>}/>
               <Route path="/profile" element={<Profile/>} />
-            {/* </Route> */}
+            </Route>
 
             <Route element={<ProtectedRoute allowedRoles={["admin"]}/>}>
               <Route path="/admin/manage/accommodations" element={<Accommodation/>}/>
