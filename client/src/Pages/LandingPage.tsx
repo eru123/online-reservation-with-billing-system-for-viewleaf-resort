@@ -213,9 +213,11 @@ function LandingPage() {
             <Typography variant="h5" color="primary" style={{marginBottom:"40px"}} align='center' fontWeight={600}>Accommodation to Offer</Typography>
             {Array.isArray(accommodations) && !(accommodations.length <=0)?<>
               <Box display="flex" flexDirection={"column"} gap={"15px"}>
-                {accommodations?.map((accommodation: any) => (
-                  <AccommodationCard key={accommodation._id} accommodation={accommodation} variant="display" openModal={setOpen}/>
-                ))}
+                {accommodations?.map((accommodation: any) => {
+                  if (accommodation.availability !== "unavailable") {
+                    return <AccommodationCard key={accommodation._id} accommodation={accommodation} variant="display" openModal={setOpen}/>
+                  }
+              })}
               </Box>
             </>:<>
               <Box display="flex" flexDirection={"column"} gap={"25px"} width={"100%"}  sx={{opacity:".5"}} height={"400px"}  alignItems={"center"} justifyContent={"center"}>
