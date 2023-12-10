@@ -14,7 +14,7 @@ import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import Accommodation from './Accommodation';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import useReservation from '../../../../Hooks/useReservation';
 import useContent from '../../../../Hooks/useContent';
 
@@ -53,6 +53,7 @@ type Invoice = {
 
 function Additional() {
   const {id} = useParams();
+  const navigate = useNavigate();
   const [step,setStep] = useState(1);
   const {data: reservation, loading, error, getReservation, updateReservation, rescheduleReservation, extrasReservation} = useReservation();
   const {data:content, loading:contentLoading, error:contentError, getContent} = useContent();
@@ -65,6 +66,7 @@ function Additional() {
   const submit = () => {
     extrasReservation(form);
     alert("Submitted!")
+    navigate(`/admin/invoice/${id}`)
   }
 
   const getShiftIndex = (shift: string) => {
@@ -164,7 +166,6 @@ function Additional() {
     let inclusionsAll = 0
     let guestsAll = 0
     
-
     setForm((prevForm: { accommodations: any }) => ({
       ...prevForm,
       accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any; fees: any; guests: any; }) => {
@@ -207,12 +208,6 @@ function Additional() {
             
           }
 
-        // return {
-        //   ...accommodation,
-        //   total: total ,
-        //   minimum: minimum
-        // }
-
         return {
           ...accommodation,
           total: content?.promo === 0 ? total : total * (content?.promo / 100) ,
@@ -220,12 +215,6 @@ function Additional() {
         }
 
       }),
-      // costs: {
-      //     total: minimumAll +  inclusionsAll + guestsAll ,
-      //     guests: guestsAll ,
-      //     inclusions: inclusionsAll,
-      //     accommodations: minimumAll
-      // },
       costs: {
         total: content?.promo === 0 ? (minimumAll +  inclusionsAll + guestsAll) : (minimumAll +  inclusionsAll + guestsAll) * (content?.promo / 100) ,
         guests: content?.promo === 0 ? guestsAll : guestsAll * (content?.promo / 100) ,
@@ -266,6 +255,7 @@ function Additional() {
       }));
     }
 
+    console.log(form)
 
   }, [form])
 
