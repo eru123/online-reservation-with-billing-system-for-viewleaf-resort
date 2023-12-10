@@ -50,7 +50,7 @@ function Dashboard() {
         console.log(currentDate + " - - " + scheduleDate);
 
         return (
-          ['approved', 'rescheduling'].includes(reservation.status) && scheduleDate === currentDate 
+          ['approved', 'rescheduling','checked in', 'checked out'].includes(reservation.status) && scheduleDate === currentDate 
         );
       });
       setFilteredReservations(filtered);
@@ -104,7 +104,15 @@ function Dashboard() {
                     <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
                     <TableCell>{reservation.customer.name}</TableCell>
                     <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })}</TableCell>
-                    <TableCell align='center'><Chip label={reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)} color="primary" /></TableCell>
+                    <TableCell align='center'>
+                      <Chip 
+                        label={reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)} 
+                        color={
+                          reservation.status === 'cancelled' || reservation.status === 'declined' || reservation.status === 'refunded'   ? "error" : (reservation.status === "checked out" ? "success" : "info")
+                        }
+                      />
+                      
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
