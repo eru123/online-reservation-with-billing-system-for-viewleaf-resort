@@ -71,8 +71,8 @@ function CreateResrvation() {
       accommodations: 0
     })
 
-
   const {data:accommodations, getAccommodation} = useAccommodation();
+  
   const {data:content, loading:contentLoading, error:contentError, getContent} = useContent();
 
   const updateSchedule = (date: any, shift: any) => {
