@@ -64,6 +64,7 @@ function Additional() {
 
   const submit = () => {
     extrasReservation(form);
+    alert("Submitted!")
   }
 
   const getShiftIndex = (shift: string) => {
@@ -238,16 +239,14 @@ function Additional() {
 
     calculateCosts()
 
-    if (!content || content.length === 0){
+    if (!content){
       getContent();
-      console.log(form)
     }
    
-    if (!reservation || reservation.length === 0) {
+    if (!reservation) {
       getReservation({
         reservationId: id
       })
-      
     }
 
     if (reservation && form?.accommodations?.length ===0) {
@@ -256,14 +255,19 @@ function Additional() {
         schedule: new Date(reservation[0].schedule).getTime(),
         reservationId: reservation[0].reservationId,
         shift: reservation[0].invoices[0].shift,
-        // accommodations: reservation[0].invoices,
-        accommodations: reservation[0].invoices.map((invoice: any) => ({...invoice.accommodation,
-          shift: reservation[0].invoices[0].shift
+        accommodations: reservation[0].invoices.map((invoice: any) => ({
+          ...invoice.accommodation,
+          shift: reservation[0].invoices[0].shift,
+          inclusions: invoice.accommodation.inclusions.map((inclusion: any) => ({
+            ...inclusion,
+            quantity: 0, // Set the quantity to 0 for each inclusion
+          })),
         })),
       }));
     }
 
-  }, [form, content])
+
+  }, [form])
 
     return (
         
