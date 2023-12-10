@@ -210,7 +210,7 @@ function LandingPage() {
         </div>
 
         <div style={{margin:"4em 0"}}>
-            <Typography variant="h5" color="primary" style={{marginBottom:"40px"}} align='center' fontWeight={600}>Accommodation to Offer</Typography>
+            <Typography variant="h5" color="primary" style={{marginBottom:"40px"}} align='center' fontWeight={600}>Accommodations</Typography>
             {Array.isArray(accommodations) && !(accommodations.length <=0)?<>
               <Box display="flex" flexDirection={"column"} gap={"15px"}>
                 {accommodations?.map((accommodation: any) => {
