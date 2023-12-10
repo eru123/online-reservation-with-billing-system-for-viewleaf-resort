@@ -99,7 +99,7 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
             return accommodation;
         })
         // Filter out all accommodations where fees are empty
-        .filter(({ fees }) => fees.length > 0);
+        // .filter(({ fees }) => fees.length > 0);
 
     return accommodations;
 };
