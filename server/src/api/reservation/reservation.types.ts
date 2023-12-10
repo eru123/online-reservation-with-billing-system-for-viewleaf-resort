@@ -44,7 +44,7 @@ export interface ReservationDocument extends Reservation, Document {
 
 /* REQUESTS */
 
-type ReserveAccommodation = {
+export type ReserveAccommodation = {
     accommodationId: string;
     shift: Shift;
     guests: {
