@@ -157,23 +157,19 @@ function Invoice({}:Props) {
           :""}
           {status==="checked out"?
           <>
-
-          {data?.[0]?.feedbacks?.length > 0 ? <>
-            <Alert severity="success" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>This reservation is done, We are happy to serve you!</Alert>
-            
-            <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
-              <Typography variant="subtitle1" fontWeight={600} color="initial">Rating</Typography>
-              {/* Insert in the value how plenty of star */}
-              <Rating name="read-only" value={data?.[0]?.feedbacks?.[0]?.rating} readOnly />
-              <Typography variant="subtitle1" mt={2} fontWeight={600} color="initial">Feedback</Typography>
-              <Typography variant="body2"  color="initial">
-              {data?.[0]?.feedbacks?.[0]?.review}
-              </Typography>
-            </Paper>
-          </> : <></>}
-
-
-            
+            {data?.[0]?.feedbacks?.length > 0 ? <>
+              <Alert severity="success" sx={{margin:"2em 0",padding:" 1em 9em 1em 1em"}}>This reservation is done, We are happy to serve you!</Alert>
+              
+              <Paper variant="elevation" elevation={1} sx={{marginTop:"-2px",background:"white",padding:"1em"}}>
+                <Typography variant="subtitle1" fontWeight={600} color="initial">Rating</Typography>
+                {/* Insert in the value how plenty of star */}
+                <Rating name="read-only" value={data?.[0]?.feedbacks?.[0]?.rating} readOnly />
+                <Typography variant="subtitle1" mt={2} fontWeight={600} color="initial">Feedback</Typography>
+                <Typography variant="body2"  color="initial">
+                {data?.[0]?.feedbacks?.[0]?.review}
+                </Typography>
+              </Paper>
+            </> : <></>}
           </>
           :""}
           {status==="declined"?<>
@@ -352,7 +348,7 @@ function Invoice({}:Props) {
                         </Grid>
 
                         <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                            <Button variant="text" sx={{color:"black"}} onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
                             <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("refunding", note)}}>Send</Button>
@@ -378,7 +374,7 @@ function Invoice({}:Props) {
                             />
                         </Grid>
                         <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen(""); }} fullWidth>Cancel</Button>
+                            <Button variant="text" sx={{color:"black"}} onClick={()=>{setOpen(""); }} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
                             <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("cancelling", note)}}>Send</Button>
@@ -403,7 +399,7 @@ function Invoice({}:Props) {
                           <TextField id="feedback" fullWidth multiline value={ratingForm.feedback} onChange={(e)=>{setRatingForm({...ratingForm,feedback:e.target.value})}}/>
                         </Grid>
                         <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                            <Button variant="text" sx={{color:"black"}} onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
                           <Button variant="contained" fullWidth type='submit'>Send</Button>
@@ -424,12 +420,11 @@ function Invoice({}:Props) {
                           <img style={{width:"100%"}} src={receipt} alt="" />
                       </Grid>
                       ))}
-                        
 
-                        {/* <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
-                        </Grid>
-                        <Grid item xs={7} marginBottom={"20px"}>
+                      <Grid item xs={5} marginBottom={"20px"}>
+                          <Button variant="text"  sx={{color:"black"}} onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                      </Grid>
+                        {/* <Grid item xs={7} marginBottom={"20px"}>
                             <Button variant="contained" fullWidth>Send</Button>
                         </Grid> */}
                     </Grid>

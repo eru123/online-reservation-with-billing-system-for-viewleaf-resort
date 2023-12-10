@@ -363,9 +363,9 @@ function Invoice() {
                                   required
                               />
                           </Grid> */}
-
+ 
                           <Grid item xs={5}>
-                              <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                              <Button variant="text" sx={{color:"black"}}  onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                           </Grid>
                           <Grid item xs={7}>
                               <Button 
@@ -400,7 +400,7 @@ function Invoice() {
                         </Grid>
 
                         <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("");}} fullWidth>Cancel</Button>
+                            <Button variant="text" sx={{color:"black"}} onClick={()=>{setOpen("");}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
                             <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("refunded", note)}}>Send</Button>
@@ -426,7 +426,7 @@ function Invoice() {
                             />
                         </Grid>
                         <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("");}} fullWidth>Cancel</Button>
+                            <Button variant="text" sx={{color:"black"}} onClick={()=>{setOpen("");}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
                             <Button variant="contained" fullWidth onClick={()=>{setOpen(""); submit("cancelled", note)}}>Send</Button>
@@ -450,7 +450,7 @@ function Invoice() {
                             <TextField id="feedback" fullWidth multiline/>
                         </Grid>
                         <Grid item xs={5} marginBottom={"20px"}>
-                            <Button variant="text" onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
+                            <Button variant="text"  sx={{color:"black"}} onClick={()=>{setOpen("")}} fullWidth>Cancel</Button>
                         </Grid>
                         <Grid item xs={7} marginBottom={"20px"}>
                             <Button variant="contained" fullWidth>Send</Button>

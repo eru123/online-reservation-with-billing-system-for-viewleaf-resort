@@ -383,7 +383,7 @@ function CreateResrvation() {
                             Back
                         </Button>
                         <Button variant="contained" color="primary" onClick={()=>{setStep(3)}}>
-                        Set as Paid
+                          Set as Paid
                         </Button>
                     </Box>
                     
@@ -393,11 +393,9 @@ function CreateResrvation() {
                   form={form}
                 />
                 <Box sx={{padding:"0 32px"}}>
-                    <Typography variant="subtitle1" textAlign="end" color="initial" fontWeight={600} sx={{opacity:".6"}}>TOTAL</Typography>
-                    <Typography variant="h5" textAlign="end" color="initial" fontWeight={600}>₱ {form?.costs?.total}</Typography> 
 
-                    <Typography variant="h6" color="initial">TOTAL : {content?.promo === 0 ? `₱${form?.costs?.total}` : ` from ₱${form?.costs?.total} to  ₱${form?.costs?.total * ((100 - content?.promo) / 100)} `} </Typography>
-                    <Typography variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of {content?.promo === 0 ? `₱${form?.costs?.accommodations}` : ` from ₱${form?.costs?.accommodations} to  ₱${form?.costs?.accommodations * ((100 - content?.promo) / 100)} `}  </Typography>
+                    <Typography textAlign={"end"} variant="h6" color="initial">TOTAL : {content?.promo === 0 ? `₱${form?.costs?.total}` : ` from ₱${form?.costs?.total} to  ₱${form?.costs?.total * ((100 - content?.promo) / 100)} `} </Typography>
+                    <Typography  textAlign={"end"} variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of {content?.promo === 0 ? `₱${form?.costs?.accommodations}` : ` from ₱${form?.costs?.accommodations} to  ₱${form?.costs?.accommodations * ((100 - content?.promo) / 100)} `}  </Typography>
                 
                 </Box>
                 
