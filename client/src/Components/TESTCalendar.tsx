@@ -38,7 +38,8 @@ function TESTCalendar({ appointments, setSelectedDay, selectedDay }: Props) {
   const formatDateToMonthYear = (date: string) => {
     return dayjs(date).format('MMMM-YYYY');
   };
-  const schedules = appointments?.map((item) => item.schedule) || [];
+  const filteredAppointments = appointments?.filter(item => !['cancelled', 'refunded', 'declined'].includes(item.status)) || [];
+  const schedules = filteredAppointments.map(item => item.schedule) || [];
 
   const formatSchedulesToHighlightedDaysMap = (schedules: string[]) => {
     const highlightedDaysMap: HighlightedDaysMap = {};
