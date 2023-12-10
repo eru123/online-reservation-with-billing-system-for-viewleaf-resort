@@ -311,6 +311,7 @@ function Booking() {
   }
 
   const resendCode = () => {
+    alert("OTP resent!")
     sendEmail({
       email: form.email,
       subject: "View Leaf: Email Verification",
@@ -367,7 +368,7 @@ function Booking() {
     if (reservationError) {
       navigate("/");
     } 
-    
+
   }, [form, content])
 
   // if (contentLoading) {
