@@ -2,6 +2,7 @@ import {
     // AccommodationAvailbility,
     AccommodationDocument,
     AccommodationShift,
+    AccommodationType,
     AddShift,
     CreateAccommodation,
     Fee,
@@ -70,6 +71,33 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
 
     // Get all available accommodations
     let accommodations: AccommodationDocument[] = await AccommodationModel.find().exec();
+
+    const resortInvoiceAccommodations = invoiceAccommodations.filter(({ accommodationId }) => {
+        const accommodation = accommodations.find((accommodation) => accommodation.accommodationId === accommodationId);
+        if (!accommodation) return false;
+        return accommodation.type === AccommodationType.RESORT;
+    });
+
+    const hasWhole = resortInvoiceAccommodations.some((ria) => ria.shift === Shift.WHOLE);
+    const hasDay = resortInvoiceAccommodations.some((ria) => ria.shift === Shift.DAY);
+    const hasNight = resortInvoiceAccommodations.some((ria) => ria.shift === Shift.NIGHT);
+
+    if (resortInvoiceAccommodations.length > 0) {
+        accommodations = accommodations.map((accommodation) => {
+            accommodation.fees = accommodation.fees.filter((fee) => {
+                if (hasWhole) {
+                    return false;
+                }
+
+                return (
+                    (hasDay && (fee.shift === Shift.NIGHT || fee.shift === Shift.WHOLE)) ||
+                    (hasNight && (fee.shift === Shift.DAY || fee.shift === Shift.WHOLE))
+                );
+            });
+
+            return accommodation;
+        });
+    }
 
     accommodations = accommodations
         // Filter out accommodations where shift is in invoiceAccommodations
