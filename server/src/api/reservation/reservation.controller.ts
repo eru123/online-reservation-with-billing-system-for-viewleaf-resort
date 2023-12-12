@@ -91,7 +91,7 @@ export const getReservations: RequestHandler = async (req: QueryRequest<GetReser
     res.json(reservationWithInvoices);
 };
 
-const reservationTimeLimitInMinutes = 15;
+const reservationTimeLimitInMinutes = 60;
 export const createReservation: RequestHandler = async (req: BodyRequest<CreateReservation>, res) => {
     const { name, phone, email, schedule } = req.body;
     let { accommodations } = req.body;
