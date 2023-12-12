@@ -31,7 +31,9 @@ import Additional from './Pages/Admin/Reservation/Additional/Additional';
 import Staff from './Pages/Admin/staff/ManageStaffs';
 import Notifications from './Pages/Admin/Notifications/Notifications';
 import Profile from './Pages/Admin/Profile/Profile';
-
+import Approval from './Pages/Admin/Reservation/Lists/Approval';
+import CheckOut from './Pages/Admin/Reservation/Lists/CheckOut';
+import CancelledDecline from './Pages/Admin/Reservation/Lists/CancelledDecline';
 // Test
 import TestFeedback from './Test/TestFeedback';
 import TestFAQ from './Test/TestFAQ';
@@ -42,11 +44,14 @@ import TestCreateStaff from './Test/TestCreateStaff';
 import TestLogout from './Test/TestLogout';
 import TestAccommodation from './Test/TestAccommodation';
 import TestReservation from './Test/TestReservation';
+import CheckIn from './Pages/Admin/Reservation/Lists/CheckIn';
 import SendEmails from './Pages/_Test/sendEmail';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ProtectedRoute } from './Hooks/useAuth';
 import PolicyView from './Pages/Guests/Policy';
 import Error from './Pages/Error';
+
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -88,7 +93,13 @@ function App() {
           <Route element={<AppLayout />} >
             <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]}/>}>
               <Route path="/admin" element={<Dashboard/>}/>
-              <Route path="/admin/reservation/list" element={<ListReservation/>}/>
+              {/* <Route path="/admin/reservation/list" element={<ListReservation/>}/> */}
+
+              <Route path="/admin/reservation/approval" element={<Approval/>}/>
+              <Route path="/admin/reservation/checkin" element={<CheckIn/>}/>
+              <Route path="/admin/reservation/checkout" element={<CheckOut/>}/>
+              <Route path="/admin/reservation/cancelled" element={<CancelledDecline/>}/>
+
               <Route path="/admin/reservation/create" element={<CreateResrvation/>}/>
               <Route path="/admin/reservation/add/:id" element={<Additional/>}/>
               <Route path="/admin/reservation/requests" element={<Requests/>}/>
