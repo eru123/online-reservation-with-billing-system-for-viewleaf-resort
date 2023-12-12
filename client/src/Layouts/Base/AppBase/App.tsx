@@ -47,11 +47,12 @@ function App() {
           }}> 
             <Box display="flex" gap={"10px"} alignItems={"center"} ><EventAvailableIcon/> Reservation</Box>
           </Typography>
-          <NavItem  title="List of Reservation" link="/admin/reservation/list" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}}/>} type={"subTitle"}/>
+          <NavItem  title="Approval" link="/admin/reservation/approval" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}}/>} type={"subTitle"}/> 
+          <NavItem  title="Check In" link="/admin/reservation/checkin" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}}/>} type={"subTitle"}/> 
+          <NavItem  title="Check out" link="/admin/reservation/checkout" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}}/>} type={"subTitle"}/>
+          <NavItem  title="Cancelled & Declined" link="/admin/reservation/cancelled" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}}/>} type={"subTitle"}/> 
+          {/* <NavItem  title="List of Reservation" link="/admin/reservation/list" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}}/>} type={"subTitle"}/> */}
           <NavItem  title="Requests" link="/admin/reservation/requests" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}}/>} type={"subTitle"}/>
-
-          
-
           {User().role==="admin"?<>
             <Typography variant="h6"  color="initial" sx={{
                 padding:".5em 1em",
@@ -63,14 +64,13 @@ function App() {
             <NavItem  title="Content" link="/admin/manage/content" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
             <NavItem  title="Payment Instruction" link="/admin/manage/paymentInstruction" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
             <NavItem  title="Policy" link="/admin/manage/policy" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
-            
+            <NavItem  title="Terms & Condition" link="/admin/manage/ternsncondition" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
+
+
             <NavItem  title="Reports" link="/admin/report" icon={<AssessmentIcon/>} type={"title"} />
             
             <NavItem  title="Staff" link="/admin/staff" icon={<PersonIcon/>} type={"title"} />
           </>:""}
-          
-
-
 
           {/* <NavItem  title="Notification" link="/admin/notifications" icon={<NotificationsIcon/>} type={"title"} /> */}
 

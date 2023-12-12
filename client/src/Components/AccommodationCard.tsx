@@ -33,18 +33,22 @@ function AccommodationCard({
   const {date, shift} = useParams();
   const [selectedShift,setSelectedShift] = useState("Day Shift");
   const navigate = useNavigate();
-
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Use smooth scrolling behavior
+    });
+  };
   return <>
-      <div>
+      <div style={accommodation?.availability === "unavailable"?{opacity:".5"}:{opacity:"1"}}>
           <div style={{paddingBottom:"10px",backgroundColor:"#DADADA", borderTopLeftRadius:"8px",borderTopRightRadius:"8px"}}>
-              <Paper variant="elevation" elevation={3} sx={{borderRadius:"10px",overflow:"hidden"}}>
+              <Paper variant="elevation" elevation={accommodation?.availability === "unavailable"?0:3} sx={{borderRadius:"10px",overflow:"hidden"}}>
                   <Grid container spacing={0}>
                       <Grid item md={3} xs={12}>
                         <img width={"100%"} height={"100%"} src={accommodation?.image} alt="" />
                       </Grid>
                       <Grid item md={6} xs={9} sx={{padding:"1em"}}>
                           <Box >
-                            {accommodation?.availability === "unavailable" && "Unavailable"}
                               <Typography variant="subtitle2" color="initial" fontWeight={500} textTransform={"uppercase"}>{accommodation?.type}</Typography>
                               <Typography variant="h5" color="Primary" fontWeight={600} >{accommodation?.title}</Typography>
                               <Typography sx={{minHeight:"100px"}} variant="body2" color="initial"  textAlign={"justify"}>{accommodation?.description}</Typography>
@@ -100,7 +104,7 @@ function AccommodationCard({
                                       :""
                                   }
                                   {(variant==="view")?
-                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation)}}>    
+                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation);scrollToTop()}}>    
                                           Book
                                       </Button>
                                   :""}

@@ -74,54 +74,54 @@ function ListReservation() {
                           </TableRow>
                       </TableHead>
                       <TableBody>
-                      {selectedDay?<>
-                        {filteredDataBySelectedDay?.length <= 0 ? <>"No reservation"</> : (
-                          <>
-                            {filteredDataBySelectedDay?.map((reservation: any) => (
-                              <TableRow key={reservation.reservationId} sx={{ background: "white" }} component={Link} to={`/admin/invoice/${reservation.reservationId}`} >
-                                <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
-                                <TableCell>{reservation.customer?.name || "Unknown"}</TableCell>
-                                <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })} - {reservation?.invoices[0].shift}</TableCell>
-                                {/* <TableCell></TableCell>
-                                <TableCell></TableCell> */}
-                                {/* <TableCell align='center'> */}
-                                <TableCell>
-                                  <Chip 
-                                    label={reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)} 
-                                    color={
-                                      reservation.status === 'cancelled' || reservation.status === 'declined' || reservation.status === 'refunded'   ? "error" : (reservation.status === "checked out" ? "success" : "info")
-                                    }
-                                  />
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </>
-                        )}
-                      
-                      </>:<>
-                        {filteredData?.length <= 0 ? <>"No reservation"</> : (
-                          <>
-                            {filteredData?.map((reservation: any) => (
-                              <TableRow key={reservation.reservationId} sx={{ background: "white" }} component={Link} to={`/admin/invoice/${reservation.reservationId}`} >
-                                <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
-                                <TableCell>{reservation.customer?.name || "Unknown"}</TableCell>
-                                <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })} - {reservation.invoices[0].shift}</TableCell>
-                                {/* <TableCell></TableCell>
-                                <TableCell></TableCell> */}
-                                {/* <TableCell align='center'> */}
-                                <TableCell>
-                                  <Chip 
-                                    label={reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)} 
-                                    color={
-                                      reservation.status === 'cancelled' || reservation.status === 'declined' || reservation.status === 'refunded'   ? "error" : (reservation.status === "checked out" ? "success" : "info")
-                                    }
-                                  />
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </>
-                        )}
-                      </>}
+                        {selectedDay?<>
+                          {filteredDataBySelectedDay?.length <= 0 ? <>"No reservation"</> : (
+                            <>
+                              {filteredDataBySelectedDay?.map((reservation: any) => (
+                                <TableRow key={reservation.reservationId} sx={{ background: "white" }} component={Link} to={`/admin/invoice/${reservation.reservationId}`} >
+                                  <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
+                                  <TableCell>{reservation.customer?.name || "Unknown"}</TableCell>
+                                  <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })} - {reservation?.invoices[0].shift}</TableCell>
+                                  {/* <TableCell></TableCell>
+                                  <TableCell></TableCell> */}
+                                  {/* <TableCell align='center'> */}
+                                  <TableCell>
+                                    <Chip 
+                                      label={reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)} 
+                                      color={
+                                        reservation.status === 'cancelled' || reservation.status === 'declined' || reservation.status === 'refunded'   ? "error" : (reservation.status === "checked out" ? "success" : "info")
+                                      }
+                                    />
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </>
+                          )}
+                        
+                        </>:<>
+                          {filteredData?.length <= 0 ? <>"No reservation"</> : (
+                            <>
+                              {filteredData?.map((reservation: any) => (
+                                <TableRow key={reservation.reservationId} sx={{ background: "white" }} component={Link} to={`/admin/invoice/${reservation.reservationId}`} >
+                                  <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
+                                  <TableCell>{reservation.customer?.name || "Unknown"}</TableCell>
+                                  <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })} - {reservation.invoices[0].shift}</TableCell>
+                                  {/* <TableCell></TableCell>
+                                  <TableCell></TableCell> */}
+                                  {/* <TableCell align='center'> */}
+                                  <TableCell>
+                                    <Chip 
+                                      label={reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)} 
+                                      color={
+                                        reservation.status === 'cancelled' || reservation.status === 'declined' || reservation.status === 'refunded'   ? "error" : (reservation.status === "checked out" ? "success" : "info")
+                                      }
+                                    />
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </>
+                          )}
+                        </>}
                       </TableBody>
                   </Table>
               </TableContainer>

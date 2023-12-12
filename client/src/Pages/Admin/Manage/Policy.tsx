@@ -23,92 +23,92 @@ const style = {
 };
 
 function Policy() {
-    const [open, setOpen] = useState("");
-    const {data:content, loading:contentLoading, error:contentError, getContent, updateContent} = useContent();
-    const {
-      downloadURL, 
-      uploading, 
-      uploadFile
-    } = useFirebase();
+  const [open, setOpen] = useState("");
+  const {data:content, loading:contentLoading, error:contentError, getContent, updateContent} = useContent();
+  const {
+    downloadURL, 
+    uploading, 
+    uploadFile
+  } = useFirebase();
 
-    useEffect(()=>{
-      getContent();
-    },[])
+  useEffect(()=>{
+    getContent();
+  },[])
 
-    if (contentLoading) {
-      return <div>Loading...</div>;
-    }
+  if (contentLoading) {
+    return <div>Loading...</div>;
+  }
 
-    return <>
-        <Typography variant="h4" fontWeight={600} color="primary">Manage Policy </Typography>
-        <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>Update your policy</Typography>
-        <Box display="flex" sx={{margin:"2em 0"}}>
-                <Box sx={{flexGrow:"1",display:"flex"}}>
-                    
-                </Box>
-                <Button variant="contained" color="primary" onClick={()=>{setOpen("editPDF")}}>
-                    Upload PDF
-                </Button>
-            </Box>
-        <Box>
-          <iframe
-            title="PDF Viewer" 
-            src={content?.policy} 
-            width="100%"
-            height="900px"
-          />
-        </Box>
-        <Modal
-            keepMounted
-            open={!(open==="")}
-            onClose={()=>{setOpen("")}}
-            aria-labelledby="keep-mounted-modal-title"
-            aria-describedby="keep-mounted-modal-description"
-        >
-            <Box sx={style}>
-                {open === "editPDF"?<>
-                    <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
-                        Upload PDF
-                    </Typography>
-                    <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
-                        Set policy for the guests
-                    </Typography>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} >
-                            <TextField
-                              type='file'
-                              id="policy"
-                              fullWidth
-                              inputProps={{
-                                accept: '.pdf',
-                              }}
-                              onChange={(e:any)=>{uploadFile(e.target.files[0], 'orbs')}}
-                            />
-                        </Grid>
-                        
-                        <Grid item xs={12} padding={"1em 0"}>
-                            
-                        </Grid>
-                        <Grid item xs={5}>
-                            <Button variant="text" fullWidth sx={{color:"black"}} onClick={()=>{setOpen("")}}>
-                                back
-                            </Button>
-                        </Grid>
-                        <Grid item xs={7}>
-                            <Button variant="contained" color='primary' fullWidth onClick={()=>{
-                              setOpen("");
-                              updateContent({policy: downloadURL});
-                            }}>
-                                Confirm
-                            </Button>
-                        </Grid>
-                    </Grid>
-                
-                </>:""}
+  return <>
+      <Typography variant="h4" fontWeight={600} color="primary">Manage Policy </Typography>
+      <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>Update your policy</Typography>
+      <Box display="flex" sx={{margin:"2em 0"}}>
+              <Box sx={{flexGrow:"1",display:"flex"}}>
+                  
+              </Box>
+              <Button variant="contained" color="primary" onClick={()=>{setOpen("editPDF")}}>
+                  Upload PDF
+              </Button>
+          </Box>
+      <Box>
+        <iframe
+          title="PDF Viewer" 
+          src={content?.policy} 
+          width="100%"
+          height="900px"
+        />
+      </Box>
+      <Modal
+          keepMounted
+          open={!(open==="")}
+          onClose={()=>{setOpen("")}}
+          aria-labelledby="keep-mounted-modal-title"
+          aria-describedby="keep-mounted-modal-description"
+      >
+          <Box sx={style}>
+              {open === "editPDF"?<>
+                  <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={700} color={"primary"} component="h2">
+                      Upload PDF
+                  </Typography>
+                  <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
+                      Set policy for the guests
+                  </Typography>
+                  <Grid container spacing={2}>
+                      <Grid item xs={12} >
+                          <TextField
+                            type='file'
+                            id="policy"
+                            fullWidth
+                            inputProps={{
+                              accept: '.pdf',
+                            }}
+                            onChange={(e:any)=>{uploadFile(e.target.files[0], 'orbs')}}
+                          />
+                      </Grid>
+                      
+                      <Grid item xs={12} padding={"1em 0"}>
+                          
+                      </Grid>
+                      <Grid item xs={5}>
+                          <Button variant="text" fullWidth sx={{color:"black"}} onClick={()=>{setOpen("")}}>
+                              back
+                          </Button>
+                      </Grid>
+                      <Grid item xs={7}>
+                          <Button variant="contained" color='primary' fullWidth onClick={()=>{
+                            setOpen("");
+                            updateContent({policy: downloadURL});
+                          }}>
+                              Confirm
+                          </Button>
+                      </Grid>
+                  </Grid>
+              
+              </>:""}
 
-            </Box>
-        </Modal>
-    </>
+          </Box>
+      </Modal>
+  </>
 }
 
 export default Policy
