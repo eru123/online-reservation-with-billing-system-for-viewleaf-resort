@@ -31,7 +31,13 @@ function Payment() {
   } = useReservation();
   const {data: content, loading: contentLoading, error: contentError, getContent} = useContent();
   const {downloadURL, uploading, uploadFile } = useFirebase();
-  const [policyAgree,setPolicyAgree] = useState(false);
+  const [policyAgree,setPolicyAgree] = useState({
+    policy:false,
+    termsNCondition:false,
+    dataPrivacy:false
+  });
+
+
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     payReservation({
@@ -120,10 +126,23 @@ function Payment() {
           </div>
           <div style={{display:"flex",alignItems:"center"}}>
             <FormControlLabel
-              control={<Checkbox checked={policyAgree} onChange={() => setPolicyAgree(!policyAgree)} />}
+              control={<Checkbox checked={policyAgree.policy} onChange={() => setPolicyAgree({...policyAgree, policy:!(policyAgree.policy)})} />}
               label="I agree with ViewLeaf's"
             />
             <Typography variant="body1" component={"a"} href='/policy' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Policies</Typography>
+          </div>
+          <div style={{display:"flex",alignItems:"center"}}>
+            <FormControlLabel
+              control={<Checkbox checked={policyAgree.termsNCondition} onChange={() => setPolicyAgree({...policyAgree, termsNCondition:!(policyAgree.termsNCondition)})}/>}
+              label="I agree with ViewLeaf's"
+            />
+            <Typography variant="body1" component={"a"} href='/termsncondition' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Terms & Condition</Typography>
+          </div>
+          <div style={{display:"flex",alignItems:"center"}}>
+            <FormControlLabel
+              control={<Checkbox checked={policyAgree.dataPrivacy} onChange={() => setPolicyAgree({...policyAgree, dataPrivacy:!(policyAgree.dataPrivacy)})} />}
+              label="I agree with the Data Privacy Policy"
+            />
           </div>
           <div style={{display:"flex",alignItems:"center",justifyContent:"center",margin:"2em 0"}}>
             <img width={"50%"} src={downloadURL} alt="" />
@@ -134,7 +153,7 @@ function Payment() {
                 <Chip label="Upload Payment Receipt " variant="outlined" onClick={()=>{}}/>
               </label>
               {/* <Chip label="Send" variant="filled" color='primary' sx={{color:"white"}} onClick={()=>{}}/> */}
-              <Button variant="contained" color="primary" type="submit" disabled={policyAgree && downloadURL ?false:true}>
+              <Button variant="contained" color="primary" type="submit" disabled={policyAgree.dataPrivacy && policyAgree.policy && policyAgree.termsNCondition && downloadURL ?false:true}>
                 Pay Now
               </Button>
           </div>

@@ -34,6 +34,8 @@ import Profile from './Pages/Admin/Profile/Profile';
 import Approval from './Pages/Admin/Reservation/Lists/Approval';
 import CheckOut from './Pages/Admin/Reservation/Lists/CheckOut';
 import CancelledDecline from './Pages/Admin/Reservation/Lists/CancelledDecline';
+import TermsNCondition from './Pages/Admin/Manage/TermsNCondition';
+import TermsNConditionGuest from './Pages/Guests/TermsNCondition';
 // Test
 import TestFeedback from './Test/TestFeedback';
 import TestFAQ from './Test/TestFAQ';
@@ -50,7 +52,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ProtectedRoute } from './Hooks/useAuth';
 import PolicyView from './Pages/Guests/Policy';
 import Error from './Pages/Error';
-
 
 const theme = createTheme({
   palette: {
@@ -88,6 +89,7 @@ function App() {
             <Route path="/reservation/:id" element={<Invoice />} />
             <Route path="/payment/:id" element={<Payment />} />
             <Route path='/policy' element={<PolicyView/>}/>
+            <Route path='/termsncondition' element={<TermsNConditionGuest/>}/>
           </Route>
 
           <Route element={<AppLayout />} >
@@ -116,6 +118,8 @@ function App() {
               <Route path="/admin/manage/content" element={<Content/>}/>
               <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
               <Route path="/admin/manage/policy" element={<Policy/>}/>
+              <Route path="/admin/manage/ternsncondition" element={<TermsNCondition/>}/>
+              
               <Route path="/admin/staff" element={<Staff/>}/>
             </Route>
           </Route>
