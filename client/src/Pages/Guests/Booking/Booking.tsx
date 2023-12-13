@@ -419,11 +419,13 @@ function Booking() {
               <MenuItem value={"2"}>Whole Shift</MenuItem>
             </Select>
             </FormControl>
-            <Button variant="contained" color="primary" onClick={()=>{
-              navigate(`/booking/${bookingSchedule.date}/${bookingSchedule.shift}`)
-            }}>
-              change Date
-            </Button>
+              <Button variant="contained" color="primary">
+                <a href={`/booking/${bookingSchedule.date}/${bookingSchedule.shift}`} style={{color:"white"}}>
+                  change Date
+                </a>
+
+              </Button>
+            
         </Box>
           <Accommodation 
             date={date||""} 
