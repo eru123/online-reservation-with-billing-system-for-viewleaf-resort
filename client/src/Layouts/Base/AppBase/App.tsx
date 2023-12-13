@@ -64,7 +64,8 @@ function App() {
             <NavItem  title="Content" link="/admin/manage/content" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
             <NavItem  title="Payment Instruction" link="/admin/manage/paymentInstruction" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
             <NavItem  title="Policy" link="/admin/manage/policy" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
-            <NavItem  title="Terms & Condition" link="/admin/manage/ternsncondition" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
+            <NavItem  title="Privacy" link="/admin/manage/privacy" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
+            <NavItem  title="Terms & Condition" link="/admin/manage/terms" icon={<FiberManualRecordIcon sx={{transform:"scale(.6)"}} />} type={"subTitle"} />
 
 
             <NavItem  title="Reports" link="/admin/report" icon={<AssessmentIcon/>} type={"title"} />
