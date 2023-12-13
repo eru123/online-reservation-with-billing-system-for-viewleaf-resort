@@ -18,7 +18,7 @@ function Policy() {
       <div style={{marginTop:"25px",marginBottom:"25px"}}>
         <iframe
           title="PDF Viewer" 
-          src={content?.payment} 
+          src={content?.policy} 
           width="100%"
           height="800px" 
         />
