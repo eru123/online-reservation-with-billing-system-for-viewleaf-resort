@@ -113,7 +113,7 @@ function Accommodation({
     <Box display="flex" flexDirection={"column"} gap={"25px"} >
       {accommodations?.map((accommodation: any) => (
         <>
-          {accommodation?.fees?.[parseInt(shift||"0")]?.rate !== 0 ? 
+          {parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.rate) !== 0 ? 
           <AccommodationCard 
             accommodation={accommodation} 
             variant="view" 
