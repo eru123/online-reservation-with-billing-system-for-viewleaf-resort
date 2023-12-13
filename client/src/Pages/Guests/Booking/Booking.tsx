@@ -349,8 +349,6 @@ function Booking() {
       getContent();
     }
    
-    // getContent();
-
     if (reservationData) {
       // console.log(reservationData);
       console.log(form)
@@ -381,7 +379,7 @@ function Booking() {
 
   }, [form, content])
 
-  if (contentLoading) {
+  if (contentLoading && date && shift) {
     return <div>Loading...</div>;
   }
   
