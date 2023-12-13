@@ -18,7 +18,7 @@ function TermsNCondition() {
       <div style={{marginTop:"25px",marginBottom:"25px"}}>
         <iframe
           title="PDF Viewer" 
-          src={content?.payment} 
+          src={content?.terms} 
           width="100%"
           height="800px" 
         />
