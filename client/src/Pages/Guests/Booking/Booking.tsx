@@ -377,7 +377,7 @@ function Booking() {
       navigate("/");
     } 
 
-  }, [form, content])
+  }, [form])
 
   if (contentLoading && date && shift) {
     return <div>Loading...</div>;
