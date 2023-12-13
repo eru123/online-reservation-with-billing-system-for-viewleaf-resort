@@ -2,7 +2,7 @@ import React,{useEffect}from 'react'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import useContent from '../../Hooks/useContent'
-function Policy() {
+function Privacy() {
   const {data:content, loading:contentLoading, error:contentError, getContent} = useContent();
   useEffect(()=>{
     getContent();
@@ -13,12 +13,12 @@ function Policy() {
   }
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
-      <Typography variant="h4" color="primary" fontWeight={600}>Policy</Typography>
-      <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Here are you can see information about our resort</Typography>
+      <Typography variant="h4" color="primary" fontWeight={600}>Data Privacy</Typography>
+      <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Here are you can see information about the data privacy</Typography>
       <div style={{marginTop:"25px",marginBottom:"25px"}}>
         <iframe
           title="PDF Viewer" 
-          src={content?.policy} 
+          src={content?.privacy} 
           width="100%"
           height="800px" 
         />
@@ -27,4 +27,4 @@ function Policy() {
   )
 }
 
-export default Policy
+export default Privacy

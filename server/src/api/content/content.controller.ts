@@ -13,6 +13,8 @@ export const initializeContent = async () => {
         email: 'default@example.com',
         address: 'Default Address Value',
         policy: 'Default Policy Value',
+        terms: 'Default Terms Value',
+        privacy: 'Default Privacy Value',
         payment: 'Default Payment Value',
         promo: 0,
         shift: {

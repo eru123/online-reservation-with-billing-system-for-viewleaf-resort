@@ -22,7 +22,7 @@ const style = {
     overflowY:"scroll"
 };
 
-function TermsNCondition() {
+function Privacy() {
     const [open, setOpen] = useState("");
     const {data:content, loading:contentLoading, error:contentError, getContent, updateContent} = useContent();
     const {
@@ -40,8 +40,8 @@ function TermsNCondition() {
     }
 
     return <>
-        <Typography variant="h4" fontWeight={600} color="primary">Manage Terms & Condition </Typography>
-        <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>Update your terms & condition</Typography>
+        <Typography variant="h4" fontWeight={600} color="primary">Manage Privacy </Typography>
+        <Typography variant="h6" fontWeight={400} color="initial" sx={{marginBottom:"2em"}}>Update your privacy policy</Typography>
         <Box display="flex" sx={{margin:"2em 0"}}>
                 <Box sx={{flexGrow:"1",display:"flex"}}>
                     
@@ -53,7 +53,7 @@ function TermsNCondition() {
         <Box>
           <iframe
             title="PDF Viewer" 
-            src={content?.terms} 
+            src={content?.privacy} 
             width="100%"
             height="900px"
           />
@@ -71,7 +71,7 @@ function TermsNCondition() {
                         Upload PDF
                     </Typography>
                     <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
-                        Set terms and conditions
+                        Set privacy policy
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12} >
@@ -97,7 +97,7 @@ function TermsNCondition() {
                         <Grid item xs={7}>
                             <Button variant="contained" color='primary' fullWidth onClick={()=>{
                               setOpen("");
-                              updateContent({terms: downloadURL});
+                              updateContent({privacy: downloadURL});
                             }}>
                                 Confirm
                             </Button>
@@ -111,4 +111,4 @@ function TermsNCondition() {
     </>
 }
 
-export default TermsNCondition
+export default Privacy

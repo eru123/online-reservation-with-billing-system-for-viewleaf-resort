@@ -95,15 +95,15 @@ function Accommodation({
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
           </Box>
           {form.accommodations?.map((accommodation: any) => (
-          <AccommodationCard 
+            <AccommodationCard 
             accommodation={accommodation}
             variant="selected" 
             openModal={setOpen}
             selectAccommodation={selectAccommodation}
             addInclusion={addInclusion}
             editGuests={editGuests}
-          />
-        ))}
+            />
+          ))}
       </>:""}
     </Box>
 
@@ -112,12 +112,16 @@ function Accommodation({
     <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>List of all available accommodation</Typography>
     <Box display="flex" flexDirection={"column"} gap={"25px"} >
       {accommodations?.map((accommodation: any) => (
-        <AccommodationCard 
-          accommodation={accommodation} 
-          variant="view" 
-          openModal={setOpen}
-          selectAccommodation={selectAccommodation}
-        />
+        <>
+          {parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.rate) !== 0 ? 
+          <AccommodationCard 
+            accommodation={accommodation} 
+            variant="view" 
+            openModal={setOpen}
+            selectAccommodation={selectAccommodation}
+          />
+          :<></>}
+        </>
       ))}
     </Box>
   </>

@@ -172,7 +172,6 @@ function AddAccommodation() {
           <TextField
             id="dayPrice"
             label="Day Shift Price"
-            required
             fullWidth
             type='number'
             onChange={(e) => {
@@ -193,7 +192,6 @@ function AddAccommodation() {
           <TextField
             id="nightPrice"
             label="Night Shift Price"
-            required
             fullWidth
             type='number'
             onChange={(e) => {
@@ -215,7 +213,6 @@ function AddAccommodation() {
           <TextField
             id="wholePrice"
             label="Whole Day Price"
-            required
             fullWidth
             type='number'
             onChange={(e) => {

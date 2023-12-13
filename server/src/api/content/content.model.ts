@@ -28,6 +28,16 @@ const ContentSchema = new Schema<ContentDocument>(
       required: true,
       default: 'Default Policy Value', // Set your default value here
     },
+    terms: {
+      type: String,
+      required: true,
+      default: 'Default Policy Value', // Set your default value here
+    },
+    privacy: {
+      type: String,
+      required: true,
+      default: 'Default Policy Value', // Set your default value here
+    },
     payment: {
       type: String,
       required: true,

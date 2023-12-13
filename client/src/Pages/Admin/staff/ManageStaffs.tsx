@@ -17,6 +17,8 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
+import useEmail from '../../../Hooks/useEmail'
+
 
 import useStaff from '../../../Hooks/useStaff'
 
@@ -41,12 +43,29 @@ function ManageStaffs() {
     username: "",
     email: "",
   })
-  
+  const {sendEmail, sendReservation} = useEmail();
   async function createStaff(e: React.FormEvent) {
     e.preventDefault();
-    setOpen("credential");
+    alert(form.email)
+    sendEmail({
+      email: form.email,
+      subject: "Welcome to View Leaf Family",
+      content: `
+        <html lang="en">
+          <body>
+            <h1>You are officially added a sa staff in view leaf resort, Under you will see your credential</h1>
+            <hr>
+            <p>Email:  ${credentials?.email} </p>
+            <p>Password: ${credentials?.password}</p>
+            <br/>
+            <a href={"${process.env.REACT_APP_URL}/login"}>Login in our website</a>
+        </html>
+      `,
+    })
+    // value={credentials?.email}
     registerStaff(form);
     console.log(form);
+    setOpen("");  
   }
 
   useEffect(()=>{
@@ -131,7 +150,7 @@ function ManageStaffs() {
 
                     <Grid container spacing={1} mt={4}>
                         <Grid item sm={4} xs={12}>
-                            <Button variant="text" fullWidth color='primary' onClick={()=>{setOpen("")}}>
+                            <Button variant="text"  sx={{color:"black"}} fullWidth color='primary' onClick={()=>{setOpen("")}}>
                                 cancel
                             </Button>
                         </Grid>
@@ -225,7 +244,7 @@ function ManageStaffs() {
                     </Typography>
                     <Grid container spacing={1} mt={4}>
                         <Grid item sm={4} xs={12}>
-                            <Button variant="text" fullWidth color='primary' onClick={()=>{setOpen("")}}>
+                            <Button variant="text" sx={{color:"black"}} fullWidth color='primary' onClick={()=>{setOpen("")}}>
                                 cancel
                             </Button>
                         </Grid>

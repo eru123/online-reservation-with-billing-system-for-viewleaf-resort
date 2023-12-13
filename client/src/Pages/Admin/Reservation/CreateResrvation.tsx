@@ -392,12 +392,12 @@ function CreateResrvation() {
                   additional={false} 
                   form={form}
                 />
-                <Box sx={{padding:"0 32px"}}>
+                {/* <Box sx={{padding:"0 32px"}}>
 
                     <Typography textAlign={"end"} variant="h6" color="initial">TOTAL : {content?.promo === 0 ? `₱${form?.costs?.total}` : ` from ₱${form?.costs?.total} to  ₱${form?.costs?.total * ((100 - content?.promo) / 100)} `} </Typography>
                     <Typography  textAlign={"end"} variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of {content?.promo === 0 ? `₱${form?.costs?.accommodations}` : ` from ₱${form?.costs?.accommodations} to  ₱${form?.costs?.accommodations * ((100 - content?.promo) / 100)} `}  </Typography>
                 
-                </Box>
+                </Box> */}
                 
             </>:""}
             {step===3?<>
