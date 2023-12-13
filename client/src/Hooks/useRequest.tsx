@@ -31,11 +31,11 @@ function useRequest(): RequestHook {
     } catch (error: any) {
       setError(error);
       console.error('Error making request:', error);
-      if (error?.response?.data?.errors?.[0]?.message) {
-        alert(error?.response?.data?.errors?.[0]?.message);
-      } else {
-        alert(error?.response?.data?.message);
-      }
+      // if (error?.response?.data?.errors?.[0]?.message) {
+      //   alert(error?.response?.data?.errors?.[0]?.message);
+      // } else {
+      //   alert(error?.response?.data?.message);
+      // }
     } finally {
       setLoading(false);
     }
