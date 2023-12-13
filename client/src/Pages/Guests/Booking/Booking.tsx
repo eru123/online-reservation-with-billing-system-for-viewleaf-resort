@@ -408,7 +408,6 @@ function Booking() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               defaultValue={shift}
-              value={bookingSchedule.shift}
               label="Shift"
               onChange={(e) => {
                 setBookingSchedule({ ...bookingSchedule, shift: e.target.value });
