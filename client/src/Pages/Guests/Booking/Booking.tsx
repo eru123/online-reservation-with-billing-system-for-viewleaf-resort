@@ -330,7 +330,11 @@ function Booking() {
       content: `Your One Time Password (OTP) is: ${otpCode}`,
     })
   }
-
+  useEffect(()=>{
+    if (content){
+      getContent();
+    }
+  },[content])
   useEffect(() => {
     updateSchedule(date, shift)
     calculateCosts();
@@ -340,9 +344,7 @@ function Booking() {
     //   getContent();
     // }
 
-    if (!content){
-      getContent();
-    }
+    
    
     if (reservationData) {
       // console.log(reservationData);
