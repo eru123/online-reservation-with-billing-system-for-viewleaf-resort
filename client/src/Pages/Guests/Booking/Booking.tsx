@@ -331,11 +331,6 @@ function Booking() {
     })
   }
 
-  useEffect(()=>{
-    getContent();
-    console.log("Test");
-  }, [])
-
   useEffect(() => {
     updateSchedule(date, shift)
     calculateCosts();
@@ -345,7 +340,7 @@ function Booking() {
     //   getContent();
     // }
 
-    if (!content || content.length === 0){
+    if (!content){
       getContent();
     }
    
