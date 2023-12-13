@@ -24,6 +24,14 @@ import Box from '@mui/material/Box'
 import ReplayIcon from '@mui/icons-material/Replay';
 import moment from 'moment';
 
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs'
 
 
 interface CustomerData {
@@ -50,6 +58,10 @@ function Booking() {
   const {data: reservationData, error: reservationError, createReservation} = useReservation();
   const [active,setActive] =  useState(1);
   const {date, shift} = useParams();
+  const [bookingSchedule, setBookingSchedule] = useState<any>({
+    date : new Date().getTime(),
+    shift : "0",
+  });
   const [otpCode, setOtpCode] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [form, setForm] = useState<any>({});
@@ -377,7 +389,42 @@ function Booking() {
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
       {active === 1?<>
-          
+        <Box display={"flex"} justifyContent={"start"} gap={2} mb={5}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} >
+            <DatePicker 
+              slotProps={{ 
+                textField: {required:true} ,
+              }}
+              minDate={dayjs()}
+              defaultValue={dayjs(new Date(parseInt(date||"", 10)))}
+              onChange={(newDate:any) => {
+                setBookingSchedule({ ...bookingSchedule, date: new Date(newDate).getTime() });
+              }}
+            />
+          </LocalizationProvider>
+          <FormControl sx={{width:"200px"}} required>
+            <InputLabel id="demo-simple-select-label">shift</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              defaultValue={shift}
+              value={bookingSchedule.shift}
+              label="Shift"
+              onChange={(e) => {
+                setBookingSchedule({ ...bookingSchedule, shift: e.target.value });
+              }}
+            >
+              <MenuItem value={"0"}>Day Shift</MenuItem>
+              <MenuItem value={"1"}>Night Shift</MenuItem>
+              <MenuItem value={"2"}>Whole Shift</MenuItem>
+            </Select>
+            </FormControl>
+            <Button variant="contained" color="primary" onClick={()=>{
+              navigate(`/booking/${bookingSchedule.date}/${bookingSchedule.shift}`)
+            }}>
+              change Date
+            </Button>
+        </Box>
           <Accommodation 
             date={date||""} 
             shift={shift||""}
