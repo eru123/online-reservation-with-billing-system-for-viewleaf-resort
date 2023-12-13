@@ -18,6 +18,8 @@ interface ContentData {
   address: string,
   policy: string,
   payment: string,
+  privacy: string,
+  terms: string,
   promo: string,
   shift: Shift,
 }
@@ -29,6 +31,8 @@ interface UpdateContentData {
   address?: string,
   policy?: string,
   payment?: string,
+  privacy?: string,
+  terms?: string,
   promo?: string,
 }
 
