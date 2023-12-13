@@ -129,20 +129,21 @@ function Payment() {
               control={<Checkbox checked={policyAgree.policy} onChange={() => setPolicyAgree({...policyAgree, policy:!(policyAgree.policy)})} />}
               label="I agree with ViewLeaf's"
             />
-            <Typography variant="body1" component={"a"} href='/policy' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Policies</Typography>
+            <Typography variant="body1" component={"a"} sx={{color:"#70AE45" , borderBottom:"1px solid #70AE45"}} href='/policy' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Policies</Typography>
           </div>
           <div style={{display:"flex",alignItems:"center"}}>
             <FormControlLabel
               control={<Checkbox checked={policyAgree.termsNCondition} onChange={() => setPolicyAgree({...policyAgree, termsNCondition:!(policyAgree.termsNCondition)})}/>}
               label="I agree with ViewLeaf's"
             />
-            <Typography variant="body1" component={"a"} href='/termsncondition' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Terms & Condition</Typography>
+            <Typography variant="body1" component={"a"} sx={{color:"#70AE45" , borderBottom:"1px solid #70AE45"}} href='/termsncondition' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Terms & Condition</Typography>
           </div>
           <div style={{display:"flex",alignItems:"center"}}>
             <FormControlLabel
               control={<Checkbox checked={policyAgree.dataPrivacy} onChange={() => setPolicyAgree({...policyAgree, dataPrivacy:!(policyAgree.dataPrivacy)})} />}
-              label="I agree with the Data Privacy Policy"
+              label="I agree with the "
             />
+            <Typography variant="body1" component={"a"} sx={{color:"#70AE45" , borderBottom:"1px solid #70AE45"}} href='/privacy' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Data Privacy Policy</Typography>
           </div>
           <div style={{display:"flex",alignItems:"center",justifyContent:"center",margin:"2em 0"}}>
             <img width={"50%"} src={downloadURL} alt="" />
