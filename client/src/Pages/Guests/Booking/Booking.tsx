@@ -349,8 +349,6 @@ function Booking() {
       getContent();
     }
    
-    // getContent();
-
     if (reservationData) {
       // console.log(reservationData);
       console.log(form)
@@ -381,10 +379,9 @@ function Booking() {
 
   }, [form, content])
 
-  if (contentLoading) {
+  if (contentLoading && date && shift) {
     return <div>Loading...</div>;
   }
-  
 
   return (
     <Container maxWidth="lg" sx={{padding:"6em 0 7em"}}>
