@@ -124,7 +124,7 @@ function Payment() {
               height="800px" 
             />
           </div>
-          <div style={{display:"flex",alignItems:"center"}}>
+          {/* <div style={{display:"flex",alignItems:"center"}}>
             <FormControlLabel
               control={<Checkbox checked={policyAgree.policy} onChange={() => setPolicyAgree({...policyAgree, policy:!(policyAgree.policy)})} />}
               label="I agree with ViewLeaf's"
@@ -144,7 +144,7 @@ function Payment() {
               label="I agree with the "
             />
             <Typography variant="body1" component={"a"} sx={{color:"#70AE45" , borderBottom:"1px solid #70AE45"}} href='/privacy' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Data Privacy Policy</Typography>
-          </div>
+          </div> */}
           <div style={{display:"flex",alignItems:"center",justifyContent:"center",margin:"2em 0"}}>
             <img width={"50%"} src={downloadURL} alt="" />
           </div>
@@ -154,7 +154,7 @@ function Payment() {
                 <Chip label="Upload Payment Receipt " variant="outlined" onClick={()=>{}}/>
               </label>
               {/* <Chip label="Send" variant="filled" color='primary' sx={{color:"white"}} onClick={()=>{}}/> */}
-              <Button variant="contained" color="primary" type="submit" disabled={policyAgree.dataPrivacy && policyAgree.policy && policyAgree.termsNCondition && downloadURL ?false:true}>
+              <Button variant="contained" color="primary" type="submit" disabled={downloadURL ?false:true}>
                 Pay Now
               </Button>
           </div>

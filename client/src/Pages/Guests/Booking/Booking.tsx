@@ -32,7 +32,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs'
-
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 interface CustomerData {
   name?: string;
@@ -73,6 +74,11 @@ function Booking() {
     inclusions: 0,
     accommodations: 0
   })
+  const [policyAgree,setPolicyAgree] = useState({
+    policy:false,
+    termsNCondition:false,
+    dataPrivacy:false
+  });
   const {data:content, loading:contentLoading, error:contentError, getContent} = useContent();
 
   const updateSchedule = (date: any, shift: any) => {
@@ -442,6 +448,27 @@ function Booking() {
           <Typography variant="h4" color="primary" fontWeight={600}>Guest Details </Typography>
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Please provide your information to so we can send update to you</Typography>
           <GuestDetails updateCustomer={updateCustomer} form={form} />
+          <div style={{display:"flex",alignItems:"center",marginTop:"25px"}} >
+            <FormControlLabel
+              control={<Checkbox checked={policyAgree.policy} onChange={() => setPolicyAgree({...policyAgree, policy:!(policyAgree.policy)})} />}
+              label="I agree with ViewLeaf's"
+            />
+            <Typography variant="body1" component={"a"} sx={{color:"#70AE45" , borderBottom:"1px solid #70AE45"}} href='/policy' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Policies</Typography>
+          </div>
+          <div style={{display:"flex",alignItems:"center"}}>
+            <FormControlLabel
+              control={<Checkbox checked={policyAgree.termsNCondition} onChange={() => setPolicyAgree({...policyAgree, termsNCondition:!(policyAgree.termsNCondition)})}/>}
+              label="I agree with ViewLeaf's"
+            />
+            <Typography variant="body1" component={"a"} sx={{color:"#70AE45" , borderBottom:"1px solid #70AE45"}} href='/termsncondition' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Terms & Condition</Typography>
+          </div>
+          <div style={{display:"flex",alignItems:"center"}}>
+            <FormControlLabel
+              control={<Checkbox checked={policyAgree.dataPrivacy} onChange={() => setPolicyAgree({...policyAgree, dataPrivacy:!(policyAgree.dataPrivacy)})} />}
+              label="I agree with the "
+            />
+            <Typography variant="body1" component={"a"} sx={{color:"#70AE45" , borderBottom:"1px solid #70AE45"}} href='/privacy' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>Data Privacy Policy</Typography>
+          </div>
       </>:""}
       
 
@@ -467,7 +494,7 @@ function Booking() {
                       sendVerification();
                       setOpen("verify");
                     }}
-                      disabled={!form.name || !form.email || !form.phone || !/^09\d{9}$/.test(form.phone) ||  !/@.*\..*/.test(form.email)}
+                      disabled={!form.name || !form.email || !form.phone || !/^09\d{9}$/.test(form.phone) ||  !/@.*\..*/.test(form.email) || !policyAgree.dataPrivacy || !policyAgree.policy || !policyAgree.termsNCondition}
                     >
                       Finish
                     </Button>
@@ -488,8 +515,6 @@ function Booking() {
                           alert("All accommodations should have at least one guest");
                         }
                       }
-
-                      
                     }}
                   >
                     Next
