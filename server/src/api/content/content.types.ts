@@ -4,6 +4,8 @@ export interface ContentDocument extends Document {
   email: string,
   address: string,
   policy: string,
+  terms: string,
+  privacy: string,
   payment: string,
   promo: Number,
   shift: Shift,
