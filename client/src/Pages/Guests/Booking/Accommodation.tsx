@@ -44,7 +44,7 @@ function Accommodation({
 }:Props) {
   const [open, setOpen] = React.useState("");
 
-  const {data:accommodations, getAccommodation} = useAccommodation();
+  const {data:accommodations,loading:LoadingAccommodation, getAccommodation} = useAccommodation();
 
   useEffect(()=>{
     
@@ -57,7 +57,7 @@ function Accommodation({
     }
     
   }, [date, shift])
-
+  if(LoadingAccommodation)return<>Loading...</>
   return <>
     {/* <Box display="flex"  my={"20px"} gap={"10px"}>  
       <LocalizationProvider dateAdapter={AdapterDayjs}>
