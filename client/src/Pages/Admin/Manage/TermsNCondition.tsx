@@ -53,7 +53,7 @@ function TermsNCondition() {
         <Box>
           <iframe
             title="PDF Viewer" 
-            src={content?.policy} 
+            src={content?.terms} 
             width="100%"
             height="900px"
           />
@@ -71,7 +71,7 @@ function TermsNCondition() {
                         Upload PDF
                     </Typography>
                     <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
-                        Set policy for the guests
+                        Set terms and conditions
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12} >
@@ -97,7 +97,7 @@ function TermsNCondition() {
                         <Grid item xs={7}>
                             <Button variant="contained" color='primary' fullWidth onClick={()=>{
                               setOpen("");
-                              updateContent({policy: downloadURL});
+                              updateContent({terms: downloadURL});
                             }}>
                                 Confirm
                             </Button>
