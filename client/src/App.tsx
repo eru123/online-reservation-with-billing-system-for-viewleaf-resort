@@ -25,6 +25,7 @@ import Content from './Pages/Admin/Manage/Content';
 import InvoiceManage from './Pages/Admin/Invoice'
 import PaymentInstruction from './Pages/Admin/Manage/PaymentInstruction';
 import Policy from './Pages/Admin/Manage/Policy';
+import Privacy from './Pages/Admin/Manage/Privacy';
 import CreateResrvation from './Pages/Admin/Reservation/CreateResrvation';
 import Report from './Pages/Admin/Report/Report';
 import Additional from './Pages/Admin/Reservation/Additional/Additional';
@@ -118,7 +119,8 @@ function App() {
               <Route path="/admin/manage/content" element={<Content/>}/>
               <Route path="/admin/manage/paymentInstruction" element={<PaymentInstruction/>}/>
               <Route path="/admin/manage/policy" element={<Policy/>}/>
-              <Route path="/admin/manage/ternsncondition" element={<TermsNCondition/>}/>
+              <Route path="/admin/manage/privacy" element={<Privacy/>}/>
+              <Route path="/admin/manage/terms" element={<TermsNCondition/>}/>
               
               <Route path="/admin/staff" element={<Staff/>}/>
             </Route>
