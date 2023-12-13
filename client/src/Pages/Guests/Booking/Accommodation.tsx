@@ -95,14 +95,18 @@ function Accommodation({
           <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>Select you want to rent</Typography>
           </Box>
           {form.accommodations?.map((accommodation: any) => (
-          <AccommodationCard 
-            accommodation={accommodation}
-            variant="selected" 
-            openModal={setOpen}
-            selectAccommodation={selectAccommodation}
-            addInclusion={addInclusion}
-            editGuests={editGuests}
-          />
+            <>
+              {accommodation?.fees?.[parseInt(shift||"0")]?.rate !== 0 ? 
+                <AccommodationCard 
+                accommodation={accommodation}
+                variant="selected" 
+                openModal={setOpen}
+                selectAccommodation={selectAccommodation}
+                addInclusion={addInclusion}
+                editGuests={editGuests}
+                />
+              :<></>}
+            </>
         ))}
       </>:""}
     </Box>
