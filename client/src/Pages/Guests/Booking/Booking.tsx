@@ -376,7 +376,7 @@ function Booking() {
 
   }, [form])
 
-  if (contentLoading && date && shift) {
+  if (contentLoading && date && shift && content) {
     return <div>Loading...</div>;
   }
 
