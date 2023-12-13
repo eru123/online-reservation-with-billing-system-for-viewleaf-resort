@@ -12,28 +12,6 @@ interface SendEmailData {
   content: unknown
 }
 
-interface ReservationDetails{
-  reservationId: string;
-  name: string;
-  email: string;
-  phone: string;
-  schedule: number;
-  status: string;
-  accommodations: {
-    accommodationId: string;
-    shift: string;
-    guests: {
-      adult: number;
-      children: number;
-      senior: number;
-      pwd: number;
-    },
-    inclusions: {
-        name: string;
-        quantity: number;
-    }[]
-  }[]
-}
 
 function useEmail(): Data {
 

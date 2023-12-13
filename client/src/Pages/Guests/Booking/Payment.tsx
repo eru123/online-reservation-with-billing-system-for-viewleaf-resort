@@ -84,7 +84,7 @@ function Payment() {
   useEffect(() => {
     if (reservation) {
       const estimatedTimeToPay = dayjs(reservation[0].createdAt)
-        .add(15, 'minute')
+        .add(60, 'minute')
         .format('MMM D, YYYY ( h:mm A )');
       setEstimatedTimeToPay(estimatedTimeToPay);
     }
