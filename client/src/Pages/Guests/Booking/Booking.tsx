@@ -331,10 +331,9 @@ function Booking() {
     })
   }
   useEffect(()=>{
-    if (content){
-      getContent();
-    }
-  },[content])
+    getContent();
+  },[])
+
   useEffect(() => {
     updateSchedule(date, shift)
     calculateCosts();
@@ -376,7 +375,7 @@ function Booking() {
 
   }, [form])
 
-  if (contentLoading && date && shift && content) {
+  if (contentLoading && date && shift) {
     return <div>Loading...</div>;
   }
 
