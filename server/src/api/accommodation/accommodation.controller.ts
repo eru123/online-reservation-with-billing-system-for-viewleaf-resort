@@ -58,6 +58,8 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
         return [];
     }
 
+    console.log(reservedShiftsOfResorts);
+
     // Get all the accmmodations from invoices
     const invoiceAccommodations: AccommodationShift[] = invoices
         .map(({ accommodationId, shift }) => {
@@ -76,7 +78,8 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
 
     accommodations = accommodations.map((accommodation) => {
         accommodation.fees = accommodation.fees.filter(
-            (fee) => ![...reservedShiftsOfResorts, Shift.WHOLE].includes(fee.shift)
+            (fee) =>
+                reservedShiftsOfResorts.length === 0 || ![...reservedShiftsOfResorts, Shift.WHOLE].includes(fee.shift)
         );
         return accommodation;
     });
