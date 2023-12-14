@@ -54,12 +54,14 @@ function AccommodationCard({
                               <Typography variant="subtitle2" color="initial" fontWeight={500} textTransform={"uppercase"}>{accommodation?.type}</Typography>
                               <Typography variant="h5" color="Primary" fontWeight={600} >{accommodation?.title}</Typography>
                               <Typography sx={{minHeight:"100px"}} variant="body2" color="initial"  textAlign={"justify"}>{accommodation?.description}</Typography>
-                              <Typography variant="subtitle2" color="initial" fontWeight={500} sx={{marginTop:"10px",opacity:'.6',marginBottom:"5px"}}>Inclusion</Typography>
-                              <Box display="flex" sx={{flexWrap:"wrap",gap:"10px"}}>
-                                {accommodation?.inclusions?.map((inclusion:any)=>{
-                                    return <Chip label={inclusion.name + " (₱" + inclusion.price + ")"} variant="outlined" />
-                                })}
-                              </Box>
+                              {accommodation?.inclusions?.length === 0?"":<>
+                                <Typography variant="subtitle2" color="initial" fontWeight={500} sx={{marginTop:"10px",opacity:'.6',marginBottom:"5px"}}>Inclusion</Typography>
+                                <Box display="flex" sx={{flexWrap:"wrap",gap:"10px"}}>
+                                  {accommodation?.inclusions?.map((inclusion:any)=>{
+                                      return <Chip label={inclusion.name + " (₱" + inclusion.price + ")"} variant="outlined" />
+                                  })}
+                                </Box>
+                              </>}
                           </Box>
                       </Grid>
                       <Grid item md={3} xs={3}>
