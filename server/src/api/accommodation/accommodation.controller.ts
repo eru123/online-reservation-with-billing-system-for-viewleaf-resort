@@ -53,6 +53,11 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
     // Get all the accommodations from each of the reservations' invoices
     const invoices: InvoiceDocument[] = await InvoiceModel.find({ reservation: { $in: reservationIds } }).exec();
 
+    const reservedShiftsOfResorts = [...new Set(invoices.map((invoice) => invoice.shift))];
+    if (reservedShiftsOfResorts.includes(Shift.WHOLE)) {
+        return [];
+    }
+
     // Get all the accmmodations from invoices
     const invoiceAccommodations: AccommodationShift[] = invoices
         .map(({ accommodationId, shift }) => {
@@ -68,34 +73,13 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
 
     // Get all available accommodations
     let accommodations: AccommodationDocument[] = await AccommodationModel.find().exec();
-    
-    // Get the reserved shifts of accommodations with type RESORT
-    const reservedShiftsOfResorts = [
-        ...new Set(
-            invoiceAccommodations
-                .filter(({ accommodationId }) => {
-                    const accommodation = accommodations.find(
-                        (accommodation) => accommodation.accommodationId === accommodationId
-                    );
-                    if (!accommodation) return false;
-                    return accommodation.type === AccommodationType.RESORT;
-                })
-                .map(({ shift }) => shift)
-        )
-    ];
 
-    // This filters the accommodation where shift is not in reservedShiftsOfResorts
-    if (reservedShiftsOfResorts.includes(Shift.WHOLE)) {
-        return [];
-    } else {
-        accommodations = accommodations.map((accommodation) => {
-            accommodation.fees = accommodation.fees.filter((fee) => {
-                return !reservedShiftsOfResorts.includes(fee.shift);
-            });
-
-            return accommodation;
-        });
-    }
+    accommodations = accommodations.map((accommodation) => {
+        accommodation.fees = accommodation.fees.filter((fee) =>
+            ![...reservedShiftsOfResorts, Shift.WHOLE].includes(fee.shift)
+        );
+        return accommodation;
+    });
 
     accommodations = accommodations
         // Filter out accommodations where shift is in invoiceAccommodations
