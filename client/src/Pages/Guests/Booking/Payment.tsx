@@ -109,11 +109,11 @@ function Payment() {
           <Box display="flex" gap={4} mt={2}>
             <Box >
               <Typography variant="subtitle2" color="initial" sx={{opacity:'.6'}}>Total</Typography>
-              <Typography variant="h6" color="initial" fontWeight={600}>₱{reservation ? calculateCost(reservation)?.total : ""}</Typography>
+              <Typography variant="h6" color="initial" fontWeight={600}>₱{reservation?.total}</Typography>
             </Box>
             <Box >
               <Typography variant="subtitle2" color="initial" sx={{opacity:'.6'}}>Min. Payment</Typography>
-              <Typography variant="h6" color="initial" fontWeight={600}>₱{reservation ? calculateCost(reservation)?.minimum : ""}</Typography>
+              <Typography variant="h6" color="initial" fontWeight={600}>₱{reservation?.minimum}</Typography>
             </Box>
           </Box>
           <div style={{marginTop:"25px",marginBottom:"25px"}}>
