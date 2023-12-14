@@ -58,12 +58,9 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
         .map(({ accommodationId, shift }) => {
             const shifts = [{ accommodationId, shift }];
 
-            // if (shift == Shift.WHOLE)
-            //     shifts.push({ accommodationId, shift: Shift.DAY }, { accommodationId, shift: Shift.NIGHT });
-            // else shifts.push({ accommodationId, shift: Shift.WHOLE });
-            if (shift != Shift.WHOLE) {
-                shifts.push({ accommodationId, shift: Shift.WHOLE });
-            }
+            if (shift == Shift.WHOLE)
+                shifts.push({ accommodationId, shift: Shift.DAY }, { accommodationId, shift: Shift.NIGHT });
+            else shifts.push({ accommodationId, shift: Shift.WHOLE });
 
             return shifts;
         })
@@ -71,28 +68,29 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
 
     // Get all available accommodations
     let accommodations: AccommodationDocument[] = await AccommodationModel.find().exec();
+    
+    // Get the reserved shifts of accommodations with type RESORT
+    const reservedShiftsOfResorts = [
+        ...new Set(
+            invoiceAccommodations
+                .filter(({ accommodationId }) => {
+                    const accommodation = accommodations.find(
+                        (accommodation) => accommodation.accommodationId === accommodationId
+                    );
+                    if (!accommodation) return false;
+                    return accommodation.type === AccommodationType.RESORT;
+                })
+                .map(({ shift }) => shift)
+        )
+    ];
 
-    const resortInvoiceAccommodations = invoiceAccommodations.filter(({ accommodationId }) => {
-        const accommodation = accommodations.find((accommodation) => accommodation.accommodationId === accommodationId);
-        if (!accommodation) return false;
-        return accommodation.type === AccommodationType.RESORT;
-    });
-
-    const hasWhole = resortInvoiceAccommodations.some((ria) => ria.shift === Shift.WHOLE);
-    const hasDay = resortInvoiceAccommodations.some((ria) => ria.shift === Shift.DAY);
-    const hasNight = resortInvoiceAccommodations.some((ria) => ria.shift === Shift.NIGHT);
-
-    if (resortInvoiceAccommodations.length > 0) {
+    // This filters the accommodation where shift is not in reservedShiftsOfResorts
+    if (reservedShiftsOfResorts.includes(Shift.WHOLE)) {
+        return [];
+    } else {
         accommodations = accommodations.map((accommodation) => {
             accommodation.fees = accommodation.fees.filter((fee) => {
-                if (hasWhole) {
-                    return false;
-                }
-
-                return (
-                    (hasDay && (fee.shift === Shift.NIGHT || fee.shift === Shift.WHOLE)) ||
-                    (hasNight && (fee.shift === Shift.DAY || fee.shift === Shift.WHOLE))
-                );
+                return !reservedShiftsOfResorts.includes(fee.shift);
             });
 
             return accommodation;
@@ -102,13 +100,15 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
     accommodations = accommodations
         // Filter out accommodations where shift is in invoiceAccommodations
         .map((accommodation) => {
-            accommodation.fees = accommodation.fees.filter(
-                (fee) =>
-                    !invoiceAccommodations.some(
-                        ({ accommodationId, shift }) =>
-                            accommodationId === accommodation.accommodationId && shift === fee.shift
-                    )
-            );
+            accommodation.fees = accommodation.fees.filter((fee) => {
+                const foundFee = invoiceAccommodations.find(
+                    ({ accommodationId, shift }) =>
+                        accommodationId === accommodation.accommodationId && shift === fee.shift
+                );
+
+                if (foundFee) return false;
+                return true;
+            });
 
             return accommodation;
         })
@@ -116,19 +116,18 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
         .filter(({ fees }) => fees.length > 0);
 
     return accommodations;
-}
+};
 
 export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAccommodations>, res) => {
     const { accommodationId, schedule, shift, all } = req.query;
     const checker = new CheckData();
- 
+
     let accommodations: AccommodationDocument[];
 
     if (Boolean(all) === true) {
         accommodations = await AccommodationModel.find().exec();
-    }
-    else {
-        accommodations = await getAvailableAccommodations(checker, schedule); 
+    } else {
+        accommodations = await getAvailableAccommodations(checker, schedule);
     }
 
     if (shift) {
@@ -176,7 +175,7 @@ export const createAccommodation: RequestHandler = async (req: BodyRequest<Creat
 
     // Additional check for inclusions
     if (!Array.isArray(inclusions)) {
-      checker.addError('inclusions', 'inclusions must be an array');
+        checker.addError('inclusions', 'inclusions must be an array');
     } else {
         for (let i = 0; i < inclusions.length; i++) {
             const { name, price } = inclusions[i];
@@ -272,11 +271,11 @@ export const updateAccommodationDetails: RequestHandler = async (req: BodyReques
     if (!accommodation) throw new NotFound('Accommodation');
 
     if (title) {
-      checker.checkType(title, 'string', 'title');
-      if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
+        checker.checkType(title, 'string', 'title');
+        if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
-      accommodation.title = title;
-  }
+        accommodation.title = title;
+    }
 
     if (description) {
         checker.checkType(description, 'string', 'description');
@@ -387,8 +386,7 @@ export const updateInclusions: RequestHandler = async (req: BodyRequest<UpdateIn
     if (!accommodation) throw new NotFound('Accommodation');
 
     const uniqueInclusions = inclusions.filter(
-        (inclusion, idx, originalInclusions) => 
-            originalInclusions.findIndex((i) => i.name === inclusion.name) === idx
+        (inclusion, idx, originalInclusions) => originalInclusions.findIndex((i) => i.name === inclusion.name) === idx
     );
 
     accommodation.inclusions = uniqueInclusions.map((inclusion) => ({ ...inclusion, accommodationId }));
