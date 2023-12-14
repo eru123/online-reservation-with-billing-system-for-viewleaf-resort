@@ -463,15 +463,19 @@ function Content() {
                         <form onSubmit={handleEditContact}>
                           <Grid container spacing={2}>
                               <Grid item xs={12}>
-                                <TextField
-                                  id="phone"
-                                  label="Phone Number"
-                                  type='number'
-                                  fullWidth
-                                  defaultValue={contents?.phone}
-                                  onChange={(e) => {
-                                    setContactForm({...contactForm,phone:parseInt(e.target.value)})
-                                  }}
+                              <TextField
+                                id="phone"
+                                label="Phone Number"
+                                type="text"
+                                fullWidth
+                                defaultValue={contents?.phone}
+                                onChange={(e) => {
+                                  // Remove non-numeric characters using a regular expression
+                                  const numericValue = e.target.value.replace(/\D/g, '');
+
+                                  // Update the state with the numeric value
+                                  setContactForm({ ...contactForm, phone: parseInt(numericValue) });
+                                }}
                                 />
                               </Grid>
                               <Grid item xs={12}>

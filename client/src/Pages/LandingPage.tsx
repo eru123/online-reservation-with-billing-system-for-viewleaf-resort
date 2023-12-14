@@ -260,7 +260,7 @@ function LandingPage() {
                       <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
                           <CallIcon sx={{fill:"white"}}/>
                           <Typography variant="body2" color="white">
-                            {contents?.phone}
+                            (+63)  {contents?.phone}
                           </Typography>
                       </div>
                       <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
