@@ -119,9 +119,10 @@ export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAcc
         if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
         // Filter out all accommodations where shift is not equal to shift
-        accommodations = accommodations.filter((accommodation) =>
-            accommodation.fees.some((fee) => fee.shift === shift)
-        );
+        accommodations = accommodations.map((accommodation) => {
+            accommodation.fees = accommodation.fees.filter((fee) => fee.shift === shift);
+            return accommodation;
+        });
     }
 
     if (accommodationId) {
