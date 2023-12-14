@@ -103,7 +103,7 @@ function BookingStatement({additional, form, invoices}:Props) {
                     <Typography variant="subtitle1" fontWeight={500}  color="initial">Senior</Typography>
                     <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}>  {accommodation.guests.senior} x {(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult) * .8} </Typography>
                   </div> 
-                  <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.adult * ((accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult) * .8)} </Typography>
+                  <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.senior * ((accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult) * .8)} </Typography>
                 </Box>
               :<></>}
               {accommodation?.guests?.pwd ? 
@@ -112,7 +112,7 @@ function BookingStatement({additional, form, invoices}:Props) {
                       <Typography variant="subtitle1" fontWeight={500}  color="initial">PWD</Typography>
                       <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}>  {accommodation.guests.pwd} x {(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult) * .8} </Typography>
                     </div> 
-                    <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.adult * ((accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult) * .8)} </Typography>
+                    <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.pwd * ((accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult) * .8)} </Typography>
                 </Box>
               :<></>}
             </Box>
