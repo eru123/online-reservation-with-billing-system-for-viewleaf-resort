@@ -30,6 +30,7 @@ type Props = {
   selectAccommodation?: any;
   editGuests?: any;
   addInclusion?: any;
+  calculateCosts?: any;
 }
 
 function Accommodation({
@@ -40,7 +41,8 @@ function Accommodation({
   updateCustomer,
   selectAccommodation,
   editGuests,
-  addInclusion
+  addInclusion,
+  calculateCosts
 }:Props) {
   const [open, setOpen] = React.useState("");
 
@@ -116,6 +118,7 @@ function Accommodation({
           {parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.rate) !== 0 ? 
           <AccommodationCard 
             accommodation={accommodation} 
+            calculateCosts={calculateCosts}
             variant="view" 
             openModal={setOpen}
             selectAccommodation={selectAccommodation}

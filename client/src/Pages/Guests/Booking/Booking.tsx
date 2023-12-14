@@ -192,7 +192,6 @@ function Booking() {
     let minimumAll = 0
     let inclusionsAll = 0
     let guestsAll = 0
-    
 
     setForm((prevForm: { accommodations: any }) => ({
       ...prevForm,
@@ -231,17 +230,10 @@ function Booking() {
               guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee.adult) * 0.8)
               guestsAll += parseInt(accommodation.guests.pwd) * (parseInt(accommodation?.fees?.[parseInt(shift||"0")]?.guestFee.adult) * 0.8)
             }
-    
-            total = minimum +  inclusions + guests
             
           }
-          totalAll += total
-
-        // return {
-        //   ...accommodation,
-        //   total: total ,
-        //   minimum: minimum
-        // }
+        total = minimum +  inclusions + guests
+        totalAll += total
 
         return {
           ...accommodation,
@@ -338,18 +330,11 @@ function Booking() {
   }
   useEffect(()=>{
     getContent();
+    updateSchedule(date, shift)
   },[])
 
   useEffect(() => {
-    updateSchedule(date, shift)
     calculateCosts();
-    // console.log(form);
-
-    // if (content?.length===0){
-    //   getContent();
-    // }
-
-    
    
     if (reservationData) {
       // console.log(reservationData);
@@ -429,6 +414,7 @@ function Booking() {
             date={date||""} 
             shift={shift||""}
             form={form}
+            calculateCosts={calculateCosts}
             updateSchedule={updateSchedule}
             updateCustomer={updateCustomer}
             selectAccommodation={selectAccommodation}
@@ -505,7 +491,7 @@ function Booking() {
                     onClick={() => {
                       const hasValidGuests = checkGuestsForAllAccommodations(form);
                       const hasAccommodations = form.accommodations?.length > 0;
-                  
+                      console.log(form)
                       if (hasValidGuests && hasAccommodations) {
                         setActive((prevActive) => prevActive + 1);
                       } else {

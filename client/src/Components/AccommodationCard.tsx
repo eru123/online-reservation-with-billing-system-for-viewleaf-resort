@@ -19,6 +19,7 @@ type Props={
   selectAccommodation?: any;
   addInclusion?: any;
   editGuests?: any;
+  calculateCosts?:any;
 }
 
 function AccommodationCard({
@@ -27,11 +28,12 @@ function AccommodationCard({
   accommodation, 
   selectAccommodation,
   addInclusion,
-  editGuests
+  editGuests,
+  calculateCosts
 }:Props) {
 
   const {date, shift} = useParams();
-  const [selectedShift,setSelectedShift] = useState("Day Shift");
+  // const [selectedShift,setSelectedShift] = useState("Day Shift");
   const navigate = useNavigate();
   const scrollToTop = () => {
     window.scrollTo({
@@ -63,7 +65,7 @@ function AccommodationCard({
                       <Grid item md={3} xs={3}>
                           <div style={{padding:'1em 1em 1em 0',display:"flex",flexDirection:"column",height:"100%"}}>
                               <div style={{display:"flex",flexDirection:"column",alignItems:"end",flexGrow:"1"}}>
-                                  {variant === "selected"?"":
+                                  {/* {variant === "selected"?"":
                                     <FormControl sx={{ borderBottom: 'none' ,textAlign:"end"}}>
                                         <NativeSelect
                                             defaultValue={30}
@@ -79,16 +81,16 @@ function AccommodationCard({
                                             <option  style={{ textAlign: 'end' }} value={"Whole Day"}>Whole Day</option>
                                         </NativeSelect>
                                     </FormControl>
-                                  }
+                                  } */}
                                   {variant === "additional"?"": <>
                                     <Typography variant="h4" color="Primary" fontWeight={700} >₱
-                                      {selectedShift ==="Day Shift"?<>
+                                      {shift ==="0"?<>
                                         {accommodation?.fees?.[0]?.rate}
                                       </>:""}
-                                      {selectedShift ==="Night Shift"?<>
+                                      {shift ==="1"?<>
                                         {accommodation?.fees?.[1]?.rate}
                                       </>:""}
-                                      {selectedShift ==="Whole Day"?<>
+                                      {shift ==="2"?<>
                                         {accommodation?.fees?.[2]?.rate}
                                       </>:""}
                                     </Typography>
@@ -98,13 +100,13 @@ function AccommodationCard({
                               </div>
                               <div style={{display:"flex",justifyContent:"end"}}>
                                   {(variant==="selected")?
-                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation)}}>    
+                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation);calculateCosts()}}>    
                                           Unbook
                                       </Button>
                                       :""
                                   }
                                   {(variant==="view")?
-                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation);scrollToTop()}}>    
+                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation);scrollToTop();calculateCosts()}}>    
                                           Book
                                       </Button>
                                   :""}
