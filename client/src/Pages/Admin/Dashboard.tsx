@@ -103,7 +103,7 @@ function Dashboard() {
                   <TableRow key={reservation.reservationId} sx={{ background: "#D7D7D7" }} component={Link}  to={`/admin/invoice/${reservation.reservationId}`}>
                     <TableCell>{`${reservation.reservationId.substring(0, 4)}...${reservation.reservationId.substring(reservation.reservationId.length - 4)}`}</TableCell>
                     <TableCell>{reservation.customer.name}</TableCell>
-                    <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })}</TableCell>
+                    <TableCell>{new Date(reservation.schedule).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })} - {reservation.shift}</TableCell>
                     <TableCell align='center'>
                       <Chip 
                         label={reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)} 
