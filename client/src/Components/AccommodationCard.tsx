@@ -84,7 +84,7 @@ function AccommodationCard({
                                   } */}
                                   {variant === "additional"?"": <>
                                     <Typography variant="h4" color="Primary" fontWeight={700} >₱
-                                      {shift ==="0"?<>
+                                      {shift ==="0" || shift === undefined?<>
                                         {accommodation?.fees?.[0]?.rate}
                                       </>:""}
                                       {shift ==="1"?<>
