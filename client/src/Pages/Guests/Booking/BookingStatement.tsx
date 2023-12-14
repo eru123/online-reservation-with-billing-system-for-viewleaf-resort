@@ -18,7 +18,7 @@ type Props = {
 function BookingStatement({additional, form, invoices}:Props) {
   const {date, shift} = useParams();
 
-  
+  console.log(form)
 
   const calculateCost = (data: any) =>{
     let minimum = 0
@@ -92,9 +92,10 @@ function BookingStatement({additional, form, invoices}:Props) {
                 <Box display="flex" >
                     <div style={{flexGrow:"1"}}>
                       <Typography variant="subtitle1" fontWeight={500}  color="initial">Kids</Typography>
-                      <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}>  {accommodation.guests.kids} x {accommodation.guestFee.kids || accommodation?.guestFee?.kids} </Typography>
+                      <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}>  {accommodation.guests.kids} x {accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.kids || accommodation?.guestFee?.kids} </Typography>
+                      {/* <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}> {accommodation.guests.adult} x {accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult} </Typography> */}
                     </div> 
-                    <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.kids * accommodation.guestFee.kids}</Typography>
+                    <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.kids * accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.kids || accommodation?.guestFee?.kids} </Typography>
                 </Box>
               :<></>}
               {accommodation?.guests?.senior ? 
