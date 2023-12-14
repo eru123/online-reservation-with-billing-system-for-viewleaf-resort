@@ -75,8 +75,8 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
     let accommodations: AccommodationDocument[] = await AccommodationModel.find().exec();
 
     accommodations = accommodations.map((accommodation) => {
-        accommodation.fees = accommodation.fees.filter((fee) =>
-            ![...reservedShiftsOfResorts, Shift.WHOLE].includes(fee.shift)
+        accommodation.fees = accommodation.fees.filter(
+            (fee) => ![...reservedShiftsOfResorts, Shift.WHOLE].includes(fee.shift)
         );
         return accommodation;
     });
@@ -119,10 +119,12 @@ export const getAccommodations: RequestHandler = async (req: QueryRequest<GetAcc
         if (checker.size() > 0) throw new UnprocessableEntity(checker.errors);
 
         // Filter out all accommodations where shift is not equal to shift
-        accommodations = accommodations.map((accommodation) => {
-            accommodation.fees = accommodation.fees.filter((fee) => fee.shift === shift);
-            return accommodation;
-        });
+        accommodations = accommodations
+            .map((accommodation) => {
+                accommodation.fees = accommodation.fees.filter((fee) => fee.shift === shift);
+                return accommodation;
+            })
+            .filter(({ fees }) => fees.length > 0);
     }
 
     if (accommodationId) {
