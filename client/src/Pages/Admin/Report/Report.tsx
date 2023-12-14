@@ -271,7 +271,7 @@ function Report() {
                   variant="contained"
                   aria-label="Disabled elevation buttons"
               >
-                <Button onClick={()=>{exportToCSV(reports)}}>Backup</Button>
+                <Button onClick={()=>{exportToCSV(reservations)}}>Backup</Button>
                 {/* <Button>Restore</Button> */}
               </ButtonGroup>
           </Box>
