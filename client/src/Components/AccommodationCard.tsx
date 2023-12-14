@@ -86,15 +86,7 @@ function AccommodationCard({
                                   } */}
                                   {variant === "additional"?"": <>
                                     <Typography variant="h4" color="Primary" fontWeight={700} >₱
-                                      {shift ==="0" || shift === undefined?<>
                                         {accommodation?.fees?.[0]?.rate}
-                                      </>:""}
-                                      {shift ==="1"?<>
-                                        {accommodation?.fees?.[1]?.rate}
-                                      </>:""}
-                                      {shift ==="2"?<>
-                                        {accommodation?.fees?.[2]?.rate}
-                                      </>:""}
                                     </Typography>
                                     <Typography variant="subtitle2" color="inital" >for {accommodation?.pax} pax</Typography>
                                     
@@ -149,28 +141,28 @@ function AccommodationCard({
                       <QuantitySelector 
                         name={"Kids"} 
                         value={accommodation?.guests?.kids ? accommodation?.guests?.kids : 0} 
-                        pricePerItem={accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.kids} 
+                        pricePerItem={accommodation?.fees?.[0]?.guestFee?.kids} 
                         setValue={(value) => editGuests(accommodation?.accommodationId, { kids: value })}
                         type="guest"
                       />
                       <QuantitySelector 
                         name={"Adult"} 
                         value={ accommodation?.guests?.adult ? accommodation?.guests?.adult : 0} 
-                        pricePerItem={accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult} 
+                        pricePerItem={accommodation?.fees?.[0]?.guestFee?.adult} 
                         setValue={(value) => editGuests(accommodation?.accommodationId, { adult: value })}
                         type="guest"
                       />
                       <QuantitySelector 
                         name={"Senior"} 
                         value={ accommodation?.guests?.senior ? accommodation?.guests?.senior : 0} 
-                        pricePerItem={accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult * 0.8} 
+                        pricePerItem={accommodation?.fees?.[0]?.guestFee?.adult * 0.8} 
                         setValue={(value) => editGuests(accommodation?.accommodationId, { senior: value })}
                         type="guest"
                       />
                       <QuantitySelector 
                         name={"PWD"} 
                         value={ accommodation?.guests?.pwd ? accommodation?.guests?.pwd : 0} 
-                        pricePerItem={accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult * 0.8} 
+                        pricePerItem={accommodation?.fees?.[0]?.guestFee?.adult * 0.8} 
                         setValue={(value) => editGuests(accommodation?.accommodationId, { pwd: value })}
                         type="guest"
                       />
