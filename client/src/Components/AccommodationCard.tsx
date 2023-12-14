@@ -100,13 +100,13 @@ function AccommodationCard({
                               </div>
                               <div style={{display:"flex",justifyContent:"end"}}>
                                   {(variant==="selected")?
-                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation);calculateCosts()}}>    
+                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation);}}>    
                                           Unbook
                                       </Button>
                                       :""
                                   }
                                   {(variant==="view")?
-                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation);scrollToTop();calculateCosts()}}>    
+                                      <Button variant="contained" color="primary" onClick={()=>{selectAccommodation(accommodation);scrollToTop();}}>    
                                           Book
                                       </Button>
                                   :""}

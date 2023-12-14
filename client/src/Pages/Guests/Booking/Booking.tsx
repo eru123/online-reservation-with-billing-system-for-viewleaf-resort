@@ -244,8 +244,8 @@ function Booking() {
       }),
       
       costs: {
-        total: (totalAll/2),
-        accommodations: (minimumAll/2)
+        total: totalAll/2,
+        accommodations: minimumAll/2
       },
     }));
   }
