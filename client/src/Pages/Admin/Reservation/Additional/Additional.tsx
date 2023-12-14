@@ -117,7 +117,7 @@ function Additional() {
     }
   };
 
-  const editGuests = (accommodationId: string, guests: { adult?: number; children?: number; senior?: number; pwd?: number }) => {
+  const editGuests = (accommodationId: string, guests: { adult?: number; kids?: number; senior?: number; pwd?: number }) => {
     setForm((prevForm: { accommodations: any }) => ({
       ...prevForm,
       accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string, guests?: any }) =>
@@ -191,9 +191,9 @@ function Additional() {
               guests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult)
               guestsAll += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult)
             }
-            if(accommodation.guests.children) {
-              guests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.kids)
-              guestsAll += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.kids)
+            if(accommodation.guests.kids) {
+              guests += parseInt(accommodation.guests.kids) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.kids)
+              guestsAll += parseInt(accommodation.guests.kids) * parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.kids)
             }
             if(accommodation.guests.senior) {
               guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult) * 0.8)

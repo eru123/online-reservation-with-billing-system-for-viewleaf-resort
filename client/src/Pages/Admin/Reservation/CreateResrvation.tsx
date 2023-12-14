@@ -35,7 +35,7 @@ interface ReservationForm {
     accommodationId: string;
     guests: {
       adult: number;
-      children: number;
+      kids: number;
       senior: number;
       pwd: number;
     };
@@ -123,7 +123,7 @@ function CreateResrvation() {
   };
   
 
-  const editGuests = (accommodationId: string, guests: { adult?: number; children?: number; senior?: number; pwd?: number }) => {
+  const editGuests = (accommodationId: string, guests: { adult?: number; kids?: number; senior?: number; pwd?: number }) => {
     setForm((prevForm: { accommodations: any }) => ({
       ...prevForm,
       accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string, guests?: any }) =>
@@ -195,8 +195,8 @@ function CreateResrvation() {
             if (accommodation.guests.adult) {
               guests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.adult)
             }
-            if(accommodation.guests.children) {
-              guests += parseInt(accommodation.guests.children) * parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.kids)
+            if(accommodation.guests.kids) {
+              guests += parseInt(accommodation.guests.kids) * parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.kids)
             }
             if(accommodation.guests.senior) {
               guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.adult) * 0.8)

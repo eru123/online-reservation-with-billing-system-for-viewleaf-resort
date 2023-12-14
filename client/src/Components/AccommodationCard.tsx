@@ -146,9 +146,9 @@ function AccommodationCard({
                   <div>
                       <QuantitySelector 
                         name={"Kids"} 
-                        value={accommodation?.guests?.children ? accommodation?.guests?.children : 0} 
+                        value={accommodation?.guests?.kids ? accommodation?.guests?.kids : 0} 
                         pricePerItem={accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.kids} 
-                        setValue={(value) => editGuests(accommodation?.accommodationId, { children: value })}
+                        setValue={(value) => editGuests(accommodation?.accommodationId, { kids: value })}
                         type="guest"
                       />
                       <QuantitySelector 

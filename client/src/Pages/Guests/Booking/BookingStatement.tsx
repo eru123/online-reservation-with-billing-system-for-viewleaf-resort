@@ -18,7 +18,7 @@ type Props = {
 function BookingStatement({additional, form, invoices}:Props) {
   const {date, shift} = useParams();
 
-  // console.log(form)
+  
 
   const calculateCost = (data: any) =>{
     let minimum = 0
@@ -76,7 +76,7 @@ function BookingStatement({additional, form, invoices}:Props) {
           </>:""}
           
           {/* Entrance Fee */}
-          {(accommodation?.guests?.adult || accommodation?.guests?.children || accommodation?.guests?.senior || accommodation?.guests?.pwd)?<>
+          {(accommodation?.guests?.adult || accommodation?.guests?.kids || accommodation?.guests?.senior || accommodation?.guests?.pwd)?<>
             <Box sx={{marginTop:"15px"}}>
               <Typography variant="h6" fontWeight={600} color="initial" sx={{opacity:".6"}}>Entrance Fee</Typography>
               {accommodation?.guests?.adult ?
@@ -88,13 +88,13 @@ function BookingStatement({additional, form, invoices}:Props) {
                     <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.adult * accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult} </Typography>
                 </Box>
               :<></>}
-              {accommodation?.guests?.children ? 
+              {accommodation?.guests?.kids ? 
                 <Box display="flex" >
                     <div style={{flexGrow:"1"}}>
                       <Typography variant="subtitle1" fontWeight={500}  color="initial">Kids</Typography>
-                      <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}>  {accommodation.guests.children} x {accommodation.fees[parseInt(shift||"0")].guestFee.kids || accommodation?.guestFee?.kids} </Typography>
+                      <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}>  {accommodation.guests.kids} x {accommodation.guestFee.kids || accommodation?.guestFee?.kids} </Typography>
                     </div> 
-                    <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.children * accommodation.fees[parseInt(shift||"0")].guestFee.kids}</Typography>
+                    <Typography variant="h6" color="initial" sx={{opacity:".6"}}>{accommodation.guests.kids * accommodation.guestFee.kids}</Typography>
                 </Box>
               :<></>}
               {accommodation?.guests?.senior ? 

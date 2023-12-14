@@ -21,7 +21,7 @@ export default function TestReservation() {
         shift: "day",
         guests: {
           adult: 1,
-          children: 2,
+          kids: 2,
           senior: 3,
           pwd: 4
         },

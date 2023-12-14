@@ -11,7 +11,7 @@ interface ReservationData {
     shift: string;
     guests: {
       adult: number;
-      children: number;
+      kids: number;
       senior: number;
       pwd: number;
     },
@@ -29,7 +29,7 @@ interface ReservationExtras{
     shift: string;
     guests: {
       adult: number;
-      children: number;
+      kids: number;
       senior: number;
       pwd: number;
     },
