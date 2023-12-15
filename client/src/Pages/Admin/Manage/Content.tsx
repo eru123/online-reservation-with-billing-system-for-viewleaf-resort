@@ -310,6 +310,7 @@ function Content() {
                           <Grid container spacing={2}>
                               <Grid item xs={12} >
                                   <TextField
+                                      required
                                       id="Question"
                                       label="Question"
                                       fullWidth
@@ -320,6 +321,7 @@ function Content() {
                               </Grid>
                               <Grid item xs={12} >
                                   <TextField
+                                      required
                                       id="answer"
                                       label="Answer"
                                       fullWidth
@@ -356,6 +358,7 @@ function Content() {
                           <Grid container spacing={2}>
                               <Grid item xs={12} >
                                   <TextField
+                                      required
                                       id="Question"
                                       label="Question"
                                       fullWidth
@@ -366,6 +369,7 @@ function Content() {
                               </Grid>
                               <Grid item xs={12} >
                                   <TextField
+                                      required
                                       id="answer"
                                       label="Answer"
                                       fullWidth
