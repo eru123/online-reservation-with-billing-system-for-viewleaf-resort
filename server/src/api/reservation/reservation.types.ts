@@ -108,11 +108,23 @@ export type PopulatedInvoice = Omit<InvoiceDocument, 'reservation' | 'accommodat
     accommodation: AccommodationDocument | null;
 };
 
+export type ReservationInfoPopulatedInvoice = {
+    invoice: PopulatedInvoice | undefined;
+    guests?: ReserveAccommodation['guests'];
+    inclusions?: ReserveAccommodation['inclusions'];
+    total?: number;
+    minimum?: number;
+}
+
 export type ReservationInfo = {
     reservation: ReservationDocument;
     invoices: PopulatedInvoice[];
     receipts: string[];
     feedbacks: Omit<Feedback, 'reservation'>[];
+    extras: {
+        date: Date;
+        invoices: ReservationInfoPopulatedInvoice[]
+    }[]
 };
 
 export type RescheduleReservation = {
