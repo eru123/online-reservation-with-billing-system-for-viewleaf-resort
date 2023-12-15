@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import { Outlet } from 'react-router-dom';
 import Box from '@mui/material/Box'
-import { AppBar, Typography, Container, IconButton } from '@mui/material';
+import { AppBar, Typography, Container, IconButton, Grid } from '@mui/material';
 import logoDrop from '../../../Images/LogoDrop.png'
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
@@ -18,10 +18,28 @@ import { Link } from 'react-router-dom'
 import NavItem from './NavItem';
 import {useAuth} from '../../../Hooks/useAuth';
 import MenuIcon from '@mui/icons-material/Menu';
+import Button from '@mui/material/Button'
+import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField'
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  borderRadius:"8px"
+};
+
 function App() {
   const {logout, User} = useAuth();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const openDropdown = Boolean(anchorEl);
+  const [open, setOpen] = React.useState("");
+  
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -98,11 +116,15 @@ function App() {
             'aria-labelledby': 'fade-button',
           }}
           anchorEl={anchorEl}
-          open={open}
+          open={openDropdown}
           onClose={handleClose}
           TransitionComponent={Fade}
         >
-          {User().role==="admin"?"":<MenuItem component={Link} to={'/profile'} >Profile</MenuItem>}
+          {User().role==="admin"?
+            <MenuItem onClick={()=>{setOpen("ChangePass")}}>Change Password</MenuItem>
+            :
+            <MenuItem component={Link} to={'/profile'} >Profile</MenuItem>
+          }
           
           <MenuItem onClick={logout}>Logout</MenuItem>
         </Menu>
@@ -117,6 +139,61 @@ function App() {
         </div>
       </Box>
     </Box>
+    
+    <Modal
+          keepMounted
+          open={!(open==="")}
+          onClose={()=>{setOpen("")}}
+          aria-labelledby="keep-mounted-modal-title"
+          aria-describedby="keep-mounted-modal-description"
+        >
+        <Box sx={style}>
+          {open === "ChangePass"?<>
+            <form >
+              <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={600} color={"primary"} component="h2">
+                Update Password
+              </Typography>
+              <Typography id="keep-mounted-modal-description" >
+                We sent you a 6 digit code, please check your email and enter the code to complete the verification and reservation
+              </Typography>
+              <Grid container spacing={2} sx={{marginTop:"10px"}}>
+                <Grid item  xs={12}>
+                  <TextField
+                    id="current Password"
+                    label="Current Password"
+                    required
+                    fullWidth
+                    // onChange={(e)=>{}}
+                  />
+                </Grid>
+                <Grid item  xs={12} sx={{marginBottom:"15px"}}>
+                  <TextField
+                    id="New Password"
+                    label="New Password"
+                    required
+                    fullWidth
+                    // onChange={(e)=>{}}
+                  />
+                </Grid>
+
+
+
+
+
+
+                <Grid item xs={5} display={"flex"}>
+                  <Button variant="contained" color="primary" fullWidth sx={{height:"100%",background:"#414141"}} onClick={()=>{setOpen("")}} >
+                    Cancel
+                  </Button>
+                </Grid>
+                <Grid item xs={7} display={"flex"} justifyContent={"center"}>
+                  <Button fullWidth  variant="contained" type="submit" > Update Password</Button>
+                </Grid>
+              </Grid>
+            </form>
+          </>:""}
+        </Box>
+      </Modal>
   </>
 }
 

@@ -127,6 +127,7 @@ function BookingStatement({additional, form, invoices}:Props) {
       <Typography variant="h6" color="initial" fontWeight={700}><span style={{opacity:".5"}}>Total:</span> ₱{(form?.costs?.total || calculateCost(invoices).total).toLocaleString()}</Typography>
       {additional?"":<Typography variant="subtitle2" color="initial" style={{opacity:".5"}}>Min. Payment of ₱{(form?.costs?.accommodations || calculateCost(invoices).minimum).toLocaleString()}  </Typography>}
     </Box>
+    
   </>
 }
 
