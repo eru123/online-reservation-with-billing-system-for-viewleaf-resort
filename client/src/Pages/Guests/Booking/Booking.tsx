@@ -459,7 +459,7 @@ function Booking() {
                   <Typography variant="h6" color="initial">TOTAL : {content?.promo === 0 ? `₱${form?.costs?.total}` : ` from ₱${form?.costs?.total} to  ₱${form?.costs?.total * ((100 - content?.promo) / 100)} `} </Typography>
                   <Typography variant="subtitle2" color="initial" fontWeight={600}>Min. Payment of {content?.promo === 0 ? `₱${form?.costs?.accommodations}` : ` from ₱${form?.costs?.accommodations} to  ₱${form?.costs?.accommodations * ((100 - content?.promo) / 100)} `}  </Typography>
               </div>
-              <div style={{display:"flex",gap:"10px"}}>
+              <Box sx={{display:"flex",gap:"10px",paddingRight:{lg:"0", md:"40px",xs:"70px"}}}>
                   <Button variant="text" onClick={()=> {if(active>1){setActive(active-1)}}}>
                       back
                   </Button>
@@ -497,7 +497,7 @@ function Booking() {
                     Next
                   </Button>
                   }
-              </div>
+              </Box>
           </Container> 
       </Paper>
       <Modal
