@@ -31,22 +31,21 @@
     <div id="root"></div>
 
     <!-- Messenger Chat Plugin Code -->
-    <div id="fb-root"></div>
+    <!-- <div id="fb-root"></div> -->
 
     <!-- Your Chat Plugin code -->
-    <div id="fb-customer-chat" class="fb-customerchat"></div>
+    <!-- <div id="fb-customer-chat" class="fb-customerchat"></div> -->
 
-    <script>
+    <!-- <script>
       console.log(window.location.pathname +"  - " + window.location.pathname === '/')
-        // Check if the current page location is the main URL or starts with '/'
+       
         if (window.location.pathname === '/') {
           
-            // Set attributes for the Chat Plugin
+        
             var chatbox = document.getElementById('fb-customer-chat');
             chatbox.setAttribute("page_id", "191293380731152");
             chatbox.setAttribute("attribution", "biz_inbox");
 
-            // Load the Facebook SDK and initialize it
             window.fbAsyncInit = function () {
                 FB.init({
                     xfbml: true,
@@ -54,7 +53,6 @@
                 });
             };
 
-            // Load the SDK asynchronously
             (function (d, s, id) {
                 var js, fjs = d.getElementsByTagName(s)[0];
                 if (d.getElementById(id)) return;
@@ -63,7 +61,7 @@
                 fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
         }
-    </script>
+    </script> -->
 
     <!--
       This HTML file is a template.
