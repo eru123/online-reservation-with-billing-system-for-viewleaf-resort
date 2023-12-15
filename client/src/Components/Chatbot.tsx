@@ -6,6 +6,8 @@ const Chatbot: React.FC = () => {
   useEffect(() => {
     // Ensure chatboxRef exists before setting attributes
     if (chatboxRef.current) {
+      console.log("GOt in")
+
       chatboxRef.current.setAttribute('page_id', '191293380731152');
       chatboxRef.current.setAttribute('attribution', 'biz_inbox');
 
