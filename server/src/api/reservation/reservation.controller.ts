@@ -350,7 +350,9 @@ export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res
 
         extraInvoices.push({ invoiceId: existingAccommodation.invoiceId });
 
-        const foundExtraInvoice = extraInvoices.find((invoice) => invoice.invoiceId === existingAccommodation.invoiceId);
+        const foundExtraInvoice = extraInvoices.find(
+            (invoice) => invoice.invoiceId === existingAccommodation.invoiceId
+        );
         if (!foundExtraInvoice) continue;
 
         // Update guests
@@ -376,6 +378,10 @@ export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res
         foundExtraInvoice.total = total;
         foundExtraInvoice.minimum = minimum;
     }
+
+    reservation.extras.push({ date: new Date(), invoices: extraInvoices });
+
+    await reservation.save();
 
     // await Promise.all(
     //     accommodations.map(async (accommodation) => {

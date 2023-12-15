@@ -65,22 +65,10 @@ const reservationSchema = new Schema(
                                 required: true
                             },
                             guests: {
-                                adult: {
-                                    type: Number,
-                                    required: true
-                                },
-                                kids: {
-                                    type: Number,
-                                    required: true
-                                },
-                                senior: {
-                                    type: Number,
-                                    required: true
-                                },
-                                pwd: {
-                                    type: Number,
-                                    required: true
-                                }
+                                adult: Number,
+                                kids: Number,
+                                senior: Number,
+                                pwd: Number
                             },
                             inclusions: [
                                 {
