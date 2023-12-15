@@ -11,7 +11,7 @@ router.post('/login', asynchronousHandler(login));
 
 router.use(authenticate);
 
-router.get('/', limitUsers(Role.ADMIN), asynchronousHandler(getStaffs));
+router.get('/', asynchronousHandler(getStaffs));
 
 /**
  * username: string

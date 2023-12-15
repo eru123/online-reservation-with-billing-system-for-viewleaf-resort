@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useRequest from './useRequest';
 
 interface Staff {
-  staffId?: number;
+  staffId?: string;
   username?: string;
   email?: string;
   contact?: string;
@@ -12,10 +12,11 @@ interface Staff {
 function useStaff() {
   const { data, loading, error, makeRequest } = useRequest();
 
-  const getStaff = () => {
+  const getStaff = (content?: Staff) => {
     makeRequest({
       method: 'get',
       url: `/staffs`,
+      params: content || {}
     });
   };
 
