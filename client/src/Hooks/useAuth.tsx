@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       catch (error: any){
         console.log(error);
-        alert(error.message);
+        alert("Invalid Credential");
     }
   };
 

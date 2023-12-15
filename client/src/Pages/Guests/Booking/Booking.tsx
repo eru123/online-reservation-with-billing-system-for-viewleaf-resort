@@ -276,7 +276,7 @@ function Booking() {
     }
   
     // 'data' is not valid or 'accommodations' array is empty, return false
-    alert("All Accommodations should have at least one guest.")
+    // alert("wewAll Accommodations should have at least one guest.")
     return false;
   }
 
