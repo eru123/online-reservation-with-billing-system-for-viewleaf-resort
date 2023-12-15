@@ -171,7 +171,6 @@ function CreateResrvation() {
     let minimumAll = 0
     let inclusionsAll = 0
     let guestsAll = 0
-    
 
     setForm((prevForm: { accommodations: any }) => ({
       ...prevForm,
@@ -181,34 +180,39 @@ function CreateResrvation() {
         let inclusions = 0
         let guests = 0
 
-        minimum += parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].rate)
-        
+        minimum += parseInt(accommodation?.fees?.[0]?.rate)
+        minimumAll += parseInt(accommodation?.fees?.[0]?.rate)
+
           if (accommodation.inclusions) {
             accommodation.inclusions?.map((inclusion: any) => {
               if (inclusion.quantity) {
                 inclusions += (inclusion.quantity * inclusion.price)
+                inclusionsAll += (inclusion.quantity * inclusion.price)
               }
             })
           }
 
           if (accommodation.guests) {
             if (accommodation.guests.adult) {
-              guests += parseInt(accommodation.guests.adult) * parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.adult)
+              guests += parseInt(accommodation.guests.adult) * parseInt(accommodation?.fees?.[0]?.guestFee.adult)
+              guestsAll += parseInt(accommodation.guests.adult) * parseInt(accommodation?.fees?.[0]?.guestFee.adult)
             }
             if(accommodation.guests.kids) {
-              guests += parseInt(accommodation.guests.kids) * parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.kids)
+              guests += parseInt(accommodation.guests.kids) * parseInt(accommodation?.fees?.[0]?.guestFee.kids)
+              guestsAll += parseInt(accommodation.guests.kids) * parseInt(accommodation?.fees?.[0]?.guestFee.kids)
             }
             if(accommodation.guests.senior) {
-              guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.adult) * 0.8)
+              guests += parseInt(accommodation.guests.senior) * (parseInt(accommodation?.fees?.[0]?.guestFee.adult) * 0.8)
+              guestsAll += parseInt(accommodation.guests.senior) * (parseInt(accommodation?.fees?.[0]?.guestFee.adult) * 0.8)
             }
             if(accommodation.guests.pwd) {
-              guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[parseInt(bookingSchedule.shift||"0")].guestFee.adult) * 0.8)
+              guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation?.fees?.[0]?.guestFee.adult) * 0.8)
+              guestsAll += parseInt(accommodation.guests.pwd) * (parseInt(accommodation?.fees?.[0]?.guestFee.adult) * 0.8)
             }
-            total = minimum +  inclusions + guests
+            
           }
-
-          minimumAll += minimum
-          totalAll += total
+        total = minimum +  inclusions + guests
+        totalAll += total
 
         return {
           ...accommodation,
@@ -217,13 +221,10 @@ function CreateResrvation() {
         }
 
       }),
+      
       costs: {
-        // total: content?.promo === 0 ? (totalAll/2) : (totalAll/2) * ((100 - content?.promo) / 100) ,
-        // guests: content?.promo === 0 ? guestsAll : guestsAll * ((100 - content?.promo) / 100) ,
-        // inclusions: content?.promo === 0 ? inclusionsAll : inclusionsAll * ((100 - content?.promo) / 100),
-        // accommodations: content?.promo === 0 ? (minimumAll/2) : (minimumAll/2) * ((100 - content?.promo) / 100)
-        total: (totalAll/2),
-        accommodations: (minimumAll/2)
+        total: totalAll,
+        accommodations: minimumAll
       },
     }));
   }
