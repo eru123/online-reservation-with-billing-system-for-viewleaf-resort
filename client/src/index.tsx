@@ -36,11 +36,12 @@ body.render(
       </BrowserRouter>
     </React.StrictMode>
     <div id="fb-root"></div>
-    <div className="fb-customerchat"></div>
+    <div id="fb-customer-chat" className="fb-customerchat"></div>
   </>
 );
 
 if (window.location.pathname === '/') {
+  console.log("I AM ROOT");
   var chatbot = document.getElementById('fb-customer-chat');
   chatbot?.setAttribute("page_id", "191293380731152");
   chatbot?.setAttribute("attribution", "biz_inbox");
