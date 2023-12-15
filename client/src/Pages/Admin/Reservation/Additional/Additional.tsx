@@ -106,7 +106,7 @@ function Additional() {
 
   const selectAccommodation = (accommodationData: any) => {
     // Add shift property to the accommodationData
-    const modifiedAccommodationData = { ...accommodationData, shift: form.shift==="0"? "day": form.shift==="1"? "night": "whole day" };
+    const modifiedAccommodationData = { ...accommodationData, shift: form.shift };
   
     if (form?.accommodations?.some((item: any) => item.accommodationId === accommodationData.accommodationId)) {
       // If the accommodation with the same accommodationId exists, remove it
@@ -149,7 +149,7 @@ function Additional() {
         if (accommodation.accommodationId === accommodationId) {
           // Check if the inclusion already exists in the inclusions array
           const existingInclusion = accommodation.inclusions.find((existing: any) => existing.name === inclusion.name);
-  
+
           // If it exists, update the quantity
           if (existingInclusion) {
             return {
@@ -179,7 +179,7 @@ function Additional() {
     let minimumAll = 0
     let inclusionsAll = 0
     let guestsAll = 0
-    
+
     setForm((prevForm: { accommodations: any }) => ({
       ...prevForm,
       accommodations: (prevForm.accommodations || []).map((accommodation: { accommodationId: string; inclusions: any; fees: any; guests: any; }) => {
@@ -217,7 +217,7 @@ function Additional() {
               guests += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult) * 0.8)
               guestsAll += parseInt(accommodation.guests.pwd) * (parseInt(accommodation.fees[getShiftIndex(form.shift)].guestFee.adult) * 0.8)
             }
-    
+
             total = minimum +  inclusions + guests
             
           }
