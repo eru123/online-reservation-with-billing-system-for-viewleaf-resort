@@ -389,7 +389,7 @@ function Invoice() {
                         Refund
                     </Typography>
                     <Typography id="keep-mounted-modal-description" sx={{marginBottom:"15px"}}>
-                        Only the 50% of the payment is refundable
+                        View our terms & condition to see what covers of our refunds <Typography variant="body1" component={"a"} sx={{marginLeft:"5px",color:"#70AE45" , borderBottom:"1px solid #70AE45"}} href='/termsncondition' target="_blank" fontWeight={500} color="initial" marginLeft={"-12px"}>View</Typography>
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sx={{marginBottom:"25px"}}>
