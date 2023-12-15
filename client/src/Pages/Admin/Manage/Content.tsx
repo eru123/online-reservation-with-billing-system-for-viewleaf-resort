@@ -27,6 +27,7 @@ const style = {
 };
 
 function Content() {
+    const [statusContact,setStatusContact] = useState(false);
     const [open, setOpen] = useState("");
     const [accordionOpen,setAccordionOPen] = useState("");
     const handleAccordionOpen = (value:string) =>{
@@ -404,7 +405,7 @@ function Content() {
                             </Grid>
                             <Grid item xs={5}>
                                 <Button variant="text" sx={{color:"black"}} fullWidth onClick={()=>{setOpen("")}}>
-                                    back
+                                  back
                                 </Button>
                             </Grid>
                             <Grid item xs={7}>
@@ -468,15 +469,15 @@ function Content() {
                                 label="Phone Number"
                                 type="text"
                                 fullWidth
+                                required
                                 defaultValue={contents?.phone}
                                 onChange={(e) => {
-                                  // Remove non-numeric characters using a regular expression
-                                  const numericValue = e.target.value.replace(/\D/g, '');
-
-                                  // Update the state with the numeric value
-                                  setContactForm({ ...contactForm, phone: parseInt(numericValue) });
+                                  if (/^\d{11}$/.test(e.target.value) && !/[a-zA-Z]/.test(e.target.value)) {
+                                    setStatusContact(true)
+                                  }
+                                  setContactForm({ ...contactForm, phone: parseInt(e.target.value) });
                                 }}
-                                />
+                              />
                               </Grid>
                               <Grid item xs={12}>
                                 <TextField
@@ -484,6 +485,7 @@ function Content() {
                                   label="Email"
                                   type='email'
                                   fullWidth
+                                  required
                                   defaultValue={contents?.email}
                                   onChange={(e) => {
                                     setContactForm({...contactForm,email:e.target.value})
@@ -495,6 +497,7 @@ function Content() {
                                   id="address"
                                   label="Address"
                                   type='text'
+                                  required
                                   fullWidth
                                   multiline
                                   defaultValue={contents?.address}
@@ -512,7 +515,7 @@ function Content() {
                                 </Button>
                               </Grid>
                               <Grid item xs={7}>
-                                  <Button variant="contained" color='primary' fullWidth type='submit'>
+                                  <Button variant="contained" color='primary' fullWidth type='submit' disabled={!statusContact?true:false}>
                                     Confirm
                                   </Button>
                               </Grid>
