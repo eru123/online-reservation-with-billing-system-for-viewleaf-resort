@@ -22,36 +22,36 @@ root.render(
   </React.StrictMode>
 );
 
-const chatRoot = ReactDOM.createRoot(document.body);
+// const chatRoot = ReactDOM.createRoot(document.body);
 
-chatRoot.render(
-  <>
-    <div id="fb-root"></div>
-    <div className="fb-customerchat"></div>
-  </>
-);
+// chatRoot.render(
+//   <>
+//     <div id="fb-root"></div>
+//     <div className="fb-customerchat"></div>
+//   </>
+// );
 
-if (window.location.pathname === '/') {
-  var chatbot = document.getElementById('fb-customer-chat');
-  chatbot?.setAttribute("page_id", "191293380731152");
-  chatbot?.setAttribute("attribution", "biz_inbox");
+// if (window.location.pathname === '/') {
+//   var chatbot = document.getElementById('fb-customer-chat');
+//   chatbot?.setAttribute("page_id", "191293380731152");
+//   chatbot?.setAttribute("attribution", "biz_inbox");
 
-  (window as any).fbAsyncInit = function () {
-    (window as any).FB?.init({
-      xfbml: true,
-      version: 'v18.0',
-    });
-  };
+//   (window as any).fbAsyncInit = function () {
+//     (window as any).FB?.init({
+//       xfbml: true,
+//       version: 'v18.0',
+//     });
+//   };
 
-  (function (d, s, id) {
-    const js: HTMLScriptElement = d.createElement(s) as HTMLScriptElement; // Type assertion
-    const fjs = d.getElementsByTagName(s)[0];
-    if (!fjs || !js) return;
-    js.id = id;
-    js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-    fjs.parentNode?.insertBefore(js, fjs);
-  })(document, 'script', 'facebook-jssdk');
-}
+//   (function (d, s, id) {
+//     const js: HTMLScriptElement = d.createElement(s) as HTMLScriptElement; // Type assertion
+//     const fjs = d.getElementsByTagName(s)[0];
+//     if (!fjs || !js) return;
+//     js.id = id;
+//     js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+//     fjs.parentNode?.insertBefore(js, fjs);
+//   })(document, 'script', 'facebook-jssdk');
+// }
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
