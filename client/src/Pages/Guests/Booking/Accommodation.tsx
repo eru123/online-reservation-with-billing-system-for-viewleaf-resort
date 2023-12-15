@@ -114,7 +114,7 @@ function Accommodation({
     <Typography variant="h4" color="primary" mt={"3em"} fontWeight={600}>Suggested Accommodation</Typography>
     <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>List of all available accommodation</Typography>
     <Box display="flex" flexDirection={"column"} gap={"25px"} >
-      {accommodations.length === 0?<>
+      {accommodations === undefined && accommodations.length === 0?<>
       
         <Typography variant="h6" color="error" align='center' mt={"10em"}>
         Sorry you may choose other day because there's no reservation available at the moment for this day
