@@ -26,25 +26,23 @@ const style = {
 
 function Profile() {
     const{User} = useAuth();
-    const {getStaff, updateStaff} = useStaff();
+    const {data, loading, error, getStaff, updateStaff} = useStaff();
     const [open, setOpen] = useState("");
 
     const [form, setForm] = useState({
-      staffId: User().staffId,
-      username: User().username,
-      email: User().email,
-      contact: User().contact,
+      staffId: "",
+      username: "",
+      email: "",
+      contact: "",
       password: ""
     })
 
     const submit = () => {
-      console.log(form);
       updateStaff(form)
       setOpen("");
     }
 
     useEffect(()=>{
-      console.log(User().staffId);
       getStaff({
         staffId: User().staffId
       });

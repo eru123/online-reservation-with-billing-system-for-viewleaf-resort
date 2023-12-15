@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useRequest from './useRequest';
 
 interface Staff {
-  staffId?: number;
+  staffId?: string;
   username?: string;
   email?: string;
   contact?: string;
