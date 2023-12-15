@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { AccommodationDocument, Shift } from '../accommodation/accommodation.types';
 import { InvoiceDocument } from '../invoice/invoice.types';
 import { Feedback } from '../feedback/feedback.types';
@@ -25,6 +25,19 @@ export interface Note {
     note: string;
 }
 
+export interface ExtraInvoice {
+    invoiceId: string;
+    guests?: ReserveAccommodation['guests'];
+    inclusions?: ReserveAccommodation['inclusions'];
+    total?: number;
+    minimum?: number;
+}
+
+export interface Extra {
+    date: Date;
+    invoices: ExtraInvoice[];
+}
+
 export interface Reservation {
     reservationId: string;
     customer: {
@@ -35,6 +48,7 @@ export interface Reservation {
     schedule: Date;
     status: ReservationStatus;
     notes: Note[];
+    extras: Extra[];
 }
 
 export interface ReservationDocument extends Reservation, Document {
@@ -104,4 +118,4 @@ export type ReservationInfo = {
 export type RescheduleReservation = {
     reservationId: string;
     schedule: number;
-}
+};
