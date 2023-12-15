@@ -41,6 +41,19 @@ function BookingStatement({additional, form, invoices}:Props) {
     return quantity
   }
 
+  function getPriceByName(data: any, targetName:any) {
+
+
+    const targetObject = data?.find((item:any) => item.name === targetName);
+  
+    if (targetObject) {
+      return targetObject.price;
+    } else {
+      // Return a default value or handle the case where the name is not found
+      return null; // You can change this to a default value or handle it as needed
+    }
+  }
+
   return <>
     <Timeline
       sx={{
@@ -83,14 +96,20 @@ function BookingStatement({additional, form, invoices}:Props) {
                 <>{ inclusion?.quantity > 0 ?
                   <Box display="flex" >
                     <div style={{flexGrow:"1"}}>
-                      {JSON.stringify(accommodation?.invoice?.inclusions)}
+                      
                       <Typography variant="subtitle1" fontWeight={500}  color="initial">{inclusion?.name}</Typography>
                       <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}> 
-                        {inclusion?.quantity} x {inclusion?.price} 
+                      {additional 
+                        ?<>{inclusion?.quantity} x {getPriceByName(accommodation?.invoice?.inclusions, inclusion?.name)}</> 
+                        :<>{inclusion?.quantity} x {inclusion?.price} </>
+                      } 
                       </Typography>
                     </div> 
                     <Typography variant="h6" color="initial" sx={{opacity:".6"}}>
-                      {inclusion?.quantity * inclusion?.price}
+                      {additional 
+                        ?<>{inclusion?.quantity * getPriceByName(accommodation?.invoice?.inclusions, inclusion?.name)}</> 
+                        :<>{inclusion?.quantity * inclusion?.price}</>
+                      } 
                     </Typography>
                 </Box> : <></> }</>
               ))}
@@ -135,7 +154,10 @@ function BookingStatement({additional, form, invoices}:Props) {
                       {/* <Typography variant="body2"   color="initial" sx={{opacity:".6",paddingLeft:"1em"}}> {accommodation.guests.adult} x {accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.adult || accommodation?.guestFee?.adult} </Typography> */}
                     </div> 
                     <Typography variant="h6" color="initial" sx={{opacity:".6"}}>
-                      {accommodation.guests.kids * accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.kids || accommodation?.guestFee?.kids} 
+                      {additional 
+                        ?<>{accommodation.guests.kids * accommodation?.invoice?.guestFee?.kids}  </> 
+                        :<>{accommodation.guests.kids * accommodation?.fees?.[parseInt(shift||"0")]?.guestFee?.kids || accommodation?.guestFee?.kids} </>
+                      } 
                     </Typography>
                 </Box>
               :<></>}
