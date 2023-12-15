@@ -31,11 +31,16 @@ const Chatbot: React.FC = () => {
     }
   }, []); // Run this effect only once when the component mounts
 
-  return (
-    <div ref={chatboxRef} id="fb-customer-chat" className="fb-customerchat">
-      CHATBOT
-    </div>
-  );
+  return<>
+    <div id="fb-root"></div>
+    <div  ref={chatboxRef} id="fb-customer-chat" className="fb-customerchat"></div> 
+  </>
+  // return (
+  //   <div></div>
+  //   <div id="fb-customer-chat" className="fb-customerchat">
+  //     CHATBOT
+  //   </div>
+  // );
 };
 
 export default Chatbot;
