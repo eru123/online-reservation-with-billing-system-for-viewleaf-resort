@@ -88,8 +88,6 @@ function AddAccommodation() {
         price: 0
       })
     }
-    console.log(inclusions)
-    
   }
 
   const deleteInclusion = (index: number) => {
