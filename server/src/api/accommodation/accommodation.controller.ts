@@ -58,8 +58,6 @@ const getAvailableAccommodations = async (checker: CheckData, schedule: unknown)
         return [];
     }
 
-    console.log(reservedShiftsOfResorts);
-
     // Get all the accmmodations from invoices
     const invoiceAccommodations: AccommodationShift[] = invoices
         .map(({ accommodationId, shift }) => {

@@ -268,8 +268,31 @@ function Invoice({}:Props) {
             </Tooltip>
           </Paper>
 
-          <Typography variant="h6" color="initial">Billing Statement</Typography>
+          <Typography variant="h4" color="initial">Billing Statement</Typography>
+
+          <br/>
+          <Typography variant="h6" color="initial">Accommodations</Typography>
           { data?.[0]?.invoices &&  <BookingStatement additional={false} form={data?.[0]?.invoices} invoices={data}/> }
+
+          {data?.[0]?.extras && 
+              <>
+              {data?.[0]?.extras.length > 0 && 
+              <>
+                <Typography variant="h6" color="initial">Additions</Typography>
+              </>
+              }
+                {data?.[0]?.extras.map((extra:any)=>(
+                  <>
+                    {extra?.invoices?.map((item:any)=>(
+                      <>
+                        <BookingStatement additional={true} form={extra?.invoices} invoices={extra}/>
+                      </>
+                      
+                    ))}
+                  </>
+                ))}
+              </>
+            }
             
           <hr style={{margin:"2em 0"}}/>
         </Container>

@@ -1,6 +1,6 @@
 import { reservation } from '../../utilities/ids';
 import { ReservationDocument, ReservationStatus } from './reservation.types';
-import { Schema, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 
 const reservationSchema = new Schema(
     {
@@ -55,6 +55,44 @@ const reservationSchema = new Schema(
                 }
             }
         ],
+        extras: {
+            type: [
+                {
+                    invoices: [
+                        {
+                            invoiceId: {
+                                type: String,
+                                required: true
+                            },
+                            guests: {
+                                adult: Number,
+                                kids: Number,
+                                senior: Number,
+                                pwd: Number
+                            },
+                            inclusions: [
+                                {
+                                    name: {
+                                        type: String,
+                                        required: true
+                                    },
+                                    quantity: {
+                                        type: Number,
+                                        required: true
+                                    }
+                                }
+                            ],
+                            total: Number,
+                            minimum: Number
+                        }
+                    ],
+                    date: {
+                        type: Date,
+                        required: true
+                    }
+                }
+            ]
+        }
     },
     {
         timestamps: true,
