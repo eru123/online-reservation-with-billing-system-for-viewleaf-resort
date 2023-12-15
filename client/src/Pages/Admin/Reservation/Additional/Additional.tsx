@@ -55,18 +55,19 @@ function Additional() {
   const {id} = useParams();
   const navigate = useNavigate();
   const [step,setStep] = useState(1);
-  const {data: reservation, loading, error, getReservation, updateReservation, rescheduleReservation, extrasReservation} = useReservation();
+  const {data: reservation, loading: reservationLoading, error, getReservation, updateReservation, rescheduleReservation, extrasReservation} = useReservation();
   const {data:content, loading:contentLoading, error:contentError, getContent} = useContent();
+  const [submitted, setSubmitted] = useState(false);
 
   const [form, setForm] = useState<any>({
     shift: "day",
     schedule: new Date()
   });
 
-  const submit = () => {
-    extrasReservation(form);
-    alert("Submitted!")
-    navigate(`/admin/invoice/${id}`)
+  const submit = async () => {
+    await filterAccommodations();
+    setSubmitted(true);
+    
   }
 
   const getShiftIndex = (shift: string) => {
@@ -82,13 +83,26 @@ function Additional() {
     }
   }
 
-  const updateSchedule = (date: any, shift: any) => {
-    setForm((prevForm: any) => ({
-      ...prevForm,
-      schedule: parseInt(date||""),
-      shift: shift==="0"? "day": shift==="1"? "night": "whole day"
-    }));
-  }
+  const filterAccommodations = async () => {
+    // Assuming form is a state variable
+    setForm((prevForm:any) => {
+      const updatedAccommodations = prevForm.accommodations.filter((accommodation:any) => {
+        // Check if guests and combined inclusions quantity are not zero
+        const hasGuests = accommodation.guests && accommodation.guests.adult > 0;
+        const hasInclusions = accommodation.inclusions.some((inclusion:any) => inclusion.quantity > 0);
+  
+        return hasGuests || hasInclusions;
+      });
+  
+      // Update the state with the filtered accommodations
+      return {
+        ...prevForm,
+        accommodations: updatedAccommodations,
+      };
+    });
+  
+    // No need to return a Promise here; the state update is synchronous
+  };
 
   const selectAccommodation = (accommodationData: any) => {
     // Add shift property to the accommodationData
@@ -225,18 +239,27 @@ function Additional() {
   }
 
   useEffect(()=>{
-
-    calculateCosts()
-
-    if (!content){
-      getContent();
+    if(submitted){
+      extrasReservation(form);
+      alert("Submitted!")
+      navigate(`/admin/invoice/${id}`)
     }
-   
+  }, [submitted])
+
+  useEffect(()=>{
     if (!reservation) {
       getReservation({
         reservationId: id
       })
     }
+    if (!content){
+      getContent();
+    }
+  }, [])
+
+  useEffect(()=>{
+
+    calculateCosts()
 
     if (reservation && form?.accommodations?.length ===0) {
       setForm((prevForm: { accommodations: any }) => ({
@@ -255,9 +278,13 @@ function Additional() {
       }));
     }
 
-    console.log(form)
+    // console.log(form)
 
   }, [form])
+
+  if (reservationLoading || contentLoading) {
+    return <div>Loading...</div>;
+  }
 
     return (
         
