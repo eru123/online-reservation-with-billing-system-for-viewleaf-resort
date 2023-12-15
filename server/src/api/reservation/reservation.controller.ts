@@ -12,7 +12,9 @@ import {
     UpdateStatus,
     PopulatedInvoice,
     RescheduleReservation,
-    ReserveAccommodation
+    ReserveAccommodation,
+    Extra,
+    ExtraInvoice
 } from './reservation.types';
 import { InvoiceDocument, InvoicePopulatedDocument } from '../invoice/invoice.types';
 import { Shift } from '../accommodation/accommodation.types';
@@ -219,7 +221,10 @@ export const createReservation: RequestHandler = async (req: BodyRequest<CreateR
         //     reservation.status = ReservationStatus.CANCELLED;
         //     reservation.save();
         // }
-        ReservationModel.findOneAndUpdate({_id: reservation._id, status: ReservationStatus.PENDING}, {$set:{status: ReservationStatus.CANCELLED}}).exec();
+        ReservationModel.findOneAndUpdate(
+            { _id: reservation._id, status: ReservationStatus.PENDING },
+            { $set: { status: ReservationStatus.CANCELLED } }
+        ).exec();
     }, 1000 * 60 * reservationTimeLimitInMinutes);
 
     res.status(201).json({ reservationId: reservation.reservationId });
@@ -240,7 +245,7 @@ const newAccommodationReservation = async (
     const fees = accommodation.fees.find((fee) => fee.shift === shift);
     if (!fees) throw new NotFound('Fees');
 
-    await InvoiceModel.create({
+    return await InvoiceModel.create({
         reservation: reservation._id,
         accommodationId,
         shift,
@@ -256,6 +261,7 @@ const newAccommodationReservation = async (
         minimum
     });
 };
+
 export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res) => {
     const { reservationId, accommodations } = req.body;
 
@@ -305,67 +311,132 @@ export const addExtras: RequestHandler = async (req: BodyRequest<AddExtras>, res
     if (!reservation) throw new NotFound('Reservation');
 
     const invoices: InvoiceDocument[] = await InvoiceModel.find({ reservation: reservation._id }).exec();
+    const extraInvoices: ExtraInvoice[] = [];
 
-    await Promise.all(
-        accommodations.map(async (accommodation) => {
-            const { accommodationId, shift, guests, inclusions = [], total, minimum } = accommodation;
-            const accommodationInvoices = invoices.filter((invoice) => invoice.accommodationId === accommodationId);
+    for (const accommodation of accommodations) {
+        const { accommodationId, shift, guests, inclusions = [], total, minimum } = accommodation;
+        const accommodationInvoices = invoices.filter((invoice) => invoice.accommodationId === accommodationId);
 
-            // New accommodation
-            if (accommodationInvoices.length === 0)
-                return newAccommodationReservation(
-                    reservation,
-                    accommodationId,
-                    shift,
-                    guests,
-                    inclusions,
-                    total,
-                    minimum
-                );
+        // New accommodation
+        if (accommodationInvoices.length === 0) {
+            const { invoiceId } = await newAccommodationReservation(
+                reservation,
+                accommodationId,
+                shift,
+                guests,
+                inclusions,
+                total,
+                minimum
+            );
+            extraInvoices.push({ invoiceId });
+            continue;
+        }
 
-            const existingAccommodation = accommodationInvoices.find((invoice) => invoice.shift === shift);
-            if (!existingAccommodation)
-                // New accommodation shift
-                return newAccommodationReservation(
-                    reservation,
-                    accommodationId,
-                    shift,
-                    guests,
-                    inclusions,
-                    total,
-                    minimum
-                );
+        const existingAccommodation = accommodationInvoices.find((invoice) => invoice.shift === shift);
+        if (!existingAccommodation) {
+            // New accommodation shift
+            const { invoiceId } = await newAccommodationReservation(
+                reservation,
+                accommodationId,
+                shift,
+                guests,
+                inclusions,
+                total,
+                minimum
+            );
+            extraInvoices.push({ invoiceId });
+            continue;
+        }
 
-            // Update guests
-            if (guests) {
-                const { adult = 0, kids = 0, senior = 0, pwd = 0 } = guests;
+        extraInvoices.push({ invoiceId: existingAccommodation.invoiceId });
 
-                existingAccommodation.guests.adult += adult;
-                existingAccommodation.guests.kids += kids;
-                existingAccommodation.guests.senior += senior;
-                existingAccommodation.guests.pwd += pwd;
-            }
+        const foundExtraInvoice = extraInvoices.find((invoice) => invoice.invoiceId === existingAccommodation.invoiceId);
+        if (!foundExtraInvoice) continue;
 
-            // Update inclusions
-            if (inclusions) {
-                for (let j = 0; j < inclusions.length; j++) {
-                    const { name, quantity } = inclusions[j];
+        // Update guests
+        if (guests) {
+            const { adult = 0, kids = 0, senior = 0, pwd = 0 } = guests;
+            foundExtraInvoice.guests = { adult, kids, senior, pwd };
+        }
 
-                    const existingInclusion = existingAccommodation.inclusions.find(
-                        (inclusion) => inclusion.name === name
-                    );
-                    if (existingInclusion) {
-                        existingInclusion.quantity += quantity;
-                    }
+        // Update inclusions
+        if (inclusions) {
+            foundExtraInvoice.inclusions = [];
+
+            for (let j = 0; j < inclusions.length; j++) {
+                const { name } = inclusions[j];
+
+                const existingInclusion = existingAccommodation.inclusions.find((inclusion) => inclusion.name === name);
+                if (existingInclusion) {
+                    foundExtraInvoice.inclusions.push(inclusions[j]);
                 }
             }
+        }
 
-            existingAccommodation.total += total;
-            existingAccommodation.minimum += minimum;
+        foundExtraInvoice.total = total;
+        foundExtraInvoice.minimum = minimum;
+    }
 
-            return existingAccommodation.save();
-        })
-    );
+    // await Promise.all(
+    //     accommodations.map(async (accommodation) => {
+    //         const { accommodationId, shift, guests, inclusions = [], total, minimum } = accommodation;
+    //         const accommodationInvoices = invoices.filter((invoice) => invoice.accommodationId === accommodationId);
+
+    //         // New accommodation
+    //         if (accommodationInvoices.length === 0)
+    //             return newAccommodationReservation(
+    //                 reservation,
+    //                 accommodationId,
+    //                 shift,
+    //                 guests,
+    //                 inclusions,
+    //                 total,
+    //                 minimum
+    //             );
+
+    //         const existingAccommodation = accommodationInvoices.find((invoice) => invoice.shift === shift);
+    //         if (!existingAccommodation)
+    //             // New accommodation shift
+    //             return newAccommodationReservation(
+    //                 reservation,
+    //                 accommodationId,
+    //                 shift,
+    //                 guests,
+    //                 inclusions,
+    //                 total,
+    //                 minimum
+    //             );
+
+    //         // Update guests
+    //         if (guests) {
+    //             const { adult = 0, kids = 0, senior = 0, pwd = 0 } = guests;
+
+    //             existingAccommodation.guests.adult += adult;
+    //             existingAccommodation.guests.kids += kids;
+    //             existingAccommodation.guests.senior += senior;
+    //             existingAccommodation.guests.pwd += pwd;
+    //         }
+
+    //         // Update inclusions
+    //         if (inclusions) {
+    //             for (let j = 0; j < inclusions.length; j++) {
+    //                 const { name, quantity } = inclusions[j];
+
+    //                 const existingInclusion = existingAccommodation.inclusions.find(
+    //                     (inclusion) => inclusion.name === name
+    //                 );
+    //                 if (existingInclusion) {
+    //                     existingInclusion.quantity += quantity;
+    //                 }
+    //             }
+    //         }
+
+    //         existingAccommodation.total += total;
+    //         existingAccommodation.minimum += minimum;
+
+    //         return existingAccommodation.save();
+    //     })
+    // );
 
     res.sendStatus(204);
 };
