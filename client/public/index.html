@@ -32,12 +32,16 @@
 <!-- Messenger Chat Plugin Code -->
 <div id="fb-root"></div>
 
+<div id="root"></div>
+<!-- Messenger Chat Plugin Code -->
+<div id="fb-root"></div>
+
 <!-- Your Chat Plugin code -->
 <div id="fb-customer-chat" class="fb-customerchat"></div>
 
 <script>
-    // Check if the current page location is '/' or 'localhost/'
-    if (window.location.pathname === '/' || window.location.hostname === 'localhost') {
+    // Check if the current page location is the main URL or starts with '/'
+    if (window.location.pathname === '/') {
         // Set attributes for the Chat Plugin
         var chatbox = document.getElementById('fb-customer-chat');
         chatbox.setAttribute("page_id", "191293380731152");
