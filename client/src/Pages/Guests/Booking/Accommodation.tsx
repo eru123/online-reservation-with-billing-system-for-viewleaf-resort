@@ -9,6 +9,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import useAccommodation from '../../../Hooks/useAccommodation'
 
 
+
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -113,19 +114,27 @@ function Accommodation({
     <Typography variant="h4" color="primary" mt={"3em"} fontWeight={600}>Suggested Accommodation</Typography>
     <Typography variant="body1" color="initial" fontWeight={400} mb={"20px"}>List of all available accommodation</Typography>
     <Box display="flex" flexDirection={"column"} gap={"25px"} >
-      {accommodations?.map((accommodation: any) => (
-        <>
-          {parseInt(accommodation?.fees?.[0]?.rate) !== 0 ? 
-            <AccommodationCard 
-              accommodation={accommodation} 
-              calculateCosts={calculateCosts}
-              variant="view" 
-              openModal={setOpen}
-              selectAccommodation={selectAccommodation}
-            />
-          :<></>}
-        </>
-      ))}
+      {accommodations.length === 0?<>
+      
+        <Typography variant="h6" color="error" align='center' mt={"10em"}>
+        Sorry you may choose other day because there's no reservation available at the moment for this day
+        </Typography>
+      </>:<>
+        {accommodations?.map((accommodation: any) => (
+          <>
+            {parseInt(accommodation?.fees?.[0]?.rate) !== 0 ? 
+              <AccommodationCard 
+                accommodation={accommodation} 
+                calculateCosts={calculateCosts}
+                variant="view" 
+                openModal={setOpen}
+                selectAccommodation={selectAccommodation}
+              />
+            :<></>}
+          </>
+        ))}
+      </>}
+      
     </Box>
   </>
 }

@@ -66,14 +66,6 @@ function Booking() {
   const [otpCode, setOtpCode] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [form, setForm] = useState<any>({});
-  const[disabledButton,setDisabledButton] = useState(true)
-  const [proxyAccommodation, setProxyAccommodation] = useState<any>([]);
-  const [billing, setBilling] = useState<any>({
-    total: 0,
-    guests: 0,
-    inclusions: 0,
-    accommodations: 0
-  })
   const [policyAgree,setPolicyAgree] = useState({
     policy:false,
     termsNCondition:false,
@@ -335,7 +327,6 @@ function Booking() {
 
   useEffect(() => {
     calculateCosts();
-   
     if (reservationData) {
       // console.log(reservationData);
       console.log(form)
