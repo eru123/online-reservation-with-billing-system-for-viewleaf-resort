@@ -37,8 +37,10 @@
     <div id="fb-customer-chat" class="fb-customerchat"></div>
 
     <script>
+      console.log(window.location.pathname +"  - " + window.location.pathname === '/')
         // Check if the current page location is the main URL or starts with '/'
         if (window.location.pathname === '/') {
+          
             // Set attributes for the Chat Plugin
             var chatbox = document.getElementById('fb-customer-chat');
             chatbox.setAttribute("page_id", "191293380731152");

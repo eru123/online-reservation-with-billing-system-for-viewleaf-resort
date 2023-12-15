@@ -176,11 +176,6 @@ function App() {
                   />
                 </Grid>
 
-
-
-
-
-
                 <Grid item xs={5} display={"flex"}>
                   <Button variant="contained" color="primary" fullWidth sx={{height:"100%",background:"#414141"}} onClick={()=>{setOpen("")}} >
                     Cancel
