@@ -26,9 +26,9 @@ const style = {
 
 function Profile() {
     const{User} = useAuth();
-    const {data, loading, error, getStaff, updateStaff} = useStaff();
     const [open, setOpen] = useState("");
-
+    const {data, loading, error, getStaff, updateStaff} = useStaff();
+    
     const [form, setForm] = useState({
       staffId: "",
       username: "",

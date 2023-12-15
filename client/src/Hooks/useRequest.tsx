@@ -26,6 +26,7 @@ function useRequest(): RequestHook {
     setLoading(true);
     try {
       const response = await axios(config);
+      console.log(response.data);
       setData(response.data);
     } catch (error: any) {
       setError(error);
@@ -37,6 +38,7 @@ function useRequest(): RequestHook {
       }
     } finally {
       setLoading(false);
+      
     }
   };
 
