@@ -288,6 +288,8 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    required
+
                     onChange={(e) => {
                       setForm((prevForm) => ({
                         ...prevForm,
@@ -307,6 +309,8 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    required
+
                     onChange={(e) => {
                       setForm((prevForm) => ({
                         ...prevForm,
@@ -327,6 +331,8 @@ function AddAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    required
+
                     onChange={(e) => {
                       setForm((prevForm) => ({
                         ...prevForm,
@@ -348,6 +354,7 @@ function AddAccommodation() {
                 </TableCell>
                 <TableCell >
                   <TextField
+                    required
                     id=""
                     label=""
                     fullWidth
@@ -424,7 +431,7 @@ function AddAccommodation() {
           </Table>
         </TableContainer>
       </Paper>
-      <Box display="flex">
+      <Box display="flex" justifyContent={"end"}>
         {/* <FormControlLabel sx={{flexGrow:"1"}} control={<Checkbox defaultChecked />} label="Make it this active?" /> */}
         <Button variant="contained" color="primary" type='submit'>
           Create

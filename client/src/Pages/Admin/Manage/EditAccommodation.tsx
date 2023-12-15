@@ -359,6 +359,7 @@ function EditAccommodation() {
                 </TableCell>
                 <TableCell >
                   <TextField
+                    required
                     id=""
                     label=""
                     fullWidth
@@ -379,6 +380,7 @@ function EditAccommodation() {
                 </TableCell>
                 <TableCell >
                   <TextField
+                    required
                     id=""
                     label=""
                     fullWidth
@@ -400,6 +402,7 @@ function EditAccommodation() {
                 </TableCell>
                 <TableCell >
                   <TextField
+                    required
                     id=""
                     label=""
                     fullWidth
@@ -425,6 +428,7 @@ function EditAccommodation() {
                 </TableCell>
                 <TableCell >
                   <TextField
+                    required
                     id=""
                     label=""
                     fullWidth
@@ -445,6 +449,7 @@ function EditAccommodation() {
                 </TableCell>
                 <TableCell >
                   <TextField
+                    required
                     id=""
                     label=""
                     fullWidth
@@ -469,6 +474,7 @@ function EditAccommodation() {
                     id=""
                     label=""
                     fullWidth
+                    required
                     defaultValue={accommodation?.[0]?.fees?.[2]?.guestFee?.adult}
                     onChange={(e) => {
                       setForm((prevForm) => ({
@@ -517,7 +523,7 @@ function EditAccommodation() {
         }
         
         <Button variant="contained" color="primary" type='submit'>
-          Create
+          Update
         </Button>
       </Box>
       </form>
