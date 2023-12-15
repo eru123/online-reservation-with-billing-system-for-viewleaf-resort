@@ -27,7 +27,6 @@ function useRequest(): RequestHook {
     try {
       const response = await axios(config);
       setData(response.data);
-      console.log(response.data);
     } catch (error: any) {
       setError(error);
       console.error('Error making request:', error);
