@@ -22,6 +22,8 @@ import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField'
 
+import useStaff from '../../../Hooks/useStaff';
+
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -39,6 +41,20 @@ function App() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openDropdown = Boolean(anchorEl);
   const [open, setOpen] = React.useState("");
+
+  const {data, loading, error, getStaff, updateStaff} = useStaff();
+    
+  const [password, setPassword] = useState("")
+
+  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    updateStaff({
+      username: User().username,
+      email: User().email,
+      password: password
+    })
+    setOpen("");
+  }
   
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -121,10 +137,12 @@ function App() {
           TransitionComponent={Fade}
         >
           {User().role==="admin"?
-            <MenuItem onClick={()=>{setOpen("ChangePass")}}>Change Password</MenuItem>
+            <></>
             :
             <MenuItem component={Link} to={'/profile'} >Profile</MenuItem>
           }
+
+          <MenuItem onClick={()=>{setOpen("ChangePass")}}>Change Password</MenuItem>
           
           <MenuItem onClick={logout}>Logout</MenuItem>
         </Menu>
@@ -149,45 +167,27 @@ function App() {
         >
         <Box sx={style}>
           {open === "ChangePass"?<>
-            <form >
+            <form onSubmit={submit}>
               <Typography id="keep-mounted-modal-title" variant="h6" fontWeight={600} color={"primary"} component="h2">
                 Update Password
               </Typography>
-              <Typography id="keep-mounted-modal-description" >
-                We sent you a 6 digit code, please check your email and enter the code to complete the verification and reservation
-              </Typography>
               <Grid container spacing={2} sx={{marginTop:"10px"}}>
-                <Grid item  xs={12}>
-                  <TextField
-                    id="current Password"
-                    label="Current Password"
-                    required
-                    fullWidth
-                    // onChange={(e)=>{}}
-                  />
-                </Grid>
                 <Grid item  xs={12} sx={{marginBottom:"15px"}}>
                   <TextField
                     id="New Password"
                     label="New Password"
                     required
                     fullWidth
-                    // onChange={(e)=>{}}
+                    onChange={(e)=>{setPassword(e.target.value)}}
                   />
                 </Grid>
-
-
-
-
-
-
                 <Grid item xs={5} display={"flex"}>
                   <Button variant="contained" color="primary" fullWidth sx={{height:"100%",background:"#414141"}} onClick={()=>{setOpen("")}} >
                     Cancel
                   </Button>
                 </Grid>
                 <Grid item xs={7} display={"flex"} justifyContent={"center"}>
-                  <Button fullWidth  variant="contained" type="submit" > Update Password</Button>
+                  <Button fullWidth  variant="contained" type="submit"> Update Password</Button>
                 </Grid>
               </Grid>
             </form>
