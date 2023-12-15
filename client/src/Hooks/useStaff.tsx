@@ -12,10 +12,11 @@ interface Staff {
 function useStaff() {
   const { data, loading, error, makeRequest } = useRequest();
 
-  const getStaff = () => {
+  const getStaff = (content?: Staff) => {
     makeRequest({
       method: 'get',
       url: `/staffs`,
+      params: content || {}
     });
   };
 

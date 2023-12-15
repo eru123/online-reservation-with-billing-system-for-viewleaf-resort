@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar';
@@ -7,6 +7,7 @@ import Modal from '@mui/material/Modal';
 import { Grid,Button, TextField, IconButton } from '@mui/material'
 
 import { useAuth } from '../../../Hooks/useAuth';
+import useStaff from '../../../Hooks/useStaff';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -25,7 +26,30 @@ const style = {
 
 function Profile() {
     const{User} = useAuth();
+    const {getStaff, updateStaff} = useStaff();
     const [open, setOpen] = useState("");
+
+    const [form, setForm] = useState({
+      staffId: User().staffId,
+      username: User().username,
+      email: User().email,
+      contact: User().contact,
+      password: ""
+    })
+
+    const submit = () => {
+      console.log(form);
+      updateStaff(form)
+      setOpen("");
+    }
+
+    useEffect(()=>{
+      console.log(User().staffId);
+      getStaff({
+        staffId: User().staffId
+      });
+    }, [])
+
     return <>
       <Box display={"flex"} flexWrap={"wrap"}>
           <Box width={"300px"} >
