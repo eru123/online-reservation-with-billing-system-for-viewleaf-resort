@@ -174,7 +174,7 @@ function EditAccommodation() {
   return <>
     <div>
       <form onSubmit={submit}>
-      <Typography variant="h4" fontWeight={600} color="primary">Edit Accommodation</Typography>
+      <Typography variant="h4" fontWeight={600} color="primary" sx={{marginBottom:"55px"}}>Edit Accommodation</Typography>
       <Grid container spacing={2}>
         <Grid item md={3} xs={12}>
           <FormControl fullWidth required>
@@ -240,7 +240,6 @@ function EditAccommodation() {
           <TextField
             id="dayPrice"
             label="Day Shift Price"
-            required
             fullWidth
             type='number'
             defaultValue={accommodation?.[0]?.fees?.[0]?.rate}
@@ -262,7 +261,6 @@ function EditAccommodation() {
           <TextField
             id="nightPrice"
             label="Night Shift Price"
-            required
             fullWidth
             type='number'
             defaultValue={accommodation?.[0]?.fees?.[1]?.rate}
@@ -285,7 +283,6 @@ function EditAccommodation() {
           <TextField
             id="wholePrice"
             label="Whole Day Price"
-            required
             fullWidth
             type='number'
             defaultValue={accommodation?.[0]?.fees?.[2]?.rate}
