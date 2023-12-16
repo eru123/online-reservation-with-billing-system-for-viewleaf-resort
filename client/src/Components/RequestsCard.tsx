@@ -46,10 +46,6 @@ function RequestsCard({status,data}:Props) {
               <Typography variant="subtitle1" fontWeight={500}>Requested Date</Typography>
               <Typography variant="body2">Oct 25, 2023</Typography>
             </>:""}
-            {status === "paid"?<>
-              <Typography variant="subtitle1" fontWeight={500}>Expected Payment </Typography>
-              <Typography variant="body2">Total of <strong>1525 Pesos</strong> / Min payment of <strong>300 pesos</strong></Typography>
-            </>:""}
             {status === "rescheduling" || status==="cancelling" || status === "refunding" ?<>
               <Typography variant="subtitle1" fontWeight={500} mt={".2em"}>Note</Typography>
               <Typography variant="body2" textAlign={"justify"}>Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus..Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus..</Typography>

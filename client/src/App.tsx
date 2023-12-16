@@ -55,6 +55,7 @@ import PolicyView from './Pages/Guests/Policy';
 import Error from './Pages/Error';
 import PrivacyGuest from './Pages/Guests/Privacy';
 
+
 const theme = createTheme({
   palette: {
     primary: {
