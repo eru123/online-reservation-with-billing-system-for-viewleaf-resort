@@ -4,6 +4,7 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
+import cron from 'node-cron';
 
 // Middlewares
 import errorHandler from './middlewares/errorHandler';
@@ -29,6 +30,10 @@ const { PORT, MONGO_URI, CORS_ORIGIN, USERNAME, PASSWORD, EMAIL } = envs;
 
 const app = express();
 
+cron.schedule('*/5 * * * * *', () => {
+    console.log(`[${new Date().toLocaleString()}] Cron job running...`);
+});
+
 app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
 app.use(cookieParser());
 app.use(express.json());
@@ -53,13 +58,13 @@ mongoose
         admin
             ? admin
             : StaffModel.create({
-                  username: USERNAME,
-                  credentials: {
-                      email: EMAIL,
-                      password: PASSWORD
-                  },
-                  role: Role.ADMIN
-              })
+                username: USERNAME,
+                credentials: {
+                    email: EMAIL,
+                    password: PASSWORD
+                },
+                role: Role.ADMIN
+            })
     )
     .then(() => {
         console.log('Connected to database');
