@@ -18,3 +18,5 @@ export const send: (number: string, message: string) => Promise<unknown> = async
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     }).then(e => e.data);
 }
+
+export default send;
