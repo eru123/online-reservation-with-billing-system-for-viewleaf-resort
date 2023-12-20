@@ -10,7 +10,12 @@ export type PaymentData = {
     remarks?: string;
 };
 
-export const create = async (attr: PaymentData): Promise<unknown> => {
+export const create = async (attr: PaymentData): Promise<{
+    id: string;
+    url: string;
+    ref: string;
+    status: string;
+}> => {
     const url = 'https://api.paymongo.com/v1/links';
     attr.amount = (Math.round((Number(attr.amount) + Number.EPSILON) * 100) / 100) * 100;
     const payload = {
@@ -35,7 +40,12 @@ export const create = async (attr: PaymentData): Promise<unknown> => {
         }))
 };
 
-export const retrieve = async (id: string): Promise<unknown> => {
+export const retrieve = async (id: string): Promise<{
+    id: string;
+    url: string;
+    ref: string;
+    status: string;
+}> => {
     const url = `https://api.paymongo.com/v1/links/${id}`;
 
     return axios.get(url, {
